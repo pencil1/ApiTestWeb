@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue 2 Scrollbar | The Simplest Pretty Scroll Area Component with custom scrollbar for Vue Js Version 2</title>
+  <link rel="stylesheet" href="./dist/style/vue2-scrollbar.css">
+  <link rel="stylesheet" href="./dist/style/app.css">
+</head>
+<body>
+
+
+  <div id="app">
+    <vue-scrollbar classes="my-scrollbar" ref="Scrollbar">
+      <div class="scroll-me">
+        <div class="kolom"></div>
+        <div class="kolom"></div>
+        <div class="kolom"></div>
+        <div class="kolom"></div>
+        <div class="kolom"></div>
+        <div class="kolom"></div>
+        <div class="kolom"></div>
+        <div class="kolom"></div>
+        <div class="kolom"></div>
+        <div class="kolom"></div>
+        <div class="kolom"></div>
+        <div class="kolom"></div>
+        <div class="kolom"></div>
+        <div class="kolom"></div>
+        <div class="kolom"></div>
+        <div class="kolom"></div>
+        <div class="clearfix"></div>
+      </div>
+    </vue-scrollbar>
+  </div>
+
+  <script src="https://vuejs.org/js/vue.js"></script>
+  <script src="./dist/vue2-scrollbar.js"></script>
+  <script>
+    new Vue({
+      el: "#app",
+
+      components: {
+        VueScrollbar: Vue2Scrollbar
+      },
+
+    })
+  </script>
+</body>
+</html>
