@@ -51,6 +51,7 @@
 
                     <el-table-column
                             :show-overflow-tooltip= true
+                            width="550"
                             prop="name"
                             label="执行业务集"
                             >

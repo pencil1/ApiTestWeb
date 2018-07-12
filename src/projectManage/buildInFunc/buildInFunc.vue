@@ -14,7 +14,7 @@
             <el-button-group>
                 <el-button type="success" @click.native="findFunc()" size="small">读取</el-button>
                 <el-button type="primary" @click.native="createFunc()" size="small">创建</el-button>
-                <el-button type="danger" @click.native="sureView(removeFunc)" size="small">删除</el-button>
+                <!--<el-button type="danger" @click.native="sureView(removeFunc)" size="small">删除</el-button>-->
             </el-button-group>
         </div>
         <el-button-group style="float: right;margin-bottom: 10px">

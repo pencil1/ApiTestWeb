@@ -76,12 +76,12 @@
                             label="接口名称"
                             width="200">
                     </el-table-column>
-                    <el-table-column
-                            :show-overflow-tooltip= true
-                            prop="desc"
-                            label="接口描述"
-                            width="200">
-                    </el-table-column>
+                    <!--<el-table-column-->
+                            <!--:show-overflow-tooltip= true-->
+                            <!--prop="desc"-->
+                            <!--label="接口描述"-->
+                            <!--width="200">-->
+                    <!--</el-table-column>-->
                     <el-table-column
                             :show-overflow-tooltip= true
                             prop="url"
@@ -361,43 +361,43 @@
                     </el-table>
                 </el-tab-pane>
 
-                <el-tab-pane label="接口判断">
-                    <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
-                               @click="addValidate()">添加
-                    </el-button>
-                    <el-table :data="caseData.validate" style="width:100%" size="mini" stripe>
-                        <el-table-column label="Check" header-align="center"
-                                         style="font-size: 16px;" width="300">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.key" size="medium">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="Comparator" header-align="center" width="200">
-                            <template slot-scope="scope">
-                                <el-autocomplete
-                                        class="inline-input"
-                                        v-model="scope.row.comparator"
-                                        :fetch-suggestions="querySearch"
-                                        placeholder="请输入内容"
-                                ></el-autocomplete>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="Expected" header-align="center" width="350">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.value" size="medium">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="操作" header-align="center" width="80">
-                            <template slot-scope="scope">
-                                <el-button type="danger" icon="el-icon-delete" size="mini"
-                                           @click.native="delValidate(scope.$index)">删除
-                                </el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-tab-pane>
+                <!--<el-tab-pane label="接口判断">-->
+                    <!--<el-button type="primary" icon="el-icon-circle-plus-outline" size="small"-->
+                               <!--@click="addValidate()">添加-->
+                    <!--</el-button>-->
+                    <!--<el-table :data="caseData.validate" style="width:100%" size="mini" stripe>-->
+                        <!--<el-table-column label="Check" header-align="center"-->
+                                         <!--style="font-size: 16px;" width="300">-->
+                            <!--<template slot-scope="scope">-->
+                                <!--<el-input v-model="scope.row.key" size="medium">-->
+                                <!--</el-input>-->
+                            <!--</template>-->
+                        <!--</el-table-column>-->
+                        <!--<el-table-column label="Comparator" header-align="center" width="200">-->
+                            <!--<template slot-scope="scope">-->
+                                <!--<el-autocomplete-->
+                                        <!--class="inline-input"-->
+                                        <!--v-model="scope.row.comparator"-->
+                                        <!--:fetch-suggestions="querySearch"-->
+                                        <!--placeholder="请输入内容"-->
+                                <!--&gt;</el-autocomplete>-->
+                            <!--</template>-->
+                        <!--</el-table-column>-->
+                        <!--<el-table-column label="Expected" header-align="center" width="350">-->
+                            <!--<template slot-scope="scope">-->
+                                <!--<el-input v-model="scope.row.value" size="medium">-->
+                                <!--</el-input>-->
+                            <!--</template>-->
+                        <!--</el-table-column>-->
+                        <!--<el-table-column label="操作" header-align="center" width="80">-->
+                            <!--<template slot-scope="scope">-->
+                                <!--<el-button type="danger" icon="el-icon-delete" size="mini"-->
+                                           <!--@click.native="delValidate(scope.$index)">删除-->
+                                <!--</el-button>-->
+                            <!--</template>-->
+                        <!--</el-table-column>-->
+                    <!--</el-table>-->
+                <!--</el-tab-pane>-->
             </el-tabs>
 
             <div slot="footer" class="dialog-footer">
@@ -735,7 +735,7 @@
             copyCase(caseId) {
                 this.$axios.post('/api/api/cases/copy', {'caseId': caseId}).then((response) => {
                         this.caseData.name = response.data['data']['caseName'];
-                        // this.caseData.num = response.data['data']['caseNum'];
+                        this.caseData.num = '';
                         this.caseData.desc = response.data['data']['caseDesc'];
                         this.caseData.url = response.data['data']['caseUrl'];
                         this.caseData.funcAddress = response.data['data']['funcAddress'];

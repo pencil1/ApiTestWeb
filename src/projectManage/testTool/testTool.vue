@@ -13,8 +13,9 @@
         <!--<el-button type="primary"-->
                    <!--@click.native="testTask()" size="small">测试-->
         <!--</el-button>-->
-        <el-button type="primary" size="small" @click.native="dealData()">优化数据</el-button>
+        <el-button type="primary" size="small" @click.native="testTask()">优化数据</el-button>
         <el-button type="primary" size="small" @click.native="dealSql()">执行语句</el-button>
+        <el-button type="primary" size="small" @click.native="sqlData()">数据库修改</el-button>
         <div style="margin: 20px 0;"></div>
         <div>
             <el-input
@@ -87,10 +88,10 @@
                     }
                 )
             },
-            dealData() {
+            sqlData() {
                 // 调用 callback 返回建议列表的数据
                 this.$axios.post('/api/api/runCmd', {
-                    'dictData':this.showData,
+                    'funcName':'sql_func',
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
@@ -100,7 +101,11 @@
                             });
                         }
                         else {
-                            this.showData = response.data['data'];
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'success',
+                            });
 
                         }
                     }

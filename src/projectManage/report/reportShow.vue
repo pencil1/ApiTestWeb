@@ -90,6 +90,7 @@
                 </template>
             </el-table-column>
             <el-table-column
+                    :show-overflow-tooltip= true
                     prop="meta_data"
                     label="接口地址">
                 <template slot-scope="scope">

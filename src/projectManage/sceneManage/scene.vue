@@ -123,11 +123,28 @@
                                 label="编号"
                                 width="80">
                         </el-table-column>
+
+                        <el-table-column
+                                prop="status"
+                                label="状态"
+                                width="80">
+                            <template slot-scope="scope">
+                                <el-switch
+                                v-model="caseList[scope.$index]['status']"
+                                >
+                                </el-switch>
+                            </template>
+                        </el-table-column>
                         <el-table-column
                                 prop="case_name"
                                 label="用例名称"
                                 width="200">
+                            <!--<template slot-scope="scope" >-->
+                                <!--<el-input v-model="caseList[scope.$index]['status']" auto-complete="off">-->
+                                <!--</el-input>-->
+                            <!--</template>-->
                         </el-table-column>
+
                         <el-table-column
                                 prop="name"
                                 label="接口名称"
@@ -199,6 +216,7 @@
                                 type="selection"
                                 width="55">
                         </el-table-column>
+
                         <el-table-column
                                 prop="num"
                                 label="编号"
@@ -387,7 +405,7 @@
                                 <div v-if="scope.row.param_type === 'file'">
                                     <el-row>
                                         <el-col :span="17">
-                                            <el-input v-model="scope.row.value" size="medium">
+                                            <el-input v-model="scope.row.value" size="medium" :disabled="true">
                                             </el-input>
                                         </el-col>
                                         <el-col :span="1">
@@ -441,7 +459,7 @@
                             inactive-text="启动功能">
                     </el-switch>
                     <el-switch
-                            v-model="caseConfig.statusCase.extract[1]"
+                            v-model="caseConfig.statusCase.extract[1]" :disabled='true'
                             inactive-text="启动新参数">
                     </el-switch>
                     <el-table :data="caseConfig.extract" style="width:100%" size="mini" stripe>
@@ -483,7 +501,7 @@
                             inactive-text="启动功能">
                     </el-switch>
                     <el-switch
-                            v-model="caseConfig.statusCase.validate[1]"
+                            v-model="caseConfig.statusCase.validate[1]" :disabled='true'
                             inactive-text="启动新参数">
                     </el-switch>
                     <el-table :data="caseConfig.validate" style="width:100%" size="mini" stripe>
@@ -784,8 +802,6 @@
                 // this.caseList.splice(i, 1);
             },
             caseConfigBtn(i) {
-
-
                 this.caseConfig.variable = this.caseList[i]['variables'];
                 this.caseConfig.extract = this.caseList[i]['extract'];
                 this.caseConfig.validate = this.caseList[i]['validate'];
@@ -825,8 +841,9 @@
                 else {
                     this.caseList[this.tempNum]['down_func'] = '';
                 }
-                if (this.caseConfig.up_func) {
-                    this.caseList[this.tempNum]['up_func'] = this.caseConfig.up_func;
+                if (this.caseConfig.upFunc) {
+                    this.caseList[this.tempNum]['up_func'] = this.caseConfig.upFunc;
+
                 }
                 else {
                     this.caseList[this.tempNum]['up_func'] = '';

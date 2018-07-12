@@ -49,17 +49,17 @@
                             </el-menu-item-group>
                         </el-submenu>
 
-                        <!--<el-submenu index="4">-->
-                            <!--<template slot="title">-->
-                                <!--<i class="el-icon-menu"></i>-->
-                                <!--<span>其他程序</span>-->
-                            <!--</template>-->
-                            <!--<el-menu-item-group>-->
-                                <!--<el-menu-item index="/manage/testTool">小工具</el-menu-item>-->
+                        <el-submenu index="4">
+                            <template slot="title">
+                                <i class="el-icon-menu"></i>
+                                <span>其他程序</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="/manage/testTool">小工具</el-menu-item>
                                 <!--<el-menu-item index="/manage/sqlCheck">数据库查询</el-menu-item>-->
-                                <!--&lt;!&ndash;<el-menu-item index="/manage/batch">批量添加</el-menu-item>&ndash;&gt;-->
-                            <!--</el-menu-item-group>-->
-                        <!--</el-submenu>-->
+                                <!--<el-menu-item index="/manage/batch">批量添加</el-menu-item>-->
+                            </el-menu-item-group>
+                        </el-submenu>
                     </el-menu>
                 </vue-scrollbar>
             </el-aside>
