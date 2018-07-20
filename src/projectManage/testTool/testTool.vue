@@ -17,14 +17,19 @@
         <el-button type="primary" size="small" @click.native="dealSql()">执行语句</el-button>
         <el-button type="primary" size="small" @click.native="sqlData()">数据库修改</el-button>
         <div style="margin: 20px 0;"></div>
-        <div>
-            <el-input
-                    type="textarea"
-                    :rows="30"
-                    placeholder="请输入内容"
-                    v-model="showData">
-            </el-input>
-        </div>
+        <!--<div>-->
+            <!--<el-input-->
+                    <!--type="textarea"-->
+                    <!--:rows="30"-->
+                    <!--placeholder="请输入内容"-->
+                    <!--v-model="showData">-->
+            <!--</el-input>-->
+        <!--</div>-->
+        <el-scrollbar wrap-class="list" >
+            <div v-for="value in num" >
+                {{value}}
+            </div>
+        </el-scrollbar>
     </div>
 </template>
 
@@ -35,6 +40,7 @@
         name: 'test',
         data() {
             return {
+                num:[1,2,3,4,5,6,7,8,9,0],
                 token: '',
                 message: '啦啦啦，这是复制的内容！',
                 showData:'',
@@ -169,5 +175,7 @@
 </script>
 
 <style>
-
+    .list {
+        max-height: 200px;
+    }
 </style>

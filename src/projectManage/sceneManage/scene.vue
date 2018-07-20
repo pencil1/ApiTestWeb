@@ -32,6 +32,7 @@
             <el-tab-pane label="业务列表" name="first" style="margin: 0 0 -10px;">
                 <div style="margin: 0 0 -20px;">
                 </div>
+                <el-scrollbar wrap-class="scrollbarList" >
                 <el-table :data="sceneAll" stripe>
                     <el-table-column
                             prop="num"
@@ -64,6 +65,7 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                </el-scrollbar>
                 <div class="block" style="left:68%; position: relative;">
                     <el-pagination
                             @current-change="handleCurrentChange"
@@ -153,7 +155,7 @@
 
                         <el-table-column
                                 label="操作"
-                                width="460">
+                                width="380">
                             <template slot-scope="scope">
                                 <el-button type="primary" size="mini"
                                            @click.native="upNum(scope.$index)">升序
@@ -501,7 +503,8 @@
                             inactive-text="启动功能">
                     </el-switch>
                     <el-switch
-                            v-model="caseConfig.statusCase.validate[1]" :disabled='true'
+
+                            v-model="caseConfig.statusCase.validate[1]"
                             inactive-text="启动新参数">
                     </el-switch>
                     <el-table :data="caseConfig.validate" style="width:100%" size="mini" stripe>

@@ -19,6 +19,8 @@
     }
 </script>
 
-<style scoped>
-
+<style>
+  .scrollbarList {
+    max-height: 700px;
+  }
 </style>

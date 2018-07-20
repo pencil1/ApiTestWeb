@@ -55,11 +55,11 @@
             <el-tab-pane label="接口信息" name="first" style="margin: 0 0 -10px;">
                 <div style="margin: 0 0 -20px;">
                 </div>
+                <el-scrollbar wrap-class="scrollbarList" >
                 <el-table
                         ref="multipleTable"
                         @selection-change="handleCaseSelection"
                         :data="tableData"
-                        height="561"
                         stripe>
                     <el-table-column
                             type="selection"
@@ -103,6 +103,7 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                </el-scrollbar>
                 <el-button @click="cancelSelection()" size="mini" style="position: absolute;margin-top: 2px;">取消选择
                 </el-button>
                 <div class="block" style="left:68%; position: relative;">
@@ -110,7 +111,6 @@
                             @current-change="handleCurrentChange"
                             @size-change="handleSizeChange"
                             :page-size="10"
-
                             layout="total, sizes, prev, pager, next, jumper"
                             :total="this.total">
                     </el-pagination>

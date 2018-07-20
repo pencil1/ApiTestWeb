@@ -41,7 +41,8 @@
             <el-tab-pane label="报告列表" name="first" style="margin: 0 0 -10px;">
                 <div style="margin: 0 0 -20px;">
                 </div>
-                <el-table :data="tableData" stripe>
+                <el-scrollbar wrap-class="scrollbarList" >
+                <el-table :data="tableData" stripe >
 
                     <el-table-column
                             prop="belong"
@@ -87,6 +88,7 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                </el-scrollbar>
                 <div class="block" style="left:68%; position: relative;">
                     <el-pagination
                             @current-change="handleCurrentChange"

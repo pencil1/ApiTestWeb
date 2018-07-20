@@ -2,17 +2,23 @@
 
     <div id="manage">
         <el-container>
-            <el-aside width="260px" style="height: 920px">
-                <vue-scrollbar classes="my-scrollbar" ref="Scrollbar">
+            <el-aside width="auto" style="height: 948px">
+                <div class="menu-toggle" @click.prevent="collapse">
+                    <i class="my-icon-xiangzuo-copy" v-show="!collapsed"></i>
+                    <i class="my-icon-xiangyou" v-show="collapsed"></i>
+                </div>
+                <el-scrollbar wrap-class="specialList">
                     <el-menu
                             background-color="#545c64"
                             text-color="#fff"
                             active-text-color="#ffd04b"
-                            :router="true">
+                            :router="true"
+                            :collapse="collapsed"
+                            class="el-menu-vertical-demo" >
 
                         <el-submenu index="1">
                             <template slot="title">
-                                <i class="el-icon-menu"></i>
+                                <i class="my-icon-indent"></i>
                                 <span>项目管理</span>
                             </template>
 
@@ -35,7 +41,6 @@
                                 <el-menu-item index="/manage/buildInFunc">内置函数</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
-
                         <el-submenu index="3">
                             <template slot="title">
                                 <i class="el-icon-menu"></i>
@@ -61,7 +66,7 @@
                             </el-menu-item-group>
                         </el-submenu>
                     </el-menu>
-                </vue-scrollbar>
+                </el-scrollbar>
             </el-aside>
             <el-container>
                 <el-header style="height: 40px;">
@@ -91,25 +96,39 @@
 </template>
 
 <script>
-    import * as types from '../store/types'
-    import VueScrollbar from 'vue2-scrollbar';
-
-    require("vue2-scrollbar/dist/style/vue2-scrollbar.css");
-    require("vue2-scrollbar/dist/style/app.css");
     export default {
-        components: {VueScrollbar},
         name: 'manage',
 
         data() {
-            return {}
+            return {
+                collapsed:false
+            }
         },
-        methods: {},
+        methods: {
+            collapse: function () {
+                this.collapsed = !this.collapsed;
+            },
+        },
         mounted() {
         },
     }
 </script>
 
 <style>
+    .el-menu-vertical-demo:not(.el-menu--collapse) {
+        width: 200px;
+        min-height: 400px;
+    }
+    .menu-toggle {
+        background: #434650;
+        text-align: center;
+        color: white;
+        height: 26px;
+        line-height: 30px;
+    }
+    .specialList {
+        max-height: 948px;
+    }
     .el-menu {
         border-right: solid 0px #e6e6e6;
     }

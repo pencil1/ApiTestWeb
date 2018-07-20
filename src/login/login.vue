@@ -34,7 +34,8 @@
                     width="30%"
                     center
                     >
-                <el-form :model="caseData">
+                <el-form :model="caseData"
+                         >
 
                     <el-form-item label="名字" :label-width="caseData.formLabelWidth"
                     >
