@@ -2,7 +2,11 @@
 
     <div id="manage">
         <el-container>
+
             <el-aside width="auto" style="height: 948px">
+                <!--<div style="margin: 0 0 40px;line-height: 30px;">-->
+                    <!--测试平台-->
+                <!--</div>-->
                 <div class="menu-toggle" @click.prevent="collapse">
                     <i class="my-icon-xiangzuo-copy" v-show="!collapsed"></i>
                     <i class="my-icon-xiangyou" v-show="collapsed"></i>
@@ -18,7 +22,7 @@
 
                         <el-submenu index="1">
                             <template slot="title">
-                                <i class="my-icon-indent"></i>
+                                <i class="el-icon-menu"></i>
                                 <span>项目管理</span>
                             </template>
 
@@ -116,8 +120,8 @@
 
 <style>
     .el-menu-vertical-demo:not(.el-menu--collapse) {
-        width: 200px;
-        min-height: 400px;
+        width: 220px;
+
     }
     .menu-toggle {
         background: #434650;

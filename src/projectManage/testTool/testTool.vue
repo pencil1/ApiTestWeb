@@ -17,19 +17,19 @@
         <el-button type="primary" size="small" @click.native="dealSql()">执行语句</el-button>
         <el-button type="primary" size="small" @click.native="sqlData()">数据库修改</el-button>
         <div style="margin: 20px 0;"></div>
-        <!--<div>-->
-            <!--<el-input-->
-                    <!--type="textarea"-->
-                    <!--:rows="30"-->
-                    <!--placeholder="请输入内容"-->
-                    <!--v-model="showData">-->
-            <!--</el-input>-->
-        <!--</div>-->
-        <el-scrollbar wrap-class="list" >
-            <div v-for="value in num" >
-                {{value}}
-            </div>
-        </el-scrollbar>
+        <div>
+            <el-input
+                    type="textarea"
+                    :rows="30"
+                    placeholder="请输入内容"
+                    v-model="showData">
+            </el-input>
+        </div>
+        <!--<el-scrollbar wrap-class="list" >-->
+            <!--<div v-for="value in num" >-->
+                <!--{{value}}-->
+            <!--</div>-->
+        <!--</el-scrollbar>-->
     </div>
 </template>
 
