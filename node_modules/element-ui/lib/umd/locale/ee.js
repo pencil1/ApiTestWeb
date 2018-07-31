@@ -33,10 +33,10 @@
         startTime: 'Algusaeg',
         endDate: 'Lõpukuupäev',
         endTime: 'Lõpuaeg',
-        prevYear: 'Previous Year', // to be translated
-        nextYear: 'Next Year', // to be translated
-        prevMonth: 'Previous Month', // to be translated
-        nextMonth: 'Next Month', // to be translated
+        prevYear: 'Eelmine aasta',
+        nextYear: 'Järgmine aasta',
+        prevMonth: 'Eelmine kuu',
+        nextMonth: 'Järgmine kuu',
         year: '',
         month1: 'Jaanuar',
         month2: 'Veebruar',
@@ -99,7 +99,7 @@
         error: 'Vigane sisend'
       },
       upload: {
-        deleteTip: 'press delete to remove', // to be translated
+        deleteTip: 'Vajuta kustuta et eemaldada',
         delete: 'Kustuta',
         preview: 'Eelvaate',
         continue: 'Jätka'

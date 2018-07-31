@@ -19,11 +19,11 @@ exports.default = {
       startTime: 'Starttidspunkt',
       endDate: 'Slutdato',
       endTime: 'Sluttidspunkt',
-      prevYear: 'Previous Year', // to be translated
-      nextYear: 'Next Year', // to be translated
-      prevMonth: 'Previous Month', // to be translated
-      nextMonth: 'Next Month', // to be translated
-      year: 'År',
+      prevYear: 'Forrige år',
+      nextYear: 'Næste år',
+      prevMonth: 'Forrige måned',
+      nextMonth: 'Næste måned',
+      year: '',
       month1: 'Januar',
       month2: 'Februar',
       month3: 'Marts',
@@ -84,7 +84,7 @@ exports.default = {
       error: 'Ugyldig input'
     },
     upload: {
-      deleteTip: 'press delete to remove', // to be translated
+      deleteTip: 'tryk slet for at fjerne',
       delete: 'Slet',
       preview: 'Forhåndsvisning',
       continue: 'Fortsæt'
@@ -94,7 +94,7 @@ exports.default = {
       confirmFilter: 'Bekræft',
       resetFilter: 'Nulstil',
       clearFilter: 'Alle',
-      sumText: 'Sum' // to be translated
+      sumText: 'Sum'
     },
     tree: {
       emptyText: 'Ingen data'
@@ -102,10 +102,10 @@ exports.default = {
     transfer: {
       noMatch: 'Ingen matchende data',
       noData: 'Ingen data',
-      titles: ['List 1', 'List 2'], // to be translated
-      filterPlaceholder: 'Enter keyword', // to be translated
-      noCheckedFormat: '{total} items', // to be translated
-      hasCheckedFormat: '{checked}/{total} checked' // to be translated
+      titles: ['Liste 1', 'Liste 2'],
+      filterPlaceholder: 'Indtast søgeord',
+      noCheckedFormat: '{total} emner',
+      hasCheckedFormat: '{checked}/{total} valgt'
     }
   }
 };

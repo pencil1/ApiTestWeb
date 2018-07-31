@@ -123,13 +123,13 @@
                         <el-table-column
                                 prop="num"
                                 label="编号"
-                                width="80">
+                                minWidth="20">
                         </el-table-column>
 
                         <el-table-column
                                 prop="status"
                                 label="状态"
-                                width="80">
+                                minWidth="20">
                             <template slot-scope="scope">
                                 <el-switch
                                 v-model="caseList[scope.$index]['status']"
@@ -140,7 +140,7 @@
                         <el-table-column
                                 prop="case_name"
                                 label="用例名称"
-                                width="200">
+                                minWidth="50">
                             <!--<template slot-scope="scope" >-->
                                 <!--<el-input v-model="caseList[scope.$index]['status']" auto-complete="off">-->
                                 <!--</el-input>-->
@@ -150,12 +150,12 @@
                         <el-table-column
                                 prop="name"
                                 label="接口名称"
-                                width="200">
+                                minWidth="50">
                         </el-table-column>
 
                         <el-table-column
                                 label="操作"
-                                width="380">
+                                minWidth="120">
                             <template slot-scope="scope">
                                 <el-button type="primary" size="mini"
                                            @click.native="upNum(scope.$index)">升序
@@ -216,13 +216,13 @@
                             stripe>
                         <el-table-column
                                 type="selection"
-                                width="55">
+                                width="40">
                         </el-table-column>
 
                         <el-table-column
                                 prop="num"
                                 label="编号"
-                                width="80">
+                                width="50">
                         </el-table-column>
                         <el-table-column
                                 prop="name"
@@ -232,9 +232,10 @@
                         <el-table-column
                                 prop="desc"
                                 label="用例描述"
-                                width="200">
+                                width="100">
                         </el-table-column>
                         <el-table-column
+                                :show-overflow-tooltip= true
                                 prop="url"
                                 label="接口地址">
                         </el-table-column>
@@ -293,21 +294,19 @@
                     </el-form>
 
                     <el-table :data="sceneData.variable" style="width:100%" size="mini" stripe>
-                        <el-table-column property="key" label="Key" header-align="center"
-                                         style="font-size: 16px;" width="300">
+                        <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.key" size="medium">
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column property="value" label="Value" header-align="center" width="300">
+                        <el-table-column property="value" label="Value" header-align="center" minWidth="150">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.value" size="medium">
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column label="备注" header-align="center"
-                                         style="font-size: 16px;" width="230">
+                        <el-table-column label="备注" header-align="center" minWidth="70">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.remark" size="medium">
                                 </el-input>

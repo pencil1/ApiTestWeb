@@ -88,7 +88,7 @@
       },
       pagination: {
         goto: 'Перейти',
-        pagesize: 'на странице',
+        pagesize: ' на странице',
         total: 'Всего {total}',
         pageClassifier: ''
       },

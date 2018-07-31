@@ -1,7 +1,7 @@
 <template>
   <div
     class="el-rate"
-    @keydown="handelKey"
+    @keydown="handleKey"
     role="slider"
     :aria-valuenow="currentValue"
     :aria-valuetext="text"
@@ -9,12 +9,13 @@
     :aria-valuemax="max"
     tabindex="0">
     <span
-      v-for="item in max"
+      v-for="(item, key) in max"
       class="el-rate__item"
       @mousemove="setCurrentValue(item, $event)"
       @mouseleave="resetCurrentValue"
       @click="selectValue(item)"
-      :style="{ cursor: rateDisabled ? 'auto' : 'pointer' }">
+      :style="{ cursor: rateDisabled ? 'auto' : 'pointer' }"
+      :key="key">
       <i
         :class="[classes[item - 1], { 'hover': hoverIndex === item }]"
         class="el-rate__icon"
@@ -48,7 +49,6 @@
 
     data() {
       return {
-        classMap: {},
         pointerAtLeftHalf: true,
         currentValue: this.value,
         hoverIndex: -1
@@ -205,6 +205,16 @@
         return result;
       },
 
+      classMap() {
+        return {
+          lowClass: this.iconClasses[0],
+          mediumClass: this.iconClasses[1],
+          highClass: this.iconClasses[2],
+          voidClass: this.voidIconClass,
+          disabledVoidClass: this.disabledVoidIconClass
+        };
+      },
+
       rateDisabled() {
         return this.disabled || (this.elForm || {}).disabled;
       }
@@ -268,7 +278,10 @@
         }
       },
 
-      handelKey(e) {
+      handleKey(e) {
+        if (this.rateDisabled) {
+          return;
+        }
         let currentValue = this.currentValue;
         const keyCode = e.keyCode;
         if (keyCode === 38 || keyCode === 39) { // left / down
@@ -332,13 +345,6 @@
       if (!this.value) {
         this.$emit('input', 0);
       }
-      this.classMap = {
-        lowClass: this.iconClasses[0],
-        mediumClass: this.iconClasses[1],
-        highClass: this.iconClasses[2],
-        voidClass: this.voidIconClass,
-        disabledVoidClass: this.disabledVoidIconClass
-      };
     }
   };
 </script>

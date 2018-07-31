@@ -99,9 +99,7 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column
-                    label="操作"
-            >
+            <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click.native="tempDetail(scope.$index)">详细</el-button>
                     <el-button type="success" size="mini" @click.native="tempRequest(scope.$index)">请求信息</el-button>

@@ -4,7 +4,7 @@ exports.__esModule = true;
 exports.default = {
   el: {
     colorpicker: {
-      confirm: 'OK',
+      confirm: 'Εντάξει',
       clear: 'Καθαρισμός'
     },
     datepicker: {
@@ -12,17 +12,17 @@ exports.default = {
       today: 'Σήμερα',
       cancel: 'Ακύρωση',
       clear: 'Καθαρισμός',
-      confirm: 'OK',
+      confirm: 'Εντάξει',
       selectDate: 'Επιλέξτε ημέρα',
       selectTime: 'Επιλέξτε ώρα',
       startDate: 'Ημερομηνία Έναρξης',
       startTime: 'Ωρα Έναρξης',
       endDate: 'Ημερομηνία Λήξης',
       endTime: 'Ωρα Λήξης',
-      prevYear: 'Previous Year', // to be translated
-      nextYear: 'Next Year', // to be translated
-      prevMonth: 'Previous Month', // to be translated
-      nextMonth: 'Next Month', // to be translated
+      prevYear: 'Προηγούμενο Έτος',
+      nextYear: 'Επόμενο Έτος',
+      prevMonth: 'Προηγούμενος Μήνας',
+      nextMonth: 'Επόμενος Μήνας',
       year: 'Έτος',
       month1: 'Ιανουάριος',
       month2: 'Φεβρουάριος',
@@ -80,12 +80,12 @@ exports.default = {
     },
     messagebox: {
       title: 'Μήνυμα',
-      confirm: 'OK',
+      confirm: 'Εντάξει',
       cancel: 'Ακύρωση',
       error: 'Άκυρη εισαγωγή'
     },
     upload: {
-      deleteTip: 'press delete to remove', // to be translated
+      deleteTip: 'Πάτησε Διαγραφή για αφαίρεση',
       delete: 'Διαγραφή',
       preview: 'Προεπισκόπηση',
       continue: 'Συνέχεια'
@@ -95,7 +95,7 @@ exports.default = {
       confirmFilter: 'Επιβεβαίωση',
       resetFilter: 'Επαναφορά',
       clearFilter: 'Όλα',
-      sumText: 'Sum' // to be translated
+      sumText: 'Σύνολο'
     },
     tree: {
       emptyText: 'Χωρίς Δεδομένα'
@@ -103,9 +103,9 @@ exports.default = {
     transfer: {
       noMatch: 'Δεν βρέθηκαν αποτελέσματα',
       noData: 'Χωρίς δεδομένα',
-      titles: ['List 1', 'List 2'], // to be translated
-      filterPlaceholder: 'Enter keyword', // to be translated
-      noCheckedFormat: '{total} items', // to be translated
+      titles: ['Λίστα 1', 'Λίστα 2'],
+      filterPlaceholder: 'Αναζήτηση',
+      noCheckedFormat: '{total} Αντικείμενα',
       hasCheckedFormat: '{checked}/{total} checked' // to be translated
     }
   }

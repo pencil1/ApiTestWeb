@@ -33,10 +33,10 @@
         startTime: 'Час початку',
         endDate: 'Дата завершення',
         endTime: 'Час завершення',
-        prevYear: 'Previous Year', // to be translated
-        nextYear: 'Next Year', // to be translated
-        prevMonth: 'Previous Month', // to be translated
-        nextMonth: 'Next Month', // to be translated
+        prevYear: 'Попередній Рік',
+        nextYear: 'Наступний Рік',
+        prevMonth: 'Попередній Місяць',
+        nextMonth: 'Наступний Місяць',
         year: '',
         month1: 'Січень',
         month2: 'Лютий',
@@ -99,7 +99,7 @@
         error: 'Неприпустимий ввід даних'
       },
       upload: {
-        deleteTip: 'press delete to remove', // to be translated
+        deleteTip: 'натисніть кнопку щоб видалити',
         delete: 'Видалити',
         preview: 'Перегляд',
         continue: 'Продовжити'

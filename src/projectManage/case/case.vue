@@ -222,17 +222,15 @@
                                 v-model="caseData.jsonVariable">
                         </el-input>
                     </div>
-                    <el-table :data="caseData.variable" style="width:100%" size="mini" stripe
+                    <el-table :data="caseData.variable"  width="800px"  size="mini" stripe
                               v-if="form.choiceType === 'data'">
-                        <el-table-column property="key" label="Key" header-align="center"
-                                         style="font-size: 16px;" width="250">
+                        <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.key" size="medium">
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column property="type" label="type" header-align="center"
-                                         style="font-size: 16px;" width="100">
+                        <el-table-column property="type" label="type" header-align="center" width="100">
                             <template slot-scope="scope">
                                 <!--<el-input v-model="scope.row.param_type" size="medium">-->
                                 <!--</el-input>-->
@@ -242,7 +240,7 @@
                                 </el-select>
                             </template>
                         </el-table-column>
-                        <el-table-column property="value" label="Value" header-align="center" width="350">
+                        <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                             <template slot-scope="scope">
                                 <div v-if="scope.row.param_type === 'file'">
                                     <el-row>
@@ -275,8 +273,7 @@
                                 </div>
                             </template>
                         </el-table-column>
-                        <el-table-column  label="备注" header-align="center"
-                                         style="font-size: 16px;" width="150">
+                        <el-table-column  label="备注" header-align="center" minWidth="80">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.remark" size="medium">
                                 </el-input>
@@ -303,15 +300,14 @@
                         </el-select>
                         <el-button type="primary" size="small" @click="addCaseHeader()">添加头部</el-button>
                     </el-form>
-                    <el-table :data="caseData.header" style="width:100%" size="mini" stripe>
-                        <el-table-column property="key" label="Key" header-align="center"
-                                         style="font-size: 16px;" width="300">
+                    <el-table :data="caseData.header" width="auto" size="mini" stripe>
+                        <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.key" size="medium">
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column property="value" label="Value" header-align="center" width="550">
+                        <el-table-column property="value" label="Value" header-align="center"  minWidth="200">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.value" size="medium">
                                 </el-input>
@@ -330,22 +326,21 @@
                     <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
                                @click="addExtractHeader()">添加
                     </el-button>
-                    <el-table :data="caseData.extract" style="width:100%" size="mini" stripe>
+                    <el-table :data="caseData.extract" width="auto" size="mini" stripe>
                         <el-table-column property="key" label="Key" header-align="center"
-                                         style="font-size: 16px;" width="200">
+                                         style="font-size: 16px;"  minWidth="100">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.key" size="medium">
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column property="value" label="Value" header-align="center" width="500">
+                        <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.value" size="medium">
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column  label="备注" header-align="center"
-                                          style="font-size: 16px;" width="150">
+                        <el-table-column  label="备注" header-align="center" minWidth="80">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.remark" size="medium">
                                 </el-input>

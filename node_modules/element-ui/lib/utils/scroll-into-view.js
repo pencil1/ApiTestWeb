@@ -17,8 +17,16 @@ function scrollIntoView(container, selected) {
     return;
   }
 
-  var top = selected.offsetTop;
-  var bottom = selected.offsetTop + selected.offsetHeight;
+  var offsetParents = [];
+  var pointer = selected.offsetParent;
+  while (pointer && container !== pointer && container.contains(pointer)) {
+    offsetParents.push(pointer);
+    pointer = pointer.offsetParent;
+  }
+  var top = selected.offsetTop + offsetParents.reduce(function (prev, curr) {
+    return prev + curr.offsetTop;
+  }, 0);
+  var bottom = top + selected.offsetHeight;
   var viewRectTop = container.scrollTop;
   var viewRectBottom = viewRectTop + container.clientHeight;
 

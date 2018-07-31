@@ -25,7 +25,7 @@
         now: 'Dabar',
         today: 'Šiandien',
         cancel: 'Atšaukti',
-        clear: 'Vakyti',
+        clear: 'Valyti',
         confirm: 'OK',
         selectDate: 'Pasirink datą',
         selectTime: 'Pasirink laiką',

@@ -48,7 +48,6 @@ exports.default = {
       type: Number,
       default: 35
     },
-    transition: String,
     appendToBody: {
       type: Boolean,
       default: true
@@ -81,6 +80,9 @@ exports.default = {
     },
 
     showPopper: function showPopper(val) {
+      if (this.disabled) {
+        return;
+      }
       val ? this.updatePopper() : this.destroyPopper();
       this.$emit('input', val);
     }

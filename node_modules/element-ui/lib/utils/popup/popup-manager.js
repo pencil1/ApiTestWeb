@@ -11,6 +11,8 @@ var _dom = require('element-ui/lib/utils/dom');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var hasModal = false;
+var hasInitZIndex = false;
+var zIndex = 2000;
 
 var getModal = function getModal() {
   if (_vue2.default.prototype.$isServer) return;
@@ -38,8 +40,6 @@ var getModal = function getModal() {
 var instances = {};
 
 var PopupManager = {
-  zIndex: 2000,
-
   modalFade: true,
 
   getInstance: function getInstance(id) {
@@ -163,6 +163,20 @@ var PopupManager = {
     }
   }
 };
+
+Object.defineProperty(PopupManager, 'zIndex', {
+  configurable: true,
+  get: function get() {
+    if (!hasInitZIndex) {
+      zIndex = (_vue2.default.prototype.$ELEMENT || {}).zIndex || zIndex;
+      hasInitZIndex = true;
+    }
+    return zIndex;
+  },
+  set: function set(value) {
+    zIndex = value;
+  }
+});
 
 var getTopPopup = function getTopPopup() {
   if (_vue2.default.prototype.$isServer) return;

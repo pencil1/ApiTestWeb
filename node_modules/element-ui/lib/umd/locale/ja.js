@@ -33,10 +33,10 @@
         startTime: '開始時間',
         endDate: '終了日',
         endTime: '終了時間',
-        prevYear: 'Previous Year', // to be translated
-        nextYear: 'Next Year', // to be translated
-        prevMonth: 'Previous Month', // to be translated
-        nextMonth: 'Next Month', // to be translated
+        prevYear: '前年',
+        nextYear: '翌年',
+        prevMonth: '前月',
+        nextMonth: '翌月',
         year: '年',
         month1: '1月',
         month2: '2月',
@@ -99,7 +99,7 @@
         error: '正しくない入力'
       },
       upload: {
-        deleteTip: 'press delete to remove', // to be translated
+        deleteTip: 'Delキーを押して削除する',
         delete: '削除する',
         preview: 'プレビュー',
         continue: '続行する'
@@ -109,7 +109,7 @@
         confirmFilter: '確認',
         resetFilter: '初期化',
         clearFilter: 'すべて',
-        sumText: 'Sum' // to be translated
+        sumText: '合計'
       },
       tree: {
         emptyText: 'データなし'
@@ -117,10 +117,10 @@
       transfer: {
         noMatch: 'データなし',
         noData: 'データなし',
-        titles: ['List 1', 'List 2'], // to be translated
-        filterPlaceholder: 'Enter keyword', // to be translated
-        noCheckedFormat: '{total} items', // to be translated
-        hasCheckedFormat: '{checked}/{total} checked' // to be translated
+        titles: ['リスト 1', 'リスト 2'],
+        filterPlaceholder: 'キーワードを入力',
+        noCheckedFormat: '総計 {total} 件',
+        hasCheckedFormat: '{checked}/{total} を選択した'
       }
     }
   };

@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "element-ui": "^2.0.0",
+    "element-ui": "^2.4.5",
     "vue": "^2.5.2",
     "vue-clipboard2": "^0.1.1",
     "vue-resource": "^1.4.0",

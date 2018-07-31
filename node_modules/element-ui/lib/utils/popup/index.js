@@ -24,39 +24,6 @@ var _dom = require('../dom');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var idSeed = 1;
-var transitions = [];
-
-var hookTransition = function hookTransition(transition) {
-  if (transitions.indexOf(transition) !== -1) return;
-
-  var getVueInstance = function getVueInstance(element) {
-    var instance = element.__vue__;
-    if (!instance) {
-      var textNode = element.previousSibling;
-      if (textNode.__vue__) {
-        instance = textNode.__vue__;
-      }
-    }
-    return instance;
-  };
-
-  _vue2.default.transition(transition, {
-    afterEnter: function afterEnter(el) {
-      var instance = getVueInstance(el);
-
-      if (instance) {
-        instance.doAfterOpen && instance.doAfterOpen();
-      }
-    },
-    afterLeave: function afterLeave(el) {
-      var instance = getVueInstance(el);
-
-      if (instance) {
-        instance.doAfterClose && instance.doAfterClose();
-      }
-    }
-  });
-};
 
 var scrollBarWidth = void 0;
 
@@ -73,10 +40,6 @@ exports.default = {
     visible: {
       type: Boolean,
       default: false
-    },
-    transition: {
-      type: String,
-      default: ''
     },
     openDelay: {},
     closeDelay: {},
@@ -108,11 +71,6 @@ exports.default = {
     }
   },
 
-  created: function created() {
-    if (this.transition) {
-      hookTransition(this.transition);
-    }
-  },
   beforeMount: function beforeMount() {
     this._popupId = 'popup-' + idSeed++;
     _popupManager2.default.register(this._popupId, this);
@@ -120,18 +78,15 @@ exports.default = {
   beforeDestroy: function beforeDestroy() {
     _popupManager2.default.deregister(this._popupId);
     _popupManager2.default.closeModal(this._popupId);
-    if (this.modal && this.bodyOverflow !== null && this.bodyOverflow !== 'hidden') {
-      document.body.style.overflow = this.bodyOverflow;
-      document.body.style.paddingRight = this.bodyPaddingRight;
-    }
-    this.bodyOverflow = null;
-    this.bodyPaddingRight = null;
+
+    this.restoreBodyStyle();
   },
   data: function data() {
     return {
       opened: false,
-      bodyOverflow: null,
       bodyPaddingRight: null,
+      computedBodyPaddingRight: 0,
+      withoutHiddenClass: true,
       rendered: false
     };
   },
@@ -206,17 +161,18 @@ exports.default = {
         }
         _popupManager2.default.openModal(this._popupId, _popupManager2.default.nextZIndex(), this.modalAppendToBody ? undefined : dom, props.modalClass, props.modalFade);
         if (props.lockScroll) {
-          if (!this.bodyOverflow) {
+          this.withoutHiddenClass = !(0, _dom.hasClass)(document.body, 'el-popup-parent--hidden');
+          if (this.withoutHiddenClass) {
             this.bodyPaddingRight = document.body.style.paddingRight;
-            this.bodyOverflow = document.body.style.overflow;
+            this.computedBodyPaddingRight = parseInt((0, _dom.getStyle)(document.body, 'paddingRight'), 10);
           }
           scrollBarWidth = (0, _scrollbarWidth2.default)();
           var bodyHasOverflow = document.documentElement.clientHeight < document.body.scrollHeight;
           var bodyOverflowY = (0, _dom.getStyle)(document.body, 'overflowY');
-          if (scrollBarWidth > 0 && (bodyHasOverflow || bodyOverflowY === 'scroll')) {
-            document.body.style.paddingRight = scrollBarWidth + 'px';
+          if (scrollBarWidth > 0 && (bodyHasOverflow || bodyOverflowY === 'scroll') && this.withoutHiddenClass) {
+            document.body.style.paddingRight = this.computedBodyPaddingRight + scrollBarWidth + 'px';
           }
-          document.body.style.overflow = 'hidden';
+          (0, _dom.addClass)(document.body, 'el-popup-parent--hidden');
         }
       }
 
@@ -229,9 +185,7 @@ exports.default = {
 
       this.onOpen && this.onOpen();
 
-      if (!this.transition) {
-        this.doAfterOpen();
-      }
+      this.doAfterOpen();
     },
     doAfterOpen: function doAfterOpen() {
       this._opening = false;
@@ -259,32 +213,28 @@ exports.default = {
       }
     },
     doClose: function doClose() {
-      var _this4 = this;
-
       this._closing = true;
 
       this.onClose && this.onClose();
 
       if (this.lockScroll) {
-        setTimeout(function () {
-          if (_this4.modal && _this4.bodyOverflow !== 'hidden') {
-            document.body.style.overflow = _this4.bodyOverflow;
-            document.body.style.paddingRight = _this4.bodyPaddingRight;
-          }
-          _this4.bodyOverflow = null;
-          _this4.bodyPaddingRight = null;
-        }, 200);
+        setTimeout(this.restoreBodyStyle, 200);
       }
 
       this.opened = false;
 
-      if (!this.transition) {
-        this.doAfterClose();
-      }
+      this.doAfterClose();
     },
     doAfterClose: function doAfterClose() {
       _popupManager2.default.closeModal(this._popupId);
       this._closing = false;
+    },
+    restoreBodyStyle: function restoreBodyStyle() {
+      if (this.modal && this.withoutHiddenClass) {
+        document.body.style.paddingRight = this.bodyPaddingRight;
+        (0, _dom.removeClass)(document.body, 'el-popup-parent--hidden');
+      }
+      this.withoutHiddenClass = true;
     }
   }
 };

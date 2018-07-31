@@ -19,10 +19,10 @@ exports.default = {
       startTime: 'Čas začiatku',
       endDate: 'Dátum konca',
       endTime: 'Čas konca',
-      prevYear: 'Previous Year', // to be translated
-      nextYear: 'Next Year', // to be translated
-      prevMonth: 'Previous Month', // to be translated
-      nextMonth: 'Next Month', // to be translated
+      prevYear: 'Predošlý rok',
+      nextYear: 'Ďalší rok',
+      prevMonth: 'Predošlý mesiac',
+      nextMonth: 'Ďalší mesiac',
       day: 'Deň',
       week: 'Týždeň',
       month: 'Mesiac',
@@ -87,7 +87,7 @@ exports.default = {
       error: 'Neplatný vstup'
     },
     upload: {
-      deleteTip: 'press delete to remove', // to be translated
+      deleteTip: 'pre odstránenie stisni klávesu Delete',
       delete: 'Vymazať',
       preview: 'Prehliadať',
       continue: 'Pokračovať'

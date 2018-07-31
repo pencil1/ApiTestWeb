@@ -1,6 +1,9 @@
 <template>
   <span>
-    <transition :name="transition" @after-leave="doDestroy">
+    <transition
+      :name="transition"
+      @after-enter="handleAfterEnter"
+      @after-leave="handleAfterLeave">
       <div
         class="el-popover el-popper"
         :class="[popperClass, content && 'el-popover--plain']"
@@ -65,6 +68,9 @@ export default {
   },
   watch: {
     showPopper(val) {
+      if (this.disabled) {
+        return;
+      }
       val ? this.$emit('show') : this.$emit('hide');
     }
   },
@@ -84,7 +90,13 @@ export default {
       popper.setAttribute('tabindex', 0);
 
       if (this.trigger !== 'click') {
-        on(reference, 'focusin', this.handleFocus);
+        on(reference, 'focusin', () => {
+          this.handleFocus();
+          const instance = reference.__vue__;
+          if (instance && typeof instance.focus === 'function') {
+            instance.focus();
+          }
+        });
         on(popper, 'focusin', this.handleFocus);
         on(reference, 'focusout', this.handleBlur);
         on(popper, 'focusout', this.handleBlur);
@@ -184,6 +196,13 @@ export default {
         !popper ||
         popper.contains(e.target)) return;
       this.showPopper = false;
+    },
+    handleAfterEnter() {
+      this.$emit('after-enter');
+    },
+    handleAfterLeave() {
+      this.$emit('after-leave');
+      this.doDestroy();
     }
   },
 
