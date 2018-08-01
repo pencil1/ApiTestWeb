@@ -114,16 +114,16 @@
 
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane label="业务集合" @tab-click="refresh" name="second">
+                <el-tab-pane label="业务集合" name="second">
+                    <!--<el-tab-pane label="业务集合" @tab-click="refresh" name="second">-->
                     <el-table
-
                             :data="caseList"
-                            height="561"
+                            height="660"
                             stripe>
                         <el-table-column
                                 prop="num"
                                 label="编号"
-                                minWidth="20">
+                                minWidth="18">
                         </el-table-column>
 
                         <el-table-column
@@ -780,6 +780,7 @@
             addCaseData() {
                 this.caseList = this.caseList.concat(this.caseVessel);
                 this.caseList = JSON.parse(JSON.stringify(this.caseList));
+                this.$refs.multipleTable.clearSelection();
             },
             addConfigData() {
                 this.$axios.post('/api/api/config/data', {
@@ -877,16 +878,16 @@
                 this.caseList.splice(i, 1);
                 this.caseList.splice(i + 1, 0, d);
             },
-            refresh(targetName) {
-
-                if (targetName.label === '业务集合') {
-                    this.caseList.push({key: '', value: ''});
-                    this.caseList.pop()
-                }
-                else if (targetName.label === '接口用例') {
-                    this.cancelSelection()
-                }
-            },
+            // refresh(targetName) {
+            //
+            //     if (targetName.label === '业务集合') {
+            //         // this.caseList.push({key: '', value: ''});
+            //         // this.caseList.pop()
+            //     }
+            //     else if (targetName.label === '接口用例') {
+            //         this.cancelSelection()
+            //     }
+            // },
             refreshConfig(targetName) {
 
                 if (targetName.label === 'variables') {

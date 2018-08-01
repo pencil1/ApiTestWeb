@@ -44,8 +44,8 @@
                 <el-button type="primary" size="small" @click.native="test()">测试
                 </el-button>
                 <el-tooltip content="查看最近一次接口结果" placement="top-start">
-                    <el-button type="primary" icon="el-icon-view" @click="dialogTestData = true"
-                               size="small"></el-button>
+                    <el-button type="primary" icon="el-icon-view" @click="dialogTestData = true" size="small">
+                    </el-button>
                 </el-tooltip>
             </el-form-item>
         </el-form>
@@ -55,54 +55,54 @@
             <el-tab-pane label="接口信息" name="first" style="margin: 0 0 -10px;">
                 <div style="margin: 0 0 -20px;">
                 </div>
-                <el-scrollbar wrap-class="scrollbarList" >
-                <el-table
-                        ref="multipleTable"
-                        @selection-change="handleCaseSelection"
-                        :data="tableData"
-                        stripe>
-                    <el-table-column
-                            type="selection"
-                            width="55">
-                    </el-table-column>
-                    <el-table-column
-                            prop="num"
-                            label="编号"
-                            width="60">
-                    </el-table-column>
-                    <el-table-column
-                            :show-overflow-tooltip= true
-                            prop="name"
-                            label="接口名称"
-                            width="200">
-                    </el-table-column>
-                    <!--<el-table-column-->
-                            <!--:show-overflow-tooltip= true-->
-                            <!--prop="desc"-->
-                            <!--label="接口描述"-->
-                            <!--width="200">-->
-                    <!--</el-table-column>-->
-                    <el-table-column
-                            :show-overflow-tooltip= true
-                            prop="url"
-                            label="接口地址">
-                    </el-table-column>
-                    <el-table-column
-                            label="操作"
-                            width="320">
-                        <template slot-scope="scope">
-                            <el-button type="primary" icon="el-icon-edit" size="mini"
-                                       @click.native="editCase(tableData[scope.$index]['caseId'])">编辑
-                            </el-button>
-                            <el-button type="primary" icon="el-icon-tickets" size="mini"
-                                       @click.native="copyCase(tableData[scope.$index]['caseId'])">复制
-                            </el-button>
-                            <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="sureView(delCases,tableData[scope.$index]['caseId'])">删除
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
+                <el-scrollbar wrap-class="scrollbarList">
+                    <el-table
+                            ref="multipleTable"
+                            @selection-change="handleCaseSelection"
+                            :data="tableData"
+                            stripe>
+                        <el-table-column
+                                type="selection"
+                                width="55">
+                        </el-table-column>
+                        <el-table-column
+                                prop="num"
+                                label="编号"
+                                width="60">
+                        </el-table-column>
+                        <el-table-column
+                                :show-overflow-tooltip=true
+                                prop="name"
+                                label="接口名称"
+                                width="200">
+                        </el-table-column>
+                        <!--<el-table-column-->
+                        <!--:show-overflow-tooltip= true-->
+                        <!--prop="desc"-->
+                        <!--label="接口描述"-->
+                        <!--width="200">-->
+                        <!--</el-table-column>-->
+                        <el-table-column
+                                :show-overflow-tooltip=true
+                                prop="url"
+                                label="接口地址">
+                        </el-table-column>
+                        <el-table-column
+                                label="操作"
+                                width="320">
+                            <template slot-scope="scope">
+                                <el-button type="primary" icon="el-icon-edit" size="mini"
+                                           @click.native="editCase(tableData[scope.$index]['caseId'])">编辑
+                                </el-button>
+                                <el-button type="primary" icon="el-icon-tickets" size="mini"
+                                           @click.native="copyCase(tableData[scope.$index]['caseId'])">复制
+                                </el-button>
+                                <el-button type="danger" icon="el-icon-delete" size="mini"
+                                           @click.native="sureView(delCases,tableData[scope.$index]['caseId'])">删除
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
                 </el-scrollbar>
                 <el-button @click="cancelSelection()" size="mini" style="position: absolute;margin-top: 2px;">取消选择
                 </el-button>
@@ -151,79 +151,104 @@
                             </el-select>
                         </el-form-item>
                         <!--<el-form-item label="url" :label-width="caseData.formLabelWidth"-->
-                                      <!--prop="desc">-->
+                        <!--prop="desc">-->
 
-                            <!--<el-select v-model="caseData.funcAddress" clearable placeholder="请选择导入函数文件">-->
-                                <!--<el-option-->
-                                        <!--v-for="(item, key) in this.funcAddress"-->
-                                        <!--:key="item['value']"-->
-                                        <!--:label="item['value']"-->
-                                        <!--:value="item['value']">-->
-                                <!--</el-option>-->
-                            <!--</el-select>-->
+                        <!--<el-select v-model="caseData.funcAddress" clearable placeholder="请选择导入函数文件">-->
+                        <!--<el-option-->
+                        <!--v-for="(item, key) in this.funcAddress"-->
+                        <!--:key="item['value']"-->
+                        <!--:label="item['value']"-->
+                        <!--:value="item['value']">-->
+                        <!--</el-option>-->
+                        <!--</el-select>-->
 
                         <!--</el-form-item>-->
                         <el-form-item label="接口编号" :label-width="caseData.formLabelWidth"
-                                      prop="num"  v-if="caseData.id"
+                                      prop="num" v-if="caseData.id"
                         >
                             <el-input v-model.number="caseData.num" auto-complete="off">
                             </el-input>
                         </el-form-item>
                         <el-form-item label="接口名称" :label-width="caseData.formLabelWidth"
-                                      prop="name" >
+                                      prop="name">
                             <el-input v-model="caseData.name" auto-complete="off">
                             </el-input>
                         </el-form-item>
 
                         <!--<el-form-item label="用例描述" :label-width="caseData.formLabelWidth"-->
-                                      <!--prop="desc">-->
-                            <!--<el-input v-model="caseData.desc" auto-complete="off">-->
-                            <!--</el-input>-->
+                        <!--prop="desc">-->
+                        <!--<el-input v-model="caseData.desc" auto-complete="off">-->
+                        <!--</el-input>-->
                         <!--</el-form-item>-->
 
                         <!--<el-form-item label="up函数" :label-width="caseData.formLabelWidth">-->
-                            <!--<el-input v-model="caseData.upFunc">-->
-                            <!--</el-input>-->
+                        <!--<el-input v-model="caseData.upFunc">-->
+                        <!--</el-input>-->
                         <!--</el-form-item>-->
                         <!--<el-form-item label="down函数" :label-width="caseData.formLabelWidth">-->
-                            <!--<el-input v-model="caseData.downFunc">-->
-                            <!--</el-input>-->
+                        <!--<el-input v-model="caseData.downFunc">-->
+                        <!--</el-input>-->
                         <!--</el-form-item>-->
 
 
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane label="接口参数">
-                    <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
-                               :disabled="form.choiceType === 'json'"
-                               @click="addCaseVariable()">添加
-                    </el-button>
-                    <!--<el-button type="primary" size="small"-->
-                    <!--@click="variableDialog=true">json转换-->
-                    <!--</el-button>-->
-                    <el-button type="primary" size="small"
-                               @click="cleanCaseVariable()">清空参数
-                    </el-button>
-                    <el-select v-model="form.choiceType" placeholder="请选择" size="small">
-                        <el-option
-                                v-for="(item,key) in choiceVariableType"
-                                :key="item.label"
-                                :label="item.label"
-                                :value="item.label">
-                        </el-option>
-                    </el-select>
+                <el-tab-pane label="请求信息">
+                    <el-form :inline="true" class="demo-form-inline">
+                        <el-form :inline="true" class="demo-form-inline">
+                            <el-form-item label="请求地址">
+                                <el-input placeholder="请输入url" v-model="caseData.url" size="medium"
+                                          style="width: 500px">
+                                </el-input>
+                            </el-form-item>
+                        </el-form>
+                        <el-form-item label="请求方式">
+                            <el-select v-model="caseData.method" size="medium" @change="methodChange"
+                                       style="width: 130px">
+                                <el-option v-for="item in methods" :key="item" :value="item">
+                                </el-option>
+                            </el-select>
+
+                        </el-form-item>
+                        <el-form-item label="数据类型">
+                            <el-select v-model="form.choiceType" placeholder="请选择" size="medium"
+                                       style="width: 130px"
+                                       :disabled="caseData.method === 'GET'">
+                                <el-option
+                                        v-for="(item,key) in choiceVariableType"
+                                        :key="item.label"
+                                        :label="item.label"
+                                        :value="item.label">
+                                </el-option>
+                            </el-select>
+                            <el-button type="primary" size="small"
+                                       :disabled="form.choiceType === 'json'"
+                                       @click="addCaseVariable()">添加
+                            </el-button>
+                            <!--<el-button type="primary" size="small"-->
+                            <!--@click="variableDialog=true">json转换-->
+                            <!--</el-button>-->
+                            <el-button type="primary" size="small"
+                                       @click="cleanCaseVariable()">清空参数
+                            </el-button>
+
+                        </el-form-item>
+                    </el-form>
+                    <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);" />
+
                     <div v-if="form.choiceType === 'json'">
                         <div style="margin: 0 0 15px;">
                         </div>
                         <el-input
                                 type="textarea"
                                 :rows="10"
-                                placeholder="请输入内容"
+                                placeholder="请输入json格式的参数"
                                 v-model="caseData.jsonVariable">
                         </el-input>
                     </div>
-                    <el-table :data="caseData.variable"  width="800px"  size="mini" stripe
+                    <el-table :data="caseData.variable" size="mini" stripe
                               v-if="form.choiceType === 'data'">
+
                         <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.key" size="medium">
@@ -273,7 +298,7 @@
                                 </div>
                             </template>
                         </el-table-column>
-                        <el-table-column  label="备注" header-align="center" minWidth="80">
+                        <el-table-column label="备注" header-align="center" minWidth="80">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.remark" size="medium">
                                 </el-input>
@@ -288,16 +313,10 @@
                         </el-table-column>
                     </el-table>
                 </el-tab-pane>
-                <el-tab-pane label="请求信息">
+                <el-tab-pane label="请求头部">
                     <el-form :inline="true" class="demo-form-inline">
-                        <el-form-item label="url:" style="margin-bottom:-2px">
-                            <el-input placeholder="请输入url" v-model="caseData.url" size="medium" style="width: 500px">
-                            </el-input>
-                        </el-form-item>
-                        <el-select v-model="caseData.method" size="medium">
-                            <el-option v-for="item in methods" :key="item" :value="item">
-                            </el-option>
-                        </el-select>
+
+
                         <el-button type="primary" size="small" @click="addCaseHeader()">添加头部</el-button>
                     </el-form>
                     <el-table :data="caseData.header" width="auto" size="mini" stripe>
@@ -307,7 +326,7 @@
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column property="value" label="Value" header-align="center"  minWidth="200">
+                        <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.value" size="medium">
                                 </el-input>
@@ -328,7 +347,7 @@
                     </el-button>
                     <el-table :data="caseData.extract" width="auto" size="mini" stripe>
                         <el-table-column property="key" label="Key" header-align="center"
-                                         style="font-size: 16px;"  minWidth="100">
+                                         style="font-size: 16px;" minWidth="100">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.key" size="medium">
                                 </el-input>
@@ -340,7 +359,7 @@
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column  label="备注" header-align="center" minWidth="80">
+                        <el-table-column label="备注" header-align="center" minWidth="80">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.remark" size="medium">
                                 </el-input>
@@ -357,41 +376,41 @@
                 </el-tab-pane>
 
                 <!--<el-tab-pane label="接口判断">-->
-                    <!--<el-button type="primary" icon="el-icon-circle-plus-outline" size="small"-->
-                               <!--@click="addValidate()">添加-->
-                    <!--</el-button>-->
-                    <!--<el-table :data="caseData.validate" style="width:100%" size="mini" stripe>-->
-                        <!--<el-table-column label="Check" header-align="center"-->
-                                         <!--style="font-size: 16px;" width="300">-->
-                            <!--<template slot-scope="scope">-->
-                                <!--<el-input v-model="scope.row.key" size="medium">-->
-                                <!--</el-input>-->
-                            <!--</template>-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column label="Comparator" header-align="center" width="200">-->
-                            <!--<template slot-scope="scope">-->
-                                <!--<el-autocomplete-->
-                                        <!--class="inline-input"-->
-                                        <!--v-model="scope.row.comparator"-->
-                                        <!--:fetch-suggestions="querySearch"-->
-                                        <!--placeholder="请输入内容"-->
-                                <!--&gt;</el-autocomplete>-->
-                            <!--</template>-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column label="Expected" header-align="center" width="350">-->
-                            <!--<template slot-scope="scope">-->
-                                <!--<el-input v-model="scope.row.value" size="medium">-->
-                                <!--</el-input>-->
-                            <!--</template>-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column label="操作" header-align="center" width="80">-->
-                            <!--<template slot-scope="scope">-->
-                                <!--<el-button type="danger" icon="el-icon-delete" size="mini"-->
-                                           <!--@click.native="delValidate(scope.$index)">删除-->
-                                <!--</el-button>-->
-                            <!--</template>-->
-                        <!--</el-table-column>-->
-                    <!--</el-table>-->
+                <!--<el-button type="primary" icon="el-icon-circle-plus-outline" size="small"-->
+                <!--@click="addValidate()">添加-->
+                <!--</el-button>-->
+                <!--<el-table :data="caseData.validate" style="width:100%" size="mini" stripe>-->
+                <!--<el-table-column label="Check" header-align="center"-->
+                <!--style="font-size: 16px;" width="300">-->
+                <!--<template slot-scope="scope">-->
+                <!--<el-input v-model="scope.row.key" size="medium">-->
+                <!--</el-input>-->
+                <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column label="Comparator" header-align="center" width="200">-->
+                <!--<template slot-scope="scope">-->
+                <!--<el-autocomplete-->
+                <!--class="inline-input"-->
+                <!--v-model="scope.row.comparator"-->
+                <!--:fetch-suggestions="querySearch"-->
+                <!--placeholder="请输入内容"-->
+                <!--&gt;</el-autocomplete>-->
+                <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column label="Expected" header-align="center" width="350">-->
+                <!--<template slot-scope="scope">-->
+                <!--<el-input v-model="scope.row.value" size="medium">-->
+                <!--</el-input>-->
+                <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column label="操作" header-align="center" width="80">-->
+                <!--<template slot-scope="scope">-->
+                <!--<el-button type="danger" icon="el-icon-delete" size="mini"-->
+                <!--@click.native="delValidate(scope.$index)">删除-->
+                <!--</el-button>-->
+                <!--</template>-->
+                <!--</el-table-column>-->
+                <!--</el-table>-->
                 <!--</el-tab-pane>-->
             </el-tabs>
 
@@ -474,7 +493,7 @@
                 variableDialog: false,
                 variableDialogData: '',
                 proGatherData: '',
-                configNameData:'',
+                configNameData: '',
                 temp_num: '',
                 fileList: [],
                 proUrlData: '',
@@ -514,7 +533,7 @@
 
                 form: {
                     projects: '',
-                    configName:'',
+                    configName: '',
                     gathers: [],
                     modelName: '',
                     choiceUrl: '基础url1',
@@ -797,7 +816,7 @@
                 )
             },
             addCaseVariable() {
-                this.caseData.variable.push({key: '', value: '', param_type: 'string',remark:''});
+                this.caseData.variable.push({key: '', value: '', param_type: 'string', remark: ''});
             },
             cleanCaseVariable() {
                 this.caseData.variable = [];
@@ -813,7 +832,7 @@
                 this.caseData.header.splice(i, 1);
             },
             addExtractHeader() {
-                this.caseData.extract.push({key: '', value: '',remark:''});
+                this.caseData.extract.push({key: '', value: '', remark: ''});
             },
             delExtractHeader(i) {
                 this.caseData.extract.splice(i, 1);
@@ -855,6 +874,11 @@
             clearGathers() {
                 this.form.gathers = null;
                 this.form.configName = null;
+            },
+            methodChange(i) {
+                if (i === 'GET') {
+                    this.form.choiceType = "data";
+                }
             },
 
         },
