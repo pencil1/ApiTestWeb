@@ -47,9 +47,37 @@
                     <el-button type="primary" icon="el-icon-view" @click="dialogTestData = true" size="small">
                     </el-button>
                 </el-tooltip>
+                <el-button type="primary" size="small" @click="importApiStatus = true">导入HAR
+                </el-button>
             </el-form-item>
         </el-form>
-
+        <el-dialog title="收货地址" :visible.sync="importApiStatus">
+            <el-row>
+                <el-col :span="17">
+                    <el-input v-model="importApiAddress" size="medium" :disabled="true">
+                    </el-input>
+                </el-col>
+                <el-col :span="1">
+                    <p></p>
+                </el-col>
+                <el-col :span="3">
+                    <el-upload
+                            class="upload-demo"
+                            action="/api/api/upload"
+                            :show-file-list='false'
+                            :on-success="getApiAddress"
+                    >
+                        <el-button size="small" type="primary" >
+                            点击上传
+                        </el-button>
+                    </el-upload>
+                </el-col>
+            </el-row>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="small" @click="importApiStatus = false">取 消</el-button>
+                <el-button type="small" @click.native="importCase()">确 定</el-button>
+            </div>
+        </el-dialog>
 
         <el-tabs value="first">
             <el-tab-pane label="接口信息" name="first" style="margin: 0 0 -10px;">
@@ -189,8 +217,6 @@
                         <!--<el-input v-model="caseData.downFunc">-->
                         <!--</el-input>-->
                         <!--</el-form-item>-->
-
-
                     </el-form>
                 </el-tab-pane>
                 <el-tab-pane label="请求信息">
@@ -491,6 +517,8 @@
                 ],
                 dialogTestData: false,
                 variableDialog: false,
+                importApiStatus:false,
+                importApiAddress:'',
                 variableDialogData: '',
                 proGatherData: '',
                 configNameData: '',
@@ -815,6 +843,35 @@
                     }
                 )
             },
+            importCase(){
+                this.importApiStatus = false;
+                this.$axios.post('/api/api/cases/fileChange', {
+                    'importApiAddress': this.importApiAddress,
+                    'projectName': this.form.projects,
+                    'gatherName': this.form.gathers,
+                }).then((response) => {
+
+                        if (response.data['status'] === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'warning',
+                            });
+                        }
+                        else {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'success',
+                            });
+                            this.importApiAddress = '';
+                            this.findCases();
+                        }
+
+
+                    }
+                )
+            },
             addCaseVariable() {
                 this.caseData.variable.push({key: '', value: '', param_type: 'string', remark: ''});
             },
@@ -851,6 +908,25 @@
             },
             fileChange(response, file, fileList) {
                 this.caseData.variable[this.temp_num]['value'] = response['data'];
+                if (response.data['status'] === 0) {
+                    this.$message({
+                        showClose: true,
+                        message: response['msg'],
+                        type: 'warning',
+                    });
+                }
+                else {
+                    this.$message({
+                        showClose: true,
+                        message: response['msg'],
+                        type: 'success',
+                    });
+                }
+
+
+            },
+            getApiAddress(response, file, fileList) {
+                this.importApiAddress = response['data'];
                 if (response.data['status'] === 0) {
                     this.$message({
                         showClose: true,
