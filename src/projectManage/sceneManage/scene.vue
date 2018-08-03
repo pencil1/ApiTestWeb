@@ -82,7 +82,8 @@
         <el-dialog title="业务信息" :visible.sync="sceneData.modelFormVisible" width="50%" top="5vh">
 
 
-            <el-tabs @tab-click="refresh" value="fourth">
+            <el-tabs value="fourth">
+                <!--<el-tabs @tab-click="refresh" value="fourth">-->
                 <el-tab-pane label="业务信息" name="first">
                     <el-form :model="sceneData">
                         <el-form-item label="业务编号" :label-width="sceneData.formLabelWidth"
@@ -115,7 +116,6 @@
                     </el-form>
                 </el-tab-pane>
                 <el-tab-pane label="业务集合" name="second">
-                    <!--<el-tab-pane label="业务集合" @tab-click="refresh" name="second">-->
                     <el-table
                             :data="caseList"
                             height="660"

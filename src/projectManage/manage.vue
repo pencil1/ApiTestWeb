@@ -34,7 +34,7 @@
                         </el-submenu>
                         <el-submenu index="2">
                             <template slot="title">
-                                <i class="el-icon-menu"></i>
+                                <i class="el-icon-document"></i>
                                 <span>接口管理</span>
                             </template>
                             <el-menu-item-group>
@@ -47,7 +47,7 @@
                         </el-submenu>
                         <el-submenu index="3">
                             <template slot="title">
-                                <i class="el-icon-menu"></i>
+                                <i class="el-icon-time"></i>
                                 <span>报告管理</span>
                             </template>
                             <el-menu-item-group>
@@ -60,7 +60,7 @@
 
                         <el-submenu index="4">
                             <template slot="title">
-                                <i class="el-icon-menu"></i>
+                                <i class="el-icon-setting"></i>
                                 <span>其他程序</span>
                             </template>
                             <el-menu-item-group>
@@ -194,10 +194,20 @@
     }
 
     .el-dialog__header {
-        padding: 5px 10px 1px;
+        padding: 2px 10px 2px;
+        background-color:#f5f7fa;
     }
 
     .el-dialog__title {
-        color: #f56c6c;
+        color: #6a6d71;
+        font-size:15px;
+
+    }
+    .el-dialog__headerbtn{
+        top:14px;
+        right:15px;
+    }
+    .el-input--mini .el-input__inner{
+        line-height:20px;
     }
 </style>
