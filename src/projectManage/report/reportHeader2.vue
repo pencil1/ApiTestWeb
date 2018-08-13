@@ -1,5 +1,5 @@
 <template>
-    <div class="reportHeader2">
+    <div class="reportHeader2" style="margin: 0 0 0 -20px;">
         <el-container>
             <el-container>
 
@@ -9,7 +9,7 @@
                     <el-row :gutter="20">
 
                         <el-col :span="20" style="text-align:left">
-                            <div style="font-size: 29px;font-family: KaiTi;color: #fff">Test Report: 测试报告
+                            <div style="font-size: 22px;font-family: KaiTi;color: #ffffff">Test Report: 测试报告
                             </div>
                         </el-col>
                     </el-row>
@@ -37,6 +37,6 @@
 </script>
 <style scoped>
     .el-header {
-        background-color: #757677;
+        background-color: rgba(0,0,0,0.87);
     }
 </style>

@@ -129,7 +129,7 @@
                             </el-input>
                         </el-form-item>
                         <el-form-item label="时间配置" :label-width="taskData.formLabelWidth">
-                            <el-input v-model="taskData.timeConfig" auto-complete="off" >
+                            <el-input v-model="taskData.timeConfig" auto-complete="off">
                             </el-input>
                         </el-form-item>
 
@@ -302,8 +302,8 @@
             },
             startTask(id) {
                 this.$axios.post('/api/api/task/start', {'id': id}).then((response) => {
-                    this.messageShow(this, response);
-                    this.findTask();
+                        this.messageShow(this, response);
+                        this.findTask();
                     }
                 )
             },
@@ -332,6 +332,9 @@
                 this.$axios.post('/api/api/task/del', {'id': id}).then((response) => {
                         this.messageShow(this, response);
                         this.form.taskName = '';
+                        if ((this.currentPage - 1) * this.sizePage + 1 === this.total) {
+                            this.currentPage = this.currentPage - 1
+                        }
                         this.findTask();
                     }
                 )

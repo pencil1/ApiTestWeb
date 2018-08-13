@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "echarts": "^4.1.0",
     "element-ui": "^2.4.5",
+    "v-charts": "^1.17.9",
     "vue": "^2.5.2",
     "vue-clipboard2": "^0.1.1",
     "vue-resource": "^1.4.0",

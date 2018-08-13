@@ -381,17 +381,15 @@
                                 v-model="caseConfig.variable">
                         </el-input>
                     </div>
-                    <el-table :data="caseConfig.variable" style="width:100%" size="mini" stripe
+                    <el-table :data="caseConfig.variable" size="mini" stripe
                               v-if="form.choiceType === 'data'">
-                        <el-table-column property="key" label="Key" header-align="center"
-                                         style="font-size: 16px;" width="250">
+                        <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.key" size="medium">
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column property="type" label="type" header-align="center"
-                                         style="font-size: 16px;" width="100">
+                        <el-table-column property="type" label="type" header-align="center" width="100">
                             <template slot-scope="scope">
                                 <!--<el-input v-model="scope.row.param_type" size="medium">-->
                                 <!--</el-input>-->
@@ -401,7 +399,7 @@
                                 </el-select>
                             </template>
                         </el-table-column>
-                        <el-table-column property="value" label="Value" header-align="center" width="350">
+                        <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                             <template slot-scope="scope">
                                 <div v-if="scope.row.param_type === 'file'">
                                     <el-row>
@@ -435,8 +433,7 @@
                             </template>
 
                         </el-table-column>
-                        <el-table-column label="备注" header-align="center"
-                                         style="font-size: 16px;" width="150">
+                        <el-table-column label="备注" header-align="center"  minWidth="80">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.remark" size="medium">
                                 </el-input>
@@ -463,22 +460,20 @@
                             v-model="caseConfig.statusCase.extract[1]" :disabled='true'
                             inactive-text="启动新参数">
                     </el-switch>
-                    <el-table :data="caseConfig.extract" style="width:100%" size="mini" stripe>
-                        <el-table-column property="key" label="Key" header-align="center"
-                                         style="font-size: 16px;" width="200">
+                    <el-table :data="caseConfig.extract" size="mini" stripe>
+                        <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.key" size="medium">
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column property="value" label="Value" header-align="center" width="500">
+                        <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.value" size="medium">
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column label="备注" header-align="center"
-                                         style="font-size: 16px;" width="150">
+                        <el-table-column label="备注" header-align="center" minWidth="80">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.remark" size="medium">
                                 </el-input>
@@ -506,15 +501,14 @@
                             v-model="caseConfig.statusCase.validate[1]"
                             inactive-text="启动新参数">
                     </el-switch>
-                    <el-table :data="caseConfig.validate" style="width:100%" size="mini" stripe>
-                        <el-table-column property="key" label="Key" header-align="center"
-                                         style="font-size: 16px;" width="300">
+                    <el-table :data="caseConfig.validate" size="mini" stripe>
+                        <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.key" size="medium">
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column label="Comparator" header-align="center" width="200">
+                        <el-table-column label="Comparator" header-align="center" minWidth="80">
                             <template slot-scope="scope">
                                 <el-autocomplete
                                         class="inline-input"
@@ -524,7 +518,7 @@
                                 </el-autocomplete>
                             </template>
                         </el-table-column>
-                        <el-table-column property="value" label="Value" header-align="center" width="350">
+                        <el-table-column property="value" label="Value" header-align="center"  minWidth="200">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.value" size="medium">
                                 </el-input>
@@ -855,7 +849,6 @@
                     this.caseList[this.tempNum]['case_name'] = this.caseConfig.name;
                 }
                 else {
-                    this.caseList[this.tempNum]['case_name'] = 'undetermined_case';
                     this.$message({
                         showClose: true,
                         message: '请输入用例名称',

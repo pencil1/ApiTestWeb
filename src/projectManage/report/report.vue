@@ -33,7 +33,8 @@
                 <el-button type="primary" @click.native="reset()" size="small">重置</el-button>
                 <!--<el-button type="primary" size="small" @click.native="runProject()">跑项目</el-button>-->
                 <!--<el-button type="primary" size="small"@click.native="runModel()" >跑模块</el-button>-->
-                <el-button type="primary" size="small" @click.native="runScene()" :loading="this.loading">跑业务</el-button>
+                <el-button type="primary" size="small" @click.native="runScene()" :loading="this.loading">跑业务
+                </el-button>
             </el-form-item>
         </el-form>
 
@@ -41,55 +42,56 @@
             <el-tab-pane label="报告列表" name="first" style="margin: 0 0 -10px;">
                 <div style="margin: 0 0 -20px;">
                 </div>
-                <el-scrollbar wrap-class="scrollbarList" >
-                <el-table :data="tableData" stripe >
+                <el-scrollbar wrap-class="scrollbarList">
+                    <el-table :data="tableData" stripe>
 
-                    <el-table-column
-                            prop="belong"
-                            label="所属项目"
-                            width="150">
-                    </el-table-column>
+                        <el-table-column
+                                prop="belong"
+                                label="所属项目"
+                                minWidth="50">
+                        </el-table-column>
 
-                    <el-table-column
-                            :show-overflow-tooltip= true
-                            width="550"
-                            prop="name"
-                            label="执行业务集"
-                            >
-                    </el-table-column>
-                    <el-table-column
-                            prop="address"
-                            label="时间"
-                            width="300">
-                    </el-table-column>
-                    <el-table-column
-                            prop="read_status"
-                            label="状态"
-                            width="80">
-                        <template slot-scope="scope">
-                            <div :style="scope.row.read_status === '已读' ? 'color:#2bef2b': 'color:rgb(255, 74, 74)'">
-                                {{scope.row.read_status}}
-                            </div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                            label="操作"
-                    >
-                        <template slot-scope="scope">
-                            <el-button type="primary" icon="el-icon-zoom-in" size="mini"
-                                       @click.native="check(tableData[scope.$index]['id'])">查看
-                            </el-button>
-                            <el-button type="primary" icon="el-icon-download" size="mini"
-                                       @click.native="downReport(tableData[scope.$index]['id'])">下载
-                            </el-button>
-                            <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="sureView(delReport, tableData[scope.$index]['address'])">删除
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
+                        <el-table-column
+                                :show-overflow-tooltip=true
+                                minWidth="200"
+                                prop="name"
+                                label="执行业务集"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                label="时间"
+                                minWidth="100">
+                        </el-table-column>
+                        <el-table-column
+                                prop="read_status"
+                                label="状态"
+                                width="80">
+                            <template slot-scope="scope">
+                                <div :style="scope.row.read_status === '已读' ? 'color:#2bef2b': 'color:rgb(255, 74, 74)'">
+                                    {{scope.row.read_status}}
+                                </div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                label="操作"
+                                width="300"
+                        >
+                            <template slot-scope="scope">
+                                <el-button type="primary" icon="el-icon-zoom-in" size="mini"
+                                           @click.native="check(tableData[scope.$index]['id'])">查看
+                                </el-button>
+                                <el-button type="primary" icon="el-icon-download" size="mini"
+                                           @click.native="downReport(tableData[scope.$index]['id'])">下载
+                                </el-button>
+                                <el-button type="danger" icon="el-icon-delete" size="mini"
+                                           @click.native="sureView(delReport, tableData[scope.$index]['address'])">删除
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
                 </el-scrollbar>
-                <div class="block" style="left:68%; position: relative;">
+                <div class="block" style="float: right; position: relative;margin-right: 20px">
                     <el-pagination
                             @current-change="handleCurrentChange"
                             @size-change="handleSizeChange"
@@ -160,7 +162,7 @@
                 );
                 this.$axios.get('/api/api/proScene/list').then((response) => {
                         this.proSceneData = response.data;
-                        setTimeout(this.findReport(),1000)
+                        setTimeout(this.findReport(), 1000)
                     }
                 );
 
@@ -190,6 +192,9 @@
             delReport(address) {
                 this.$axios.post('/api/api/report/del', {'address': address}).then((response) => {
                         this.messageShow(this, response);
+                        if ((this.currentPage - 1) * this.sizePage + 1 === this.total) {
+                            this.currentPage = this.currentPage - 1
+                        }
                         this.findReport();
                     }
                 )
@@ -218,7 +223,7 @@
                         this.messageShow(this, response);
                     }
                 );
-                setTimeout(this.findReport(),1500);
+                setTimeout(this.findReport(), 1500);
             },
             runProject() {
                 this.loading = true;
@@ -241,7 +246,7 @@
                 this.$axios.post('/api/api/report/download', {'reportId': reportId}).then((response) => {
                         // console.log(response.data['data']);
                         // download(response.data['data'], "测试报告.html", "text/html")
-                    this.download(response.data['data'], "测试报告.html", "text/html")
+                        this.download(response.data['data'], "测试报告.html", "text/html")
                     }
                 )
             },

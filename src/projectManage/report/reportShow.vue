@@ -1,143 +1,304 @@
 <template>
-    <div class="reportShow">
-        <div style="margin: 0 0 -15px;">
-        </div>
-        <div style="text-align:center; line-height: 15px;">
-            <el-row :gutter="20">
-                <el-col :span="1">
-                    <div class="grid-content bg-purple">
-                    </div>
-                </el-col>
-                <el-col :span="21" style="text-align:left;background-color: rgb(215, 235, 255)">
-                    <el-row :gutter="10">
-                        <el-col :span="5">
-                            <div style="margin-top: 10px">开始时间: {{this.reportData1['time']['start_at']}}
-                            </div>
-                        </el-col>
-                        <el-col :span="5">
-                            <div style="margin-top: 10px">耗时:
-                                {{this.reportData1['time']['duration']}}s
-                            </div>
-                        </el-col>
-                        <el-col :span="5">
-                            <div style="margin-top: 10px">版本:
-                                {{this.reportData1['platform']['python_version']}}
-                            </div>
-                        </el-col>
-                        <el-col :span="5">
-                            <div style="margin-top: 10px">skipped:
-                                {{this.reportData1['stat']['skipped']}}
-                            </div>
-                        </el-col>
-                    </el-row>
-                    <el-row :gutter="10">
-                        <el-col :span="5">
-                            <div class="grid-content bg-purple">用例总数:
-                                {{this.reportData1['stat']['testsRun']}}
-                            </div>
-                        </el-col>
-                        <el-col :span="5">
-                            <div class="grid-content bg-purple" style="color: #67C23A;">成功用例数:
-                                {{this.reportData1['stat']['successes']}}
-                            </div>
-                        </el-col>
-                        <el-col :span="5">
-                            <div class="grid-content bg-purple" style="color: #F56C6C;">失败用例数:
-                                {{this.reportData1['stat']['failures']}}
-                            </div>
-                        </el-col>
-                        <el-col :span="5">
-                            <div class="grid-content bg-purple" style="color: #F56C6C;">错误:
-                                {{this.reportData1['stat']['errors']}}
-                            </div>
-                        </el-col>
-                    </el-row>
-                </el-col>
-            </el-row>
-            <el-button type="info" size="mini" @click.native="returnReport()" style="float: left;">返回</el-button>
-            <el-button size="mini" @click.native="showSuccessData('all')" style="float: left;">全部信息</el-button>
-            <el-button type="success" size="mini" @click.native="showSuccessData('success')" style="float: left;">
-                成功信息
-            </el-button>
-            <el-button type="danger" size="mini" @click.native="showSuccessData('error')" style="float: left;">错误信息
-            </el-button>
-        </div>
-        <el-table :data="this.reportData1['records']" stripe height="680">
-            <el-table-column
-                    prop="status"
-                    label="状态"
-                    width="80"
-            >
-                <template slot-scope="scope">
-                    <div :style="scope.row.status === 'success' ? 'color:#2bef2b': 'color:rgb(255, 74, 74)'">
-                        {{scope.row.status}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    prop="name"
-                    label="名称"
-                    width="120">
-            </el-table-column>
-            <el-table-column
-                    prop="meta_data"
-                    label="耗时"
-                    width="110">
-                <template slot-scope="scope">
-                    <div>
-                        {{reportData1['records'][scope.$index]['meta_data']['response_time(ms)']}}ms
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    :show-overflow-tooltip= true
-                    prop="meta_data"
-                    label="接口地址">
-                <template slot-scope="scope">
-                    <div>
-                        {{reportData1['records'][scope.$index]['meta_data']['url']}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column label="操作">
-                <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click.native="tempDetail(scope.$index)">详细</el-button>
-                    <el-button type="success" size="mini" @click.native="tempRequest(scope.$index)">请求信息</el-button>
-                    <el-button type="success" size="mini" @click.native="tempReturn(scope.$index)">返回信息</el-button>
-                    <el-button type="danger" size="mini" @click.native="tempError(scope.$index)"
-                               v-show="scope.row.status === 'error'">错误信息
+    <div class="reportShow" style="margin: 0 0 0 -20px;">
+        <div style="margin: 0 0 -20px;"></div>
+        <el-row>
+            <el-col :span="24">
+                <div class="grid-content" style="background-color: #f5f5f5 !important;">
+                    <el-button type="primary" round style="padding: 4px 10px ;" v-show="false"></el-button>
+                    <el-button type="primary" round style="padding: 4px 10px ;" @click.native="hideShowPic(false)"
+                               v-show="this.picStatus">隐藏图表
                     </el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-        <el-dialog
-                title="提示"
-                :visible.sync="dialogVisible"
-                width="40%"
-        >
-            <div style="max-height: 500px;overflow: auto;">
-                <pre>{{this.temp}}</pre>
+                    <el-button type="primary" round style="padding: 4px 10px ;" @click.native="hideShowPic(true)"
+                               v-show="!this.picStatus">展示图表
+                    </el-button>
+                    <!--<el-button-group>-->
+                        <!--<el-button type="primary" icon="el-icon-check" style="padding: 4px 10px ;"></el-button>-->
+                        <!--<el-button type="danger" icon="el-icon-close" style="padding: 4px 10px ;"></el-button>-->
+                    <!--</el-button-group>-->
+                    <el-dropdown @command="handleCommand" style="line-height:15px;margin-left:10px;color: #3a8ee6;">
+                          <span class="el-dropdown-link">
+                            业务展示<i class="el-icon-arrow-down el-icon--right"></i>
+                          </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item command="None">全部业务</el-dropdown-item>
+                            <el-dropdown-item command="success">成功业务</el-dropdown-item>
+                            <el-dropdown-item command="error">失败业务</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                    <span style="font-family: Source Sans Pro;float: right;font-size: 13px;color: #3a8ee6;margin-right: 10px">time:  2018/07/31 10:51:11</span>
+                </div>
+            </el-col>
+        </el-row>
 
-            </div>
-            <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false" size="mini">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false" size="mini">确 定</el-button>
-  </span>
-        </el-dialog>
+        <el-row v-show="this.picStatus">
+            <el-col :span="10"
+                    style="border-style:solid;border-color: #ffffff rgb(234, 234, 234) #ffffff #ffffff;border-width: 1px;">
+                <div style="height: 200px;float:left;">
+                    <ve-pie :data="caseChartData" :settings="caseChartSettings" height="200px" width="350px"></ve-pie>
+                </div>
+                <ol style="margin-top:5px;font-family:Serif">
+                    <li style="list-style-type:none;">tests result</li>
+                    <li style="list-style-type:none;">总数:{{this.reportData.stat.testsRun}}</li>
+                    <li style="list-style-type:none;">成功:{{this.reportData.stat.successes}}</li>
+                    <li style="list-style-type:none;">失败:{{this.reportData.stat.failures}}</li>
+                    <li style="list-style-type:none;">错误:{{this.reportData.stat.errors}}</li>
+                </ol>
+            </el-col>
+            <el-col :span="14" style="border-width: 1px;">
+                <div style="height: 200px;float:left;">
+                    <ve-ring :data="suiteChartData" :settings="suiteChartSettings" height="200px" width="350px"
+                    ></ve-ring>
+                </div>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="7"
+                    style="border-style:solid;border-color: rgb(234, 234, 234) #ffffff #ffffff #ffffff;border-width: 1px;">
+                <el-scrollbar>
+                    <div :style={height:picHeight}>
+                        <!--<div style="height: 840px;font-family:Serif">-->
+                        <el-collapse accordion>
+                            <el-collapse-item
+                                    v-for="(item, index) in reportData['details']"
+                                    :key="index"
+                                    v-show="item.success === true ? showScene[0]: showScene[1]"
+                            >
+                                <template slot="title">
+                                    <div style="font-weight:600 ;font-size: 15px;margin-left: 10px"
+                                         :style="item.success === true ? 'color:#409eff': 'color:rgb(255, 74, 74)'"
+                                    >
+                                        {{item.name}}
+                                    </div>
+
+                                </template>
+                                <div>
+                                    <ol id="test" style="padding:5px;font-family:Times New Roman">
+                                        <li style="list-style-type:none;border-bottom: 1px solid #eee;margin-left: 10px"
+                                            :class="{'active':index === showColor[0] && index1 === showColor[1],
+                                        'wire': index1 === 0}"
+                                            v-for="(item1, index1) in item['records']"
+                                            @click="handleNodeClick(index, index1)">
+                                            <div :style="item1.status === 'success' ? 'color:#67c23a': 'color:rgb(255, 74, 74)'">
+                                                <span class="test-name">{{item1.name}}</span>
+                                                <span class="test-time">{{item1.meta_data.response.response_time_ms}} ms</span>
+                                                <span class="test-status right pass">{{item1.status}}</span>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+
+                            </el-collapse-item>
+                        </el-collapse>
+                    </div>
+                </el-scrollbar>
+            </el-col>
+            <el-col :span="17"
+                    style="border-style:solid;border-color:rgb(234, 234, 234) #ffffff rgb(234, 234, 234) rgb(234, 234, 234);border-width: 1px;font-family:Serif">
+
+
+                <el-scrollbar>
+                    <div style="float:right;padding-right:15px">
+                        <el-tooltip content="查看主要信息" placement="top-start" @click.native="showInfo()">
+                            <el-button size="mini" type="info" icon="el-icon-info" circle></el-button>
+                        </el-tooltip>
+                        <el-tooltip content="查看所有信息" placement="top-start">
+                            <el-button size="mini" type="primary" circle @click.native="showAll()">all</el-button>
+                        </el-tooltip>
+                        <!--<el-button size="mini" type="success" icon="el-icon-check" circle></el-button>-->
+                        <!--<el-button size="mini" type="info" icon="el-icon-message" circle></el-button>-->
+                        <!--<el-button size="mini" type="warning" icon="el-icon-star-off" circle></el-button>-->
+                        <el-tooltip content="查看报错信息" placement="top-start">
+                            <el-button size="mini" type="danger" icon="el-icon-error" circle
+                                       @click.native="showError()"></el-button>
+                        </el-tooltip>
+                    </div>
+                    <div :style={height:picHeight}>
+                        <table class="el-table__header" style="padding:10px;font-size: 14px;width: 100%;" border="0"
+                               cellpadding="0" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th style="width: 150px;border-bottom:1px solid #d0d0d0;">Identity</th>
+                                <th style="width: 80%;border-bottom:1px solid #d0d0d0;">Details</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-show="statusShow[0]">
+                                <td style="border-bottom:1px solid #d0d0d0;">url</td>
+                                <td class="content">
+                                    {{this.meta_data['request']['url']}}
+                                </td>
+                            </tr>
+                            <tr v-show="statusShow[1]">
+                                <td style="border-bottom:1px solid #d0d0d0;">method</td>
+                                <td class="content">
+                                    {{this.meta_data['request']['method']}}
+                                </td>
+                            </tr>
+                            <tr v-show="statusShow[2]">
+                                <td style="border-bottom:1px solid #d0d0d0;">status_code</td>
+                                <td class="content">
+                                    {{this.meta_data['response']['status_code']}}
+                                </td>
+                            </tr>
+                            <tr v-show="statusShow[3]">
+                                <td style="border-bottom:1px solid #d0d0d0;">req_headers</td>
+                                <td class="content">
+                                    <pre style="overflow: auto">{{optimizeShow(this.meta_data['request']['headers'])}}</pre>
+                                </td>
+                            </tr>
+                            <tr v-show="statusShow[4]">
+                                <td style="border-bottom:1px solid #d0d0d0;">body</td>
+                                <td class="content">
+                                    {{this.meta_data['request']['body']}}
+                                </td>
+                            </tr>
+                            <tr v-show="statusShow[5]">
+                                <td style="border-bottom:1px solid #d0d0d0;">data</td>
+                                <td class="content">
+                                    <!--<pre style="overflow: auto">{{this.meta_data['request']['data']}}</pre>-->
+                                    <pre style="overflow: auto">{{optimizeShow(this.meta_data['request']['data'])}}</pre>
+
+                                </td>
+                            </tr>
+                            <tr v-show="statusShow[6]">
+                                <td style="border-bottom:1px solid #d0d0d0;">params</td>
+                                <td class="content">
+                                    {{this.meta_data['request']['params']}}
+                                </td>
+                            </tr>
+                            <tr v-show="statusShow[7]">
+                                <td style="border-bottom:1px solid #d0d0d0;">resp_headers</td>
+                                <td class="content">
+                                    <pre style="overflow: auto">{{optimizeShow(this.meta_data['response']['headers'])}}</pre>
+                                    <!--<pre style="overflow: auto">{{this.meta_data['response']['headers']}}</pre>-->
+                                </td>
+                            </tr>
+
+                            <tr v-show="statusShow[8]">
+                                <td style="border-bottom:1px solid #d0d0d0;">resp_data</td>
+                                <td class="content">
+                                    <pre style="overflow: auto">{{this.meta_data['response']['json']}}</pre>
+                                </td>
+                            </tr>
+                            <tr v-show="attachment !== ''">
+                                <td style="border-bottom:1px solid #d0d0d0;color:red">attachment</td>
+                                <td class="content">
+                                    <pre style="overflow: auto;color:red">{{this.attachment}}</pre>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </el-scrollbar>
+            </el-col>
+        </el-row>
     </div>
 </template>
 
 <script>
+
     export default {
         name: 'reportShow',
         data() {
+            this.caseChartSettings = {
+                radius: 80,
+                avoidLabelOverlap: false,
+                offsetY: 110,
+                itemStyle: {
+                    normal: {
+                        color: function (params) {
+                            // build a color map as your need.
+                            let colorList = [
+                                'rgb(25,212,174)', 'rgb(250,110,134)', '#FE8463', '#E87C25', '#27727B',
+                                '#FE8463', '#9BCA63', '#FAD860', '#F3A43B', '#60C0DD',
+                                '#D7504B', '#C6E579', '#F4E001', '#F0805A', '#26C0C0'
+                            ];
+                            return colorList[params.dataIndex]
+                        }
+                    }
+                },
+                // level: [[],['成功case', '错误case', '失败case']],
+                label: {
+                    normal: {position: 'center', show: false,},
+                    // emphasis: {show: true,textStyle: {fontSize: '20',fontWeight: 'bold'}}
+                },
+                labelLine: {
+                    normal: {show: false}
+                },
+
+            };
+            this.suiteChartSettings = {
+                radius: 80,
+                avoidLabelOverlap: false,
+                offsetY: 110,
+                itemStyle: {
+                    normal: {
+                        color: function (params) {
+                            // build a color map as your need.
+                            let colorList = [
+                                'rgb(25,212,174)', 'rgb(250,110,134)', '#fb2828', '#E87C25', '#27727B',
+                                '#FE8463', '#9BCA63', '#FAD860', '#F3A43B', '#60C0DD',
+                                '#D7504B', '#C6E579', '#F4E001', '#F0805A', '#26C0C0'
+                            ];
+                            return colorList[params.dataIndex]
+                        }
+                    }
+                },
+                label: {
+                    normal: {position: 'center', show: false,},
+                    // emphasis: {show: true,textStyle: {fontSize: '20',fontWeight: 'bold'}}
+                },
+                labelLine: {
+                    normal: {show: false}
+                },
+            };
             return {
                 reportAddress: '',
+                picHeight: '640px',
+                picStatus: true,
+                active: true,
+                showScene:[true,true],
+                statusShow: [true, true, true, true, true, true, true, true, true],
+                showColor: [],
+                attachment: '',
+                meta_data: {
+                    request: {body: '', data: '', files: '', headers: '', method: '', params: '', url: ''},
+                    response: {
+                        content: '',
+                        content_type: '',
+                        cookies: '',
+                        elapsed_ms: '',
+                        headers: '',
+                        json: '',
+                        ok: '',
+                        status_code: '',
+                        url: ''
+                    }
+                },
+                caseChartData: {
+                    columns: ['caseName', 'num'],
+                    rows: [
+                        {'caseName': '成功case', num: 0},
+                        {"caseName": '失败case', num: 0},
+                        {'caseName': '错误case', num: 0},
+
+
+                    ]
+                },
+                suiteChartData: {
+
+                    columns: ['name', 'num',],
+                    rows: [
+                        {'name': '成功业务', 'num': 0},
+                        {'name': '失败业务', 'num': 0},
+                    ]
+                },
+
                 dialogVisible: false,
                 temp: {},
-                reportData1: {
-                    'records': [],
-
+                reportData: {
+                    'details': [{name: ''}],
                     'platform': {'duration': '', 'python_version': ''},
                     'stat': {'skipped': '', 'testsRun': '', 'successes': '', 'failures': '', 'errors': ''},
                     'time': {'start_at': '', 'duration': 1}
@@ -147,44 +308,77 @@
         },
 
         methods: {
+
+            handleNodeClick(i1, i2) {
+                this.showColor = [i1, i2];
+                this.meta_data = this.reportData['details'][i1]['records'][i2]['meta_data'];
+                this.attachment = this.reportData['details'][i1]['records'][i2]['attachment']
+            },
+            handleCommand(command) {
+                // this.showData(command);
+                if (command === 'error'){
+                    this.showScene = [false, true]
+                }
+                else if(command === 'success'){
+                    this.showScene = [true, false]
+                }
+                else{
+                    this.showScene = [true, true]
+                }
+            },
             returnReport() {
                 this.$router.push({path: 'reportManage'});
             },
-
-            tempDetail(index) {
-                this.temp = this.reportData1['records'][index];
-                this.dialogVisible = true
+            optimizeShow(dict) {
+                if (dict) {
+                    let line;
+                    for (let key in dict) {
+                        line = line + key + ':' + dict[key] + '\n'
+                    }
+                    return line
+                }
+            },
+            showInfo() {
+                this.statusShow = [true, true, true, false, false, false, false, false, true];
 
             },
-            tempRequest(index) {
-                this.temp = this.reportData1['records'][index]['meta_data']['request_body'];
-                this.dialogVisible = true
+            showAll() {
+                this.statusShow = [true, true, true, true, true, true, true, true, true];
 
             },
-            tempReturn(index) {
-                this.temp = this.reportData1['records'][index]['meta_data']['response_body'];
-                this.dialogVisible = true
+            showError() {
+                this.statusShow = [false, false, false, false, false, false, false, false, false];
 
             },
             tempError(index) {
-                this.temp = this.reportData1['records'][index]['attachment'];
+                this.temp = this.reportData['records'][index]['attachment'];
                 this.dialogVisible = true
 
             },
-            showData() {
+            showData(state='None') {
                 this.reportAddress = this.$route.query.reportId;
-                this.$axios.post('/api/api/report/list', {'reportId': this.reportAddress}).then((response) => {
-                    if (response.data['status'] === 0) {
-                        this.$message({
-                            showClose: true,
-                            message: response.data['msg'],
-                            type: 'warning',
-                        });
-                    }
-                    else {
-                        this.reportData1 = response['data'];
+                this.$axios.post('/api/api/report/list', {
+                    'reportId': this.reportAddress,
+                    'state': state,
+                }).then((response) => {
+                        if (response.data['status'] === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'warning',
+                            });
+                        }
+                        else {
+                            this.reportData = response['data'];
+                            this.meta_data = response['data']['details'][0]['records'][0]['meta_data'];
+                            this.attachment = response['data']['details'][0]['records'][0]['attachment'];
+                            this.caseChartData['rows'][0]['num'] = this.reportData['stat']['successes_1'];
+                            this.caseChartData['rows'][1]['num'] = this.reportData['stat']['failures_1'];
+                            this.caseChartData['rows'][2]['num'] = this.reportData['stat']['errors_1'];
+                            this.suiteChartData['rows'][0]['num'] = this.reportData['stat']['successes_scene'];
+                            this.suiteChartData['rows'][1]['num'] = this.reportData['stat']['failures_scene'];
 
-                    }
+                        }
 
                     }
                 )
@@ -195,14 +389,25 @@
                     'reportId': this.reportAddress,
                     'state': state
                 }).then((response) => {
-                        this.reportData1 = response['data'];
+                        this.reportData = response['data'];
                     }
                 )
 
             },
+            hideShowPic(s) {
+                if (s) {
+                    this.picStatus = true;
+                    this.picHeight = '640px';
+                }
+                else {
+                    this.picStatus = false;
+                    this.picHeight = '840px';
+                }
+            },
         },
         mounted() {
             this.showData();
+            // this.drawLine();
 
         },
     }
@@ -210,24 +415,74 @@
 
 </script>
 
-<style>
+<style scoped>
+    .wire {
+        border-top: 1px solid #eee;
+
+    }
+
+    .active {
+        background: #f7f7f7;
+        font-weight: 600;
+    }
+
+    .el-collapse-item__content {
+        padding-bottom: 1px;
+
+    }
+
+    .test-name {
+        display: inline-block;
+        word-break: break-all;
+        font-size: 16px;
+        width: 100% !important;
+    }
+
+    .test-status {
+        text-transform: capitalize;
+        font-size: 13px;
+        float: right !important;
+        margin-right: 20px;
+    }
+
     .el-row {
-        margin-bottom: 10px;
-
     }
 
-    .el-row:last-child {
-        margin-bottom: 2px;
+    .el-main {
+        padding: 0;
     }
 
-    .el-col {
-        border-radius: 4px;
+    .bg-purple-dark {
+        background: #99a9bf;
+    }
+
+    .bg-purple {
+        background: #d3dce6;
+    }
+
+    .bg-purple-light {
+        background: #e5e9f2;
     }
 
     .grid-content {
-        border-radius: 4px;
-        min-height: 25px;
+        min-height: 36px;
     }
 
+    .scrollbarList {
+        max-height: 840px;
+    }
+
+    .content {
+        height: auto;
+        word-wrap: break-word;
+        word-break: break-all;
+        overflow: hidden;
+        border-bottom: 1px solid #d0d0d0;
+    }
+
+    .row-bg {
+        padding: 10px 0;
+        background-color: #f9fafc;
+    }
 
 </style>

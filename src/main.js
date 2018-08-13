@@ -8,6 +8,10 @@ import VueResource from 'vue-resource'
 import router from './router-config'
 import store from './store/store'
 import VueClipboard from 'vue-clipboard2'
+import pie from 'v-charts/lib/pie.common'
+import histogram from 'v-charts/lib/histogram.common'
+import ring from 'v-charts/lib/ring.common'
+
 
 Vue.prototype.messageShow = function (_this, response) {
     if (response.data['status'] === 0) {
@@ -45,6 +49,9 @@ Vue.prototype.sureView = function (func, arg) {
 };
 
 Vue.prototype.$axios = axios;
+Vue.component(pie.name, pie);
+Vue.component(histogram.name, histogram);
+Vue.component(ring.name, ring);
 
 
 Vue.use(ElementUI);

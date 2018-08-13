@@ -31,34 +31,34 @@
             <el-tab-pane label="模块列表" name="first" style="margin: 0 0 -10px;">
                 <div style="margin: 0 0 -20px;">
                 </div>
-                <el-scrollbar wrap-class="scrollbarList" >
-                <el-table :data="tableData" stripe>
-                    <el-table-column
-                            prop="num"
-                            label="编号"
-                            width="80">
-                    </el-table-column>
-                    <el-table-column
-                            prop="name"
-                            label="模块名称"
-                            width="650">
-                    </el-table-column>
-                    <el-table-column
-                            label="操作"
-                    >
-                        <template slot-scope="scope">
-                            <el-button type="primary" icon="el-icon-edit" size="mini"
-                                       @click.native="editSceneConfig(tableData[scope.$index]['id'])">编辑
-                            </el-button>
-                            <!--<el-button type="primary" icon="el-icon-tickets" size="mini"-->
-                            <!--@click.native="copyModel(tableData[scope.$index]['id'])">复制-->
-                            <!--</el-button>-->
-                            <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="sureView(delConfig,tableData[scope.$index]['id'])">删除
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
+                <el-scrollbar wrap-class="scrollbarList">
+                    <el-table :data="tableData" stripe>
+                        <el-table-column
+                                prop="num"
+                                label="编号"
+                                width="80">
+                        </el-table-column>
+                        <el-table-column
+                                prop="name"
+                                label="模块名称"
+                                width="650">
+                        </el-table-column>
+                        <el-table-column
+                                label="操作"
+                        >
+                            <template slot-scope="scope">
+                                <el-button type="primary" icon="el-icon-edit" size="mini"
+                                           @click.native="editSceneConfig(tableData[scope.$index]['id'])">编辑
+                                </el-button>
+                                <!--<el-button type="primary" icon="el-icon-tickets" size="mini"-->
+                                <!--@click.native="copyModel(tableData[scope.$index]['id'])">复制-->
+                                <!--</el-button>-->
+                                <el-button type="danger" icon="el-icon-delete" size="mini"
+                                           @click.native="sureView(delConfig,tableData[scope.$index]['id'])">删除
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
                 </el-scrollbar>
                 <div class="block" style="left:68%; position: relative;">
                     <el-pagination
@@ -301,6 +301,9 @@
                 this.$axios.post('/api/api/config/del', {'id': id}).then((response) => {
                         this.messageShow(this, response);
                         this.form.configName = '';
+                        if ((this.currentPage - 1) * this.sizePage + 1 === this.total) {
+                            this.currentPage = this.currentPage - 1
+                        }
                         this.findSceneConfig();
                     }
                 )

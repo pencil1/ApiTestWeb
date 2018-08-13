@@ -61,7 +61,7 @@
                 </el-form-item>
             </el-form>
             <el-form :inline="true" class="demo-form-inline">
-                <el-form-item label="审批人">
+                <el-form-item label="文件地址">
                     <el-input v-model="importApiAddress" size="medium" :disabled="true">
                     </el-input>
                 </el-form-item>
@@ -252,9 +252,14 @@
                                         :value="item.label">
                                 </el-option>
                             </el-select>
+                            <!--为了美观添加的按钮-->
+                            <el-button type="primary" size="small"
+                                       v-show="false"
+                                       >
+                            </el-button>
                             <el-button type="primary" size="small"
                                        v-show="form.choiceType === 'data'"
-                                       @click="addCaseVariable()">添加
+                                       @click="addCaseVariable()">加参数
                             </el-button>
 
                             <el-button type="primary" size="small"
@@ -382,8 +387,7 @@
                                @click="addExtractHeader()">添加
                     </el-button>
                     <el-table :data="caseData.extract" width="auto" size="mini" stripe>
-                        <el-table-column property="key" label="Key" header-align="center"
-                                         style="font-size: 16px;" minWidth="100">
+                        <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.key" size="medium">
                                 </el-input>
@@ -411,43 +415,43 @@
                     </el-table>
                 </el-tab-pane>
 
-                <!--<el-tab-pane label="接口判断">-->
-                <!--<el-button type="primary" icon="el-icon-circle-plus-outline" size="small"-->
-                <!--@click="addValidate()">添加-->
-                <!--</el-button>-->
-                <!--<el-table :data="caseData.validate" style="width:100%" size="mini" stripe>-->
-                <!--<el-table-column label="Check" header-align="center"-->
-                <!--style="font-size: 16px;" width="300">-->
-                <!--<template slot-scope="scope">-->
-                <!--<el-input v-model="scope.row.key" size="medium">-->
-                <!--</el-input>-->
-                <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="Comparator" header-align="center" width="200">-->
-                <!--<template slot-scope="scope">-->
-                <!--<el-autocomplete-->
-                <!--class="inline-input"-->
-                <!--v-model="scope.row.comparator"-->
-                <!--:fetch-suggestions="querySearch"-->
-                <!--placeholder="请输入内容"-->
-                <!--&gt;</el-autocomplete>-->
-                <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="Expected" header-align="center" width="350">-->
-                <!--<template slot-scope="scope">-->
-                <!--<el-input v-model="scope.row.value" size="medium">-->
-                <!--</el-input>-->
-                <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="操作" header-align="center" width="80">-->
-                <!--<template slot-scope="scope">-->
-                <!--<el-button type="danger" icon="el-icon-delete" size="mini"-->
-                <!--@click.native="delValidate(scope.$index)">删除-->
-                <!--</el-button>-->
-                <!--</template>-->
-                <!--</el-table-column>-->
-                <!--</el-table>-->
-                <!--</el-tab-pane>-->
+                <el-tab-pane label="接口判断">
+                <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
+                @click="addValidate()">添加
+                </el-button>
+                <el-table :data="caseData.validate" style="width:100%" size="mini" stripe>
+                <el-table-column label="Check" header-align="center"
+                style="font-size: 16px;" width="300">
+                <template slot-scope="scope">
+                <el-input v-model="scope.row.key" size="medium">
+                </el-input>
+                </template>
+                </el-table-column>
+                <el-table-column label="Comparator" header-align="center" width="200">
+                <template slot-scope="scope">
+                <el-autocomplete
+                class="inline-input"
+                v-model="scope.row.comparator"
+                :fetch-suggestions="querySearch"
+                placeholder="请输入内容"
+                ></el-autocomplete>
+                </template>
+                </el-table-column>
+                <el-table-column label="Expected" header-align="center" width="350">
+                <template slot-scope="scope">
+                <el-input v-model="scope.row.value" size="medium">
+                </el-input>
+                </template>
+                </el-table-column>
+                <el-table-column label="操作" header-align="center" width="80">
+                <template slot-scope="scope">
+                <el-button type="danger" icon="el-icon-delete" size="mini"
+                @click.native="delValidate(scope.$index)">删除
+                </el-button>
+                </template>
+                </el-table-column>
+                </el-table>
+                </el-tab-pane>
             </el-tabs>
 
             <div slot="footer" class="dialog-footer">
@@ -479,18 +483,22 @@
                                style="position:absolute;right: 3%;">复制
                     </el-button>
                     <div style="color: red">url：</div>
-                    <div>{{item.meta_data.url}}</div>
+                    <div>{{item.meta_data.request.url}}</div>
+                    <div style="color: red">请求params：</div>
+                    <div>{{item.meta_data.request.params}}</div>
+                    <div style="color: red">请求body：</div>
+                    <div>{{item.meta_data.request.body}}</div>
                     <div style="color: red">请求参数：</div>
-                    <div>{{item.meta_data.request_body}}</div>
-                    <div style="color: red">返回头：</div>
-                    <div>{{item.meta_data.request_headers}}</div>
+                    <div>{{item.meta_data.request.data}}</div>
+                    <div style="color: red">请求头：</div>
+                    <div>{{item.meta_data.request.headers}}</div>
                     <div style="color: red">返回结果：</div>
                     <div>
-                        <pre style="overflow: auto">{{item.meta_data.response_body}}</pre>
+                        <pre style="overflow: auto">{{item.meta_data.response.json}}</pre>
                     </div>
                     <div style="color: red">错误信息：</div>
                     <div>
-                        <pre>{{item.attachment}}</pre>
+                        <pre style="overflow: auto">{{item.attachment}}</pre>
                     </div>
 
                 </el-collapse-item>
@@ -529,7 +537,7 @@
                 resultShow: [
                     {
                         name: '',
-                        meta_data: {request_body: '', url: '', response_body: '', request_headers: ''},
+                        meta_data: {request:{body: '', url: '', headers: '', data: '',params:''},response:{content:'',json:''}},
                         attachment: ''
                     },
                 ],
@@ -618,10 +626,6 @@
                     }
                 )
             },
-            querySearchFunc(queryString, cb) {
-                // 调用 callback 返回建议列表的数据
-                cb(this.funcAddress);
-            },
             querySearch(queryString, cb) {
                 // 调用 callback 返回建议列表的数据
                 cb(this.comparators);
@@ -699,8 +703,8 @@
             },
             changeData() {
                 // console.log(this.variableDialogData); JSON.parse(this.variableDialogData);
-                var variableData = JSON.parse(this.variableDialogData);
-                for (var key in variableData) {
+                let variableData = JSON.parse(this.variableDialogData);
+                for (let key in variableData) {
                     this.caseData.variable.push({key: key, value: JSON.stringify(variableData[key])});
                 }
                 this.variableDialogData = '';
@@ -770,7 +774,6 @@
                                 type: 'success',
                             });
                             this.findCases();
-
                         }
                     }
                 )
@@ -873,7 +876,7 @@
                                 message: response.data['msg'],
                                 type: 'success',
                             });
-                            this.resultShow = response['data']['data']['records'];
+                            this.resultShow = response['data']['data']['details'][0]['records'];
                             this.dialogTestData = true
                         }
 
@@ -913,14 +916,21 @@
                             this.importApiAddress = '';
                             this.findCases();
                         }
-
-
                     }
                 )
             },
             formatData() {
-                this.caseData.jsonVariable = JSON.parse(this.caseData.jsonVariable);
-                this.caseData.jsonVariable = JSON.stringify(this.caseData.jsonVariable, null, 4);
+                try {
+                    this.caseData.jsonVariable = JSON.parse(this.caseData.jsonVariable);
+                    this.caseData.jsonVariable = JSON.stringify(this.caseData.jsonVariable, null, 4);
+                }
+                catch (err) {
+                    this.$message({
+                        showClose: true,
+                        message: 'json格式错误',
+                        type: 'warning',
+                    });
+                }
             },
             addCaseVariable() {
                 this.caseData.variable.push({key: '', value: '', param_type: 'string', remark: ''});
@@ -937,6 +947,12 @@
             },
             delCaseHeader(i) {
                 this.caseData.header.splice(i, 1);
+            },
+            addValidate() {
+                this.caseData.validate.push({key: '', value: ''});
+            },
+            delValidate(i) {
+                this.caseData.validate.splice(i, 1);
             },
             addExtractHeader() {
                 this.caseData.extract.push({key: '', value: '', remark: ''});
@@ -985,8 +1001,6 @@
                         type: 'success',
                     });
                 }
-
-
             },
             tempNum(i) {
                 this.temp_num = i;

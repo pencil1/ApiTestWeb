@@ -22,46 +22,46 @@
             <el-tab-pane label="项目列表" name="first" style="margin: 0 0 -10px;">
                 <div style="margin: 0 0 -20px;">
                 </div>
-                <el-scrollbar wrap-class="scrollbarList" >
-                <el-table :data="tableData" stripe>
-                    <el-table-column
-                            prop="id"
-                            label="id"
-                            width="80">
-                    </el-table-column>
-                    <el-table-column
-                            prop="name"
-                            label="项目名称"
-                            width="150">
-                    </el-table-column>
-                    <el-table-column
-                            prop="host"
-                            label="基础url1"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                            prop="host_two"
-                            label="基础url2"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                            prop="principal"
-                            label="负责人"
-                            width="150">
-                    </el-table-column>
-                    <el-table-column
-                            label="操作"
-                    >
-                        <template slot-scope="scope">
-                            <el-button type="primary" icon="el-icon-edit" size="mini"
-                                       @click.native="editProject(tableData[scope.$index]['id'])">编辑
-                            </el-button>
-                            <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="sureView(delProject,tableData[scope.$index]['id'])">删除
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
+                <el-scrollbar wrap-class="scrollbarList">
+                    <el-table :data="tableData" stripe>
+                        <el-table-column
+                                prop="id"
+                                label="id"
+                                width="80">
+                        </el-table-column>
+                        <el-table-column
+                                prop="name"
+                                label="项目名称"
+                                width="150">
+                        </el-table-column>
+                        <el-table-column
+                                prop="host"
+                                label="基础url1"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                prop="host_two"
+                                label="基础url2"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                prop="principal"
+                                label="负责人"
+                                width="150">
+                        </el-table-column>
+                        <el-table-column
+                                label="操作"
+                        >
+                            <template slot-scope="scope">
+                                <el-button type="primary" icon="el-icon-edit" size="mini"
+                                           @click.native="editProject(tableData[scope.$index]['id'])">编辑
+                                </el-button>
+                                <el-button type="danger" icon="el-icon-delete" size="mini"
+                                           @click.native="sureView(delProject,tableData[scope.$index]['id'])">删除
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
                 </el-scrollbar>
                 <div class="block" style="left:68%; position: relative;">
                     <el-pagination
@@ -127,8 +127,8 @@
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column  label="备注" header-align="center"
-                                          style="font-size: 16px;" width="280">
+                        <el-table-column label="备注" header-align="center"
+                                         style="font-size: 16px;" width="280">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.remark" size="medium">
                                 </el-input>
@@ -145,7 +145,7 @@
                 </el-tab-pane>
                 <el-tab-pane label="请求头部">
                     <el-form :inline="true" class="demo-form-inline">
-                            <el-button type="primary" size="small" @click="addProjectHeader()">添加头部</el-button>
+                        <el-button type="primary" size="small" @click="addProjectHeader()">添加头部</el-button>
                     </el-form>
                     <el-table :data="projectData.header" style="width:100%" size="mini" stripe>
                         <el-table-column property="key" label="Key" header-align="center"
@@ -308,12 +308,15 @@
             delProject(id) {
                 this.$axios.post('/api/api/project/del', {'id': id}).then((response) => {
                         this.messageShow(this, response);
+                        if ((this.currentPage - 1) * this.sizePage + 1 === this.total) {
+                            this.currentPage = this.currentPage - 1
+                        }
                         this.findProject();
                     }
                 )
             },
             addProjectVariable() {
-                this.projectData.variable.push({key: '', value: '',remark:''});
+                this.projectData.variable.push({key: '', value: '', remark: ''});
             },
             delProjectVariable(i) {
                 this.projectData.variable.splice(i, 1);

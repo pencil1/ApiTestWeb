@@ -32,35 +32,35 @@
             <el-tab-pane label="模块列表" name="first" style="margin: 0 0 -10px;">
                 <div style="margin: 0 0 -20px;">
                 </div>
-                <el-scrollbar wrap-class="scrollbarList" >
-                <el-table :data="tableData" stripe>
-                    <el-table-column
-                            prop="num"
-                            label="编号"
-                            width="80">
-                    </el-table-column>
-                    <el-table-column
-                            prop="name"
-                            label="模块名称"
-                            width="650">
-                    </el-table-column>
-                    <el-table-column
-                            label="操作"
-                    >
-                        <template slot-scope="scope">
-                            <el-button type="primary" icon="el-icon-edit" size="mini"
-                                       @click.native="editModel(tableData[scope.$index]['id'])">编辑
-                            </el-button>
-                            <!--<el-button type="primary" icon="el-icon-tickets" size="mini"-->
-                                       <!--@click.native="copyModel(tableData[scope.$index]['id'])">复制-->
-                            <!--</el-button>-->
-                            <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="sureView(delModel,tableData[scope.$index]['id'])">删除
-                            </el-button>
-                        </template>
-                    </el-table-column>
+                <el-scrollbar wrap-class="scrollbarList">
+                    <el-table :data="tableData" stripe>
+                        <el-table-column
+                                prop="num"
+                                label="编号"
+                                width="80">
+                        </el-table-column>
+                        <el-table-column
+                                prop="name"
+                                label="模块名称"
+                                width="650">
+                        </el-table-column>
+                        <el-table-column
+                                label="操作"
+                        >
+                            <template slot-scope="scope">
+                                <el-button type="primary" icon="el-icon-edit" size="mini"
+                                           @click.native="editModel(tableData[scope.$index]['id'])">编辑
+                                </el-button>
+                                <!--<el-button type="primary" icon="el-icon-tickets" size="mini"-->
+                                <!--@click.native="copyModel(tableData[scope.$index]['id'])">复制-->
+                                <!--</el-button>-->
+                                <el-button type="danger" icon="el-icon-delete" size="mini"
+                                           @click.native="sureView(delModel,tableData[scope.$index]['id'])">删除
+                                </el-button>
+                            </template>
+                        </el-table-column>
 
-                </el-table>
+                    </el-table>
                 </el-scrollbar>
 
                 <div class="block" style="left:68%; position: relative;">
@@ -84,8 +84,8 @@
                 <el-tab-pane label="messages">
                     <el-form :model="modelData">
                         <el-form-item label="模块序号" :label-width="modelData.formLabelWidth"
-                                      prop="num"  v-if="modelData.id"
-                                      >
+                                      prop="num" v-if="modelData.id"
+                        >
                             <el-input v-model.number="modelData.num" auto-complete="off">
                             </el-input>
                         </el-form-item>
@@ -94,8 +94,8 @@
                             </el-input>
                         </el-form-item>
                         <!--<el-form-item label="项目名称" :label-width="modelData.formLabelWidth">-->
-                            <!--<el-input v-model="form.projects" auto-complete="off" :disabled="true">-->
-                            <!--</el-input>-->
+                        <!--<el-input v-model="form.projects" auto-complete="off" :disabled="true">-->
+                        <!--</el-input>-->
                         <!--</el-form-item>-->
                         <el-form-item label="项目名称" labelWidth="120px" style="width: 200%;">
                             <el-select v-model="form.projects" placeholder="请选择项目">
@@ -190,7 +190,6 @@
                             this.tableData = response.data['data'];
                             this.total = response.data['total'];
                         }
-
                     }
                 )
             },
@@ -200,6 +199,9 @@
                 this.modelData.num = '';
                 this.modelData.modelFormVisible = true;
 
+            },
+            test1(){
+                console.log(13123)
             },
             addModel() {
                 this.$axios.post('/api/api/model/add', {
@@ -243,6 +245,9 @@
                 this.$axios.post('/api/api/model/del', {'id': id}).then((response) => {
                         this.messageShow(this, response);
                         this.form.modelName = '';
+                        if ((this.currentPage - 1) * this.sizePage + 1 === this.total) {
+                            this.currentPage = this.currentPage - 1
+                        }
                         this.findModel();
                     }
                 )
