@@ -658,6 +658,7 @@
                 this.caseData.header = [];
                 this.form.choiceType = 'data';
                 this.caseData.variable = [];
+                this.caseData.param = [];
                 this.caseData.jsonVariable = '';
                 this.caseData.extract = [];
                 this.caseData.validate = [];
@@ -1014,9 +1015,12 @@
 
         },
         computed: {
+            monitorUrl() {
+                return this.caseData.url;
+
+            },
             monitorMethod() {
                 return this.caseData.method;
-
             },
             monitorVariable(){
                 return this.caseData.variable;
@@ -1031,11 +1035,35 @@
                 return this.caseData.validate;
             },
             monitorParam(){
-
                 return this.caseData.param;
             },
         },
         watch: {
+            monitorUrl(newValue, oldValue) {
+                if (!this.caseData.url){
+                    return
+                }
+                if (this.caseData.url.indexOf('?') === -1){
+
+                    return
+                }
+                let url = this.caseData.url.split("?");
+                let strParam = url[1].split("&");
+                if (strParam[0]) {
+                    this.caseData.param = Array();
+                    for (let i = 0; i < strParam.length; i++) {
+                        if (strParam[i].indexOf('=') !== -1) {
+                            this.caseData.param.push({
+                                key: strParam[i].split("=")[0],
+                                value: unescape(strParam[i].split("=")[1])
+                            });
+                        }
+                        else {
+                            this.caseData.param.push({key: strParam[i], value: ''});
+                        }
+                    }
+                }
+            },
             monitorMethod(newValue, oldValue) {
                 if (newValue === 'GET'){
                     this.bodyShow = 'first'
