@@ -1,8 +1,6 @@
 <template>
-    <div class="buildInFunc">
-        <div style="margin: 0 0 -15px;">
-        </div>
-        <div style="float: left">
+    <div class="buildInFunc" style="padding: 10px 10px 10px 10px">
+        <div style="float: left;">
             <span>内置函数文档</span>
             <el-autocomplete
                     class="inline-input"

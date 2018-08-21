@@ -1,6 +1,5 @@
 <template>
-    <div class="reportShow" style="margin: 0 0 0 -20px;">
-        <div style="margin: 0 0 -20px;"></div>
+    <div class="reportShow">
         <el-row>
             <el-col :span="24">
                 <div class="grid-content" style="background-color: #f5f5f5 !important;">
@@ -25,7 +24,7 @@
                             <el-dropdown-item command="error">失败业务</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
-                    <span style="font-family: Source Sans Pro;float: right;font-size: 13px;color: #3a8ee6;margin-right: 10px">time:  2018/07/31 10:51:11</span>
+                    <span style="font-family: Source Sans Pro;float: right;font-size: 13px;color: #3a8ee6;margin-right: 10px">time: 2018/07/31 10:51:11</span>
                 </div>
             </el-col>
         </el-row>
@@ -36,12 +35,12 @@
                 <div style="height: 200px;float:left;">
                     <ve-pie :data="caseChartData" :settings="caseChartSettings" height="200px" width="350px"></ve-pie>
                 </div>
-                <ol style="margin-top:5px;font-family:Serif">
-                    <li style="list-style-type:none;">tests result</li>
-                    <li style="list-style-type:none;">总数:{{this.reportData.stat.testsRun}}</li>
-                    <li style="list-style-type:none;">成功:{{this.reportData.stat.successes}}</li>
-                    <li style="list-style-type:none;">失败:{{this.reportData.stat.failures}}</li>
-                    <li style="list-style-type:none;">错误:{{this.reportData.stat.errors}}</li>
+                <ol style="margin-top:5px;font-family:Serif" class="remote-line">
+                    <li>tests result</li>
+                    <li>总数:{{this.reportData.stat.testsRun}}</li>
+                    <li>成功:{{this.reportData.stat.successes}}</li>
+                    <li>失败:{{this.reportData.stat.failures}}</li>
+                    <li>错误:{{this.reportData.stat.errors}}</li>
                 </ol>
             </el-col>
             <el-col :span="14" style="border-width: 1px;">
@@ -56,7 +55,6 @@
                     style="border-style:solid;border-color: rgb(234, 234, 234) #ffffff #ffffff #ffffff;border-width: 1px;">
                 <el-scrollbar>
                     <div :style={height:picHeight}>
-                        <!--<div style="height: 840px;font-family:Serif">-->
                         <el-collapse accordion>
                             <el-collapse-item
                                     v-for="(item, index) in reportData['details']"
@@ -208,7 +206,6 @@
                 itemStyle: {
                     normal: {
                         color: function (params) {
-                            // build a color map as your need.
                             let colorList = [
                                 'rgb(25,212,174)', 'rgb(250,110,134)', '#FE8463', '#E87C25', '#27727B',
                                 '#FE8463', '#9BCA63', '#FAD860', '#F3A43B', '#60C0DD',
@@ -218,10 +215,8 @@
                         }
                     }
                 },
-                // level: [[],['成功case', '错误case', '失败case']],
                 label: {
                     normal: {position: 'center', show: false,},
-                    // emphasis: {show: true,textStyle: {fontSize: '20',fontWeight: 'bold'}}
                 },
                 labelLine: {
                     normal: {show: false}
@@ -235,7 +230,6 @@
                 itemStyle: {
                     normal: {
                         color: function (params) {
-                            // build a color map as your need.
                             let colorList = [
                                 'rgb(25,212,174)', 'rgb(250,110,134)', '#fb2828', '#E87C25', '#27727B',
                                 '#FE8463', '#9BCA63', '#FAD860', '#F3A43B', '#60C0DD',
@@ -247,7 +241,6 @@
                 },
                 label: {
                     normal: {position: 'center', show: false,},
-                    // emphasis: {show: true,textStyle: {fontSize: '20',fontWeight: 'bold'}}
                 },
                 labelLine: {
                     normal: {show: false}
@@ -295,8 +288,6 @@
                     ]
                 },
 
-                dialogVisible: false,
-                temp: {},
                 reportData: {
                     'details': [{name: ''}],
                     'platform': {'duration': '', 'python_version': ''},
@@ -326,9 +317,6 @@
                     this.showScene = [true, true]
                 }
             },
-            returnReport() {
-                this.$router.push({path: 'reportManage'});
-            },
             optimizeShow(dict) {
                 if (dict) {
                     let line;
@@ -348,11 +336,6 @@
             },
             showError() {
                 this.statusShow = [false, false, false, false, false, false, false, false, false];
-
-            },
-            tempError(index) {
-                this.temp = this.reportData['records'][index]['attachment'];
-                this.dialogVisible = true
 
             },
             showData(state='None') {
@@ -384,16 +367,6 @@
                 )
 
             },
-            showSuccessData(state) {
-                this.$axios.post('/api/api/report/list', {
-                    'reportId': this.reportAddress,
-                    'state': state
-                }).then((response) => {
-                        this.reportData = response['data'];
-                    }
-                )
-
-            },
             hideShowPic(s) {
                 if (s) {
                     this.picStatus = true;
@@ -407,7 +380,6 @@
         },
         mounted() {
             this.showData();
-            // this.drawLine();
 
         },
     }
@@ -420,16 +392,15 @@
         border-top: 1px solid #eee;
 
     }
+    .remote-line{
+        list-style-type:none;
+    }
 
     .active {
         background: #f7f7f7;
         font-weight: 600;
     }
 
-    .el-collapse-item__content {
-        padding-bottom: 1px;
-
-    }
 
     .test-name {
         display: inline-block;
@@ -445,32 +416,10 @@
         margin-right: 20px;
     }
 
-    .el-row {
-    }
-
-    .el-main {
-        padding: 0;
-    }
-
-    .bg-purple-dark {
-        background: #99a9bf;
-    }
-
-    .bg-purple {
-        background: #d3dce6;
-    }
-
-    .bg-purple-light {
-        background: #e5e9f2;
-    }
-
     .grid-content {
         min-height: 36px;
     }
 
-    .scrollbarList {
-        max-height: 840px;
-    }
 
     .content {
         height: auto;
@@ -480,9 +429,5 @@
         border-bottom: 1px solid #d0d0d0;
     }
 
-    .row-bg {
-        padding: 10px 0;
-        background-color: #f9fafc;
-    }
 
 </style>

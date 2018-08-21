@@ -4,16 +4,17 @@
             <el-container>
                 <el-header style="height: 40px;">
                     <div style="float: left;">
-                        <el-breadcrumb separator-class="el-icon-arrow-right">
+                        <el-breadcrumb separator-class="el-icon-arrow-right" >
                             <el-breadcrumb-item
                                     v-for="(item, index) in title"
-                                    :key="index">
+                                    :key="index"
+                            >
                                 {{title[index]}}
                             </el-breadcrumb-item>
 
                         </el-breadcrumb>
                     </div>
-                    <el-dropdown style="float:right;line-height:20px;top:12px" @command="logOut">
+                    <el-dropdown style="float:right;line-height:20px;top:12px;color: rgb(255, 255, 255);" @command="logOut" >
                         <span class="el-dropdown-link">{{userName}}<i
                                 class="el-icon-arrow-down el-icon--right"></i></span>
                         <el-dropdown-menu slot="dropdown" style="line-height:10px">
@@ -126,12 +127,17 @@
 
 <style>
     .el-header {
-        background-color: #f1f1f4;
-        color: #333;
+        background-color: #717275;
+        color: #ffffff;
         text-align: center;
         line-height: 60px;
     }
-
+    .el-breadcrumb__inner {
+        color: rgb(255, 255, 255);
+    }
+    .el-breadcrumb__item:last-child .el-breadcrumb__inner, .el-breadcrumb__item:last-child .el-breadcrumb__inner a, .el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover, .el-breadcrumb__item:last-child .el-breadcrumb__inner:hover{
+        color: rgb(255, 255, 255);
+    }
     /*.el-dropdown {*/
     /*vertical-align: top;*/
     /*}*/

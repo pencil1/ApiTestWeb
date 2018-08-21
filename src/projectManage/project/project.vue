@@ -1,8 +1,7 @@
 <template>
     <div class="projectManage">
 
-        <el-form :inline="true" class="demo-form-inline" style="background-color: #f2f2f2;  padding-top: 20px;"
-                 size="small">
+        <el-form :inline="true" class="demo-form-inline search-style" size="small">
 
             <el-form-item label="项目名称" labelWidth="110px">
 
@@ -18,10 +17,9 @@
             </el-form-item>
         </el-form>
 
-        <el-tabs value="first">
+        <el-tabs value="first" style="padding-left: 10px">
             <el-tab-pane label="项目列表" name="first" style="margin: 0 0 -10px;">
-                <div style="margin: 0 0 -20px;">
-                </div>
+
                 <el-scrollbar wrap-class="scrollbarList">
                     <el-table :data="tableData" stripe>
                         <el-table-column
@@ -63,7 +61,7 @@
                         </el-table-column>
                     </el-table>
                 </el-scrollbar>
-                <div class="block" style="left:68%; position: relative;">
+                <div class="pagination">
                     <el-pagination
                             @current-change="handleCurrentChange"
                             @size-change="handleSizeChange"

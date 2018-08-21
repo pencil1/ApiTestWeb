@@ -1,7 +1,6 @@
 <template>
     <div class="sceneManage" v-loading="this.loading">
-        <el-form :inline="true" class="demo-form-inline" style="background-color: #f2f2f2;  padding-top: 20px;"
-                 size="small">
+        <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目名称" labelWidth="110px">
                 <el-select v-model="form.projects" placeholder="请选择项目" @change="clearGathers">
                     <el-option
@@ -28,10 +27,9 @@
             </el-form-item>
         </el-form>
 
-        <el-tabs value="first">
+        <el-tabs value="first" style="padding-left: 10px">
             <el-tab-pane label="业务列表" name="first" style="margin: 0 0 -10px;">
-                <div style="margin: 0 0 -20px;">
-                </div>
+
                 <el-scrollbar wrap-class="scrollbarList" >
                 <el-table :data="sceneAll" stripe>
                     <el-table-column
@@ -66,7 +64,7 @@
                     </el-table-column>
                 </el-table>
                 </el-scrollbar>
-                <div class="block" style="left:68%; position: relative;">
+                <div class="pagination">
                     <el-pagination
                             @current-change="handleCurrentChange"
                             @size-change="handleSizeChange"
@@ -350,6 +348,46 @@
                         </el-form-item>
                     </el-form>
                 </el-tab-pane>
+                <el-tab-pane label="url参数">
+                    <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
+                               @click="addCaseParam()">添加
+                    </el-button>
+                    <el-switch
+                            v-model="caseConfig.statusCase.param[0]"
+                            inactive-text="启动功能">
+                    </el-switch>
+                    <el-switch
+                            v-model="caseConfig.statusCase.param[1]" :disabled='true'
+                            inactive-text="启动新参数">
+                    </el-switch>
+                    <el-table :data="caseConfig.param" size="mini" stripe>
+                        <el-table-column property="key" label="Key" header-align="center" minWidth="100">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.key" size="medium">
+                                </el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column property="value" label="Value" header-align="center" minWidth="200">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.value" size="medium">
+                                </el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="备注" header-align="center" minWidth="80">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.remark" size="medium">
+                                </el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column property="value" label="操作" header-align="center" width="80">
+                            <template slot-scope="scope">
+                                <el-button type="danger" icon="el-icon-delete" size="mini"
+                                           @click.native="delCaseParam(scope.$index)">删除
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-tab-pane>
                 <el-tab-pane label="接口参数">
                     <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
                                :disabled="form.choiceTypeStatus"
@@ -560,10 +598,11 @@
                     name: '',
                     upFunc: '',
                     downFunc: '',
-                    statusCase: {variable: [], extract: [], validate: [],},
+                    statusCase: {variable: [], extract: [], validate: [],param:[]},
                     variable: [{key: '', value: '', param_type: '', remark: ''}],
                     extract: [{key: '', value: ''}],
                     validate: [{key: '', value: '', comparator: ''}],
+                    param: [{key: '', value: '', remark: ''}],
                 },
                 paramVisible: false,
                 proGatherData: '',
@@ -799,6 +838,7 @@
                 // this.caseList.splice(i, 1);
             },
             caseConfigBtn(i) {
+                this.caseConfig.param = this.caseList[i]['param'];
                 this.caseConfig.variable = this.caseList[i]['variables'];
                 this.caseConfig.extract = this.caseList[i]['extract'];
                 this.caseConfig.validate = this.caseList[i]['validate'];
@@ -900,6 +940,12 @@
             },
             delCaseExtract(i) {
                 this.caseConfig.extract.splice(i, 1);
+            },
+            addCaseParam() {
+                this.caseConfig.param.push({key: '', value: '', remark: ''});
+            },
+            delCaseParam(i) {
+                this.caseConfig.param.splice(i, 1);
             },
             addCaseValidate() {
                 this.caseConfig.validate.push({key: '', value: ''});

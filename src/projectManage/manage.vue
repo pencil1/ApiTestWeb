@@ -3,7 +3,7 @@
     <div id="manage">
         <el-container>
 
-            <el-aside width="auto" style="height: 948px">
+            <el-aside width="auto" style="min-height: 940px">
                 <!--<div style="margin: 0 0 40px;line-height: 30px;">-->
                     <!--测试平台-->
                 <!--</div>-->
@@ -65,7 +65,7 @@
                             </template>
                             <el-menu-item-group>
                                 <el-menu-item index="/manage/testTool">小工具</el-menu-item>
-                                <!--<el-menu-item index="/manage/sqlCheck">数据库查询</el-menu-item>-->
+                                <el-menu-item index="/manage/sqlCheck">数据库查询</el-menu-item>
                                 <!--<el-menu-item index="/manage/batch">批量添加</el-menu-item>-->
                             </el-menu-item-group>
                         </el-submenu>
@@ -88,7 +88,7 @@
                 <!--</el-header>-->
 
                 <el-main>
-                    <router-view class="view two" name="Manage"></router-view>
+                    <router-view class="view two" name="Manage" style="font-family: Arial"></router-view>
                 </el-main>
 
                 <!--<el-footer style="height: 30px;">-->
@@ -180,13 +180,22 @@
     .el-container:nth-child(7) .el-aside {
         line-height: 320px;
     }
-
+    .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
+        margin-bottom:  10px;
+    }
+    .search-style{
+        background-color:  #f5f5f5;
+        padding-top: 10px;
+    }
     .el-main {
         color: #333;
         text-align: left;
         line-height: 36px;
+        padding:0 0 20px 0;
     }
-
+    /*.el-tabs--top .el-tabs__item.is-top:nth-child(2){*/
+        /*padding-left:5px;*/
+    /*}*/
     .el-button--mini {
         padding: 5px 9px;
     }
@@ -194,7 +203,9 @@
     .el-dialog__body {
         padding: 5px 10px;
     }
-
+    .el-tabs__header{
+        margin: 0 ;
+    }
     .row-bg {
         padding: 5px 0;
     }
@@ -219,5 +230,10 @@
     }
     .el-input--mini .el-input__inner{
         line-height:20px;
+    }
+    .pagination{
+        float: right;
+        position: relative;
+        margin-right: 40px
     }
 </style>
