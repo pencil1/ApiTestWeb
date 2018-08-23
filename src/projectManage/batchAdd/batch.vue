@@ -613,7 +613,7 @@
                 this.caseList = this.caseList.concat(this.caseVessel);
                 this.caseList = JSON.parse(JSON.stringify(this.caseList));
             },
-            delCaseGather(i) {
+            delApiCase(i) {
                 if ('id' in this.caseList[i]) {
                     this.$axios.post('/api/api/apiCase/del', {'id': this.caseList[i]['id']}).then((response) => {
                             this.caseList.splice(i, 1);

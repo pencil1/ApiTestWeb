@@ -264,7 +264,7 @@
                         </el-table>
                     </el-tab-pane>
                     <el-tab-pane label="Body" name="second" :disabled="caseData.method === 'GET'">
-                        <el-form :inline="true" class="demo-form-inline">
+                        <el-form :inline="true" class="demo-form-inline" style="margin-top: 10px">
                             <el-radio-group v-model="form.choiceType">
                                 <el-radio label="data">form-data</el-radio>
                                 <el-radio label="json">raw</el-radio>
@@ -585,7 +585,7 @@
                 cb(this.comparators);
             },
             initBaseData() {
-                this.$axios.get('/api/api/proGather/list').then((response) => {
+                this.$axios.get(this.$api.baseDataApi).then((response) => {
                     this.proModelData = response.data['data'];
                     this.configNameData = response.data['config_name_list'];
                     this.proUrlData = response.data['urlData'];
@@ -605,6 +605,7 @@
                 this.findCases()
             },
             findCases() {
+                this.showNumTab = 'first';
                 this.$axios.post('/api/api/cases/find', {
                     'caseName': this.form.apiName,
                     'projectName': this.form.projectName,

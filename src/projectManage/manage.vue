@@ -190,7 +190,7 @@
     .el-main {
         color: #333;
         text-align: left;
-        line-height: 36px;
+        line-height: 1px;
         padding:0 0 20px 0;
     }
     /*.el-tabs--top .el-tabs__item.is-top:nth-child(2){*/

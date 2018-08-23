@@ -76,7 +76,7 @@
 
 
             <el-tabs value="second">
-                <el-tab-pane label="基础信息" name="first">
+                <el-tab-pane label="基础信息" name="first" style="margin-top: 10px">
                     <el-form :model="configData">
                         <el-form-item label="配置序号" :label-width="configData.formLabelWidth"
                                       prop="num" v-if="configData.id"
@@ -107,7 +107,7 @@
 
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane label="公用变量" name="second">
+                <el-tab-pane label="公用变量" name="second" style="margin-top: 10px">
                     <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
                                @click="addConfigVariable()">添加
                     </el-button>
@@ -192,7 +192,7 @@
 
         methods: {
             httpSend() {
-                this.$axios.get('/api/api/proGather/list').then((response) => {
+                this.$axios.get(this.$api.baseDataApi).then((response) => {
                     this.proModelData = response.data['data'];
                     this.form.projectName = response.data['user_pro']['pro_name'];
                     this.findSceneConfig();

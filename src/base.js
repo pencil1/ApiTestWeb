@@ -32,17 +32,5 @@ exports.install = function (Vue, options) {
             });
         }
     };
-
-    Vue.prototype.getBaseData = function (_this) {
-        _this.$axios.get('/api/api/proGather/list').then((response) => {
-            _this.GLOBAL.proModelData = response.data['data'];
-            _this.GLOBAL.configNameData = response.data['config_name_list'];
-            _this.GLOBAL.proUrlData = response.data['urlData'];
-            _this.GLOBAL.projectName = response.data['user_pro']['pro_name'];
-            _this.GLOBAL.configName = response.data['config_name_list'][_this.GLOBAL.projectName][0].toString();
-            _this.GLOBAL.modelName = response.data['user_pro']['model_list'][0].toString();
-            }
-        );
-    };
 };
 

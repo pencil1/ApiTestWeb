@@ -12,9 +12,11 @@ import pie from 'v-charts/lib/pie.common'
 import histogram from 'v-charts/lib/histogram.common'
 import ring from 'v-charts/lib/ring.common'
 import base from './base'
+import api from './api'
 import global from './global.vue'
 
 Vue.prototype.GLOBAL = global;
+Vue.prototype.$api = api;
 Vue.prototype.$axios = axios;
 Vue.component(pie.name, pie);
 Vue.component(histogram.name, histogram);

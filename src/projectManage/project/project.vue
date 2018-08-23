@@ -74,11 +74,11 @@
         </el-tabs>
 
 
-        <el-dialog title="项目配置" :visible.sync="projectData.modelFormVisible" width="40%">
+        <el-dialog title="项目配置" :visible.sync="projectData.modelFormVisible" width="40%" >
 
 
-            <el-tabs>
-                <el-tab-pane label="基础信息">
+            <el-tabs >
+                <el-tab-pane label="基础信息" style="margin-top: 10px">
                     <el-form :model="projectData">
 
                         <el-form-item label="项目名称" :label-width="projectData.formLabelWidth">
@@ -107,7 +107,7 @@
                         </el-form-item>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane label="公用变量">
+                <el-tab-pane label="公用变量" style="margin-top: 10px">
                     <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
                                @click="addProjectVariable()">添加
                     </el-button>
@@ -141,7 +141,7 @@
                         </el-table-column>
                     </el-table>
                 </el-tab-pane>
-                <el-tab-pane label="请求头部">
+                <el-tab-pane label="请求头部" style="margin-top: 10px">
                     <el-form :inline="true" class="demo-form-inline">
                         <el-button type="primary" size="small" @click="addProjectHeader()">添加头部</el-button>
                     </el-form>

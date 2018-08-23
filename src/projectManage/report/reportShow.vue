@@ -1,10 +1,10 @@
 <template>
-    <div class="reportShow">
+    <div class="reportShow" style="line-height: 36px">
         <el-row>
             <el-col :span="24">
                 <div class="grid-content" style="background-color: #f5f5f5 !important;">
                     <el-button type="primary" round style="padding: 4px 10px ;" v-show="false"></el-button>
-                    <el-button type="primary" round style="padding: 4px 10px ;" @click.native="hideShowPic(false)"
+                    <el-button type="primary" size="mini" round style="margin-top: 5px;padding: 4px 10px ;" @click.native="hideShowPic(false)"
                                v-show="this.picStatus">隐藏图表
                     </el-button>
                     <el-button type="primary" round style="padding: 4px 10px ;" @click.native="hideShowPic(true)"
@@ -24,7 +24,7 @@
                             <el-dropdown-item command="error">失败业务</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
-                    <span style="font-family: Source Sans Pro;float: right;font-size: 13px;color: #3a8ee6;margin-right: 10px">time: 2018/07/31 10:51:11</span>
+                    <span style="font-family: Source Sans Pro;float: right;font-size: 13px;color: #3a8ee6;margin-right: 40px">time: {{this.reportData.time.start_at}}</span>
                 </div>
             </el-col>
         </el-row>
@@ -111,7 +111,7 @@
                         </el-tooltip>
                     </div>
                     <div :style={height:picHeight}>
-                        <table class="el-table__header" style="padding:10px;font-size: 14px;width: 100%;" border="0"
+                        <table  style="padding:10px;font-size: 14px;width: 100%;" border="0"
                                cellpadding="0" cellspacing="0">
                             <thead>
                             <tr>
@@ -388,6 +388,9 @@
 </script>
 
 <style scoped>
+    .el-main{
+        line-height: 36px;
+    }
     .wire {
         border-top: 1px solid #eee;
 

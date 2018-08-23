@@ -28,7 +28,7 @@
         </el-form>
 
         <el-tabs value="first" style="padding-left: 10px">
-            <el-tab-pane label="业务列表" name="first" style="margin: 0 0 -10px;">
+            <el-tab-pane label="业务列表" name="first">
 
                 <el-scrollbar wrap-class="scrollbarList" >
                 <el-table :data="sceneAll" stripe>
@@ -82,7 +82,7 @@
 
             <el-tabs value="fourth">
                 <!--<el-tabs @tab-click="refresh" value="fourth">-->
-                <el-tab-pane label="业务信息" name="first">
+                <el-tab-pane label="业务信息" name="first" style="margin-top: 10px">
                     <el-form :model="sceneData">
                         <el-form-item label="业务编号" :label-width="sceneData.formLabelWidth"
                                       prop="num" v-if="sceneData.id"
@@ -162,7 +162,7 @@
                                            @click.native="downNum(scope.$index)">降序
                                 </el-button>
                                 <el-button type="danger" size="mini"
-                                           @click.native="delCaseGather(scope.$index)">删除
+                                           @click.native="delApiCase(scope.$index)">删除
                                 </el-button>
                                 <el-button type="primary" size="mini"
                                            @click.native="caseConfigBtn(scope.$index)">配置
@@ -173,9 +173,7 @@
                 </el-tab-pane>
 
                 <el-tab-pane label="接口用例" name="third">
-                    <el-form :inline="true" class="demo-form-inline"
-                             style="background-color: #f2f2f2;  padding-top: 20px;"
-                             size="small">
+                    <el-form :inline="true" class="demo-form-inline search-style" size="small">
                         <el-form-item label=" " labelWidth="10px">
                             <el-select v-model="form.projectName" placeholder="请选择项目" @change="clearGathers">
                                 <el-option
@@ -185,7 +183,7 @@
                                 </el-option>
                             </el-select>
 
-                            <el-select v-model="form.gathers" placeholder="请选择模块">
+                            <el-select v-model="form.modelName" placeholder="请选择模块">
                                 <el-option
                                         v-for="item in proModelData[this.form.projectName]"
                                         :key="item"
@@ -252,9 +250,7 @@
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="业务变量" name="fourth">
-                    <el-form :inline="true" class="demo-form-inline"
-                             style="background-color: #f2f2f2;  padding-top: 20px;"
-                             size="small">
+                    <el-form :inline="true" class="demo-form-inline search-style" size="small">
                         <el-form-item label=" " labelWidth="10px">
                             <el-select v-model="form.projectName" placeholder="请选择项目" @change="clearGathers">
                                 <el-option
@@ -632,7 +628,7 @@
                     label: 'json'
                 }],
                 form: {
-                    gathers: '',
+                    modelName: '',
                     projectName: '',
                     sceneName: '',
                     configName: '',
@@ -664,7 +660,7 @@
             findCases() {
                 this.$axios.post('/api/api/cases/find', {
                     'projectName': this.form.projectName,
-                    'gatName': this.form.gathers,
+                    'gatName': this.form.modelName,
                     'caseName': this.form.caseName,
                     'page': this.casePage.currentPage,
                     'sizePage': this.casePage.sizePage,
@@ -705,7 +701,7 @@
                 )
             },
             httpSend() {
-                this.$axios.get('/api/api/proGather/list').then((response) => {
+                this.$axios.get(this.$api.baseDataApi).then((response) => {
                     this.proModelData = response.data['data'];
                     this.configNameData = response.data['config_name_list'];
                     this.proUrlData = response.data['urlData'];
@@ -742,17 +738,7 @@
             delConfigVariable(i) {
                 this.sceneData.variable.splice(i, 1);
             },
-            findModel() {
-            },
             addScene() {
-                // var caseData = [];
-                // for (var scene in this.caseList) {
-                //     var temp = new Object();
-                //     temp.caseId = this.caseList[scene]['caseId'];
-                //     temp.gatherId = this.caseList[scene]['gather_id'];
-                //     temp.variables = this.caseList[scene]['variables'];
-                //     caseData.push(temp);
-                // }
                 this.$axios.post('/api/api/scene/add', {
                     'num': this.sceneData.num,
                     'name': this.sceneData.name,
@@ -799,10 +785,6 @@
                 // this.toggleSelection();
 
             },
-
-            addCase() {
-                this.sceneData.apiCases.push({key: '', value: ''});
-            },
             handleCaseSelection(val) {
                 this.caseVessel = val;
             },
@@ -821,7 +803,8 @@
                     }
                 )
             },
-            delCaseGather(i) {
+            delApiCase(i) {
+                //判断caseList中是否存在id，存在则在数据库删除信息，否则在前端删除临时数据
                 if ('id' in this.caseList[i]) {
                     this.$axios.post('/api/api/apiCase/del', {'id': this.caseList[i]['id']}).then((response) => {
                             this.caseList.splice(i, 1);
@@ -831,7 +814,6 @@
                 else {
                     this.caseList.splice(i, 1);
                 }
-                // this.caseList.splice(i, 1);
             },
             caseConfigBtn(i) {
                 this.caseConfig.param = this.caseList[i]['param'];
@@ -845,7 +827,7 @@
                 this.caseConfig.downFunc = this.caseList[i]['down_func'];
                 this.tempNum = i;
                 this.paramVisible = true;
-                if (this.form.choiceType.toString() === 'json') {
+                if(this.form.choiceType.toString() === 'json') {
                     this.form.choiceTypeStatus = true
                 }
                 else {

@@ -186,13 +186,9 @@
 
         methods: {
             httpSend() {
-                this.$axios.get('/api/api/proGather/list').then((response) => {
-                        this.proModelData = response.data['data'];
-                        for (var key in response.data['data']) {
-                            this.form.projectName = key;
-                            // this.form.gathers = response.data[key][0].toString();
-                            break
-                        }
+                this.$axios.get(this.$api.baseDataApi).then((response) => {
+                    this.proModelData = response.data['data'];
+                    this.form.projectName = response.data['user_pro']['pro_name'];
                     }
                 );
                 this.$axios.get('/api/api/proScene/list').then((response) => {

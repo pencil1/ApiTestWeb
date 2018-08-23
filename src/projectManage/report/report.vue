@@ -148,7 +148,7 @@
                 this.findReport()
             },
             httpSend() {
-                this.$axios.get('/api/api/proGather/list').then((response) => {
+                this.$axios.get(this.$api.baseDataApi).then((response) => {
                     this.proModelData = response.data['data'];
                     this.form.projectName = response.data['user_pro']['pro_name'];
                     }

@@ -79,7 +79,7 @@
 
 
             <el-tabs>
-                <el-tab-pane label="messages">
+                <el-tab-pane label="messages" style="margin-top: 10px">
                     <el-form :model="modelData">
                         <el-form-item label="模块序号" :label-width="modelData.formLabelWidth"
                                       prop="num" v-if="modelData.id"
@@ -152,7 +152,7 @@
 
         methods: {
             httpSend() {
-                this.$axios.get('/api/api/proGather/list').then((response) => {
+                this.$axios.get(this.$api.baseDataApi).then((response) => {
                     this.proModelData = response.data['data'];
                     this.form.projectName = response.data['user_pro']['pro_name'];
                     this.findModel();
