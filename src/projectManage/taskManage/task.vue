@@ -103,16 +103,16 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="项目名称" :label-width="taskData.formLabelWidth">
-                            <el-select v-model="form.projects" placeholder="请选择项目">
+                            <el-select v-model="form.projectName" placeholder="请选择项目">
                                 <el-option
-                                        v-for="(item, key) in proGatherData"
+                                        v-for="(item, key) in proModelData"
                                         :key="key"
                                         :value="key">
                                 </el-option>
                             </el-select>
                             <el-select v-model="form.scenes" multiple placeholder="请选择业务集" style="width: 400px;">
                                 <el-option
-                                        v-for="item in proSceneData[this.form.projects]"
+                                        v-for="item in proSceneData[this.form.projectName]"
                                         :key="item.id"
                                         :value="item.value">
                                 </el-option>
@@ -154,7 +154,7 @@
         name: 'modeManage',
         data() {
             return {
-                proGatherData: '',
+                proModelData: '',
                 proSceneData: '',
                 tableData: [],
                 taskTypes: ['cron', 'date'],
@@ -162,7 +162,7 @@
                 currentPage: 1,
                 sizePage: 10,
                 form: {
-                    projects: '',
+                    projectName: '',
                     modelName: '',
                     taskName: '',
                     scenes: [],
@@ -187,9 +187,9 @@
         methods: {
             httpSend() {
                 this.$axios.get('/api/api/proGather/list').then((response) => {
-                        this.proGatherData = response.data['data'];
+                        this.proModelData = response.data['data'];
                         for (var key in response.data['data']) {
-                            this.form.projects = key;
+                            this.form.projectName = key;
                             // this.form.gathers = response.data[key][0].toString();
                             break
                         }
@@ -198,7 +198,7 @@
                 this.$axios.get('/api/api/proScene/list').then((response) => {
                         this.proSceneData = response.data;
                         for (var key in response.data) {
-                            this.form.projects = key;
+                            this.form.projectName = key;
                             // this.form.gathers = response.data[key][0].toString();
                             break
                         }
@@ -243,7 +243,7 @@
                 this.taskData.toEmail = '';
                 this.taskData.SendEmail = '';
                 this.taskData.timeConfig = '';
-                this.form.projects = '';
+                this.form.projectName = '';
                 this.form.scenes = [];
                 this.taskData.num = '';
                 this.taskData.modelFormVisible = true;
@@ -251,7 +251,7 @@
             },
             addTask() {
                 this.$axios.post('/api/api/task/add', {
-                    'projectName': this.form.projects,
+                    'projectName': this.form.projectName,
                     'sceneNames': this.form.scenes,
                     'id': this.taskData.id,
                     'num': this.taskData.num,
@@ -286,13 +286,13 @@
                 this.$axios.post('/api/api/task/edit', {'id': id}).then((response) => {
                         this.taskData.name = response.data['data']['task_name'];
                         this.taskData.timeConfig = response.data['data']['task_config_time'];
-                        this.form.projects = response.data['data']['project_name'];
+                        this.form.projectName = response.data['data']['project_name'];
                         this.form.scenes = response.data['data']['scene_names'];
                         this.taskData.taskType = response.data['data']['task_type'];
                         this.taskData.toEmail = response.data['data']['task_to_email_address'];
                         this.taskData.SendEmail = response.data['data']['task_send_email_address'];
                         this.taskData.num = response.data['data']['num'];
-                        this.taskData.projectName = this.form.projects;
+                        this.taskData.projectName = this.form.projectName;
                         this.taskData.id = id;
                         this.taskData.modelFormVisible = true;
                     }

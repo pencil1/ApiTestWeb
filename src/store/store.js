@@ -10,6 +10,10 @@ export default new Vuex.Store({
     state: {
         userName: null,
         token: null,
+        proModelData:[],
+        projectName: '',
+        configNameData:[],
+        urlData:[],
         title: '',
     },
     mutations: {
@@ -20,6 +24,22 @@ export default new Vuex.Store({
         [types.USERNAME]: (state, data) => {
             localStorage.userName = data;
             state.userName = data;
+        },
+        [types.PROJECTNAME]: (state, data) => {
+            localStorage.projectName = data;
+            state.projectName = data;
+        },
+        [types.PROMODELDATA]: (state, data) => {
+            localStorage.proModelData = data;
+            state.proModelData = data;
+        },
+        [types.CONFIGNAMEDATA]: (state, data) => {
+            localStorage.configNameData = data;
+            state.configNameData = data;
+        },
+        [types.URLDATA]: (state, data) => {
+            localStorage.urlData = data;
+            state.urlData = data;
         },
         [types.LOGOUT]: (state) => {
             localStorage.removeItem('token');

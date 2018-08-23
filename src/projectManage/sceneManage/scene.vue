@@ -2,9 +2,9 @@
     <div class="sceneManage" v-loading="this.loading">
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目名称" labelWidth="110px">
-                <el-select v-model="form.projects" placeholder="请选择项目" @change="clearGathers">
+                <el-select v-model="form.projectName" placeholder="请选择项目" @change="clearGathers">
                     <el-option
-                            v-for="(item, key) in proGatherData"
+                            v-for="(item, key) in proModelData"
                             :key="key"
                             :value="key">
                     </el-option>
@@ -99,11 +99,11 @@
                             </el-input>
                         </el-form-item>
                         <el-form-item label="项目名称" :label-width="sceneData.formLabelWidth">
-                            <!--<el-input v-model="form.projects" auto-complete="off" :disabled="true">-->
+                            <!--<el-input v-model="form.projectName" auto-complete="off" :disabled="true">-->
                             <!--</el-input>-->
-                            <el-select v-model="form.projects" placeholder="请选择项目">
+                            <el-select v-model="form.projectName" placeholder="请选择项目">
                                 <el-option
-                                        v-for="(item, key) in proGatherData"
+                                        v-for="(item, key) in proModelData"
                                         :key="key"
                                         :value="key">
                                 </el-option>
@@ -177,9 +177,9 @@
                              style="background-color: #f2f2f2;  padding-top: 20px;"
                              size="small">
                         <el-form-item label=" " labelWidth="10px">
-                            <el-select v-model="form.projects" placeholder="请选择项目" @change="clearGathers">
+                            <el-select v-model="form.projectName" placeholder="请选择项目" @change="clearGathers">
                                 <el-option
-                                        v-for="(item, key) in proGatherData"
+                                        v-for="(item, key) in proModelData"
                                         :key="key"
                                         :value="key">
                                 </el-option>
@@ -187,7 +187,7 @@
 
                             <el-select v-model="form.gathers" placeholder="请选择模块">
                                 <el-option
-                                        v-for="item in proGatherData[this.form.projects]"
+                                        v-for="item in proModelData[this.form.projectName]"
                                         :key="item"
                                         :value="item">
                                 </el-option>
@@ -256,9 +256,9 @@
                              style="background-color: #f2f2f2;  padding-top: 20px;"
                              size="small">
                         <el-form-item label=" " labelWidth="10px">
-                            <el-select v-model="form.projects" placeholder="请选择项目" @change="clearGathers">
+                            <el-select v-model="form.projectName" placeholder="请选择项目" @change="clearGathers">
                                 <el-option
-                                        v-for="(item, key) in proGatherData"
+                                        v-for="(item, key) in proModelData"
                                         :key="key"
                                         :value="key">
                                 </el-option>
@@ -266,7 +266,7 @@
 
                             <el-select v-model="form.configName" placeholder="请选择配置">
                                 <el-option
-                                        v-for="item in configNameData[this.form.projects]"
+                                        v-for="item in configNameData[this.form.projectName]"
                                         :key="item"
                                         :value="item">
                                 </el-option>
@@ -605,7 +605,7 @@
                     param: [{key: '', value: '', remark: ''}],
                 },
                 paramVisible: false,
-                proGatherData: '',
+                proModelData: '',
                 loading: false,
                 configNameData: '',
                 proUrlData: '',
@@ -633,7 +633,7 @@
                 }],
                 form: {
                     gathers: '',
-                    projects: '',
+                    projectName: '',
                     sceneName: '',
                     configName: '',
                     caseName: '',
@@ -663,7 +663,7 @@
             },
             findCases() {
                 this.$axios.post('/api/api/cases/find', {
-                    'projectName': this.form.projects,
+                    'projectName': this.form.projectName,
                     'gatName': this.form.gathers,
                     'caseName': this.form.caseName,
                     'page': this.casePage.currentPage,
@@ -685,7 +685,7 @@
             },
             findScenes() {
                 this.$axios.post('/api/api/scene/find', {
-                    'projectName': this.form.projects,
+                    'projectName': this.form.projectName,
                     'sceneName': this.form.sceneName,
                     'page': this.currentPage,
                     'sizePage': this.sizePage,
@@ -706,17 +706,13 @@
             },
             httpSend() {
                 this.$axios.get('/api/api/proGather/list').then((response) => {
-                        this.proGatherData = response.data['data'];
-                        this.configNameData = response.data['config_name_list'];
-                        this.proUrlData = response.data['urlData'];
-                        for (var key in response.data['user_pro']) {
-                            this.form.projects = key;
-                            this.form.gathers = response.data['data'][key][0].toString();
-                            this.form.configName = response.data['config_name_list'][key][0].toString();
-                            break
-                        }
-                        // this.findCases();
-                        this.findScenes()
+                    this.proModelData = response.data['data'];
+                    this.configNameData = response.data['config_name_list'];
+                    this.proUrlData = response.data['urlData'];
+                    this.form.projectName = response.data['user_pro']['pro_name'];
+                    this.form.configName = response.data['config_name_list'][this.form.projectName][0].toString();
+                    this.form.modelName = response.data['user_pro']['model_list'][0].toString();
+                    this.findScenes()
                     }
                 );
                 this.$axios.post('/api/api/func/getAddress').then((response) => {
@@ -763,7 +759,7 @@
                     'desc': this.sceneData.desc,
                     'funcAddress': this.sceneData.funcAddress,
                     'variable': JSON.stringify(this.sceneData.variable),
-                    'project': this.form.projects,
+                    'project': this.form.projectName,
                     'ids': this.sceneData.id,
                     'cases': this.caseList,
 
@@ -979,7 +975,7 @@
                 this.loading = true;
                 this.$axios.post('/api/api/report/run', {
                     'sceneNames': [name],
-                    'projectName': this.form.projects
+                    'projectName': this.form.projectName
                 }).then((response) => {
                         this.loading = false;
                         this.messageShow(this, response);

@@ -5,7 +5,7 @@
 
             <el-form-item label="项目名称" labelWidth="110px">
 
-                <el-input placeholder="请输入" v-model="form.projects">
+                <el-input placeholder="请输入" v-model="form.projectName">
                 </el-input>
             </el-form-item>
             <el-form-item>
@@ -192,7 +192,7 @@
                 currentPage: 1,
                 sizePage: 10,
                 form: {
-                    projects: '',
+                    projectName: '',
                 },
                 projectData: {
                     host: '',
@@ -222,7 +222,7 @@
             },
             findProject() {
                 this.$axios.post('/api/api/project/find', {
-                    'projectName': this.form.projects,
+                    'projectName': this.form.projectName,
                     'page': this.currentPage,
                     'sizePage': this.sizePage,
                 }).then((response) => {

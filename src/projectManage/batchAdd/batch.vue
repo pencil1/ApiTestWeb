@@ -3,7 +3,7 @@
         <el-form :inline="true" class="demo-form-inline" style="background-color: #f2f2f2;  padding-top: 20px;"
                  size="small">
             <el-form-item label="项目名称" labelWidth="110px">
-                <el-select v-model="form.projects" placeholder="请选择项目">
+                <el-select v-model="form.projectName" placeholder="请选择项目">
                     <el-option
                             v-for="(item, key) in proGatherData"
                             :key="key"
@@ -141,7 +141,7 @@
                              style="background-color: #f2f2f2;  padding-top: 20px;"
                              size="small">
                         <el-form-item label=" " labelWidth="10px">
-                            <el-select v-model="form.projects" placeholder="请选择项目">
+                            <el-select v-model="form.projectName" placeholder="请选择项目">
                                 <el-option
                                         v-for="(item, key) in proGatherData"
                                         :key="key"
@@ -151,7 +151,7 @@
 
                             <el-select v-model="form.gathers" placeholder="请选择模块">
                                 <el-option
-                                        v-for="item in proGatherData[this.form.projects]"
+                                        v-for="item in proGatherData[this.form.projectName]"
                                         :key="item"
                                         :value="item">
                                 </el-option>
@@ -427,7 +427,7 @@
                     validate: [{key: '', value: '', comparator: ''}],
                 },
                 paramVisible: false,
-                proGatherData: '',
+                proModelData: '',
                 proUrlData: '',
                 temp_num:'',
                 paramTypes: ['string', 'file'],
@@ -452,7 +452,7 @@
                 }],
                 form: {
                     gathers: '',
-                    projects: '',
+                    projectName: '',
                     sceneName: '',
                     choiceType:'data',
                     choiceTypeStatus:false,
@@ -478,7 +478,7 @@
             },
             findCases() {
                 this.$axios.post('/api/api/cases/find', {
-                    'proName': this.form.projects,
+                    'proName': this.form.projectName,
                     'gatName': this.form.gathers,
                     'page': this.casePage.currentPage,
                     'sizePage': this.casePage.sizePage,
@@ -499,7 +499,7 @@
             },
             findScenes() {
                 this.$axios.post('/api/api/scene/find', {
-                    'projectName': this.form.projects,
+                    'projectName': this.form.projectName,
                     'sceneName': this.form.sceneName,
                     'page': this.currentPage,
                     'sizePage': this.sizePage,
@@ -520,10 +520,10 @@
             },
             httpSend() {
                 this.$axios.get('/api/api/proGather/list').then((response) => {
-                        this.proGatherData = response.data['data'];
+                        this.proModelData = response.data['data'];
                         this.proUrlData = response.data['urlData'];
                         for (var key in response.data['data']) {
-                            this.form.projects = key;
+                            this.form.projectName = key;
                             this.form.gathers = response.data['data'][key][0].toString();
                             break
                         }
@@ -563,7 +563,7 @@
                     'num': this.sceneData.num,
                     'name': this.sceneData.name,
                     'desc': this.sceneData.desc,
-                    'project': this.form.projects,
+                    'project': this.form.projectName,
                     'ids': this.sceneData.id,
                     'cases': this.caseList,
 

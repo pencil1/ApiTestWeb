@@ -3,17 +3,17 @@
 
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目、模块" labelWidth="110px">
-                <el-select v-model="form.projects" placeholder="请选择项目" @change="clearGathers" style="width: 150px">
+                <el-select v-model="form.projectName" placeholder="请选择项目" @change="clearChoice" style="width: 150px">
                     <el-option
-                            v-for="(item, key) in proGatherData"
+                            v-for="(item, key) in proModelData"
                             :key="key"
                             :value="key">
                     </el-option>
                 </el-select>
 
-                <el-select v-model="form.gathers" placeholder="请选择模块" style="width: 150px">
+                <el-select v-model="form.modelName" placeholder="请选择模块" style="width: 150px">
                     <el-option
-                            v-for="item in proGatherData[this.form.projects]"
+                            v-for="item in proModelData[this.form.projectName]"
                             :key="item"
                             :value="item"
                     >
@@ -22,7 +22,7 @@
 
                 <el-select v-model="form.configName" placeholder="请选择配置" style="width: 150px">
                     <el-option
-                            v-for="item in configNameData[this.form.projects]"
+                            v-for="item in configNameData[this.form.projectName]"
                             :key="item"
                             :value="item">
                     </el-option>
@@ -30,7 +30,7 @@
             </el-form-item>
             <el-form-item label="接口名称">
 
-                <el-input placeholder="请输入接口" v-model="form.modelName" clearable>
+                <el-input placeholder="请输入接口" v-model="form.apiName" clearable>
                 </el-input>
             </el-form-item>
             <el-form-item>
@@ -40,10 +40,11 @@
                 <el-button type="primary" size="small" @click.native="initCaseData()">录入接口信息
                 </el-button>
 
-                <el-button type="primary" size="small" @click.native="test(caseSelection)">测试
+                <el-button type="primary" size="small" @click.native="test(casesList)">测试
                 </el-button>
+
                 <el-tooltip content="查看最近一次接口结果" placement="top-start">
-                    <el-button type="primary" icon="el-icon-view" @click="dialogTestData = true" size="small">
+                    <el-button type="primary" icon="el-icon-view" @click="resultViewStatus = true" size="small">
                     </el-button>
                 </el-tooltip>
                 <el-button type="primary" size="small" @click="importApiStatus = true">导入信息
@@ -83,14 +84,14 @@
             </div>
         </el-dialog>
 
-        <el-tabs :value="paShow" v-model="paShow" style="padding-left: 10px">
-            <el-tab-pane label="接口信息" name="first" >
+        <el-tabs v-model="showNumTab" style="padding-left: 10px">
+            <el-tab-pane label="接口信息" name="first">
 
                 <el-scrollbar>
                     <el-table
                             ref="multipleTable"
                             @selection-change="handleCaseSelection"
-                            :data="tableData"
+                            :data="caseTableData"
                             stripe>
                         <el-table-column
                                 type="selection"
@@ -123,13 +124,13 @@
                                 width="320">
                             <template slot-scope="scope">
                                 <el-button type="primary" icon="el-icon-edit" size="mini"
-                                           @click.native="editCase(tableData[scope.$index]['caseId'])">编辑
+                                           @click.native="editCopyCase(caseTableData[scope.$index]['caseId'],'edit')">编辑
                                 </el-button>
                                 <el-button type="primary" icon="el-icon-tickets" size="mini"
-                                           @click.native="copyCase(tableData[scope.$index]['caseId'])">复制
+                                           @click.native="editCopyCase(caseTableData[scope.$index]['caseId'],'copy')">复制
                                 </el-button>
                                 <el-button type="danger" icon="el-icon-delete" size="mini"
-                                           @click.native="sureView(delCases,tableData[scope.$index]['caseId'])">删除
+                                           @click.native="sureView(delCases,caseTableData[scope.$index]['caseId'])">删除
                                 </el-button>
                             </template>
                         </el-table-column>
@@ -146,54 +147,57 @@
                             :total="this.total">
                     </el-pagination>
                 </div>
-            </el-tab-pane >
+            </el-tab-pane>
             <el-tab-pane :label="tabName" name="second" v-if="editShow" style="background-color: rgb(250, 250, 250);">
                 <el-form :inline="true" :model="caseData" style="padding: 10px 20px -10px 10px;">
                     <el-form-item label="基础信息" labelWidth="80px" style="margin-bottom: 5px">
-                        <el-select v-model="form.projects" placeholder="请选择项目" style="min-width: 130px" size="small">
+                        <el-select v-model="form.projectName" placeholder="请选择项目" style="min-width: 130px" size="small">
                             <el-option
-                                    v-for="(item, key) in proGatherData"
+                                    v-for="(item, key) in proModelData"
                                     :key="key"
                                     :value="key">
                             </el-option>
                         </el-select>
 
-                        <el-select v-model="form.gathers" placeholder="请选择模块" style="min-width: 130px" size="small">
+                        <el-select v-model="form.modelName" placeholder="请选择模块" style="min-width: 130px" size="small">
                             <el-option
-                                    v-for="item in proGatherData[this.form.projects]"
+                                    v-for="item in proModelData[this.form.projectName]"
                                     :key="item"
                                     :value="item">
                             </el-option>
                         </el-select>
                         <el-select v-model="form.choiceUrl" placeholder="请选择url" style="min-width: 130px" size="small">
                             <el-option
-                                    v-for="item in proUrlData[this.form.projects]"
+                                    v-for="item in proUrlData[this.form.projectName]"
                                     :key="item"
                                     :label="item"
                                     :value="item">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                        <el-form-item label="接口编号" label-width="80px" prop="num" v-if="caseData.id"
-                                       style="margin-bottom: 5px">
-                        <el-input v-model.number="caseData.num" auto-complete="off"  placeholder="接口编号" size="small">
+                    <el-form-item label="接口编号" label-width="80px" prop="num" v-if="caseData.id"
+                                  style="margin-bottom: 5px">
+                        <el-input v-model.number="caseData.num" auto-complete="off" placeholder="接口编号" size="small">
                         </el-input>
                     </el-form-item>
-                    <el-form-item prop="name"  style="margin-bottom: 5px">
-                        <el-input v-model="caseData.name" auto-complete="off"  placeholder="接口名称" size="small">
+                    <el-form-item prop="name" style="margin-bottom: 5px">
+                        <el-input v-model="caseData.name" auto-complete="off" placeholder="接口名称" size="small">
                         </el-input>
                     </el-form-item>
                 </el-form>
                 <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
                 <el-form style="margin: 0 0 0 10px">
-                    <el-form-item >
-                        <el-input placeholder="Enter request URL" v-model="caseData.url" class="input-with-select" style="width: 80%;">
+                    <el-form-item>
+                        <el-input placeholder="Enter request URL" v-model="caseData.url" class="input-with-select"
+                                  style="width: 80%;">
                             <el-select v-model="caseData.method" size="medium" @change="methodChange"
                                        style="width: 100px" slot="prepend" placeholder="选择请求方式">
                                 <el-option v-for="item in methods" :key="item" :value="item" :label="item">
                                 </el-option>
                             </el-select>
-                            <el-button slot="append" type="primary" @click="hideShowParamStatus = !hideShowParamStatus">Params</el-button>
+                            <el-button slot="append" type="primary" @click="ParamViewStatus = !ParamViewStatus">
+                                Params
+                            </el-button>
                         </el-input>
 
                         <el-button type="primary" @click.native="saveAndRun()" size="medium">Send</el-button>
@@ -203,33 +207,34 @@
 
                 <el-table :data="caseData.param" :row-style="{'background-color': 'rgb(250, 250, 250)'}"
                           style="width:99%;margin-top:-20px" size="mini"
-                          :show-header="false" v-show="this.hideShowParamStatus">
+                          :show-header="false" v-show="this.ParamViewStatus">
                     <el-table-column property="key" label="Key" header-align="center"
                                      min-width="80">
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.key" size="mini"  placeholder="key">
+                            <el-input v-model="scope.row.key" size="mini" placeholder="key">
                             </el-input>
                         </template>
                     </el-table-column>
                     <el-table-column property="value" label="Value" header-align="center" min-width="200">
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.value" size="mini"  placeholder="value">
+                            <el-input v-model="scope.row.value" size="mini" placeholder="value">
                             </el-input>
                         </template>
                     </el-table-column>
                     <el-table-column property="value" label="操作" header-align="center" width="60">
                         <template slot-scope="scope">
                             <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="delParam(scope.$index)">
+                                       @click.native="delTableList('param',scope.$index)">
                             </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
 
                 <el-tabs style="margin: 0 0 0 10px" v-model="bodyShow">
-                    <el-tab-pane label="Headers" name="first" >
-                        <el-table :data="caseData.header" size="mini" stripe  :show-header="false" height="594" style="background-color: rgb(250, 250, 250)"
-                                  :row-style="{'background-color': 'rgb(250, 250, 250)'}" >
+                    <el-tab-pane label="Headers" name="first">
+                        <el-table :data="caseData.header" size="mini" stripe :show-header="false" height="594"
+                                  style="background-color: rgb(250, 250, 250)"
+                                  :row-style="{'background-color': 'rgb(250, 250, 250)'}">
 
                             <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                                 <template slot-scope="scope">
@@ -239,8 +244,8 @@
                             </el-table-column>
                             <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                                 <template slot-scope="scope">
-                                        <el-input v-model="scope.row.value" size="mini" placeholder="value">
-                                        </el-input>
+                                    <el-input v-model="scope.row.value" size="mini" placeholder="value">
+                                    </el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column label="备注" header-align="center" minWidth="80">
@@ -252,15 +257,15 @@
                             <el-table-column property="value" label="操作" header-align="center" width="80">
                                 <template slot-scope="scope">
                                     <el-button type="danger" icon="el-icon-delete" size="mini"
-                                               @click.native="delCaseHeader(scope.$index)">
+                                               @click.native="delTableList('header',scope.$index)">
                                     </el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
                     </el-tab-pane>
                     <el-tab-pane label="Body" name="second" :disabled="caseData.method === 'GET'">
-                        <el-form :inline="true" class="demo-form-inline" >
-                            <el-radio-group v-model="form.choiceType" @change="radioChange">
+                        <el-form :inline="true" class="demo-form-inline">
+                            <el-radio-group v-model="form.choiceType">
                                 <el-radio label="data">form-data</el-radio>
                                 <el-radio label="json">raw</el-radio>
                             </el-radio-group>
@@ -283,8 +288,10 @@
                                     v-model="caseData.jsonVariable">
                             </el-input>
                         </div>
-                        <el-table :data="caseData.variable" size="mini" stripe  :show-header="false" height="540" style="background-color: rgb(250, 250, 250)"
-                                  v-if="form.choiceType === 'data'" :row-style="{'background-color': 'rgb(250, 250, 250)'}" >
+                        <el-table :data="caseData.variable" size="mini" stripe :show-header="false" height="540"
+                                  style="background-color: rgb(250, 250, 250)"
+                                  v-if="form.choiceType === 'data'"
+                                  :row-style="{'background-color': 'rgb(250, 250, 250)'}">
 
                             <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                                 <template slot-scope="scope">
@@ -320,7 +327,8 @@
                                                         :show-file-list='false'
                                                         :on-success="fileChange"
                                                 >
-                                                    <el-button size="mini" type="primary" @click="tempNum(scope.$index)">
+                                                    <el-button size="mini" type="primary"
+                                                               @click="tempNum(scope.$index)">
                                                         点击上传
                                                     </el-button>
                                                 </el-upload>
@@ -344,46 +352,48 @@
                             <el-table-column property="value" label="操作" header-align="center" width="80">
                                 <template slot-scope="scope">
                                     <el-button type="danger" icon="el-icon-delete" size="mini"
-                                               @click.native="delCaseVariable(scope.$index)">
+                                               @click.native="delTableList('variable',scope.$index)">
                                     </el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
                     </el-tab-pane>
                     <el-tab-pane label="Extract" name="third">
-                            <el-table :data="caseData.extract" size="mini" stripe  :show-header="false" height="594" style="background-color: rgb(250, 250, 250)"
-                                      :row-style="{'background-color': 'rgb(250, 250, 250)'}" >
+                        <el-table :data="caseData.extract" size="mini" stripe :show-header="false" height="594"
+                                  style="background-color: rgb(250, 250, 250)"
+                                  :row-style="{'background-color': 'rgb(250, 250, 250)'}">
 
-                                <el-table-column property="key" label="Key" header-align="center" minWidth="100">
-                                    <template slot-scope="scope">
-                                        <el-input v-model="scope.row.key" size="mini" placeholder="key">
-                                        </el-input>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column property="value" label="Value" header-align="center" minWidth="200">
-                                    <template slot-scope="scope">
-                                        <el-input v-model="scope.row.value" size="mini" placeholder="value">
-                                        </el-input>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column label="备注" header-align="center" minWidth="80">
-                                    <template slot-scope="scope">
-                                        <el-input v-model="scope.row.remark" size="mini" placeholder="备注">
-                                        </el-input>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column property="value" label="操作" header-align="center" width="80">
-                                    <template slot-scope="scope">
-                                        <el-button type="danger" icon="el-icon-delete" size="mini"
-                                                   @click.native="delCaseExtract(scope.$index)">
-                                        </el-button>
-                                    </template>
-                                </el-table-column>
-                            </el-table>
+                            <el-table-column property="key" label="Key" header-align="center" minWidth="100">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.key" size="mini" placeholder="key">
+                                    </el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column property="value" label="Value" header-align="center" minWidth="200">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.value" size="mini" placeholder="value">
+                                    </el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="备注" header-align="center" minWidth="80">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.remark" size="mini" placeholder="备注">
+                                    </el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column property="value" label="操作" header-align="center" width="80">
+                                <template slot-scope="scope">
+                                    <el-button type="danger" icon="el-icon-delete" size="mini"
+                                               @click.native="delTableList('extract',scope.$index)">
+                                    </el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
                     </el-tab-pane>
                     <el-tab-pane label="Assert" name="fourth">
-                        <el-table :data="caseData.validate" size="mini" stripe  :show-header="false" height="594" style="background-color: rgb(250, 250, 250)"
-                                  :row-style="{'background-color': 'rgb(250, 250, 250)'}" >
+                        <el-table :data="caseData.validate" size="mini" stripe :show-header="false" height="594"
+                                  style="background-color: rgb(250, 250, 250)"
+                                  :row-style="{'background-color': 'rgb(250, 250, 250)'}">
 
                             <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                                 <template slot-scope="scope">
@@ -417,7 +427,7 @@
                             <el-table-column property="value" label="操作" header-align="center" width="80">
                                 <template slot-scope="scope">
                                     <el-button type="danger" icon="el-icon-delete" size="mini"
-                                               @click.native="delValidate(scope.$index)">
+                                               @click.native="delTableList('validate',scope.$index)">
                                     </el-button>
                                 </template>
                             </el-table-column>
@@ -428,10 +438,10 @@
             </el-tab-pane>
         </el-tabs>
 
-        <el-dialog title="测试结果" :visible.sync="dialogTestData" width="45%">
+        <el-dialog title="测试结果" :visible.sync="resultViewStatus" width="45%">
             <el-collapse accordion>
                 <el-collapse-item
-                        v-for="(item, index) in resultShow"
+                        v-for="(item, index) in resultShowData"
                         :key="index">
                     <template slot="title">
                         <div :style="item.attachment ? 'color:rgb(255, 74, 74)': 'color:#303133'">{{item.name}}</div>
@@ -465,22 +475,22 @@
         </el-dialog>
 
         <!--<el-dialog title="参数转换" :visible.sync="variableDialog">-->
-            <!--<el-collapse accordion>-->
-                <!--<div>-->
-                    <!--<el-input-->
-                            <!--type="textarea"-->
-                            <!--:rows="30"-->
-                            <!--placeholder="请输入内容"-->
-                            <!--v-model="caseData.jsonVariable">-->
-                    <!--</el-input>-->
-                <!--</div>-->
-            <!--</el-collapse>-->
-            <!--<div slot="footer" class="dialog-footer">-->
-                <!--<el-button @click="variableDialog = false" size="small">取 消</el-button>-->
-                <!--<el-button type="primary"-->
-                           <!--@click.native="changeData()" size="small">确 定-->
-                <!--</el-button>-->
-            <!--</div>-->
+        <!--<el-collapse accordion>-->
+        <!--<div>-->
+        <!--<el-input-->
+        <!--type="textarea"-->
+        <!--:rows="30"-->
+        <!--placeholder="请输入内容"-->
+        <!--v-model="caseData.jsonVariable">-->
+        <!--</el-input>-->
+        <!--</div>-->
+        <!--</el-collapse>-->
+        <!--<div slot="footer" class="dialog-footer">-->
+        <!--<el-button @click="variableDialog = false" size="small">取 消</el-button>-->
+        <!--<el-button type="primary"-->
+        <!--@click.native="changeData()" size="small">确 定-->
+        <!--</el-button>-->
+        <!--</div>-->
         <!--</el-dialog>-->
     </div>
 </template>
@@ -492,71 +502,54 @@
         name: 'caseManage',
         data() {
             return {
-                editShow:false,
-                url:'',
-                bodyShow:'second',
-                hideShowParamStatus:false,
-                tabName:'编辑接口',
-                radioType:'data',
-                theRequest: [{key:'',value:''}],
-                paShow:'first',
+                editShow: false,
+                url: '',
+                bodyShow: 'second',
+                ParamViewStatus: false,
+                tabName: '编辑接口',
+                radioType: 'data',
+                theRequest: [{key: '', value: ''}],
+                showNumTab: 'first',
                 loading: false,
-                resultShow: [
+                resultShowData: [
                     {
                         name: '',
-                        meta_data: {request:{body: '', url: '', headers: '', data: '',params:''},response:{content:'',json:''}},
+                        meta_data: {
+                            request: {body: '', url: '', headers: '', data: '', params: ''},
+                            response: {content: '', json: ''}
+                        },
                         attachment: ''
                     },
                 ],
-                dialogTestData: false,
+                resultViewStatus: false,
                 variableDialog: false,
                 importApiStatus: false,
                 saveRunStatus: false,
                 importApiAddress: '',
                 variableDialogData: '',
-                proGatherData: '',
+                proModelData: '',
                 configNameData: '',
+
+                //上传文件时，记录当前数据的下标，方便后续录入路径时赋值
                 temp_num: '',
+
                 fileList: [],
                 proUrlData: '',
-                choiceVariableType: [{
-                    value: '选项1',
-                    label: 'data'
-                }, {
-                    value: '选项2',
-                    label: 'json'
-                }],
-                choiceUrlData: [{
-                    value: '选项1',
-                    label: '基础url1'
-                }, {
-                    value: '选项2',
-                    label: '基础url2'
-                },
-                    {
-                        value: '选项3',
-                        label: '基础url3'
-                    },
-                    {
-                        value: '选项4',
-                        label: '基础url4'
-                    },],
-                funcAddress: '',
                 methods: ['POST', 'GET', 'PUT', 'DELETE'],
                 paramTypes: ['string', 'file'],
                 comparators: [{'value': 'string_equals'}, {'value': 'contains'}, {'value': 'less_than'}, {'value': 'less_than_or_equals'},
                     {'value': 'greater_than'}, {'value': 'greater_than_or_equals'}, {'value': 'not_equals'},
                 ],
-                tableData: [],
-                caseSelection: [],
+                caseTableData: [],
+                casesList: [],
                 total: 1,
                 currentPage: 1,
                 sizePage: 10,
-                importFormat:'',
+                importFormat: '',
                 form: {
-                    projects: '',
+                    projectName: '',
                     configName: '',
-                    gathers: [],
+                    apiName: '',
                     modelName: '',
                     choiceUrl: '基础url1',
                     choiceType: 'data',
@@ -576,7 +569,7 @@
                     downFunc: '',
                     formLabelWidth: '120px',
                     url: '',
-                    param:[{key:'',value:''}],
+                    param: [{key: '', value: ''}],
                     header: [],
                     variable: [],
                     jsonVariable: '',
@@ -586,37 +579,20 @@
             }
         },
 
-
         methods: {
-            getFuncAddress() {
-                this.$axios.post('/api/api/func/getAddress').then((response) => {
-                        this.funcAddress = response['data']['data'];
-                    }
-                )
-            },
             querySearch(queryString, cb) {
                 // 调用 callback 返回建议列表的数据
                 cb(this.comparators);
             },
-            httpSend() {
+            initBaseData() {
                 this.$axios.get('/api/api/proGather/list').then((response) => {
-                        this.proGatherData = response.data['data'];
-                        this.configNameData = response.data['config_name_list'];
-                        this.proUrlData = response.data['urlData'];
-                        for (var key in response.data['user_pro']) {
-                            this.form.projects = key;
-                            this.form.gathers = response.data['data'][key][0].toString();
-                            this.form.configName = response.data['config_name_list'][key][0].toString();
-                            break
-                        }
-                        this.$axios.post('/api/api/cases/list', {
-                            'proName': this.form.projects,
-                            'gatName': this.form.gathers
-                        }).then((response) => {
-                                this.tableData = response.data['data'];
-                                this.findCases();
-                            }
-                        )
+                    this.proModelData = response.data['data'];
+                    this.configNameData = response.data['config_name_list'];
+                    this.proUrlData = response.data['urlData'];
+                    this.form.projectName = response.data['user_pro']['pro_name'];
+                    this.form.configName = response.data['config_name_list'][this.form.projectName][0].toString();
+                    this.form.modelName = response.data['user_pro']['model_list'][0].toString();
+                    this.findCases();
                     }
                 )
             },
@@ -629,11 +605,10 @@
                 this.findCases()
             },
             findCases() {
-
                 this.$axios.post('/api/api/cases/find', {
-                    'caseName': this.form.modelName,
-                    'projectName': this.form.projects,
-                    'gatName': this.form.gathers,
+                    'caseName': this.form.apiName,
+                    'projectName': this.form.projectName,
+                    'gatName': this.form.modelName,
                     'page': this.currentPage,
                     'sizePage': this.sizePage,
                 }).then((response) => {
@@ -645,7 +620,7 @@
                             });
                         }
                         else {
-                            this.tableData = response.data['data'];
+                            this.caseTableData = response.data['data'];
                             this.total = response.data['total'];
                         }
                     }
@@ -653,7 +628,7 @@
             },
             initCaseData() {
                 this.editShow = true;
-                this.paShow = 'second';
+                this.showNumTab = 'second';
                 this.tabName = '新增接口';
                 this.caseData.header = [];
                 this.form.choiceType = 'data';
@@ -673,28 +648,19 @@
                 this.caseData.url = '';
                 // this.caseData.modelFormVisible = true;
             },
-            changeData() {
-                // console.log(this.variableDialogData); JSON.parse(this.variableDialogData);
-                let variableData = JSON.parse(this.variableDialogData);
-                for (let key in variableData) {
-                    this.caseData.variable.push({key: key, value: JSON.stringify(variableData[key])});
-                }
-                this.variableDialogData = '';
-                this.variableDialog = false;
-            },
             saveAndRun() {
                 this.saveRunStatus = true;
                 this.addCase(false);
-                if(this.caseData.id){
+                if (this.caseData.id) {
                     this.test([{'caseId': this.caseData.id, 'num': '1'}], false);
                 }
 
 
-
             },
             addCase(status = true) {
+                let variable;
                 if (this.form.choiceType === 'data') {
-                    var variable = JSON.stringify(this.caseData.variable)
+                    variable = JSON.stringify(this.caseData.variable)
                 }
                 else {
                     variable = this.caseData.jsonVariable;
@@ -711,12 +677,12 @@
                     }
                 }
                 this.$axios.post('/api/api/cases/add', {
-                    'gatherName': this.form.gathers,
-                    'projectName': this.form.projects,
+                    'gatherName': this.form.modelName,
+                    'projectName': this.form.projectName,
                     'caseName': this.caseData.name,
                     'caseNum': this.caseData.num,
                     // 'choiceUrl': this.form.choiceUrl,
-                    'choiceUrl': this.proUrlData[this.form.projects].indexOf(this.form.choiceUrl),
+                    'choiceUrl': this.proUrlData[this.form.projectName].indexOf(this.form.choiceUrl),
                     'variableType': this.form.choiceType,
                     'caseDesc': this.caseData.desc,
                     'funcAddress': this.caseData.funcAddress,
@@ -731,7 +697,6 @@
                     'caseMethod': this.caseData.method,
                     'caseValidate': JSON.stringify(this.caseData.validate)
                 }).then((response) => {
-
                         if (response.data['status'] === 0) {
                             this.$message({
                                 showClose: true,
@@ -749,17 +714,21 @@
                                 });
                                 this.findCases();
                             }
-
-
-
                         }
                     }
                 )
             },
-            editCase(caseId) {
-                this.$axios.post('/api/api/cases/edit', {'caseId': caseId}).then((response) => {
+            editCopyCase(caseId, status) {
+                this.$axios.post('/api/api/cases/editAndCopy', {'caseId': caseId}).then((response) => {
                         this.caseData.name = response.data['data']['caseName'];
-                        this.caseData.num = response.data['data']['caseNum'];
+                        if(status === 'edit'){
+                            this.caseData.num = response.data['data']['caseNum'];
+                            this.caseData.id = caseId;
+                        }
+                        else{
+                            this.caseData.num = '';
+                            this.caseData.id = '';
+                        }
                         this.caseData.desc = response.data['data']['caseDesc'];
                         this.caseData.funcAddress = response.data['data']['funcAddress'];
                         this.caseData.upFunc = response.data['data']['up_func'];
@@ -779,54 +748,21 @@
                         this.caseData.extract = response.data['data']['caseExtract'];
                         this.caseData.validate = response.data['data']['caseValidate'];
                         this.caseData.method = response.data['data']['caseMethod'];
-                        this.caseData.id = caseId;
+
                         // this.form.choiceUrl = response.data['data']['status_url'];
-                        this.form.choiceUrl = this.proUrlData[this.form.projects][response.data['data']['status_url']];
+                        this.form.choiceUrl = this.proUrlData[this.form.projectName][response.data['data']['status_url']];
                         this.caseData.modelFormVisible = true;
                     }
                 );
                 this.editShow = true;
-                this.paShow = 'second';
-                this.tabName = '编辑接口';
-            },
-            copyCase(caseId) {
-                this.$axios.post('/api/api/cases/copy', {'caseId': caseId}).then((response) => {
-                        this.caseData.name = response.data['data']['caseName'];
-                        this.caseData.num = '';
-                        this.caseData.desc = response.data['data']['caseDesc'];
-                        this.caseData.url = response.data['data']['caseUrl'];
-                        this.caseData.funcAddress = response.data['data']['funcAddress'];
-                        this.caseData.upFunc = response.data['data']['up_func'];
-                        this.caseData.downFunc = response.data['data']['down_func'];
-                        this.caseData.header = response.data['data']['caseHeader'];
-                        this.caseData.variable = response.data['data']['caseVariable'];
-                        this.caseData.extract = response.data['data']['caseExtract'];
-                        this.caseData.param = response.data['data']['param'];
-                        this.caseData.validate = response.data['data']['caseValidate'];
-                        this.caseData.method = response.data['data']['caseMethod'];
-                        this.caseData.id = '';
-                        this.form.choiceType = response.data['data']['variableType'];
-                        if (this.form.choiceType === 'data') {
-                            this.caseData.variable = response.data['data']['caseVariable'];
-                            this.caseData.jsonVariable = ''
-                        }
-                        else {
-                            this.caseData.jsonVariable = response.data['data']['caseVariable'];
-                            this.caseData.variable = []
-                        }
-                        this.form.choiceUrl = this.proUrlData[this.form.projects][response.data['data']['status_url']];
-                        this.caseData.modelFormVisible = true;
-                    }
-                );
-                this.editShow = true;
-                this.paShow = 'second';
+                this.showNumTab = 'second';
                 this.tabName = '编辑接口';
             },
             delCases(caseId) {
                 this.$axios.post('/api/api/cases/del', {'caseId': caseId}).then((response) => {
                         this.messageShow(this, response);
-                        this.form.modelName = '';
-                        if((this.currentPage-1)*this.sizePage+1 === this.total){
+                        this.form.apiName = '';
+                        if ((this.currentPage - 1) * this.sizePage + 1 === this.total) {
                             this.currentPage = this.currentPage - 1
                         }
                         this.findCases();
@@ -844,8 +780,8 @@
 
                 this.$axios.post('/api/api/cases/run', {
                     'caseData': caseData,
-                    'projectName': this.form.projects,
-                    'gathers': this.form.gathers,
+                    'projectName': this.form.projectName,
+                    'gathers': this.form.modelName,
                     'configName': this.form.configName,
                 }).then((response) => {
 
@@ -862,10 +798,9 @@
                                 message: response.data['msg'],
                                 type: 'success',
                             });
-                            this.resultShow = response['data']['data']['details'][0]['records'];
-                            this.dialogTestData = true
+                            this.resultShowData = response['data']['data']['details'][0]['records'];
+                            this.resultViewStatus = true
                         }
-
                         if (status) {
                             this.loading = false;
                         }
@@ -880,8 +815,8 @@
 
                 this.$axios.post('/api/api/cases/fileChange', {
                     'importApiAddress': this.importApiAddress,
-                    'projectName': this.form.projects,
-                    'gatherName': this.form.gathers,
+                    'projectName': this.form.projectName,
+                    'gatherName': this.form.modelName,
                     'importFormat': this.importFormat,
                 }).then((response) => {
 
@@ -918,100 +853,68 @@
                     });
                 }
             },
-            addCaseVariable() {
-                this.caseData.variable.push({key: '', value: '', param_type: 'string', remark: ''});
+            addTableList(type) {
+                if (type === 'variable') {
+                    this.caseData.variable.push({key: '', value: '', param_type: 'string', remark: ''});
+                }
+                else if (type === 'header') {
+                    this.caseData.header.push({key: '', value: ''});
+                }
+                else if (type === 'validate') {
+                    this.caseData.validate.push({key: '', value: ''});
+                }
+                else if (type === 'extract') {
+                    this.caseData.extract.push({key: '', value: '', remark: ''});
+                }
+                else if (type === 'param') {
+                    this.caseData.param.push({key: '', value: ''});
+                }
             },
-            cleanCaseVariable() {
-                this.caseData.variable = [];
-                this.caseData.jsonVariable = ''
-            },
-            delCaseVariable(i) {
-                this.caseData.variable.splice(i, 1);
-            },
-            addCaseHeader() {
-                this.caseData.header.push({key: '', value: ''});
-            },
-            delCaseHeader(i) {
-                this.caseData.header.splice(i, 1);
-            },
-            addValidate() {
-                this.caseData.validate.push({key: '', value: ''});
-            },
-            delValidate(i) {
-                this.caseData.validate.splice(i, 1);
-            },
-            addCaseExtract() {
-                this.caseData.extract.push({key: '', value: '', remark: ''});
-            },
-            delCaseExtract(i) {
-                this.caseData.extract.splice(i, 1);
+            delTableList(type, i) {
+                if (type === 'variable') {
+                    this.caseData.variable.splice(i, 1);
+                }
+                else if (type === 'header') {
+                    this.caseData.header.splice(i, 1);
+                }
+                else if (type === 'validate') {
+                    this.caseData.validate.splice(i, 1);
+                }
+                else if (type === 'extract') {
+                    this.caseData.extract.splice(i, 1);
+                }
+                else if (type === 'param') {
+                    this.caseData.param.splice(i, 1);
+                }
             },
             handleCaseSelection(val) {
-                this.caseSelection = val;
+                this.casesList = val;
             },
             cancelSelection() {
                 this.$refs.multipleTable.clearSelection();
             },
             fileChange(response, file, fileList) {
                 this.caseData.variable[this.temp_num]['value'] = response['data'];
-                if (response.data['status'] === 0) {
-                    this.$message({
-                        showClose: true,
-                        message: response['msg'],
-                        type: 'warning',
-                    });
-                }
-                else {
-                    this.$message({
-                        showClose: true,
-                        message: response['msg'],
-                        type: 'success',
-                    });
-                }
-
+                this.messageShow(this, response);
 
             },
             getApiAddress(response, file, fileList) {
                 this.importApiAddress = response['data'];
-                if (response.data['status'] === 0) {
-                    this.$message({
-                        showClose: true,
-                        message: response['msg'],
-                        type: 'warning',
-                    });
-                }
-                else {
-                    this.$message({
-                        showClose: true,
-                        message: response['msg'],
-                        type: 'success',
-                    });
-                }
+                this.messageShow(this, response);
             },
             tempNum(i) {
                 this.temp_num = i;
             },
-            clearGathers() {
-                this.form.gathers = null;
-                this.form.configName = null;
+            clearChoice() {
+                this.form.modelName = '';
+                this.form.configName = '';
             },
             methodChange(i) {
                 if (i === 'GET') {
                     this.form.choiceType = "data";
                 }
             },
-            radioChange(i) {
-                if (i) {
-                    console.log(i);
-                    console.log(this.radioType)
-                }
-            },
-            delParam(i) {
-                this.caseData.param.splice(i, 1);
-            },
-            addParam() {
-                this.caseData.param.push({key: '', value: ''});
-            },
+
 
         },
         computed: {
@@ -1022,28 +925,28 @@
             monitorMethod() {
                 return this.caseData.method;
             },
-            monitorVariable(){
+            monitorVariable() {
                 return this.caseData.variable;
             },
-            monitorHeader(){
+            monitorHeader() {
                 return this.caseData.header;
             },
-            monitorExtract(){
+            monitorExtract() {
                 return this.caseData.extract;
             },
-            monitorValidate(){
+            monitorValidate() {
                 return this.caseData.validate;
             },
-            monitorParam(){
+            monitorParam() {
                 return this.caseData.param;
             },
         },
         watch: {
             monitorUrl(newValue, oldValue) {
-                if (!this.caseData.url){
+                if (!this.caseData.url) {
                     return
                 }
-                if (this.caseData.url.indexOf('?') === -1){
+                if (this.caseData.url.indexOf('?') === -1) {
 
                     return
                 }
@@ -1065,62 +968,62 @@
                 }
             },
             monitorMethod(newValue, oldValue) {
-                if (newValue === 'GET'){
+                if (newValue === 'GET') {
                     this.bodyShow = 'first'
                 }
 
             },
-            monitorVariable:{
-               handler: function(){
-                   if (this.caseData.variable.length === 0){
-                       this.caseData.variable.push({key: '', value: '', param_type: 'string', remark: ''});
-                   }
-                   if (this.caseData.variable[this.caseData.variable.length - 1]['key'] || this.caseData.variable[this.caseData.variable.length - 1]['value']) {
-                       this.addCaseVariable()
-                   }
-               },
-                deep:true
+            monitorVariable: {
+                handler: function () {
+                    if (this.caseData.variable.length === 0) {
+                        this.addTableList('variable')
+                    }
+                    if (this.caseData.variable[this.caseData.variable.length - 1]['key'] || this.caseData.variable[this.caseData.variable.length - 1]['value']) {
+                        this.addTableList('variable')
+                    }
+                },
+                deep: true
             },
-            monitorExtract:{
-                handler: function(){
-                    if (this.caseData.extract.length === 0){
-                        this.caseData.extract.push({key: '', value: '',  remark: ''});
+            monitorExtract: {
+                handler: function () {
+                    if (this.caseData.extract.length === 0) {
+                        this.addTableList('extract')
                     }
                     if (this.caseData.extract[this.caseData.extract.length - 1]['key'] || this.caseData.extract[this.caseData.extract.length - 1]['value']) {
-                        this.addCaseExtract()
+                        this.addTableList('extract')
                     }
                 },
-                deep:true
+                deep: true
             },
-            monitorHeader:{
-                handler: function(){
-                    if (this.caseData.header.length === 0){
-                        this.caseData.header.push({key: '', value: '', remark: ''});
+            monitorHeader: {
+                handler: function () {
+                    if (this.caseData.header.length === 0) {
+                        this.addTableList('header')
                     }
                     if (this.caseData.header[this.caseData.header.length - 1]['key'] || this.caseData.header[this.caseData.header.length - 1]['value']) {
-                        this.addCaseHeader()
+                        this.addTableList('header')
                     }
                 },
-                deep:true
+                deep: true
             },
-            monitorValidate:{
-                handler: function(){
-                    if (this.caseData.validate.length === 0){
-                        this.caseData.validate.push({key: '', value: '', remark: ''});
+            monitorValidate: {
+                handler: function () {
+                    if (this.caseData.validate.length === 0) {
+                        this.addTableList('validate')
                     }
                     if (this.caseData.validate[this.caseData.validate.length - 1]['key'] || this.caseData.validate[this.caseData.validate.length - 1]['value']) {
-                        this.addValidate()
+                        this.addTableList('validate')
                     }
                 },
-                deep:true
+                deep: true
             },
-            monitorParam:{
+            monitorParam: {
                 handler: function () {
-                    if (this.caseData.param.length === 0){
-                        this.addParam()
+                    if (this.caseData.param.length === 0) {
+                        this.addTableList('param')
                     }
                     else if (this.caseData.param[this.caseData.param.length - 1]['key'] || this.caseData.param[this.caseData.param.length - 1]['value']) {
-                        this.addParam()
+                        this.addTableList('param')
                     }
                     let strParam = '';
                     for (let i in this.caseData.param) {
@@ -1145,13 +1048,13 @@
                 deep: true
             },
         },
+        // created(){
+        //     this.getProModel(this, this.findCases);
+        // },
         mounted() {
-            this.httpSend();
-            this.getFuncAddress();
-
+            this.initBaseData();
         },
     }
 </script>
-
 <style>
 </style>

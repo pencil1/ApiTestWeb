@@ -157,7 +157,7 @@
             },
             hideShowParam(){
                 console.log(123)
-                // this.hideShowParamStatus = !this.hideShowParamStatus
+                // this.ParamViewStatus = !this.ParamViewStatus
             },
             sendMethod() {
                 //     this.$axios({

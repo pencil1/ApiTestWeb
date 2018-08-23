@@ -20,7 +20,6 @@ import taskManage from './projectManage/taskManage/task.vue'
 import batch from './projectManage/batchAdd/batch.vue'
 import sqlCheck from './projectManage/sqlCheck/sqlCheck.vue'
 import sceneConfig from './projectManage/sceneConfig/sceneConfig.vue'
-
 import login from './login/login.vue'
 
 Vue.use(VueRouter);
@@ -200,7 +199,7 @@ if (window.localStorage.getItem('token')) {
 }
 
 if (window.localStorage.getItem('userName')) {
-    store.commit(types.USERNAME, window.localStorage.getItem('userName'))
+    store.commit(types.USERNAME, window.localStorage.getItem('userName'));
     // store.commit(types.LOGIN, '1111')
 }
 

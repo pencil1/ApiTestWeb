@@ -3,9 +3,9 @@
 
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目名称" labelWidth="110px">
-                <el-select v-model="form.projects" placeholder="请选择项目">
+                <el-select v-model="form.projectName" placeholder="请选择项目">
                     <el-option
-                            v-for="(item, key) in proGatherData"
+                            v-for="(item, key) in proModelData"
                             :key="key"
                             :value="key">
                     </el-option>
@@ -90,13 +90,13 @@
                         </el-form-item>
 
                         <!--<el-form-item label="项目名称" :label-width="configData.formLabelWidth">-->
-                        <!--<el-input v-model="form.projects" auto-complete="off" :disabled="true">-->
+                        <!--<el-input v-model="form.projectName" auto-complete="off" :disabled="true">-->
                         <!--</el-input>-->
                         <!--</el-form-item>-->
                         <el-form-item label="项目名称" labelWidth="120px" style="width: 200%;">
-                            <el-select v-model="form.projects" placeholder="请选择项目">
+                            <el-select v-model="form.projectName" placeholder="请选择项目">
                                 <el-option
-                                        v-for="(item, key) in proGatherData"
+                                        v-for="(item, key) in proModelData"
                                         :key="key"
                                         :value="key">
                                 </el-option>
@@ -167,14 +167,14 @@
         name: 'sceneConfig',
         data() {
             return {
-                proGatherData: '',
+                proModelData: '',
                 funcAddress: '',
                 tableData: [],
                 total: 1,
                 currentPage: 1,
                 sizePage: 10,
                 form: {
-                    projects: '',
+                    projectName: '',
                     configName: '',
                 },
                 configData: {
@@ -193,12 +193,9 @@
         methods: {
             httpSend() {
                 this.$axios.get('/api/api/proGather/list').then((response) => {
-                        this.proGatherData = response.data['data'];
-                        for (var key in response.data['user_pro']) {
-                            this.form.projects = key;
-                            break
-                        }
-                        this.findSceneConfig();
+                    this.proModelData = response.data['data'];
+                    this.form.projectName = response.data['user_pro']['pro_name'];
+                    this.findSceneConfig();
                     }
                 );
 
@@ -224,7 +221,7 @@
             },
             findSceneConfig() {
                 this.$axios.post('/api/api/config/find', {
-                    'projectName': this.form.projects,
+                    'projectName': this.form.projectName,
                     'configName': this.form.configName,
                     'page': this.currentPage,
                     'sizePage': this.sizePage,
@@ -255,7 +252,7 @@
             },
             addSceneConfig() {
                 this.$axios.post('/api/api/sceneConfig/add', {
-                    'projectName': this.form.projects,
+                    'projectName': this.form.projectName,
                     'sceneConfigName': this.configData.name,
                     'funcAddress': this.configData.funcAddress,
                     'num': this.configData.num,
@@ -287,7 +284,7 @@
                 this.$axios.post('/api/api/config/edit', {'id': id}).then((response) => {
                         this.configData.name = response.data['data']['name'];
                         this.configData.num = response.data['data']['num'];
-                        this.configData.projectName = this.form.projects;
+                        this.configData.projectName = this.form.projectName;
                         this.configData.variable = response.data['data']['variables'];
                         this.configData.funcAddress = response.data['data']['func_address'];
                         this.configData.id = id;

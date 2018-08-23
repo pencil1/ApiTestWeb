@@ -3,9 +3,9 @@
 
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目名称" labelWidth="110px">
-                <el-select v-model="form.projects" placeholder="请选择项目">
+                <el-select v-model="form.projectName" placeholder="请选择项目">
                     <el-option
-                            v-for="(item, key) in proGatherData"
+                            v-for="(item, key) in proModelData"
                             :key="key"
                             :value="key">
                     </el-option>
@@ -92,13 +92,13 @@
                             </el-input>
                         </el-form-item>
                         <!--<el-form-item label="项目名称" :label-width="modelData.formLabelWidth">-->
-                        <!--<el-input v-model="form.projects" auto-complete="off" :disabled="true">-->
+                        <!--<el-input v-model="form.projectName" auto-complete="off" :disabled="true">-->
                         <!--</el-input>-->
                         <!--</el-form-item>-->
                         <el-form-item label="项目名称" labelWidth="120px" style="width: 200%;">
-                            <el-select v-model="form.projects" placeholder="请选择项目">
+                            <el-select v-model="form.projectName" placeholder="请选择项目">
                                 <el-option
-                                        v-for="(item, key) in proGatherData"
+                                        v-for="(item, key) in proModelData"
                                         :key="key"
                                         :value="key">
                                 </el-option>
@@ -129,13 +129,13 @@
         name: 'modeManage',
         data() {
             return {
-                proGatherData: '',
+                proModelData: '',
                 tableData: [],
                 total: 1,
                 currentPage: 1,
                 sizePage: 10,
                 form: {
-                    projects: '',
+                    projectName: '',
                     modelName: '',
                 },
                 modelData: {
@@ -153,12 +153,9 @@
         methods: {
             httpSend() {
                 this.$axios.get('/api/api/proGather/list').then((response) => {
-                        this.proGatherData = response.data['data'];
-                        for (var key in response.data['user_pro']) {
-                            this.form.projects = key;
-                            break
-                        }
-                        this.findModel();
+                    this.proModelData = response.data['data'];
+                    this.form.projectName = response.data['user_pro']['pro_name'];
+                    this.findModel();
                     }
                 )
             },
@@ -172,7 +169,7 @@
             },
             findModel() {
                 this.$axios.post('/api/api/model/find', {
-                    'projectName': this.form.projects,
+                    'projectName': this.form.projectName,
                     'modelName': this.form.modelName,
                     'page': this.currentPage,
                     'sizePage': this.sizePage,
@@ -198,12 +195,9 @@
                 this.modelData.modelFormVisible = true;
 
             },
-            test1(){
-                console.log(13123)
-            },
             addModel() {
                 this.$axios.post('/api/api/model/add', {
-                    'projectName': this.form.projects,
+                    'projectName': this.form.projectName,
                     'gatherName': this.modelData.name,
                     'id': this.modelData.id,
                     'num': this.modelData.num,
@@ -233,7 +227,7 @@
                 this.$axios.post('/api/api/model/edit', {'id': id}).then((response) => {
                         this.modelData.name = response.data['data']['gatherName'];
                         this.modelData.num = response.data['data']['num'];
-                        this.modelData.projectName = this.form.projects;
+                        this.modelData.projectName = this.form.projectName;
                         this.modelData.id = id;
                         this.modelData.modelFormVisible = true;
                     }

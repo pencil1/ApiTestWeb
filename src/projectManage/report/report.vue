@@ -3,9 +3,9 @@
 
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目" labelWidth="50px">
-                <el-select v-model="form.projects" placeholder="请选择项目">
+                <el-select v-model="form.projectName" placeholder="请选择项目">
                     <el-option
-                            v-for="(item, key) in proGatherData"
+                            v-for="(item, key) in proModelData"
                             :key="key"
                             :value="key">
                     </el-option>
@@ -13,14 +13,14 @@
 
                 <!--<el-select v-model="form.gathers" multiple placeholder="请选择模块" style="width: 400px;">-->
                 <!--<el-option-->
-                <!--v-for="item in proGatherData[this.form.projects]"-->
+                <!--v-for="item in proModelData[this.form.projectName]"-->
                 <!--:key="item.id"-->
                 <!--:value="item.value">-->
                 <!--</el-option>-->
                 <!--</el-select>-->
                 <el-select v-model="form.scenes" multiple placeholder="请选择业务集" style="width: 400px;">
                     <el-option
-                            v-for="item in proSceneData[this.form.projects]"
+                            v-for="item in proSceneData[this.form.projectName]"
                             :key="item.id"
                             :value="item.value">
                     </el-option>
@@ -78,9 +78,9 @@
                                 <el-button type="primary" icon="el-icon-zoom-in" size="mini"
                                            @click.native="check(tableData[scope.$index]['id'])">查看
                                 </el-button>
-                                <el-button type="primary" icon="el-icon-download" size="mini"
-                                           @click.native="downReport(tableData[scope.$index]['id'])">下载
-                                </el-button>
+                                <!--<el-button type="primary" icon="el-icon-download" size="mini"-->
+                                           <!--@click.native="downReport(tableData[scope.$index]['id'])">下载-->
+                                <!--</el-button>-->
                                 <el-button type="danger" icon="el-icon-delete" size="mini"
                                            @click.native="sureView(delReport, tableData[scope.$index]['address'])">删除
                                 </el-button>
@@ -110,14 +110,14 @@
         data() {
             return {
                 loading: false,
-                proGatherData: '',
+                proModelData: '',
                 proSceneData: '',
                 tableData: [],
                 total: 1,
                 currentPage: 1,
                 sizePage: 10,
                 form: {
-                    projects: '',
+                    projectName: '',
                     gathers: [],
                     scenes: [],
                 },
@@ -149,12 +149,8 @@
             },
             httpSend() {
                 this.$axios.get('/api/api/proGather/list').then((response) => {
-                        this.proGatherData = response.data['data'];
-                        for (var key in response.data['user_pro']) {
-                            this.form.projects = key;
-                            // this.form.gathers = response.data[key][0].toString();
-                            break
-                        }
+                    this.proModelData = response.data['data'];
+                    this.form.projectName = response.data['user_pro']['pro_name'];
                     }
                 );
                 this.$axios.get('/api/api/proScene/list').then((response) => {
@@ -167,7 +163,7 @@
             findReport() {
                 this.$axios.post('/api/api/report/find', {
                     'page': this.currentPage,
-                    'belong': this.form.projects,
+                    'belong': this.form.projectName,
                     'sizePage': this.sizePage,
                 }).then((response) => {
                         if (response.data['status'] === 0) {
@@ -213,7 +209,7 @@
                 this.loading = true;
                 this.$axios.post('/api/api/report/run', {
                     'sceneNames': this.form.scenes,
-                    'projectName': this.form.projects
+                    'projectName': this.form.projectName
                 }).then((response) => {
                         this.findReport();
                         this.loading = false;
@@ -224,7 +220,7 @@
             },
             runProject() {
                 this.loading = true;
-                this.$axios.post('/api/api/report/run', {'projectName': this.form.projects}).then((response) => {
+                this.$axios.post('/api/api/report/run', {'projectName': this.form.projectName}).then((response) => {
                         this.findReport();
                         this.loading = false;
                         this.messageShow(this, response);
@@ -249,7 +245,7 @@
             },
             download(data, strFileName, strMimeType) {
 
-                var self = window, // this script is only for browsers anyway...
+                let self = window, // this script is only for browsers anyway...
                     defaultMime = "application/octet-stream", // this default mime also triggers iframe downloads
                     mimeType = strMimeType || defaultMime,
                     payload = data,

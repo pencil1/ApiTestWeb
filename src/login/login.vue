@@ -152,7 +152,8 @@
                             }
                         }
                     }
-                )
+                );
+
             },
             loGout() {
                 console.log(this.$store.state.token);
