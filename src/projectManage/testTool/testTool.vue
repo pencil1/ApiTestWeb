@@ -96,27 +96,39 @@
                 )
             },
             sqlData() {
-                // 调用 callback 返回建议列表的数据
-                this.$axios.post('/api/api/runCmd', {
-                    'funcName':'sql_func',
-                }).then((response) => {
-                        if (response.data['status'] === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'warning',
-                            });
-                        }
-                        else {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'success',
-                            });
-
-                        }
+                    try {
+                        JSON.parse(this.showData)
                     }
-                )
+                    catch (err) {
+                        this.$message({
+                            showClose: true,
+                            message: 'json格式错误',
+                            type: 'warning',
+                        });
+                        console.log(err);
+                        console.log(this.showData.indexOf(5377))
+                        return
+                    }
+                // this.$axios.post('/api/api/runCmd', {
+                //     'funcName':'sql_func',
+                // }).then((response) => {
+                //         if (response.data['status'] === 0) {
+                //             this.$message({
+                //                 showClose: true,
+                //                 message: response.data['msg'],
+                //                 type: 'warning',
+                //             });
+                //         }
+                //         else {
+                //             this.$message({
+                //                 showClose: true,
+                //                 message: response.data['msg'],
+                //                 type: 'success',
+                //             });
+                //
+                //         }
+                //     }
+                // )
             },
             sqlData1() {
                 // 调用 callback 返回建议列表的数据

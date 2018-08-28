@@ -84,7 +84,7 @@
 
         <el-dialog title="任务配置" :visible.sync="taskData.modelFormVisible" width="40%">
             <el-tabs>
-                <el-tab-pane label="messages">
+                <el-tab-pane label="messages" style="margin-top: 10px">
                     <el-form :model="taskData">
                         <el-form-item label="任务序号" :label-width="taskData.formLabelWidth"
                                       prop="num"

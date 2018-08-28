@@ -136,19 +136,26 @@
                             </template>
                         </el-table-column>
                         <el-table-column
-                                prop="case_name"
                                 label="用例名称"
                                 minWidth="50">
-                            <!--<template slot-scope="scope" >-->
-                                <!--<el-input v-model="caseList[scope.$index]['status']" auto-complete="off">-->
-                                <!--</el-input>-->
-                            <!--</template>-->
+                            <template slot-scope="scope" >
+                                <el-input v-model="caseList[scope.$index]['case_name']" auto-complete="off">
+                                </el-input>
+                            </template>
                         </el-table-column>
 
                         <el-table-column
                                 prop="name"
                                 label="接口名称"
                                 minWidth="50">
+                        </el-table-column>
+                        <el-table-column
+                                label="time"
+                                minWidth="40">
+                            <template slot-scope="scope">
+                                <el-input v-model="caseList[scope.$index]['time']" auto-complete="off">
+                                </el-input>
+                            </template>
                         </el-table-column>
 
                         <el-table-column
@@ -327,8 +334,8 @@
 
         <el-dialog title="配置" :visible.sync="paramVisible" width="50%">
 
-            <el-tabs @tab-click="refreshConfig">
-                <el-tab-pane label="接口信息">
+            <el-tabs @tab-click="refreshConfig" >
+                <el-tab-pane label="接口信息" style="margin-top: 10px">
                     <el-form>
                         <el-form-item label="用例名称" :label-width="sceneData.formLabelWidth" prop="name">
                             <el-input v-model="caseConfig.name" auto-complete="off">
@@ -344,7 +351,7 @@
                         </el-form-item>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane label="url参数">
+                <el-tab-pane label="url参数" style="margin-top: 10px">
                     <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
                                @click="addCaseParam()">添加
                     </el-button>
@@ -384,7 +391,7 @@
                         </el-table-column>
                     </el-table>
                 </el-tab-pane>
-                <el-tab-pane label="接口参数">
+                <el-tab-pane label="接口参数" style="margin-top: 10px">
                     <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
                                :disabled="form.choiceTypeStatus"
                                @click="addCaseVariable()">添加
@@ -482,7 +489,7 @@
                         </el-table-column>
                     </el-table>
                 </el-tab-pane>
-                <el-tab-pane label="信息提取">
+                <el-tab-pane label="信息提取" style="margin-top: 10px">
                     <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
                                @click="addCaseExtract()">添加
                     </el-button>
@@ -522,7 +529,7 @@
                         </el-table-column>
                     </el-table>
                 </el-tab-pane>
-                <el-tab-pane label="接口判断">
+                <el-tab-pane label="接口判断" style="margin-top: 10px">
                     <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
                                @click="addCaseValidate()">添加
                     </el-button>
@@ -592,6 +599,7 @@
                 statusCase: {variable: [true, true], extract: [true, true], validate: [true, true],},
                 caseConfig: {
                     name: '',
+                    time:'',
                     upFunc: '',
                     downFunc: '',
                     statusCase: {variable: [], extract: [], validate: [],param:[]},
@@ -739,6 +747,17 @@
                 this.sceneData.variable.splice(i, 1);
             },
             addScene() {
+                for (let i = 0; i < this.caseList.length; i++) {
+                    if ( !(/(^[1-9]\d*$)/.test(this.caseList[i]['time']))) {
+                        this.$message({
+                            showClose: true,
+                            message: '第'+i+'条用例的执行次数请输入正整数',
+                            type: 'warning',
+                        });
+                        return
+                    }
+
+                }
                 this.$axios.post('/api/api/scene/add', {
                     'num': this.sceneData.num,
                     'name': this.sceneData.name,
@@ -823,6 +842,7 @@
                 this.caseConfig.statusCase = this.caseList[i]['statusCase'];
                 this.form.choiceType = this.caseList[i]['variableType'];
                 this.caseConfig.name = this.caseList[i]['case_name'];
+                this.caseConfig.time = this.caseList[i]['time'];
                 this.caseConfig.upFunc = this.caseList[i]['up_func'];
                 this.caseConfig.downFunc = this.caseList[i]['down_func'];
                 this.tempNum = i;

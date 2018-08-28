@@ -200,13 +200,13 @@
                             </el-button>
                         </el-input>
 
-                        <el-button type="primary" @click.native="saveAndRun()" size="medium">Send</el-button>
+                        <el-button type="primary" @click.native="saveAndRun()" size="medium" :loading="this.saveRunStatus">Send</el-button>
                         <el-button type="primary" @click.native="addCase()" size="medium">Save</el-button>
                     </el-form-item>
                 </el-form>
 
                 <el-table :data="caseData.param" :row-style="{'background-color': 'rgb(250, 250, 250)'}"
-                          style="width:99%;margin-top:-20px" size="mini"
+                          style="width:98.2%;margin-top:-20px;left: 10px;" size="mini"
                           :show-header="false" v-show="this.ParamViewStatus">
                     <el-table-column property="key" label="Key" header-align="center"
                                      min-width="80">
@@ -281,12 +281,16 @@
                         <div v-if="form.choiceType === 'json'">
                             <div style="margin: 0 0 15px;">
                             </div>
-                            <el-input
-                                    type="textarea"
-                                    :rows="24"
-                                    placeholder="请输入json格式的参数"
-                                    v-model="caseData.jsonVariable">
-                            </el-input>
+                            <div style="border-style:solid;border-width: 1px;border-color: rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234)">
+                            <codemirror :value="caseData.jsonVariable" :options="options">
+                            </codemirror>
+                            </div>
+                            <!--<el-input-->
+                                    <!--type="textarea"-->
+                                    <!--:rows="24"-->
+                                    <!--placeholder="请输入json格式的参数"-->
+                                    <!--v-model="caseData.jsonVariable">-->
+                            <!--</el-input>-->
                         </div>
                         <el-table :data="caseData.variable" size="mini" stripe :show-header="false" height="540"
                                   style="background-color: rgb(250, 250, 250)"
@@ -496,14 +500,30 @@
 </template>
 
 <script>
+    import { codemirror } from 'vue-codemirror-lite'
+
+    import 'codemirror/addon/lint/lint.css'
+    import 'codemirror/addon/lint/lint'
+    import 'codemirror/addon/lint/json-lint'
+    import 'codemirror/mode/javascript/javascript'
 
     export default {
-
+        components: {
+            codemirror
+        },
         name: 'caseManage',
         data() {
             return {
                 editShow: false,
                 url: '',
+                options:{
+                    mode: 'application/ld+json',
+                    tabSize: 4,
+                    lineNumbers: true,
+                    lineWrapping: true,
+                    // viewportMargin: Infinity,
+                    // extraKeys: {'Ctrl-Space': 'autocomplete'},
+                },
                 bodyShow: 'second',
                 ParamViewStatus: false,
                 tabName: '编辑接口',
@@ -650,7 +670,6 @@
                 // this.caseData.modelFormVisible = true;
             },
             saveAndRun() {
-                this.saveRunStatus = true;
                 this.addCase(false);
                 if (this.caseData.id) {
                     this.test([{'caseId': this.caseData.id, 'num': '1'}], false);
@@ -1058,4 +1077,21 @@
     }
 </script>
 <style>
+    .cm-s-default .cm-property{
+        color: rgb(183, 40, 135);
+        /*color: rgb(137, 21, 99);*/
+    }
+    .CodeMirror-gutter{
+        width: 40px;
+    }
+    .cm-s-default .cm-string{
+        /*color: rgb(116,88,255);*/
+        color: rgb(71,35,255);
+    }
+    .cm-s-default .cm-atom{
+        color: #000000;
+    }
+    .CodeMirror {
+        height: 550px;
+    }
 </style>

@@ -190,7 +190,7 @@
     .el-main {
         color: #333;
         text-align: left;
-        line-height: 1px;
+        line-height: 20px;
         padding:0 0 20px 0;
     }
     /*.el-tabs--top .el-tabs__item.is-top:nth-child(2){*/
@@ -225,7 +225,7 @@
 
     }
     .el-dialog__headerbtn{
-        top:14px;
+        top:6px;
         right:15px;
     }
     .el-input--mini .el-input__inner{

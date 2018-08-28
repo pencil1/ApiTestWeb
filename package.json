@@ -14,6 +14,7 @@
     "v-charts": "^1.17.9",
     "vue": "^2.5.2",
     "vue-clipboard2": "^0.1.1",
+    "vue-codemirror-lite": "^1.0.4",
     "vue-resource": "^1.4.0",
     "vue-router": "^3.0.1",
     "vue-scrollbar": "^1.0.4",

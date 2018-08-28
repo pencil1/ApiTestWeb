@@ -26,22 +26,37 @@
                 <el-button type="success" icon="el-icon-edit" @click.native="saveFunc()" size="small"></el-button>
             </el-tooltip>
         </el-button-group>
-        <div>
-            <el-input
-                    type="textarea"
-                    :rows="36"
-                    placeholder="请输入内容"
-                    v-model="funcData">
-            </el-input>
+        <div style="margin-top: 40px;border-style:solid;border-color: rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234)">
+            <!--<el-input-->
+                    <!--type="textarea"-->
+                    <!--:rows="36"-->
+                    <!--placeholder="请输入内容"-->
+                    <!--v-model="funcData">-->
+            <!--</el-input>-->
+            <codemirror :value="funcData" :options="options">
+            </codemirror>
         </div>
     </div>
 </template>
 
 <script>
+    import { codemirror } from 'vue-codemirror-lite'
+    require ('codemirror/mode/python/python');
     export default {
+        components: {
+            codemirror
+        },
         name: 'buildInFunc',
         data() {
             return {
+                options:{
+                    mode: 'python',
+                    tabSize: 4,
+                    lineNumbers: true,
+                    lineWrapping: true,
+                    viewportMargin: Infinity,
+                    extraKeys: {'Ctrl-Space': 'autocomplete'},
+                },
                 funcData: '',
                 comparator: '',
                 comparators: [],
@@ -118,5 +133,17 @@
 </script>
 
 <style>
+    .CodeMirror {
+        height: 550px;
+    }
+    .cm-s-default .cm-keyword{
+        color:#ce22e6
+    }
+    .cm-s-default .cm-comment{
+        color:#b5b5b5
+    }
 
+    .cm-s-default .cm-builtin{
+        color:#409eff
+    }
 </style>
