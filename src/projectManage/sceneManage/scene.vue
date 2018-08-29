@@ -20,7 +20,7 @@
                 <el-button type="primary" icon="el-icon-search" @click.native="findScenes()" size="small">
                     搜索
                 </el-button>
-                <el-button type="primary" size="small" @click.native="initSceneData()">添加业务集
+                <el-button type="primary" size="small" @click.native="initSceneData()">添加接口用例
                 </el-button>
 
 
@@ -77,12 +77,12 @@
         </el-tabs>
 
 
-        <el-dialog title="业务信息" :visible.sync="sceneData.modelFormVisible" width="50%" top="5vh">
+        <el-dialog title="用例" :visible.sync="sceneData.modelFormVisible" width="50%" top="5vh">
 
 
             <el-tabs value="fourth">
                 <!--<el-tabs @tab-click="refresh" value="fourth">-->
-                <el-tab-pane label="业务信息" name="first" style="margin-top: 10px">
+                <el-tab-pane label="用例信息" name="first" style="margin-top: 10px">
                     <el-form :model="sceneData">
                         <el-form-item label="业务编号" :label-width="sceneData.formLabelWidth"
                                       prop="num" v-if="sceneData.id"
@@ -113,7 +113,7 @@
 
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane label="业务集合" name="second">
+                <el-tab-pane label="执行步骤" name="second">
                     <el-table
                             :data="caseList"
                             height="660"
@@ -150,7 +150,7 @@
                                 minWidth="50">
                         </el-table-column>
                         <el-table-column
-                                label="time"
+                                label="次数"
                                 minWidth="40">
                             <template slot-scope="scope">
                                 <el-input v-model="caseList[scope.$index]['time']" auto-complete="off">
@@ -179,7 +179,7 @@
                     </el-table>
                 </el-tab-pane>
 
-                <el-tab-pane label="接口用例" name="third">
+                <el-tab-pane label="接口信息" name="third">
                     <el-form :inline="true" class="demo-form-inline search-style" size="small">
                         <el-form-item label=" " labelWidth="10px">
                             <el-select v-model="form.projectName" placeholder="请选择项目" @change="clearGathers">
@@ -854,7 +854,7 @@
                     this.form.choiceTypeStatus = false
                 }
 
-                // this.caseList.splice(i, 1);
+                this.caseList.splice(i, 1);
             },
             sureConfigBtn() {
                 if (this.form.choiceType.toString() === 'json') {

@@ -41,7 +41,7 @@
                                 <el-menu-item index="/manage/modelManage">接口模块</el-menu-item>
                                 <el-menu-item index="/manage/caseManage">接口信息</el-menu-item>
                                 <el-menu-item index="/manage/sceneConfig">业务配置</el-menu-item>
-                                <el-menu-item index="/manage/sceneManage">接口业务</el-menu-item>
+                                <el-menu-item index="/manage/sceneManage">接口用例</el-menu-item>
                                 <el-menu-item index="/manage/buildInFunc">内置函数</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
@@ -74,7 +74,6 @@
             </el-aside>
             <el-container>
                 <el-header style="height: 40px;">
-
                     <router-view class="view one" name="Header"></router-view>
                 </el-header>
 
@@ -235,5 +234,8 @@
         float: right;
         position: relative;
         margin-right: 40px
+    }
+    .CodeMirror {
+        height: 580px;
     }
 </style>

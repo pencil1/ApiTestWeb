@@ -84,7 +84,7 @@
                     this.title = ['报告管理', '接口报告']
                 }
                 else if (path === '/manage/sceneManage') {
-                    this.title = ['接口管理', '接口业务']
+                    this.title = ['接口管理', '接口用例']
                 }
                 else if (path === '/manage/buildInFunc') {
                     this.title = ['接口管理', '内置函数']

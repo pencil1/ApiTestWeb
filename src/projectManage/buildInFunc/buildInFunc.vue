@@ -133,9 +133,7 @@
 </script>
 
 <style>
-    .CodeMirror {
-        height: 550px;
-    }
+
     .cm-s-default .cm-keyword{
         color:#ce22e6
     }

@@ -200,7 +200,9 @@
                             </el-button>
                         </el-input>
 
-                        <el-button type="primary" @click.native="saveAndRun()" size="medium" :loading="this.saveRunStatus">Send</el-button>
+                        <el-button type="primary" @click.native="saveAndRun()" size="medium"
+                                   :loading="this.saveRunStatus">Send
+                        </el-button>
                         <el-button type="primary" @click.native="addCase()" size="medium">Save</el-button>
                     </el-form-item>
                 </el-form>
@@ -279,17 +281,15 @@
                         <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);"/>
 
                         <div v-if="form.choiceType === 'json'">
-                            <div style="margin: 0 0 15px;">
-                            </div>
                             <div style="border-style:solid;border-width: 1px;border-color: rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234)">
-                            <codemirror :value="caseData.jsonVariable" :options="options">
-                            </codemirror>
+                                    <codemirror :value="caseData.jsonVariable" :options="options">
+                                    </codemirror>
                             </div>
                             <!--<el-input-->
-                                    <!--type="textarea"-->
-                                    <!--:rows="24"-->
-                                    <!--placeholder="请输入json格式的参数"-->
-                                    <!--v-model="caseData.jsonVariable">-->
+                            <!--type="textarea"-->
+                            <!--:rows="24"-->
+                            <!--placeholder="请输入json格式的参数"-->
+                            <!--v-model="caseData.jsonVariable">-->
                             <!--</el-input>-->
                         </div>
                         <el-table :data="caseData.variable" size="mini" stripe :show-header="false" height="540"
@@ -500,12 +500,17 @@
 </template>
 
 <script>
-    import { codemirror } from 'vue-codemirror-lite'
+    import {codemirror} from 'vue-codemirror-lite'
 
     import 'codemirror/addon/lint/lint.css'
     import 'codemirror/addon/lint/lint'
     import 'codemirror/addon/lint/json-lint'
     import 'codemirror/mode/javascript/javascript'
+
+    // import 'codemirror/addon/lint/css-lint'
+    // import 'codemirror/addon/lint/javascript-lint'
+    // import 'codemirror/addon/lint/coffeescript-lint'
+    // import 'codemirror/addon/hint/javascript-hint'
 
     export default {
         components: {
@@ -516,7 +521,7 @@
             return {
                 editShow: false,
                 url: '',
-                options:{
+                options: {
                     mode: 'application/ld+json',
                     tabSize: 4,
                     lineNumbers: true,
@@ -606,13 +611,13 @@
             },
             initBaseData() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
-                    this.proModelData = response.data['data'];
-                    this.configNameData = response.data['config_name_list'];
-                    this.proUrlData = response.data['urlData'];
-                    this.form.projectName = response.data['user_pro']['pro_name'];
-                    this.form.configName = response.data['config_name_list'][this.form.projectName][0].toString();
-                    this.form.modelName = response.data['user_pro']['model_list'][0].toString();
-                    this.findCases();
+                        this.proModelData = response.data['data'];
+                        this.configNameData = response.data['config_name_list'];
+                        this.proUrlData = response.data['urlData'];
+                        this.form.projectName = response.data['user_pro']['pro_name'];
+                        this.form.configName = response.data['config_name_list'][this.form.projectName][0].toString();
+                        this.form.modelName = response.data['user_pro']['model_list'][0].toString();
+                        this.findCases();
                     }
                 )
             },
@@ -741,11 +746,11 @@
             editCopyCase(caseId, status) {
                 this.$axios.post('/api/api/cases/editAndCopy', {'caseId': caseId}).then((response) => {
                         this.caseData.name = response.data['data']['caseName'];
-                        if(status === 'edit'){
+                        if (status === 'edit') {
                             this.caseData.num = response.data['data']['caseNum'];
                             this.caseData.id = caseId;
                         }
-                        else{
+                        else {
                             this.caseData.num = '';
                             this.caseData.id = '';
                         }
@@ -1077,21 +1082,22 @@
     }
 </script>
 <style>
-    .cm-s-default .cm-property{
+    .cm-s-default .cm-property {
         color: rgb(183, 40, 135);
         /*color: rgb(137, 21, 99);*/
     }
-    .CodeMirror-gutter{
+
+    .CodeMirror-gutter {
         width: 40px;
     }
-    .cm-s-default .cm-string{
+
+    .cm-s-default .cm-string {
         /*color: rgb(116,88,255);*/
-        color: rgb(71,35,255);
+        color: rgb(71, 35, 255);
     }
-    .cm-s-default .cm-atom{
+
+    .cm-s-default .cm-atom {
         color: #000000;
     }
-    .CodeMirror {
-        height: 550px;
-    }
+
 </style>

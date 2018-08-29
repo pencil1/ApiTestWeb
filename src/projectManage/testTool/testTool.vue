@@ -106,8 +106,10 @@
                             type: 'warning',
                         });
                         console.log(err);
-                        console.log(this.showData.indexOf(5377))
-                        return
+                        for (let i = 0; i < 30; i++){
+                            console.log(this.showData.substring(4787-i,4787))
+                        }
+                        // console.log(this.showData.substring(4787-3,4787+3))
                     }
                 // this.$axios.post('/api/api/runCmd', {
                 //     'funcName':'sql_func',
