@@ -70,7 +70,7 @@
                             class="upload-demo"
                             action="/api/api/upload"
                             :show-file-list='false'
-                            :on-success="getApiAddress"
+                            :on-success="getApiAddress1"
                     >
                         <el-button size="small" type="primary">
                             点击上传
@@ -507,10 +507,12 @@
     import 'codemirror/addon/lint/json-lint'
     import 'codemirror/mode/javascript/javascript'
 
+    // import 'codemirror/mode/css/css'
+    // import 'codemirror/mode/css/csslint.js'
+    // import 'codemirror/mode/css/jshint.min'
+    // import 'codemirror/mode/css/jsonlint'
     // import 'codemirror/addon/lint/css-lint'
     // import 'codemirror/addon/lint/javascript-lint'
-    // import 'codemirror/addon/lint/coffeescript-lint'
-    // import 'codemirror/addon/hint/javascript-hint'
 
     export default {
         components: {
@@ -920,12 +922,38 @@
             },
             fileChange(response, file, fileList) {
                 this.caseData.variable[this.temp_num]['value'] = response['data'];
-                this.messageShow(this, response);
+                if (response['status'] === 0) {
+                    this.$message({
+                        showClose: true,
+                        message: response['msg'],
+                        type: 'warning',
+                    });
+                }
+                else {
+                    this.$message({
+                        showClose: true,
+                        message: response['msg'],
+                        type: 'success',
+                    });
+                }
 
             },
-            getApiAddress(response, file, fileList) {
+            getApiAddress1(response, file, fileList) {
                 this.importApiAddress = response['data'];
-                this.messageShow(this, response);
+                if (response['status'] === 0) {
+                    this.$message({
+                        showClose: true,
+                        message: response['msg'],
+                        type: 'warning',
+                    });
+                }
+                else {
+                    this.$message({
+                        showClose: true,
+                        message: response['msg'],
+                        type: 'success',
+                    });
+                }
             },
             tempNum(i) {
                 this.temp_num = i;

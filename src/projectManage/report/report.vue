@@ -2,7 +2,7 @@
     <div class="reportManage">
 
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
-            <el-form-item label="项目" labelWidth="50px">
+            <el-form-item label="项目" labelWidth="110px">
                 <el-select v-model="form.projectName" placeholder="请选择项目">
                     <el-option
                             v-for="(item, key) in proModelData"

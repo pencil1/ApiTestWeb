@@ -854,7 +854,6 @@
                     this.form.choiceTypeStatus = false
                 }
 
-                this.caseList.splice(i, 1);
             },
             sureConfigBtn() {
                 if (this.form.choiceType.toString() === 'json') {
@@ -897,15 +896,14 @@
                 this.caseList[this.tempNum]['variables'] = this.caseConfig.variable;
                 this.paramVisible = false;
 
-                // this.caseList.splice(i, 1);
             },
             upNum(i) {
-                var d = this.caseList[i];
+                let d = this.caseList[i];
                 this.caseList.splice(i, 1);
                 this.caseList.splice(i - 1, 0, d);
             },
             downNum(i) {
-                var d = this.caseList[i];
+                let d = this.caseList[i];
                 this.caseList.splice(i, 1);
                 this.caseList.splice(i + 1, 0, d);
             },
