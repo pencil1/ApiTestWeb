@@ -1,0 +1,1 @@
+"use strict";var bps={regexp:/BPS/,format:function(e,r,s,t){var i=~r.indexOf(" BPS")?" ":"";e*=1e4,r=r.replace(/\s?BPS/,"");var n=t._numberToFormat(e,r,s);return n.indexOf(")")?n=n+i+"BPS":((n=n.split("")).splice(-1,0,i+"BPS"),n=n.join("")),n}};module.exports=bps;

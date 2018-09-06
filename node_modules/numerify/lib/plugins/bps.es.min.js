@@ -1,0 +1,1 @@
+var bps={regexp:/BPS/,format:function(e,r,a,n){var p=~r.indexOf(" BPS")?" ":"";e*=1e4,r=r.replace(/\s?BPS/,"");var t=n._numberToFormat(e,r,a);return t.indexOf(")")?t=t+p+"BPS":((t=t.split("")).splice(-1,0,p+"BPS"),t=t.join("")),t}};export default bps;

@@ -1,0 +1,1 @@
+!function(e,o){"object"==typeof exports&&"undefined"!=typeof module?module.exports=o():"function"==typeof define&&define.amd?define(o):e.numerifyTime=o()}(this,function(){"use strict";return{regexp:/:/,format:function(e,o,t){var n=Math.floor(e/60/60),f=Math.floor((e-60*n*60)/60),r=Math.round(e-60*n*60-60*f);return[n,f<10?"0"+f:f,r<10?"0"+r:r].join(":")}}});

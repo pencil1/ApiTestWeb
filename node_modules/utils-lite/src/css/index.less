@@ -1,0 +1,21 @@
+.text-ellipsis () {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-loading (@time:2s) {
+  &::after {
+    content: '';
+    animation: simplyloading @time infinite;
+  }
+}
+
+@keyframes simplyloading {
+  0% { content: '.'; }
+  20% { content: '..'; }
+  40% { content: '...'; }
+  60% { content: '....'; }
+  80% { content: '.....'; }
+  100% { content: '......'; }
+}

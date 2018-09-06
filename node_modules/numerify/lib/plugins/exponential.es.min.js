@@ -1,0 +1,1 @@
+function numIsNaN(e){return"number"==typeof e&&isNaN(e)}var exponential={regexp:/(e\+|e-)/,format:function(e,n,t,r){var a=("number"!=typeof e||numIsNaN(e)?"0e+0":e.toExponential()).split("e");return n=n.replace(/e[+|-]{1}0/,""),r._numberToFormat(+a[0],n,t)+"e"+a[1]}};export default exponential;

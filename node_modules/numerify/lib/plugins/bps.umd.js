@@ -1,0 +1,29 @@
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global.numerifyBps = factory());
+}(this, (function () { 'use strict';
+
+  var bps = {
+    regexp: /BPS/,
+    format: function format(value, formatType, roundingFunction, numerify) {
+      var space = ~formatType.indexOf(' BPS') ? ' ' : '';
+      value = value * 10000;
+      formatType = formatType.replace(/\s?BPS/, '');
+      var output = numerify._numberToFormat(value, formatType, roundingFunction);
+
+      if (!output.indexOf(')')) {
+        output = output.split('');
+        output.splice(-1, 0, space + 'BPS');
+        output = output.join('');
+      } else {
+        output = output + space + 'BPS';
+      }
+
+      return output;
+    }
+  };
+
+  return bps;
+
+})));

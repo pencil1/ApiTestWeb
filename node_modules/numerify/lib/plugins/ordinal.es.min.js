@@ -1,0 +1,1 @@
+function ordinal(r){var n=r%10;return 1==~~(r%100/10)?"th":1===n?"st":2===n?"nd":3===n?"rd":"th"}var ordinal$1={regexp:/o/,format:function(r,n,o,a){var t=~n.indexOf(" o")?" ":"";return n=n.replace(/\s?o/,""),t+=ordinal(r),a._numberToFormat(r,n,o)+t}};export default ordinal$1;

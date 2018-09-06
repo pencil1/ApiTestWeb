@@ -1,0 +1,1 @@
+"use strict";function numIsNaN(e){return"number"==typeof e&&isNaN(e)}var exponential={regexp:/(e\+|e-)/,format:function(e,n,t,r){var o=("number"!=typeof e||numIsNaN(e)?"0e+0":e.toExponential()).split("e");return n=n.replace(/e[+|-]{1}0/,""),r._numberToFormat(+o[0],n,t)+"e"+o[1]}};module.exports=exponential;

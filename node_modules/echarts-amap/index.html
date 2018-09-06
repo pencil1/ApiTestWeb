@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Echarts plugin to support AMap</title>
+  </head>
+  <style media="screen">
+    html,body,#map {
+      margin:0;
+      padding: 0;
+      height: 100%;
+    }
+  </style>
+  <body>
+    <div id="map"></div>
+
+    <!--引入高德地图JSAPI -->
+    <script src="http://webapi.amap.com/maps?v=1.3&key=ab99f68b8f9eac7a5287f4043493e2db&plugin=AMap.CustomLayer"></script>
+    <!--引入UI组件库（1.0版本） -->
+    <script src="//webapi.amap.com/ui/1.0/main.js"></script>
+
+    <script src="http://cdn.bootcss.com/echarts/3.4.0/echarts.min.js"></script>
+    <script src="echarts-amap.js"></script>
+
+    <script type="text/javascript">
+      var echart = echarts.init(document.getElementById('map'))
+      echart.setOption({
+        amap: {
+          center: [116.397475,39.908695],
+          zoom: 5,
+          resizeEnable: true,
+          lang: 'zh_en'
+        },
+        series: [{
+          type: 'effectScatter',
+          coordinateSystem: 'amap',
+          rippleEffect: {
+            brushType: 'stroke'
+          },
+          label: {
+            normal: {
+              show: true,
+              position: 'right',
+              formatter: '{b}'
+            }
+          },
+          symbolSize: 20,
+          itemStyle: {
+            normal: {
+              color: '#f44336'
+            }
+          },
+          data: [{
+            name: '首都',
+            value: [116.397475,39.908695]
+          }]
+        }]
+      })
+
+      var map = echart.getModel().getComponent('amap').getAMap();
+      var layer = echart.getModel().getComponent('amap').getLayer();
+
+      //加载BasicControl，loadUI的路径参数为模块名中 'ui/' 之后的部分
+      AMapUI.loadUI(['control/BasicControl'], function(BasicControl) {
+        //缩放控件
+        map.addControl(new BasicControl.Zoom({
+            position: 'lt', //left top，左上角
+            showZoomNum: false //显示zoom值
+        }));
+      });
+
+      layer.setzIndex(200)
+    </script>
+  </body>
+</html>
