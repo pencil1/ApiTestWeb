@@ -22,60 +22,75 @@
                 </el-button>
                 <el-button type="primary" size="small" @click.native="initSceneData()">添加接口用例
                 </el-button>
+                <el-button type="primary" size="small" @click.native="runScene(sceneList,true)">批量运行
+                </el-button>
 
 
             </el-form-item>
         </el-form>
+        <el-scrollbar wrapStyle="height:800px;">
+            <el-tabs value="first" style="padding-left: 10px">
+                <el-tab-pane label="业务列表" name="first">
 
-        <el-tabs value="first" style="padding-left: 10px">
-            <el-tab-pane label="业务列表" name="first">
 
-                <el-scrollbar wrap-class="scrollbarList" >
-                <el-table :data="sceneAll" stripe>
-                    <el-table-column
-                            prop="num"
-                            label="编号"
-                            width="80">
-                    </el-table-column>
-                    <el-table-column
-                            prop="name"
-                            label="名称"
-                            width="250">
-                    </el-table-column>
-                    <el-table-column
-                            prop="desc"
-                            label="描述"
-                            width="400">
-                    </el-table-column>
-                    <el-table-column
-                            label="操作"
-                    >
-                        <template slot-scope="scope">
-                            <el-button type="primary" icon="el-icon-edit" size="mini"
-                                       @click.native="editScene(sceneAll[scope.$index]['sceneId'])">编辑
-                            </el-button>
-                            <el-button type="primary" icon="el-icon-setting" size="mini"
-                                       @click.native="runScene(sceneAll[scope.$index]['name'])">运行
-                            </el-button>
-                            <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="sureView(delScene,sceneAll[scope.$index]['sceneId'])">删除
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                </el-scrollbar>
-                <div class="pagination">
-                    <el-pagination
-                            @current-change="handleCurrentChange"
-                            @size-change="handleSizeChange"
-                            :page-size="10"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="this.total">
-                    </el-pagination>
-                </div>
-            </el-tab-pane>
-        </el-tabs>
+                    <el-table
+                            ref="sceneMultipleTable"
+                            @selection-change="handleSceneSelection"
+                            :data="sceneAll" stripe>
+                        <el-table-column
+                                type="selection"
+                                width="40">
+                        </el-table-column>
+                        <el-table-column
+                                prop="num"
+                                label="编号"
+                                min-width="10">
+                        </el-table-column>
+                        <el-table-column
+                                prop="name"
+                                label="名称"
+                                min-width="50">
+                        </el-table-column>
+                        <el-table-column
+                                prop="desc"
+                                label="描述"
+                                min-width="50">
+                        </el-table-column>
+                        <el-table-column
+                                label="操作"
+                        >
+                            <template slot-scope="scope">
+                                <el-button type="primary" icon="el-icon-edit" size="mini"
+                                           @click.native="editScene(sceneAll[scope.$index]['sceneId'])">编辑
+                                </el-button>
+                                <el-button type="primary" icon="el-icon-tickets" size="mini"
+                                           @click.native="editScene(sceneAll[scope.$index]['sceneId'],true)">复制
+                                </el-button>
+                                <el-button type="primary" icon="el-icon-setting" size="mini"
+                                           @click.native="runScene(sceneAll[scope.$index]['name'])">运行
+                                </el-button>
+                                <el-button type="danger" icon="el-icon-delete" size="mini"
+                                           @click.native="sureView(delScene,sceneAll[scope.$index]['sceneId'])">删除
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
 
+                    <el-button @click="cancelSelection()" size="mini" style="position: absolute;margin-top: 2px;">取消选择
+                    </el-button>
+
+                    <div class="pagination">
+                        <el-pagination
+                                @current-change="handleCurrentChange"
+                                @size-change="handleSizeChange"
+                                :page-size="20"
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :total="this.total">
+                        </el-pagination>
+                    </div>
+                </el-tab-pane>
+            </el-tabs>
+        </el-scrollbar>
 
         <el-dialog title="用例" :visible.sync="sceneData.modelFormVisible" width="50%" top="5vh">
 
@@ -130,7 +145,7 @@
                                 minWidth="20">
                             <template slot-scope="scope">
                                 <el-switch
-                                v-model="caseList[scope.$index]['status']"
+                                        v-model="caseList[scope.$index]['status']"
                                 >
                                 </el-switch>
                             </template>
@@ -138,7 +153,7 @@
                         <el-table-column
                                 label="用例名称"
                                 minWidth="50">
-                            <template slot-scope="scope" >
+                            <template slot-scope="scope">
                                 <el-input v-model="caseList[scope.$index]['case_name']" auto-complete="off">
                                 </el-input>
                             </template>
@@ -200,12 +215,15 @@
                         </el-form-item>
                         <el-form-item label="">
 
-                            <el-input placeholder="请输入用例" v-model="form.caseName">
+                            <el-input placeholder="请输入用例or套件" v-model="form.caseName">
                             </el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" icon="el-icon-search" @click.native="findCases()" size="small">
-                                搜索
+                            <el-button type="primary" @click.native="findCases()" size="small">
+                                搜索接口
+                            </el-button>
+                            <el-button type="primary" @click.native="findSuite()" size="small">
+                                搜索套件
                             </el-button>
                             <el-button type="primary" size="small" @click.native="addCaseData()">添加
                             </el-button>
@@ -216,7 +234,8 @@
                             @selection-change="handleCaseSelection"
                             :data="caseData"
                             height="550"
-                            stripe>
+                            stripe
+                            v-show="apiSuiteViewStatus">
                         <el-table-column
                                 type="selection"
                                 width="40">
@@ -238,21 +257,58 @@
                                 width="100">
                         </el-table-column>
                         <el-table-column
-                                :show-overflow-tooltip= true
+                                :show-overflow-tooltip=true
                                 prop="url"
                                 label="接口地址">
                         </el-table-column>
                     </el-table>
+
+                    <el-table
+                            ref="multipleTable"
+                            @selection-change="handleCaseSelection"
+                            :data="suiteData"
+                            height="550"
+                            stripe
+                            v-show="!apiSuiteViewStatus"
+                    >
+                        <el-table-column
+                                type="selection"
+                                width="55">
+                        </el-table-column>
+                        <el-table-column
+                                prop="num"
+                                label="编号"
+                                width="60">
+                        </el-table-column>
+                        <el-table-column
+                                :show-overflow-tooltip=true
+                                prop="name"
+                                label="套件名称"
+                                width="100">
+                        </el-table-column>
+                        <!--<el-table-column-->
+                        <!--:show-overflow-tooltip= true-->
+                        <!--prop="desc"-->
+                        <!--label="接口描述"-->
+                        <!--width="200">-->
+                        <!--</el-table-column>-->
+                        <el-table-column
+                                :show-overflow-tooltip=true
+                                prop="api_names"
+                                label="接口信息">
+                        </el-table-column>
+                    </el-table>
+
                     <el-button @click="cancelSelection()" size="mini" style="position: absolute;margin-top: 2px;">取消选择
                     </el-button>
-                    <div class="block" style="left:40%; position: relative;">
+                    <div class="block" style="float:right; position: relative;">
                         <el-pagination
                                 @current-change="handleCurrentCase"
                                 @size-change="handleSizeCase"
-                                :page-size="10"
+                                :page-size="20"
 
                                 layout="total, sizes, prev, pager, next, jumper"
-                                :total="this.casePage.total">
+                                :total="this.scenePage.total">
                         </el-pagination>
                     </div>
                 </el-tab-pane>
@@ -334,7 +390,7 @@
 
         <el-dialog title="配置" :visible.sync="paramVisible" width="50%">
 
-            <el-tabs @tab-click="refreshConfig" >
+            <el-tabs @tab-click="refreshConfig">
                 <el-tab-pane label="接口信息" style="margin-top: 10px">
                     <el-form>
                         <el-form-item label="用例名称" :label-width="sceneData.formLabelWidth" prop="name">
@@ -474,7 +530,7 @@
                             </template>
 
                         </el-table-column>
-                        <el-table-column label="备注" header-align="center"  minWidth="80">
+                        <el-table-column label="备注" header-align="center" minWidth="80">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.remark" size="medium">
                                 </el-input>
@@ -559,7 +615,7 @@
                                 </el-autocomplete>
                             </template>
                         </el-table-column>
-                        <el-table-column property="value" label="Value" header-align="center"  minWidth="200">
+                        <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.value" size="medium">
                                 </el-input>
@@ -591,6 +647,8 @@
         data() {
             return {
                 tempNum: '',
+                sceneList:[],
+                apiSuiteViewStatus: true,
                 comparators: [{'value': 'equals'}, {'value': 'less_than'}, {'value': 'less_than_or_equals'},
                     {'value': 'greater_than'}, {'value': 'greater_than_or_equals'}, {'value': 'not_equals'},
                     {'value': 'string_equals'}, {'value': 'length_equals'}, {'value': 'length_greater_than'},
@@ -599,10 +657,10 @@
                 statusCase: {variable: [true, true], extract: [true, true], validate: [true, true],},
                 caseConfig: {
                     name: '',
-                    time:'',
+                    time: '',
                     upFunc: '',
                     downFunc: '',
-                    statusCase: {variable: [], extract: [], validate: [],param:[]},
+                    statusCase: {variable: [], extract: [], validate: [], param: []},
                     variable: [{key: '', value: '', param_type: '', remark: ''}],
                     extract: [{key: '', value: ''}],
                     validate: [{key: '', value: '', comparator: ''}],
@@ -617,17 +675,18 @@
                 temp_num: '',
                 paramTypes: ['string', 'file'],
                 caseData: [],
+                suiteData: [],
                 sceneAll: [],
                 caseVessel: Array, //接口用例容器，勾选的内容都存在此变量
                 caseList: [],
-                casePage: {
+                scenePage: {
                     total: 1,
                     currentPage: 1,
-                    sizePage: 10,
+                    sizePage: 20,
                 },
                 total: 1,
                 currentPage: 1,
-                sizePage: 10,
+                sizePage: 20,
                 choiceVariableType: [{
                     value: '选项1',
                     label: 'data'
@@ -666,26 +725,50 @@
                 cb(this.comparators);
             },
             findCases() {
-                this.$axios.post('/api/api/cases/find', {
-                    'projectName': this.form.projectName,
-                    'gatName': this.form.modelName,
-                    'caseName': this.form.caseName,
-                    'page': this.casePage.currentPage,
-                    'sizePage': this.casePage.sizePage,
-                }).then((response) => {
-                        if (response.data['status'] === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'warning',
-                            });
+                this.apiSuiteViewStatus = true,
+                    this.$axios.post('/api/api/cases/find', {
+                        'projectName': this.form.projectName,
+                        'gatName': this.form.modelName,
+                        'caseName': this.form.caseName,
+                        'page': this.scenePage.currentPage,
+                        'sizePage': this.scenePage.sizePage,
+                    }).then((response) => {
+                            if (response.data['status'] === 0) {
+                                this.$message({
+                                    showClose: true,
+                                    message: response.data['msg'],
+                                    type: 'warning',
+                                });
+                            }
+                            else {
+                                this.caseData = response.data['data'];
+                                this.scenePage.total = response.data['total'];
+                            }
                         }
-                        else {
-                            this.caseData = response.data['data'];
-                            this.casePage.total = response.data['total'];
+                    )
+            },
+            findSuite() {
+                this.apiSuiteViewStatus = false,
+                    this.$axios.post('/api/api/suite/find', {
+                        'suiteName': this.form.caseName,
+                        'modelName': this.form.modelName,
+                        'projectName': this.form.projectName,
+                        'page': this.scenePage.currentPage,
+                        'sizePage': this.scenePage.sizePage,
+                    }).then((response) => {
+                            if (response.data['status'] === 0) {
+                                this.$message({
+                                    showClose: true,
+                                    message: response.data['msg'],
+                                    type: 'warning',
+                                });
+                            }
+                            else {
+                                this.suiteData = response.data['data'];
+                                this.scenePage.total = response.data['total'];
+                            }
                         }
-                    }
-                )
+                    )
             },
             findScenes() {
                 this.$axios.post('/api/api/scene/find', {
@@ -710,13 +793,13 @@
             },
             httpSend() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
-                    this.proModelData = response.data['data'];
-                    this.configNameData = response.data['config_name_list'];
-                    this.proUrlData = response.data['urlData'];
-                    this.form.projectName = response.data['user_pro']['pro_name'];
-                    this.form.configName = response.data['config_name_list'][this.form.projectName][0].toString();
-                    this.form.modelName = response.data['user_pro']['model_list'][0].toString();
-                    this.findScenes()
+                        this.proModelData = response.data['data'];
+                        this.configNameData = response.data['config_name_list'];
+                        this.proUrlData = response.data['urlData'];
+                        this.form.projectName = response.data['user_pro']['pro_name'];
+                        this.form.configName = response.data['config_name_list'][this.form.projectName][0].toString();
+                        this.form.modelName = response.data['user_pro']['model_list'][0].toString();
+                        this.findScenes()
                     }
                 );
                 this.$axios.post('/api/api/func/getAddress').then((response) => {
@@ -733,11 +816,11 @@
                 this.findScenes()
             },
             handleCurrentCase(val) {
-                this.casePage.currentPage = val;
+                this.scenePage.currentPage = val;
                 this.findCases()
             },
             handleSizeCase(val) {
-                this.casePage.sizePage = val;
+                this.scenePage.sizePage = val;
                 this.findCases()
             },
             addConfigVariable() {
@@ -748,10 +831,10 @@
             },
             addScene() {
                 for (let i = 0; i < this.caseList.length; i++) {
-                    if ( !(/(^[1-9]\d*$)/.test(this.caseList[i]['time']))) {
+                    if (!(/(^[1-9]\d*$)/.test(this.caseList[i]['time']))) {
                         this.$message({
                             showClose: true,
-                            message: '第'+i+'条用例的执行次数请输入正整数',
+                            message: '第' + i + '条用例的执行次数请输入正整数',
                             type: 'warning',
                         });
                         return
@@ -789,6 +872,9 @@
                 )
             },
             initSceneData() {
+                this.caseList = [];
+                this.caseData = [];
+                this.suiteData = [];
                 this.sceneData.header = [];
                 this.sceneData.variable = [];
                 this.sceneData.name = '';
@@ -804,13 +890,33 @@
                 // this.toggleSelection();
 
             },
+            moreRun(){
+                console.log(this.sceneList)
+            },
             handleCaseSelection(val) {
                 this.caseVessel = val;
             },
             addCaseData() {
-                this.caseList = this.caseList.concat(this.caseVessel);
-                this.caseList = JSON.parse(JSON.stringify(this.caseList));
-                this.$refs.multipleTable.clearSelection();
+                if (this.apiSuiteViewStatus) {
+                    this.caseList = this.caseList.concat(this.caseVessel);
+                    this.caseList = JSON.parse(JSON.stringify(this.caseList));
+                    this.$refs.multipleTable.clearSelection();
+                }
+                else {
+                    let suiteIds = Array();
+                    for (let i = 0; i < this.caseVessel.length; i++) {
+                        suiteIds.push(this.caseVessel[i].id);
+                    }
+                    this.$axios.post('/api/api/suite/findApi', {
+                        'suiteIds': suiteIds
+                    }).then((response) => {
+                            this.caseList = this.caseList.concat(response.data['data']);
+                            this.caseList = JSON.parse(JSON.stringify(this.caseList));
+                            this.$refs.multipleTable.clearSelection();
+                        }
+                    )
+
+                }
             },
             addConfigData() {
                 this.$axios.post('/api/api/config/data', {
@@ -847,7 +953,7 @@
                 this.caseConfig.downFunc = this.caseList[i]['down_func'];
                 this.tempNum = i;
                 this.paramVisible = true;
-                if(this.form.choiceType.toString() === 'json') {
+                if (this.form.choiceType.toString() === 'json') {
                     this.form.choiceTypeStatus = true
                 }
                 else {
@@ -957,24 +1063,44 @@
                     }
                 )
             },
-            editScene(sceneId) {
-                this.$axios.post('/api/api/scene/edit', {'sceneId': sceneId}).then((response) => {
-                        this.sceneData.num = response.data['data']['num'];
+            editScene(sceneId, copyEditStatus = false) {
+                this.$axios.post('/api/api/scene/edit', {
+                    'sceneId': sceneId,
+                    'copyEditStatus': copyEditStatus
+                }).then((response) => {
+
                         this.sceneData.name = response.data['data']['name'];
                         this.sceneData.desc = response.data['data']['desc'];
                         this.sceneData.funcAddress = response.data['data']['func_address'];
                         this.caseList = response.data['data']['cases'];
                         this.sceneData.variable = response.data['data']['variables'];
-                        this.sceneData.id = sceneId;
+                        this.caseData = [];
+                        this.suiteData = [];
+                        if (copyEditStatus) {
+                            this.sceneData.id = '';
+                            this.sceneData.num = '';
+                        }
+                        else {
+                            this.sceneData.id = sceneId;
+                            this.sceneData.num = response.data['data']['num'];
+                        }
                         this.sceneData.modelFormVisible = true;
-
                     }
                 )
             },
-            runScene(name) {
+            runScene(name, status=false) {
+                let names = [];
+                if(status){
+                    for (let i = 0; i < name.length; i++) {
+                        names.push(name[i].name);
+                    }
+                }
+                else{
+                    names.push(name)
+                }
                 this.loading = true;
                 this.$axios.post('/api/api/report/run', {
-                    'sceneNames': [name],
+                    'sceneNames': names,
                     'projectName': this.form.projectName
                 }).then((response) => {
                         this.loading = false;
@@ -984,7 +1110,22 @@
                 );
             },
             fileChange(response, file, fileList) {
-                this.caseConfig.variable[this.temp_num]['value'] = response['data']
+                this.caseConfig.variable[this.temp_num]['value'] = response['data'];
+                if (response['status'] === 0) {
+                    this.$message({
+                        showClose: true,
+                        message: response['msg'],
+                        type: 'warning',
+                    });
+                }
+                else {
+                    this.$message({
+                        showClose: true,
+                        message: response['msg'],
+                        type: 'success',
+                    });
+                }
+
             },
             tempNumTwo(i) {
                 this.temp_num = i;
@@ -992,6 +1133,12 @@
             clearGathers() {
                 this.form.gathers = '';
                 this.form.configName = '';
+            },
+            handleSceneSelection(val) {
+                this.sceneList = val;
+            },
+            cancelSelection() {
+                this.$refs.sceneMultipleTable.clearSelection();
             },
 
         },

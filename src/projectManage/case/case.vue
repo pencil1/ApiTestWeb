@@ -28,29 +28,94 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="接口名称">
+            <el-form-item label="接口名称" v-if="showNumTab !== 'third'">
 
-                <el-input placeholder="请输入接口" v-model="form.apiName" clearable>
+                <el-input placeholder="请输入" v-model="form.apiName" clearable>
+                </el-input>
+            </el-form-item>
+            <el-form-item label="套件名称" v-if="showNumTab === 'third'">
+
+                <el-input placeholder="请输入" v-model="form.suiteName" clearable>
                 </el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click.native="findCases()" size="small">
+                <el-button type="primary" icon="el-icon-search" @click.native="findData()" size="small">
                     搜索
                 </el-button>
                 <el-button type="primary" size="small" @click.native="initCaseData()">录入接口信息
                 </el-button>
 
-                <el-button type="primary" size="small" @click.native="test(casesList)">测试
+                <el-button type="primary" size="small" v-if="showNumTab === 'first'" @click.native="apiTest(casesList)">
+                    测试
+                </el-button>
+                <el-button type="primary" size="small" v-if="showNumTab === 'third'"
+                           @click.native="suiteTest(suiteList)">测试
                 </el-button>
 
                 <el-tooltip content="查看最近一次接口结果" placement="top-start">
                     <el-button type="primary" icon="el-icon-view" @click="resultViewStatus = true" size="small">
                     </el-button>
                 </el-tooltip>
+                <el-button type="primary" size="small" @click.native="suiteView()">添加套件
+                </el-button>
                 <el-button type="primary" size="small" @click="importApiStatus = true">导入信息
                 </el-button>
             </el-form-item>
         </el-form>
+        <el-dialog title="套件配置" :visible.sync="suiteViewStatus">
+            <el-form :inline="true">
+                <el-form-item label="编号" label-width="75px" v-if="suiteData.id">
+                    <el-input v-model.number="suiteData.num" auto-complete="off">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="套件名称" label-width="75px">
+                    <el-input v-model.number="suiteData.name" auto-complete="off">
+                    </el-input>
+                </el-form-item>
+            </el-form>
+            <hr style="border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -10px"/>
+            <el-table
+                    :data="apiList"
+                    stripe>
+                <el-table-column
+                        :show-overflow-tooltip=true
+                        prop="name"
+                        label="接口名称"
+                        min-width="60">
+                </el-table-column>
+                <!--<el-table-column-->
+                <!--:show-overflow-tooltip= true-->
+                <!--prop="desc"-->
+                <!--label="接口描述"-->
+                <!--width="200">-->
+                <!--</el-table-column>-->
+                <el-table-column
+                        :show-overflow-tooltip=true
+                        prop="url"
+                        label="接口地址">
+                </el-table-column>
+                <el-table-column
+                        label="操作"
+                        width="200">
+                    <template slot-scope="scope">
+                        <el-button type="primary" size="mini"
+                                   @click.native="upNum(scope.$index)">升序
+                        </el-button>
+                        <el-button type="primary" size="mini"
+                                   @click.native="downNum(scope.$index)">降序
+                        </el-button>
+                        <el-button type="danger" size="mini"
+                                   @click.native="delNum(scope.$index)">删除
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button size="small" @click="suiteViewStatus = false">取 消</el-button>
+                <el-button type="primary" size="small" @click.native="addSuite()">确 定</el-button>
+            </div>
+        </el-dialog>
         <el-dialog title="接口信息导入" :visible.sync="importApiStatus">
             <el-form>
                 <el-form-item label="请选择导入格式">
@@ -83,19 +148,19 @@
                 <el-button type="primary" size="small" @click.native="importCase()">确 定</el-button>
             </div>
         </el-dialog>
+        <el-scrollbar wrapStyle="height:840px;">
+            <el-tabs v-model="showNumTab" style="padding-left: 10px;">
 
-        <el-tabs v-model="showNumTab" style="padding-left: 10px">
-            <el-tab-pane label="接口信息" name="first">
-
-                <el-scrollbar>
+                <el-tab-pane label="接口信息" name="first">
                     <el-table
-                            ref="multipleTable"
+                            ref="apiMultipleTable"
                             @selection-change="handleCaseSelection"
                             :data="caseTableData"
-                            stripe>
+                            stripe
+                    >
                         <el-table-column
                                 type="selection"
-                                width="55">
+                                width="40">
                         </el-table-column>
                         <el-table-column
                                 prop="num"
@@ -135,313 +200,377 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                </el-scrollbar>
-                <el-button @click="cancelSelection()" size="mini" style="position: absolute;margin-top: 2px;">取消选择
-                </el-button>
-                <div class="pagination">
-                    <el-pagination
-                            @current-change="handleCurrentChange"
-                            @size-change="handleSizeChange"
-                            :page-size="10"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="this.total">
-                    </el-pagination>
-                </div>
-            </el-tab-pane>
-            <el-tab-pane :label="tabName" name="second" v-if="editShow" style="background-color: rgb(250, 250, 250);">
-                <el-form :inline="true" :model="caseData" style="padding: 10px 20px -10px 10px;">
-                    <el-form-item label="基础信息" labelWidth="80px" style="margin-bottom: 5px">
-                        <el-select v-model="form.projectName" placeholder="请选择项目" style="min-width: 130px" size="small">
-                            <el-option
-                                    v-for="(item, key) in proModelData"
-                                    :key="key"
-                                    :value="key">
-                            </el-option>
-                        </el-select>
 
-                        <el-select v-model="form.modelName" placeholder="请选择模块" style="min-width: 130px" size="small">
-                            <el-option
-                                    v-for="item in proModelData[this.form.projectName]"
-                                    :key="item"
-                                    :value="item">
-                            </el-option>
-                        </el-select>
-                        <el-select v-model="form.choiceUrl" placeholder="请选择url" style="min-width: 130px" size="small">
-                            <el-option
-                                    v-for="item in proUrlData[this.form.projectName]"
-                                    :key="item"
-                                    :label="item"
-                                    :value="item">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="接口编号" label-width="80px" prop="num" v-if="caseData.id"
-                                  style="margin-bottom: 5px">
-                        <el-input v-model.number="caseData.num" auto-complete="off" placeholder="接口编号" size="small">
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item prop="name" style="margin-bottom: 5px">
-                        <el-input v-model="caseData.name" auto-complete="off" placeholder="接口名称" size="small">
-                        </el-input>
-                    </el-form-item>
-                </el-form>
-                <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
-                <el-form style="margin: 0 0 0 10px">
-                    <el-form-item>
-                        <el-input placeholder="Enter request URL" v-model="caseData.url" class="input-with-select"
-                                  style="width: 80%;">
-                            <el-select v-model="caseData.method" size="medium" @change="methodChange"
-                                       style="width: 100px" slot="prepend" placeholder="选择请求方式">
-                                <el-option v-for="item in methods" :key="item" :value="item" :label="item">
+                    <el-button @click="cancelSelection()" size="mini" style="position: absolute;margin-top: 2px;">取消选择
+                    </el-button>
+                    <div class="pagination">
+                        <el-pagination
+                                @current-change="handleCurrentChange"
+                                @size-change="handleSizeChange"
+                                :page-size="20"
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :total="this.total">
+                        </el-pagination>
+                    </div>
+                </el-tab-pane>
+                <el-tab-pane label="接口套件" name="third">
+                    <el-table
+                            ref="suiteMultipleTable"
+                            @selection-change="handleSuiteSelection"
+                            :data="suiteTableData"
+                            stripe
+                    >
+                        <el-table-column
+                                type="selection"
+                                width="55">
+                        </el-table-column>
+                        <el-table-column
+                                prop="num"
+                                label="编号"
+                                width="60">
+                        </el-table-column>
+                        <el-table-column
+                                :show-overflow-tooltip=true
+                                prop="name"
+                                label="套件名称"
+                                width="200">
+                        </el-table-column>
+                        <!--<el-table-column-->
+                        <!--:show-overflow-tooltip= true-->
+                        <!--prop="desc"-->
+                        <!--label="接口描述"-->
+                        <!--width="200">-->
+                        <!--</el-table-column>-->
+                        <el-table-column
+                                :show-overflow-tooltip=true
+                                prop="api_names"
+                                label="接口信息">
+                        </el-table-column>
+                        <el-table-column
+                                label="操作"
+                                width="320">
+                            <template slot-scope="scope">
+                                <el-button type="primary" icon="el-icon-edit" size="mini"
+                                           @click.native="editSuite(suiteTableData[scope.$index]['id'])">
+                                    编辑
+                                </el-button>
+                                <el-button type="danger" icon="el-icon-delete" size="mini"
+                                           @click.native="sureView(delSuite,suiteTableData[scope.$index]['id'])">删除
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+
+                    <el-button @click="cancelSelection()" size="mini" style="position: absolute;margin-top: 2px;">取消选择
+                    </el-button>
+                    <div class="pagination">
+                        <el-pagination
+                                @current-change="handleCurrentChange"
+                                @size-change="handleSizeChange"
+                                :page-size="20"
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :total="this.total">
+                        </el-pagination>
+                    </div>
+                </el-tab-pane>
+                <el-tab-pane :label="tabName" name="second" v-if="editShow"
+                             style="background-color: rgb(250, 250, 250);min-height: 780px">
+                    <el-form :inline="true" :model="caseData" style="padding: 10px 20px -10px 10px;">
+                        <el-form-item label="基础信息" labelWidth="80px" style="margin-bottom: 5px">
+                            <el-select v-model="form.projectName" placeholder="请选择项目" style="min-width: 130px"
+                                       size="small">
+                                <el-option
+                                        v-for="(item, key) in proModelData"
+                                        :key="key"
+                                        :value="key">
                                 </el-option>
                             </el-select>
-                            <el-button slot="append" type="primary" @click="ParamViewStatus = !ParamViewStatus">
-                                Params
-                            </el-button>
-                        </el-input>
 
-                        <el-button type="primary" @click.native="saveAndRun()" size="medium"
-                                   :loading="this.saveRunStatus">Send
-                        </el-button>
-                        <el-button type="primary" @click.native="addCase()" size="medium">Save</el-button>
-                    </el-form-item>
-                </el-form>
-
-                <el-table :data="caseData.param" :row-style="{'background-color': 'rgb(250, 250, 250)'}"
-                          style="width:98.2%;margin-top:-20px;left: 10px;" size="mini"
-                          :show-header="false" v-show="this.ParamViewStatus">
-                    <el-table-column property="key" label="Key" header-align="center"
-                                     min-width="80">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.key" size="mini" placeholder="key">
+                            <el-select v-model="form.modelName" placeholder="请选择模块" style="min-width: 130px"
+                                       size="small">
+                                <el-option
+                                        v-for="item in proModelData[this.form.projectName]"
+                                        :key="item"
+                                        :value="item">
+                                </el-option>
+                            </el-select>
+                            <el-select v-model="form.choiceUrl" clearable placeholder="请选择url" style="min-width: 130px"
+                                       size="small">
+                                <el-option
+                                        v-for="item in proUrlData[this.form.projectName]"
+                                        :key="item"
+                                        :label="item"
+                                        :value="item">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="接口编号" label-width="80px" prop="num" v-if="caseData.id"
+                                      style="margin-bottom: 5px">
+                            <el-input v-model.number="caseData.num" auto-complete="off" placeholder="接口编号" size="small">
                             </el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column property="value" label="Value" header-align="center" min-width="200">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.value" size="mini" placeholder="value">
+                        </el-form-item>
+                        <el-form-item prop="name" style="margin-bottom: 5px">
+                            <el-input v-model="caseData.name" auto-complete="off" placeholder="接口名称" size="small">
                             </el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column property="value" label="操作" header-align="center" width="60">
-                        <template slot-scope="scope">
-                            <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="delTableList('param',scope.$index)">
+                        </el-form-item>
+                    </el-form>
+                    <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
+                    <el-form style="margin: 0 0 0 10px">
+                        <el-form-item>
+                            <el-input placeholder="Enter request URL" v-model="caseData.url" class="input-with-select"
+                                      style="width: 80%;">
+                                <el-select v-model="caseData.method" size="medium" @change="methodChange"
+                                           style="width: 100px" slot="prepend" placeholder="选择请求方式">
+                                    <el-option v-for="item in methods" :key="item" :value="item" :label="item">
+                                    </el-option>
+                                </el-select>
+                                <el-button slot="append" type="primary" @click="ParamViewStatus = !ParamViewStatus">
+                                    Params
+                                </el-button>
+                            </el-input>
+
+                            <el-button type="primary" @click.native="saveAndRun()" size="medium"
+                                       :loading="this.saveRunStatus">Send
                             </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
+                            <el-button type="primary" @click.native="addCase()" size="medium">Save</el-button>
+                        </el-form-item>
+                    </el-form>
 
-                <el-tabs style="margin: 0 0 0 10px" v-model="bodyShow">
-                    <el-tab-pane label="Headers" name="first">
-                        <el-table :data="caseData.header" size="mini" stripe :show-header="false" height="594"
-                                  style="background-color: rgb(250, 250, 250)"
-                                  :row-style="{'background-color': 'rgb(250, 250, 250)'}">
+                    <el-table :data="caseData.param" :row-style="{'background-color': 'rgb(250, 250, 250)'}"
+                              style="width:98.2%;margin-top:-20px;left: 10px;" size="mini"
+                              :show-header="false" v-show="this.ParamViewStatus">
+                        <el-table-column property="key" label="Key" header-align="center"
+                                         min-width="80">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.key" size="mini" placeholder="key">
+                                </el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column property="value" label="Value" header-align="center" min-width="200">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.value" size="mini" placeholder="value">
+                                </el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column property="value" label="操作" header-align="center" width="60">
+                            <template slot-scope="scope">
+                                <el-button type="danger" icon="el-icon-delete" size="mini"
+                                           @click.native="delTableList('param',scope.$index)">
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
 
-                            <el-table-column property="key" label="Key" header-align="center" minWidth="100">
-                                <template slot-scope="scope">
-                                    <el-input v-model="scope.row.key" size="mini" placeholder="key">
-                                    </el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column property="value" label="Value" header-align="center" minWidth="200">
-                                <template slot-scope="scope">
-                                    <el-input v-model="scope.row.value" size="mini" placeholder="value">
-                                    </el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="备注" header-align="center" minWidth="80">
-                                <template slot-scope="scope">
-                                    <el-input v-model="scope.row.remark" size="mini" placeholder="备注">
-                                    </el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column property="value" label="操作" header-align="center" width="80">
-                                <template slot-scope="scope">
-                                    <el-button type="danger" icon="el-icon-delete" size="mini"
-                                               @click.native="delTableList('header',scope.$index)">
-                                    </el-button>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                    </el-tab-pane>
-                    <el-tab-pane label="Body" name="second" :disabled="caseData.method === 'GET'">
-                        <el-form :inline="true" class="demo-form-inline" style="margin-top: 10px">
-                            <el-radio-group v-model="form.choiceType">
-                                <el-radio label="data">form-data</el-radio>
-                                <el-radio label="json">raw</el-radio>
-                            </el-radio-group>
-                            <el-button type="primary" size="mini"
-                                       v-show="form.choiceType === 'json'"
-                                       style="margin-left:20px"
-                                       @click="formatData()">格式化
+                    <el-tabs style="margin: 0 0 0 10px" v-model="bodyShow">
+                        <el-tab-pane label="Headers" name="first">
+                            <el-table :data="caseData.header" size="mini" stripe :show-header="false"
+                                      class="h-b-e-a-style"
+                                      :row-style="{'background-color': 'rgb(250, 250, 250)'}">
 
-                            </el-button>
-                        </el-form>
-                        <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);"/>
+                                <el-table-column property="key" label="Key" header-align="center" minWidth="100">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.key" size="mini" placeholder="key">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column property="value" label="Value" header-align="center" minWidth="200">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.value" size="mini" placeholder="value">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="备注" header-align="center" minWidth="80">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.remark" size="mini" placeholder="备注">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column property="value" label="操作" header-align="center" width="80">
+                                    <template slot-scope="scope">
+                                        <el-button type="danger" icon="el-icon-delete" size="mini"
+                                                   @click.native="delTableList('header',scope.$index)">
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-tab-pane>
+                        <el-tab-pane label="Body" name="second" :disabled="caseData.method === 'GET'">
+                            <el-form :inline="true" class="demo-form-inline" style="margin-top: 10px">
+                                <el-radio-group v-model="form.choiceType">
+                                    <el-radio label="data">form-data</el-radio>
+                                    <el-radio label="json">raw</el-radio>
+                                </el-radio-group>
+                                <el-button type="primary" size="mini"
+                                           v-show="form.choiceType === 'json'"
+                                           style="margin-left:20px"
+                                           @click="formatData()">格式化
 
-                        <div v-if="form.choiceType === 'json'">
-                            <div style="border-style:solid;border-width: 1px;border-color: rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234)">
+                                </el-button>
+                            </el-form>
+                            <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);"/>
+
+                            <div v-if="form.choiceType === 'json'">
+                                <div style="border-style:solid;border-width: 1px;border-color: rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234)">
                                     <codemirror :value="caseData.jsonVariable" :options="options">
                                     </codemirror>
+                                </div>
+                                <!--<el-input-->
+                                <!--type="textarea"-->
+                                <!--:rows="24"-->
+                                <!--placeholder="请输入json格式的参数"-->
+                                <!--v-model="caseData.jsonVariable">-->
+                                <!--</el-input>-->
                             </div>
-                            <!--<el-input-->
-                            <!--type="textarea"-->
-                            <!--:rows="24"-->
-                            <!--placeholder="请输入json格式的参数"-->
-                            <!--v-model="caseData.jsonVariable">-->
-                            <!--</el-input>-->
-                        </div>
-                        <el-table :data="caseData.variable" size="mini" stripe :show-header="false" height="540"
-                                  style="background-color: rgb(250, 250, 250)"
-                                  v-if="form.choiceType === 'data'"
-                                  :row-style="{'background-color': 'rgb(250, 250, 250)'}">
+                            <el-table :data="caseData.variable" size="mini" stripe :show-header="false" height="582"
+                                      style="background-color: rgb(250, 250, 250)"
+                                      v-if="form.choiceType === 'data'"
+                                      :row-style="{'background-color': 'rgb(250, 250, 250)'}">
 
-                            <el-table-column property="key" label="Key" header-align="center" minWidth="100">
-                                <template slot-scope="scope">
-                                    <el-input v-model="scope.row.key" size="mini">
-                                    </el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column property="type" label="type" header-align="center" width="100">
-                                <template slot-scope="scope">
-                                    <!--<el-input v-model="scope.row.param_type" size="medium">-->
-                                    <!--</el-input>-->
-                                    <el-select v-model="scope.row.param_type" size="mini">
-                                        <el-option v-for="item in paramTypes" :key="item" :value="item">
-                                        </el-option>
-                                    </el-select>
-                                </template>
-                            </el-table-column>
-                            <el-table-column property="value" label="Value" header-align="center" minWidth="200">
-                                <template slot-scope="scope">
-                                    <div v-if="scope.row.param_type === 'file'">
-                                        <el-row>
-                                            <el-col :span="18">
-                                                <el-input v-model="scope.row.value" size="mini" :disabled="true">
-                                                </el-input>
-                                            </el-col>
-                                            <el-col :span="1">
-                                                <p></p>
-                                            </el-col>
-                                            <el-col :span="2">
-                                                <el-upload
-                                                        class="upload-demo"
-                                                        action="/api/api/upload"
-                                                        :show-file-list='false'
-                                                        :on-success="fileChange"
-                                                >
-                                                    <el-button size="mini" type="primary"
-                                                               @click="tempNum(scope.$index)">
-                                                        点击上传
-                                                    </el-button>
-                                                </el-upload>
-                                            </el-col>
-                                        </el-row>
-
-
-                                    </div>
-                                    <div v-else>
-                                        <el-input v-model="scope.row.value" size="mini">
+                                <el-table-column property="key" label="Key" header-align="center" minWidth="100">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.key" size="mini">
                                         </el-input>
-                                    </div>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="备注" header-align="center" minWidth="80">
-                                <template slot-scope="scope">
-                                    <el-input v-model="scope.row.remark" size="mini">
-                                    </el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column property="value" label="操作" header-align="center" width="80">
-                                <template slot-scope="scope">
-                                    <el-button type="danger" icon="el-icon-delete" size="mini"
-                                               @click.native="delTableList('variable',scope.$index)">
-                                    </el-button>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                    </el-tab-pane>
-                    <el-tab-pane label="Extract" name="third">
-                        <el-table :data="caseData.extract" size="mini" stripe :show-header="false" height="594"
-                                  style="background-color: rgb(250, 250, 250)"
-                                  :row-style="{'background-color': 'rgb(250, 250, 250)'}">
+                                    </template>
+                                </el-table-column>
+                                <el-table-column property="type" label="type" header-align="center" width="100">
+                                    <template slot-scope="scope">
+                                        <!--<el-input v-model="scope.row.param_type" size="medium">-->
+                                        <!--</el-input>-->
+                                        <el-select v-model="scope.row.param_type" size="mini">
+                                            <el-option v-for="item in paramTypes" :key="item" :value="item">
+                                            </el-option>
+                                        </el-select>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column property="value" label="Value" header-align="center" minWidth="200">
+                                    <template slot-scope="scope">
+                                        <div v-if="scope.row.param_type === 'file'">
+                                            <el-row>
+                                                <el-col :span="18">
+                                                    <el-input v-model="scope.row.value" size="mini" :disabled="true">
+                                                    </el-input>
+                                                </el-col>
+                                                <el-col :span="1">
+                                                    <p></p>
+                                                </el-col>
+                                                <el-col :span="2">
+                                                    <el-upload
+                                                            class="upload-demo"
+                                                            action="/api/api/upload"
+                                                            :show-file-list='false'
+                                                            :on-success="fileChange"
+                                                    >
+                                                        <el-button size="mini" type="primary"
+                                                                   @click="tempNum(scope.$index)">
+                                                            点击上传
+                                                        </el-button>
+                                                    </el-upload>
+                                                </el-col>
+                                            </el-row>
 
-                            <el-table-column property="key" label="Key" header-align="center" minWidth="100">
-                                <template slot-scope="scope">
-                                    <el-input v-model="scope.row.key" size="mini" placeholder="key">
-                                    </el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column property="value" label="Value" header-align="center" minWidth="200">
-                                <template slot-scope="scope">
-                                    <el-input v-model="scope.row.value" size="mini" placeholder="value">
-                                    </el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="备注" header-align="center" minWidth="80">
-                                <template slot-scope="scope">
-                                    <el-input v-model="scope.row.remark" size="mini" placeholder="备注">
-                                    </el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column property="value" label="操作" header-align="center" width="80">
-                                <template slot-scope="scope">
-                                    <el-button type="danger" icon="el-icon-delete" size="mini"
-                                               @click.native="delTableList('extract',scope.$index)">
-                                    </el-button>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                    </el-tab-pane>
-                    <el-tab-pane label="Assert" name="fourth">
-                        <el-table :data="caseData.validate" size="mini" stripe :show-header="false" height="594"
-                                  style="background-color: rgb(250, 250, 250)"
-                                  :row-style="{'background-color': 'rgb(250, 250, 250)'}">
 
-                            <el-table-column property="key" label="Key" header-align="center" minWidth="100">
-                                <template slot-scope="scope">
-                                    <el-input v-model="scope.row.key" size="mini" placeholder="key">
-                                    </el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="Comparator" header-align="center" width="200">
-                                <template slot-scope="scope">
-                                    <el-autocomplete
-                                            class="inline-input"
-                                            v-model="scope.row.comparator"
-                                            :fetch-suggestions="querySearch"
-                                            placeholder="请选择"
-                                            size="mini"
-                                    ></el-autocomplete>
-                                </template>
-                            </el-table-column>
-                            <el-table-column property="value" label="Value" header-align="center" minWidth="200">
-                                <template slot-scope="scope">
-                                    <el-input v-model="scope.row.value" size="mini" placeholder="value">
-                                    </el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="备注" header-align="center" minWidth="80">
-                                <template slot-scope="scope">
-                                    <el-input v-model="scope.row.remark" size="mini" placeholder="备注">
-                                    </el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column property="value" label="操作" header-align="center" width="80">
-                                <template slot-scope="scope">
-                                    <el-button type="danger" icon="el-icon-delete" size="mini"
-                                               @click.native="delTableList('validate',scope.$index)">
-                                    </el-button>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                    </el-tab-pane>
-                </el-tabs>
+                                        </div>
+                                        <div v-else>
+                                            <el-input v-model="scope.row.value" size="mini">
+                                            </el-input>
+                                        </div>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="备注" header-align="center" minWidth="80">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.remark" size="mini">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column property="value" label="操作" header-align="center" width="80">
+                                    <template slot-scope="scope">
+                                        <el-button type="danger" icon="el-icon-delete" size="mini"
+                                                   @click.native="delTableList('variable',scope.$index)">
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-tab-pane>
+                        <el-tab-pane label="Extract" name="third">
+                            <el-table :data="caseData.extract" size="mini" stripe :show-header="false"
+                                      class="h-b-e-a-style"
+                                      :row-style="{'background-color': 'rgb(250, 250, 250)'}">
 
-            </el-tab-pane>
-        </el-tabs>
+                                <el-table-column property="key" label="Key" header-align="center" minWidth="100">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.key" size="mini" placeholder="key">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column property="value" label="Value" header-align="center" minWidth="200">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.value" size="mini" placeholder="value">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="备注" header-align="center" minWidth="80">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.remark" size="mini" placeholder="备注">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column property="value" label="操作" header-align="center" width="80">
+                                    <template slot-scope="scope">
+                                        <el-button type="danger" icon="el-icon-delete" size="mini"
+                                                   @click.native="delTableList('extract',scope.$index)">
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-tab-pane>
+                        <el-tab-pane label="Assert" name="fourth">
+                            <el-table :data="caseData.validate" size="mini" stripe :show-header="false"
+                                      class="h-b-e-a-style"
+                                      :row-style="{'background-color': 'rgb(250, 250, 250)'}">
 
+                                <el-table-column property="key" label="Key" header-align="center" minWidth="100">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.key" size="mini" placeholder="key">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="Comparator" header-align="center" width="200">
+                                    <template slot-scope="scope">
+                                        <el-autocomplete
+                                                class="inline-input"
+                                                v-model="scope.row.comparator"
+                                                :fetch-suggestions="querySearch"
+                                                placeholder="请选择"
+                                                size="mini"
+                                        ></el-autocomplete>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column property="value" label="Value" header-align="center" minWidth="200">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.value" size="mini" placeholder="value">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="备注" header-align="center" minWidth="80">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.remark" size="mini" placeholder="备注">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column property="value" label="操作" header-align="center" width="80">
+                                    <template slot-scope="scope">
+                                        <el-button type="danger" icon="el-icon-delete" size="mini"
+                                                   @click.native="delTableList('validate',scope.$index)">
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-tab-pane>
+                    </el-tabs>
+
+                </el-tab-pane>
+            </el-tabs>
+        </el-scrollbar>
         <el-dialog title="测试结果" :visible.sync="resultViewStatus" width="45%">
             <el-collapse accordion>
                 <el-collapse-item
@@ -507,7 +636,9 @@
     import 'codemirror/addon/lint/json-lint'
     import 'codemirror/mode/javascript/javascript'
 
-    // import 'codemirror/mode/css/css'
+    // import 'codemirror/addon/scroll/annotatescrollbar.js'
+    import 'codemirror/addon/scroll/simplescrollbars.js'
+    import 'codemirror/addon/scroll/simplescrollbars.css'
     // import 'codemirror/mode/css/csslint.js'
     // import 'codemirror/mode/css/jshint.min'
     // import 'codemirror/mode/css/jsonlint'
@@ -528,6 +659,7 @@
                     tabSize: 4,
                     lineNumbers: true,
                     lineWrapping: true,
+                    scrollbarStyle: 'simple',
                     // viewportMargin: Infinity,
                     // extraKeys: {'Ctrl-Space': 'autocomplete'},
                 },
@@ -551,6 +683,8 @@
                 resultViewStatus: false,
                 variableDialog: false,
                 importApiStatus: false,
+                suiteViewStatus: false,
+
                 saveRunStatus: false,
                 importApiAddress: '',
                 variableDialogData: '',
@@ -568,19 +702,28 @@
                     {'value': 'greater_than'}, {'value': 'greater_than_or_equals'}, {'value': 'not_equals'},
                 ],
                 caseTableData: [],
+                suiteTableData: [],
                 casesList: [],
+                apiList: [],
+                suiteList: [],
                 total: 1,
                 currentPage: 1,
-                sizePage: 10,
+                sizePage: 20,
                 importFormat: '',
                 form: {
                     projectName: '',
                     configName: '',
+                    suiteName: '',
                     apiName: '',
                     modelName: '',
                     choiceUrl: '基础url1',
                     choiceType: 'data',
 
+                },
+                suiteData: {
+                    id: '',
+                    name: '',
+                    num: '',
                 },
                 caseData: {
                     id: '',
@@ -620,6 +763,7 @@
                         this.form.configName = response.data['config_name_list'][this.form.projectName][0].toString();
                         this.form.modelName = response.data['user_pro']['model_list'][0].toString();
                         this.findCases();
+                        this.findSuite();
                     }
                 )
             },
@@ -631,8 +775,37 @@
                 this.sizePage = val;
                 this.findCases()
             },
+            findData() {
+                if (this.showNumTab !== 'third') {
+                    this.findCases()
+                }
+                else {
+                    this.findSuite()
+                }
+            },
+            findSuite() {
+                this.$axios.post('/api/api/suite/find', {
+                    'suiteName': this.form.suiteName,
+                    'projectName': this.form.projectName,
+                    'modelName': this.form.modelName,
+                    'page': this.currentPage,
+                    'sizePage': this.sizePage,
+                }).then((response) => {
+                        if (response.data['status'] === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'warning',
+                            });
+                        }
+                        else {
+                            this.suiteTableData = response.data['data'];
+                            this.total = response.data['total'];
+                        }
+                    }
+                )
+            },
             findCases() {
-                this.showNumTab = 'first';
                 this.$axios.post('/api/api/cases/find', {
                     'caseName': this.form.apiName,
                     'projectName': this.form.projectName,
@@ -796,8 +969,47 @@
                     }
                 )
             },
+            delSuite(suiteId) {
+                this.$axios.post('/api/api/suite/del', {'suiteId': suiteId}).then((response) => {
+                        this.messageShow(this, response);
+                        this.form.apiName = '';
+                        if ((this.currentPage - 1) * this.sizePage + 1 === this.total) {
+                            this.currentPage = this.currentPage - 1
+                        }
+                        this.findSuite();
+                    }
+                )
+            },
 
-            test(caseData, status = true) {
+            suiteTest(suiteData) {
+                this.loading = true;
+                this.$axios.post('/api/api/cases/run', {
+                    'suiteData': suiteData,
+                    'projectName': this.form.projectName,
+                    'gathers': this.form.modelName,
+                    'configName': this.form.configName,
+                }).then((response) => {
+                        if (response.data['status'] === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'warning',
+                            });
+                        }
+                        else {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'success',
+                            });
+                            this.resultShowData = response['data']['data']['details'][0]['records'];
+                            this.resultViewStatus = true;
+                            this.loading = false;
+                        }
+                    }
+                )
+            },
+            apiTest(caseData, status = true) {
                 if (status) {
                     this.loading = true;
                 }
@@ -811,7 +1023,6 @@
                     'gathers': this.form.modelName,
                     'configName': this.form.configName,
                 }).then((response) => {
-
                         if (response.data['status'] === 0) {
                             this.$message({
                                 showClose: true,
@@ -835,6 +1046,67 @@
                             this.saveRunStatus = false;
                         }
 
+                    }
+                )
+            },
+            suiteView() {
+
+                if (this.casesList.length === 0) {
+                    this.$message({
+                        showClose: true,
+                        message: '请至少选择1条接口信息',
+                        type: 'warning',
+                    });
+                }
+                else {
+                    this.suiteData.name = '';
+                    this.suiteData.num = '';
+                    this.suiteData.id = '';
+                    this.apiList = JSON.parse(JSON.stringify(this.casesList));
+                    this.suiteViewStatus = true;
+                }
+            },
+            editSuite(suiteId) {
+                this.$axios.post('/api/api/suite/edit', {'suiteId': suiteId}).then((response) => {
+                        this.apiList = response['data']['data']['apiData'];
+                        this.suiteData.num = response['data']['data']['num'];
+                        this.suiteData.name = response['data']['data']['name'];
+                        this.suiteData.id = response['data']['data']['id'];
+                        this.suiteViewStatus = true;
+                    }
+                )
+            },
+            addSuite() {
+                let apiData = Array();
+                for (let i = 0; i < this.apiList.length; i++) {
+                    apiData.push(this.apiList[i].caseId);
+                }
+                this.$axios.post('/api/api/suite/add', {
+                    'projectName': this.form.projectName,
+                    'gatherName': this.form.modelName,
+                    'num': this.suiteData.num,
+                    'suiteId': this.suiteData.id,
+                    'suiteName': this.suiteData.name,
+                    'apiData': apiData,
+                }).then((response) => {
+
+                        if (response.data['status'] === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'warning',
+                            });
+                        }
+                        else {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'success',
+                            });
+                            this.findSuite();
+                            this.suiteViewStatus = false;
+                            this.cancelSelection();
+                        }
                     }
                 )
             },
@@ -917,8 +1189,12 @@
             handleCaseSelection(val) {
                 this.casesList = val;
             },
+            handleSuiteSelection(val) {
+                this.suiteList = val;
+            },
             cancelSelection() {
-                this.$refs.multipleTable.clearSelection();
+                this.$refs.apiMultipleTable.clearSelection();
+                this.$refs.suiteMultipleTable.clearSelection();
             },
             fileChange(response, file, fileList) {
                 this.caseData.variable[this.temp_num]['value'] = response['data'];
@@ -967,7 +1243,19 @@
                     this.form.choiceType = "data";
                 }
             },
-
+            upNum(i) {
+                let d = this.apiList[i];
+                this.apiList.splice(i, 1);
+                this.apiList.splice(i - 1, 0, d);
+            },
+            downNum(i) {
+                let d = this.apiList[i];
+                this.apiList.splice(i, 1);
+                this.apiList.splice(i + 1, 0, d);
+            },
+            delNum(i){
+                this.apiList.splice(i, 1);
+            },
 
         },
         computed: {
@@ -1126,6 +1414,11 @@
 
     .cm-s-default .cm-atom {
         color: #000000;
+    }
+
+    .h-b-e-a-style {
+        background-color: rgb(250, 250, 250);
+        /*min-height: 430px;*/
     }
 
 </style>

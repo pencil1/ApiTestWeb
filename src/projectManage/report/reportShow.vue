@@ -51,7 +51,7 @@
             </el-col>
         </el-row>
         <el-row>
-            <el-col :span="7"
+            <el-col :span="6"
                     style="border-style:solid;border-color: rgb(234, 234, 234) #ffffff #ffffff #ffffff;border-width: 1px;">
                 <el-scrollbar>
                     <div :style={height:picHeight}>
@@ -90,7 +90,7 @@
                     </div>
                 </el-scrollbar>
             </el-col>
-            <el-col :span="17"
+            <el-col :span="18"
                     style="border-style:solid;border-color:rgb(234, 234, 234) #ffffff rgb(234, 234, 234) rgb(234, 234, 234);border-width: 1px;font-family:Serif">
 
 
@@ -111,47 +111,48 @@
                         </el-tooltip>
                     </div>
                     <div :style={height:picHeight}>
-                        <table  style="padding:10px;font-size: 14px;width: 100%;" border="0"
+                        <table  style="padding:10px;font-size: 14px;line-height: 25px" border="0"
                                cellpadding="0" cellspacing="0">
                             <thead>
                             <tr>
-                                <th style="width: 150px;border-bottom:1px solid #d0d0d0;">Identity</th>
-                                <th style="width: 80%;border-bottom:1px solid #d0d0d0;">Details</th>
+                                <th style="border-bottom:1px solid #d0d0d0;">Identity</th>
+                                <th style="border-bottom:1px solid #d0d0d0;">Details</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr v-show="statusShow[0]">
-                                <td style="border-bottom:1px solid #d0d0d0;">url</td>
-                                <td class="content">
+                                <td class="my-table">url</td>
+                                <td class="content" style=" overflow:auto;">
                                     {{this.meta_data['request']['url']}}
                                 </td>
                             </tr>
                             <tr v-show="statusShow[1]">
-                                <td style="border-bottom:1px solid #d0d0d0;">method</td>
+                                <td class="my-table">method</td>
                                 <td class="content">
                                     {{this.meta_data['request']['method']}}
                                 </td>
                             </tr>
                             <tr v-show="statusShow[2]">
-                                <td style="border-bottom:1px solid #d0d0d0;">status_code</td>
+                                <td class="my-table">status_code</td>
                                 <td class="content">
                                     {{this.meta_data['response']['status_code']}}
                                 </td>
                             </tr>
                             <tr v-show="statusShow[3]">
-                                <td style="border-bottom:1px solid #d0d0d0;">req_headers</td>
+                                <td class="my-table">req_headers</td>
                                 <td class="content">
                                     <pre style="overflow: auto">{{optimizeShow(this.meta_data['request']['headers'])}}</pre>
                                 </td>
                             </tr>
                             <tr v-show="statusShow[4]">
-                                <td style="border-bottom:1px solid #d0d0d0;">body</td>
+                                <td class="my-table">body</td>
                                 <td class="content">
-                                    {{this.meta_data['request']['body']}}
+                                    <!--<pre style="overflow: auto">{{this.meta_data['request']['body']}}</pre>-->
+                                    <pre style="white-space: pre-wrap;word-wrap: break-word;">{{this.meta_data['request']['body']}}</pre>
                                 </td>
                             </tr>
                             <tr v-show="statusShow[5]">
-                                <td style="border-bottom:1px solid #d0d0d0;">data</td>
+                                <td class="my-table">data</td>
                                 <td class="content">
                                     <!--<pre style="overflow: auto">{{this.meta_data['request']['data']}}</pre>-->
                                     <pre style="overflow: auto">{{optimizeShow(this.meta_data['request']['data'])}}</pre>
@@ -159,13 +160,13 @@
                                 </td>
                             </tr>
                             <tr v-show="statusShow[6]">
-                                <td style="border-bottom:1px solid #d0d0d0;">params</td>
+                                <td class="my-table">params</td>
                                 <td class="content">
                                     {{this.meta_data['request']['params']}}
                                 </td>
                             </tr>
                             <tr v-show="statusShow[7]">
-                                <td style="border-bottom:1px solid #d0d0d0;">resp_headers</td>
+                                <td class="my-table">resp_headers</td>
                                 <td class="content">
                                     <pre style="overflow: auto">{{optimizeShow(this.meta_data['response']['headers'])}}</pre>
                                     <!--<pre style="overflow: auto">{{this.meta_data['response']['headers']}}</pre>-->
@@ -173,13 +174,13 @@
                             </tr>
 
                             <tr v-show="statusShow[8]">
-                                <td style="border-bottom:1px solid #d0d0d0;">resp_data</td>
+                                <td class="my-table">resp_data</td>
                                 <td class="content">
-                                    <pre style="overflow: auto">{{this.meta_data['response']['json']}}</pre>
+                                    <pre style="white-space: pre-wrap;word-wrap: break-word;">{{this.meta_data['response']['json']}}</pre>
                                 </td>
                             </tr>
                             <tr v-show="attachment !== ''">
-                                <td style="border-bottom:1px solid #d0d0d0;color:red">attachment</td>
+                                <td class="my-table">attachment</td>
                                 <td class="content">
                                     <pre style="overflow: auto;color:red">{{this.attachment}}</pre>
                                 </td>
@@ -432,5 +433,9 @@
         border-bottom: 1px solid #d0d0d0;
     }
 
-
+    .my-table{
+        border-bottom:1px solid #d0d0d0;
+        font-weight:600;
+        color: #66b1ff
+    }
 </style>

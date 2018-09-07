@@ -191,7 +191,9 @@
         text-align: left;
         line-height: 20px;
         padding:0 0 20px 0;
+
     }
+
     /*.el-tabs--top .el-tabs__item.is-top:nth-child(2){*/
         /*padding-left:5px;*/
     /*}*/
@@ -236,6 +238,9 @@
         margin-right: 40px
     }
     .CodeMirror {
-        height: 580px;
+        min-height: 575px;
     }
+    /*.el-scrollbar__wrap {*/
+        /*overflow-x: hidden;*/
+    /*}*/
 </style>

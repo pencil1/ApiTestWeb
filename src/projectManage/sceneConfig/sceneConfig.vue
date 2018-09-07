@@ -29,7 +29,7 @@
         <el-tabs value="first" style="padding-left: 10px">
             <el-tab-pane label="模块列表" name="first" style="margin: 0 0 -10px;">
 
-                <el-scrollbar wrap-class="scrollbarList">
+                <!--<el-scrollbar wrap-class="scrollbarList">-->
                     <el-table :data="tableData" stripe>
                         <el-table-column
                                 prop="num"
@@ -57,7 +57,7 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                </el-scrollbar>
+                <!--</el-scrollbar>-->
                 <div class="pagination">
                     <el-pagination
                             @current-change="handleCurrentChange"
@@ -108,9 +108,7 @@
                     </el-form>
                 </el-tab-pane>
                 <el-tab-pane label="公用变量" name="second" style="margin-top: 10px">
-                    <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
-                               @click="addConfigVariable()">添加
-                    </el-button>
+
                     <el-select v-model="configData.funcAddress" clearable placeholder="请选择导入函数文件" size="small">
                         <el-option
                                 v-for="(item, key) in this.funcAddress"
@@ -119,6 +117,9 @@
                                 :value="item['value']">
                         </el-option>
                     </el-select>
+                    <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
+                               @click="addConfigVariable()">添加
+                    </el-button>
                     <el-table :data="configData.variable" style="width:100%" size="mini" stripe>
                         <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">

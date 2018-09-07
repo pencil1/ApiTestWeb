@@ -30,7 +30,7 @@
 
             <el-tab-pane label="模块列表" name="first" style="margin: 0 0 -10px;">
 
-                <el-scrollbar wrap-class="scrollbarList">
+                <!--<el-scrollbar wrap-class="scrollbarList">-->
                     <el-table :data="tableData" stripe>
                         <el-table-column
                                 prop="num"
@@ -59,7 +59,7 @@
                         </el-table-column>
 
                     </el-table>
-                </el-scrollbar>
+                <!--</el-scrollbar>-->
 
                 <div class="pagination">
                     <el-pagination

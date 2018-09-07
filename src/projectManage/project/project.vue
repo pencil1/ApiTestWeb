@@ -20,7 +20,7 @@
         <el-tabs value="first" style="padding-left: 10px">
             <el-tab-pane label="项目列表" name="first" style="margin: 0 0 -10px;">
 
-                <el-scrollbar wrap-class="scrollbarList">
+                <!--<el-scrollbar wrap-class="scrollbarList">-->
                     <el-table :data="tableData" stripe>
                         <el-table-column
                                 prop="id"
@@ -60,7 +60,7 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                </el-scrollbar>
+                <!--</el-scrollbar>-->
                 <div class="pagination">
                     <el-pagination
                             @current-change="handleCurrentChange"

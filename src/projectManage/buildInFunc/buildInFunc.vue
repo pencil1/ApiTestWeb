@@ -42,6 +42,10 @@
 <script>
     import { codemirror } from 'vue-codemirror-lite'
     require ('codemirror/mode/python/python');
+
+    import 'codemirror/addon/scroll/simplescrollbars.js'
+    import 'codemirror/addon/scroll/simplescrollbars.css'
+
     export default {
         components: {
             codemirror
@@ -54,8 +58,7 @@
                     tabSize: 4,
                     lineNumbers: true,
                     lineWrapping: true,
-                    viewportMargin: Infinity,
-                    extraKeys: {'Ctrl-Space': 'autocomplete'},
+                    scrollbarStyle:'simple',
                 },
                 funcData: '',
                 comparator: '',

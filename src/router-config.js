@@ -188,7 +188,12 @@ const routes = [
         path: '/login',
         // component:caseManage,
         component: login,
-    }
+    },
+    {
+        path: '',
+        // component:caseManage,
+        component: login,
+    },
 
 ];
 
