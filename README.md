@@ -21,3 +21,7 @@
 ## 页面展示
 
 ![image](https://github.com/pencil1/ApiTestWeb/blob/master/picture/api_view.png)
+
+![image](https://github.com/pencil1/ApiTestWeb/blob/master/picture/api_edit.png)
+
+![image](https://github.com/pencil1/ApiTestWeb/blob/master/picture/report.png)
