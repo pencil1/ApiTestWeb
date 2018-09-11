@@ -11,28 +11,19 @@
                 </el-select>
 
             </el-form-item>
-            <el-form-item label="">
-
-                <el-input placeholder="请输入业务集" v-model="form.sceneName">
+            <el-form-item label="用例名称">
+                <el-input placeholder="请输入用例" v-model="form.sceneName">
                 </el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click.native="findScenes()" size="small">
-                    搜索
-                </el-button>
-                <el-button type="primary" size="small" @click.native="initSceneData()">添加接口用例
-                </el-button>
-                <el-button type="primary" size="small" @click.native="runScene(sceneList,true)">批量运行
-                </el-button>
-
-
+                <el-button type="primary" icon="el-icon-search" @click.native="findScenes()">搜索</el-button>
+                <el-button type="primary" @click.native="initSceneData()">添加接口用例</el-button>
+                <el-button type="primary" @click.native="runScene(sceneList,true)">批量运行</el-button>
             </el-form-item>
         </el-form>
         <el-scrollbar wrapStyle="height:800px;">
             <el-tabs value="first" style="padding-left: 10px">
                 <el-tab-pane label="业务列表" name="first">
-
-
                     <el-table
                             ref="sceneMultipleTable"
                             @selection-change="handleSceneSelection"
@@ -57,8 +48,7 @@
                                 min-width="50">
                         </el-table-column>
                         <el-table-column
-                                label="操作"
-                        >
+                                label="操作">
                             <template slot-scope="scope">
                                 <el-button type="primary" icon="el-icon-edit" size="mini"
                                            @click.native="editScene(sceneAll[scope.$index]['sceneId'])">编辑
@@ -647,7 +637,7 @@
         data() {
             return {
                 tempNum: '',
-                sceneList:[],
+                sceneList: [],
                 apiSuiteViewStatus: true,
                 comparators: [{'value': 'equals'}, {'value': 'less_than'}, {'value': 'less_than_or_equals'},
                     {'value': 'greater_than'}, {'value': 'greater_than_or_equals'}, {'value': 'not_equals'},
@@ -890,7 +880,7 @@
                 // this.toggleSelection();
 
             },
-            moreRun(){
+            moreRun() {
                 console.log(this.sceneList)
             },
             handleCaseSelection(val) {
@@ -1088,14 +1078,14 @@
                     }
                 )
             },
-            runScene(name, status=false) {
+            runScene(name, status = false) {
                 let names = [];
-                if(status){
+                if (status) {
                     for (let i = 0; i < name.length; i++) {
                         names.push(name[i].name);
                     }
                 }
-                else{
+                else {
                     names.push(name)
                 }
                 this.loading = true;

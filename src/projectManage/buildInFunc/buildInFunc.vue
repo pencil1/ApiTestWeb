@@ -33,7 +33,7 @@
                     <!--placeholder="请输入内容"-->
                     <!--v-model="funcData">-->
             <!--</el-input>-->
-            <codemirror :value="funcData" :options="options">
+            <codemirror v-model="funcData" :options="options">
             </codemirror>
         </div>
     </div>

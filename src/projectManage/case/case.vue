@@ -15,8 +15,7 @@
                     <el-option
                             v-for="item in proModelData[this.form.projectName]"
                             :key="item"
-                            :value="item"
-                    >
+                            :value="item">
                     </el-option>
                 </el-select>
 
@@ -28,136 +27,43 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="接口名称" v-if="showNumTab !== 'third'">
 
+            <el-form-item label="接口名称" v-if="showNumTab !== 'third'">
                 <el-input placeholder="请输入" v-model="form.apiName" clearable>
                 </el-input>
             </el-form-item>
             <el-form-item label="套件名称" v-if="showNumTab === 'third'">
-
                 <el-input placeholder="请输入" v-model="form.suiteName" clearable>
                 </el-input>
             </el-form-item>
-            <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click.native="findData()" size="small">
-                    搜索
-                </el-button>
-                <el-button type="primary" size="small" @click.native="initCaseData()">录入接口信息
-                </el-button>
 
-                <el-button type="primary" size="small" v-if="showNumTab === 'first'" @click.native="apiTest(casesList)">
-                    测试
+            <el-form-item>
+                <el-button type="primary" icon="el-icon-search" @click.native="findData()">搜索</el-button>
+                <el-button type="primary" @click.native="initCaseData()">录入接口信息</el-button>
+                <el-button type="primary"
+                           v-if="showNumTab === 'first'"
+                           @click.native="apiTest(casesList)">测试
                 </el-button>
-                <el-button type="primary" size="small" v-if="showNumTab === 'third'"
+                <el-button type="primary" v-if="showNumTab === 'third'"
                            @click.native="suiteTest(suiteList)">测试
                 </el-button>
-
                 <el-tooltip content="查看最近一次接口结果" placement="top-start">
-                    <el-button type="primary" icon="el-icon-view" @click="resultViewStatus = true" size="small">
-                    </el-button>
+                    <el-button type="primary" icon="el-icon-view" @click="resultViewStatus = true"></el-button>
                 </el-tooltip>
-                <el-button type="primary" size="small" @click.native="suiteView()">添加套件
-                </el-button>
-                <el-button type="primary" size="small" @click="importApiStatus = true">导入信息
-                </el-button>
+                <el-button type="primary" @click.native="initSuiteView()">添加套件</el-button>
+                <el-button type="primary" @click="importApiData.importApiStatus = true">导入信息</el-button>
             </el-form-item>
         </el-form>
-        <el-dialog title="套件配置" :visible.sync="suiteViewStatus">
-            <el-form :inline="true">
-                <el-form-item label="编号" label-width="75px" v-if="suiteData.id">
-                    <el-input v-model.number="suiteData.num" auto-complete="off">
-                    </el-input>
-                </el-form-item>
-                <el-form-item label="套件名称" label-width="75px">
-                    <el-input v-model.number="suiteData.name" auto-complete="off">
-                    </el-input>
-                </el-form-item>
-            </el-form>
-            <hr style="border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -10px"/>
-            <el-table
-                    :data="apiList"
-                    stripe>
-                <el-table-column
-                        :show-overflow-tooltip=true
-                        prop="name"
-                        label="接口名称"
-                        min-width="60">
-                </el-table-column>
-                <!--<el-table-column-->
-                <!--:show-overflow-tooltip= true-->
-                <!--prop="desc"-->
-                <!--label="接口描述"-->
-                <!--width="200">-->
-                <!--</el-table-column>-->
-                <el-table-column
-                        :show-overflow-tooltip=true
-                        prop="url"
-                        label="接口地址">
-                </el-table-column>
-                <el-table-column
-                        label="操作"
-                        width="200">
-                    <template slot-scope="scope">
-                        <el-button type="primary" size="mini"
-                                   @click.native="upNum(scope.$index)">升序
-                        </el-button>
-                        <el-button type="primary" size="mini"
-                                   @click.native="downNum(scope.$index)">降序
-                        </el-button>
-                        <el-button type="danger" size="mini"
-                                   @click.native="delNum(scope.$index)">删除
-                        </el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
 
-            <div slot="footer" class="dialog-footer">
-                <el-button size="small" @click="suiteViewStatus = false">取 消</el-button>
-                <el-button type="primary" size="small" @click.native="addSuite()">确 定</el-button>
-            </div>
-        </el-dialog>
-        <el-dialog title="接口信息导入" :visible.sync="importApiStatus">
-            <el-form>
-                <el-form-item label="请选择导入格式">
-                    <el-radio-group v-model="importFormat">
-                        <el-radio label="HAR"></el-radio>
-                        <el-radio label="postman(JSON)"></el-radio>
-                    </el-radio-group>
-                </el-form-item>
-            </el-form>
-            <el-form :inline="true" class="demo-form-inline">
-                <el-form-item label="文件地址">
-                    <el-input v-model="importApiAddress" size="medium" :disabled="true">
-                    </el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-upload
-                            class="upload-demo"
-                            action="/api/api/upload"
-                            :show-file-list='false'
-                            :on-success="getApiAddress1"
-                    >
-                        <el-button size="small" type="primary">
-                            点击上传
-                        </el-button>
-                    </el-upload>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button size="small" @click="importApiStatus = false">取 消</el-button>
-                <el-button type="primary" size="small" @click.native="importCase()">确 定</el-button>
-            </div>
-        </el-dialog>
+
         <el-scrollbar wrapStyle="height:840px;">
             <el-tabs v-model="showNumTab" style="padding-left: 10px;">
-
                 <el-tab-pane label="接口信息" name="first">
                     <el-table
                             ref="apiMultipleTable"
                             @selection-change="handleCaseSelection"
                             :data="caseTableData"
-                            stripe
-                    >
+                            stripe>
                         <el-table-column
                                 type="selection"
                                 width="40">
@@ -173,12 +79,6 @@
                                 label="接口名称"
                                 width="200">
                         </el-table-column>
-                        <!--<el-table-column-->
-                        <!--:show-overflow-tooltip= true-->
-                        <!--prop="desc"-->
-                        <!--label="接口描述"-->
-                        <!--width="200">-->
-                        <!--</el-table-column>-->
                         <el-table-column
                                 :show-overflow-tooltip=true
                                 prop="url"
@@ -213,13 +113,13 @@
                         </el-pagination>
                     </div>
                 </el-tab-pane>
+
                 <el-tab-pane label="接口套件" name="third">
                     <el-table
                             ref="suiteMultipleTable"
                             @selection-change="handleSuiteSelection"
                             :data="suiteTableData"
-                            stripe
-                    >
+                            stripe>
                         <el-table-column
                                 type="selection"
                                 width="55">
@@ -235,12 +135,6 @@
                                 label="套件名称"
                                 width="200">
                         </el-table-column>
-                        <!--<el-table-column-->
-                        <!--:show-overflow-tooltip= true-->
-                        <!--prop="desc"-->
-                        <!--label="接口描述"-->
-                        <!--width="200">-->
-                        <!--</el-table-column>-->
                         <el-table-column
                                 :show-overflow-tooltip=true
                                 prop="api_names"
@@ -251,8 +145,7 @@
                                 width="320">
                             <template slot-scope="scope">
                                 <el-button type="primary" icon="el-icon-edit" size="mini"
-                                           @click.native="editSuite(suiteTableData[scope.$index]['id'])">
-                                    编辑
+                                           @click.native="editSuite(suiteTableData[scope.$index]['id'])">编辑
                                 </el-button>
                                 <el-button type="danger" icon="el-icon-delete" size="mini"
                                            @click.native="sureView(delSuite,suiteTableData[scope.$index]['id'])">删除
@@ -273,12 +166,12 @@
                         </el-pagination>
                     </div>
                 </el-tab-pane>
+
                 <el-tab-pane :label="tabName" name="second" v-if="editShow"
                              style="background-color: rgb(250, 250, 250);min-height: 780px">
                     <el-form :inline="true" :model="caseData" style="padding: 10px 20px -10px 10px;">
                         <el-form-item label="基础信息" labelWidth="80px" style="margin-bottom: 5px">
-                            <el-select v-model="form.projectName" placeholder="请选择项目" style="min-width: 130px"
-                                       size="small">
+                            <el-select v-model="form.projectName" placeholder="请选择项目" size="small">
                                 <el-option
                                         v-for="(item, key) in proModelData"
                                         :key="key"
@@ -286,16 +179,14 @@
                                 </el-option>
                             </el-select>
 
-                            <el-select v-model="form.modelName" placeholder="请选择模块" style="min-width: 130px"
-                                       size="small">
+                            <el-select v-model="form.modelName" placeholder="请选择模块" size="small">
                                 <el-option
                                         v-for="item in proModelData[this.form.projectName]"
                                         :key="item"
                                         :value="item">
                                 </el-option>
                             </el-select>
-                            <el-select v-model="form.choiceUrl" clearable placeholder="请选择url" style="min-width: 130px"
-                                       size="small">
+                            <el-select v-model="form.choiceUrl" clearable placeholder="请选择url" size="small">
                                 <el-option
                                         v-for="item in proUrlData[this.form.projectName]"
                                         :key="item"
@@ -321,14 +212,16 @@
                                       style="width: 80%;">
                                 <el-select v-model="caseData.method" size="medium" @change="methodChange"
                                            style="width: 100px" slot="prepend" placeholder="选择请求方式">
-                                    <el-option v-for="item in methods" :key="item" :value="item" :label="item">
+                                    <el-option v-for="item in methods"
+                                               :key="item"
+                                               :value="item"
+                                               :label="item">
                                     </el-option>
                                 </el-select>
                                 <el-button slot="append" type="primary" @click="ParamViewStatus = !ParamViewStatus">
                                     Params
                                 </el-button>
                             </el-input>
-
                             <el-button type="primary" @click.native="saveAndRun()" size="medium"
                                        :loading="this.saveRunStatus">Send
                             </el-button>
@@ -339,8 +232,7 @@
                     <el-table :data="caseData.param" :row-style="{'background-color': 'rgb(250, 250, 250)'}"
                               style="width:98.2%;margin-top:-20px;left: 10px;" size="mini"
                               :show-header="false" v-show="this.ParamViewStatus">
-                        <el-table-column property="key" label="Key" header-align="center"
-                                         min-width="80">
+                        <el-table-column property="key" label="Key" header-align="center" min-width="80">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.key" size="mini" placeholder="key">
                                 </el-input>
@@ -366,7 +258,6 @@
                             <el-table :data="caseData.header" size="mini" stripe :show-header="false"
                                       class="h-b-e-a-style"
                                       :row-style="{'background-color': 'rgb(250, 250, 250)'}">
-
                                 <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                                     <template slot-scope="scope">
                                         <el-input v-model="scope.row.key" size="mini" placeholder="key">
@@ -414,35 +305,26 @@
                                     <codemirror :value="caseData.jsonVariable" :options="options">
                                     </codemirror>
                                 </div>
-                                <!--<el-input-->
-                                <!--type="textarea"-->
-                                <!--:rows="24"-->
-                                <!--placeholder="请输入json格式的参数"-->
-                                <!--v-model="caseData.jsonVariable">-->
-                                <!--</el-input>-->
                             </div>
                             <el-table :data="caseData.variable" size="mini" stripe :show-header="false" height="582"
                                       style="background-color: rgb(250, 250, 250)"
                                       v-if="form.choiceType === 'data'"
                                       :row-style="{'background-color': 'rgb(250, 250, 250)'}">
-
-                                <el-table-column property="key" label="Key" header-align="center" minWidth="100">
+                                <el-table-column label="Key" header-align="center" minWidth="100">
                                     <template slot-scope="scope">
                                         <el-input v-model="scope.row.key" size="mini">
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column property="type" label="type" header-align="center" width="100">
+                                <el-table-column label="type" header-align="center" width="100">
                                     <template slot-scope="scope">
-                                        <!--<el-input v-model="scope.row.param_type" size="medium">-->
-                                        <!--</el-input>-->
                                         <el-select v-model="scope.row.param_type" size="mini">
                                             <el-option v-for="item in paramTypes" :key="item" :value="item">
                                             </el-option>
                                         </el-select>
                                     </template>
                                 </el-table-column>
-                                <el-table-column property="value" label="Value" header-align="center" minWidth="200">
+                                <el-table-column label="Value" header-align="center" minWidth="200">
                                     <template slot-scope="scope">
                                         <div v-if="scope.row.param_type === 'file'">
                                             <el-row>
@@ -458,17 +340,13 @@
                                                             class="upload-demo"
                                                             action="/api/api/upload"
                                                             :show-file-list='false'
-                                                            :on-success="fileChange"
-                                                    >
+                                                            :on-success="fileChange">
                                                         <el-button size="mini" type="primary"
-                                                                   @click="tempNum(scope.$index)">
-                                                            点击上传
+                                                                   @click="tempNum(scope.$index)">点击上传
                                                         </el-button>
                                                     </el-upload>
                                                 </el-col>
                                             </el-row>
-
-
                                         </div>
                                         <div v-else>
                                             <el-input v-model="scope.row.value" size="mini">
@@ -495,7 +373,6 @@
                             <el-table :data="caseData.extract" size="mini" stripe :show-header="false"
                                       class="h-b-e-a-style"
                                       :row-style="{'background-color': 'rgb(250, 250, 250)'}">
-
                                 <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                                     <template slot-scope="scope">
                                         <el-input v-model="scope.row.key" size="mini" placeholder="key">
@@ -571,6 +448,82 @@
                 </el-tab-pane>
             </el-tabs>
         </el-scrollbar>
+
+
+        <el-dialog title="套件配置" :visible.sync="suiteData.suiteViewStatus">
+            <el-form :inline="true">
+                <el-form-item label="编号" label-width="75px" v-if="suiteData.id">
+                    <el-input v-model.number="suiteData.num">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="套件名称" label-width="75px">
+                    <el-input v-model.number="suiteData.name">
+                    </el-input>
+                </el-form-item>
+            </el-form>
+            <hr style="border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -10px"/>
+            <el-table
+                    :data="suiteData.apiList"
+                    stripe>
+                <el-table-column
+                        :show-overflow-tooltip=true
+                        prop="name"
+                        label="接口名称"
+                        min-width="60">
+                </el-table-column>
+                <el-table-column
+                        :show-overflow-tooltip=true
+                        prop="url"
+                        label="接口地址">
+                </el-table-column>
+                <el-table-column
+                        label="操作"
+                        width="200">
+                    <template slot-scope="scope">
+                        <el-button type="primary" size="mini" @click.native="upNum(scope.$index)">升序</el-button>
+                        <el-button type="primary" size="mini" @click.native="downNum(scope.$index)">降序</el-button>
+                        <el-button type="danger" size="mini" @click.native="delNum(scope.$index)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div slot="footer" class="dialog-footer">
+                <el-button size="small" @click="suiteData.suiteViewStatus = false">取 消</el-button>
+                <el-button type="primary" size="small" @click.native="addSuite()">确 定</el-button>
+            </div>
+        </el-dialog>
+
+
+        <el-dialog title="接口信息导入" :visible.sync="importApiData.importApiStatus" width="30%">
+            <el-form>
+                <el-form-item label="请选择导入格式">
+                    <el-radio-group v-model="importApiData.importFormat">
+                        <el-radio label="HAR"></el-radio>
+                        <el-radio label="postman(JSON)"></el-radio>
+                    </el-radio-group>
+                </el-form-item>
+            </el-form>
+            <el-form :inline="true" class="demo-form-inline">
+                <el-form-item label="文件地址">
+                    <el-input v-model="importApiData.importApiAddress" size="medium" :disabled="true">
+                    </el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-upload
+                            class="upload-demo"
+                            action="/api/api/upload"
+                            :show-file-list='false'
+                            :on-success="getFileAddress">
+                        <el-button size="small" type="primary">点击上传</el-button>
+                    </el-upload>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button size="small" @click="importApiData.importApiStatus = false">取 消</el-button>
+                <el-button type="primary" size="small" @click.native="importCase()">确 定</el-button>
+            </div>
+        </el-dialog>
+
+
         <el-dialog title="测试结果" :visible.sync="resultViewStatus" width="45%">
             <el-collapse accordion>
                 <el-collapse-item
@@ -578,12 +531,11 @@
                         :key="index">
                     <template slot="title">
                         <div :style="item.attachment ? 'color:rgb(255, 74, 74)': 'color:#303133'">{{item.name}}</div>
-
                     </template>
-                    <el-button type="primary" v-clipboard:copy="JSON.stringify(item.meta_data.response_body)"
-                               size="small"
-                               style="position:absolute;right: 3%;">复制
-                    </el-button>
+                    <!--<el-button type="primary" v-clipboard:copy="JSON.stringify(item.meta_data.response_body)"-->
+                    <!--size="small"-->
+                    <!--style="position:absolute;right: 3%;">复制-->
+                    <!--</el-button>-->
                     <div style="color: red">url：</div>
                     <div>{{item.meta_data.request.url}}</div>
                     <div style="color: red">请求params：</div>
@@ -591,7 +543,8 @@
                     <div style="color: red">请求body：</div>
                     <div>{{item.meta_data.request.body}}</div>
                     <div style="color: red">请求参数：</div>
-                    <div>{{item.meta_data.request.data}}</div>
+                    <div v-if="item.meta_data.request.data !== '{}'">{{item.meta_data.request.data}}</div>
+                    <div v-if="item.meta_data.request.json">{{item.meta_data.request.json}}</div>
                     <div style="color: red">请求头：</div>
                     <div>{{item.meta_data.request.headers}}</div>
                     <div style="color: red">返回结果：</div>
@@ -602,29 +555,9 @@
                     <div>
                         <pre style="overflow: auto">{{item.attachment}}</pre>
                     </div>
-
                 </el-collapse-item>
             </el-collapse>
         </el-dialog>
-
-        <!--<el-dialog title="参数转换" :visible.sync="variableDialog">-->
-        <!--<el-collapse accordion>-->
-        <!--<div>-->
-        <!--<el-input-->
-        <!--type="textarea"-->
-        <!--:rows="30"-->
-        <!--placeholder="请输入内容"-->
-        <!--v-model="caseData.jsonVariable">-->
-        <!--</el-input>-->
-        <!--</div>-->
-        <!--</el-collapse>-->
-        <!--<div slot="footer" class="dialog-footer">-->
-        <!--<el-button @click="variableDialog = false" size="small">取 消</el-button>-->
-        <!--<el-button type="primary"-->
-        <!--@click.native="changeData()" size="small">确 定-->
-        <!--</el-button>-->
-        <!--</div>-->
-        <!--</el-dialog>-->
     </div>
 </template>
 
@@ -653,98 +586,97 @@
         data() {
             return {
                 editShow: false,
-                url: '',
+                url: null,
                 options: {
                     mode: 'application/ld+json',
                     tabSize: 4,
                     lineNumbers: true,
                     lineWrapping: true,
                     scrollbarStyle: 'simple',
-                    // viewportMargin: Infinity,
-                    // extraKeys: {'Ctrl-Space': 'autocomplete'},
                 },
                 bodyShow: 'second',
                 ParamViewStatus: false,
                 tabName: '编辑接口',
                 radioType: 'data',
-                theRequest: [{key: '', value: ''}],
+                theRequest: [{key: null, value: null}],
                 showNumTab: 'first',
                 loading: false,
                 resultShowData: [
                     {
-                        name: '',
+                        name: null,
+                        attachment: null,
                         meta_data: {
-                            request: {body: '', url: '', headers: '', data: '', params: ''},
-                            response: {content: '', json: ''}
+                            request: {body: null, url: null, headers: null, data: null, params: null, json:null},
+                            response: {content: null, json: null}
                         },
-                        attachment: ''
                     },
                 ],
                 resultViewStatus: false,
                 variableDialog: false,
-                importApiStatus: false,
-                suiteViewStatus: false,
-
+                importApiData: {importApiStatus: false, importFormat: null, importApiAddress: null,},
                 saveRunStatus: false,
-                importApiAddress: '',
-                variableDialogData: '',
+                variableDialogData: null,
                 proModelData: '',
                 configNameData: '',
 
-                //上传文件时，记录当前数据的下标，方便后续录入路径时赋值
+                //上传文件时，记录数组下当前数据的下标，用于把返回文件路径地址赋值
                 temp_num: '',
 
-                fileList: [],
-                proUrlData: '',
+                fileList: Array(),
+                proUrlData: null,
                 methods: ['POST', 'GET', 'PUT', 'DELETE'],
                 paramTypes: ['string', 'file'],
-                comparators: [{'value': 'string_equals'}, {'value': 'contains'}, {'value': 'less_than'}, {'value': 'less_than_or_equals'},
-                    {'value': 'greater_than'}, {'value': 'greater_than_or_equals'}, {'value': 'not_equals'},
+                comparators: [
+                    {'value': 'string_equals'}, {'value': 'contains'}, {'value': 'less_than'},
+                    {'value': 'less_than_or_equals'}, {'value': 'greater_than'},
+                    {'value': 'greater_than_or_equals'}, {'value': 'not_equals'},
                 ],
-                caseTableData: [],
-                suiteTableData: [],
-                casesList: [],
-                apiList: [],
-                suiteList: [],
+                caseTableData: Array(),
+                suiteTableData: Array(),
+                casesList: Array(),
+                apiList: Array(),
+                suiteList: Array(),
                 total: 1,
                 currentPage: 1,
                 sizePage: 20,
-                importFormat: '',
+
                 form: {
-                    projectName: '',
-                    configName: '',
-                    suiteName: '',
-                    apiName: '',
-                    modelName: '',
+                    projectName: null,
+                    configName: null,
+                    suiteName: null,
+                    apiName: null,
+                    modelName: null,
                     choiceUrl: '基础url1',
                     choiceType: 'data',
 
                 },
                 suiteData: {
-                    id: '',
-                    name: '',
-                    num: '',
+                    apiList: Array(),
+                    suiteViewStatus: false,
+                    id: null,
+                    name: null,
+                    num: null,
                 },
                 caseData: {
-                    id: '',
+                    id: null,
                     modelFormVisible: false,
-                    project: '',
+                    project: null,
                     method: 'POST',
-                    status_url: '',
-                    name: '',
-                    num: '',
-                    desc: '',
-                    funcAddress: '',
-                    upFunc: '',
-                    downFunc: '',
-                    formLabelWidth: '120px',
+                    status_url: null,
+                    name: null,
+                    num: null,
+                    desc: null,
+                    funcAddress: null,
+                    upFunc: null,
+                    downFunc: null,
+                    formLabelWidth: '80px',
                     url: '',
-                    param: [{key: '', value: ''}],
-                    header: [],
+                    param: [{key: null, value: null}],
+                    header: Array(),
                     variable: [],
-                    jsonVariable: '',
-                    extract: [],
-                    validate: [],
+                    jsonVariable: String(),
+                    extract: Array(),
+                    validate: Array(),
                 }
             }
         },
@@ -769,11 +701,13 @@
             },
             handleCurrentChange(val) {
                 this.currentPage = val;
-                this.findCases()
+                this.findCases();
+                this.findSuite();
             },
             handleSizeChange(val) {
                 this.sizePage = val;
-                this.findCases()
+                this.findCases();
+                this.findSuite();
             },
             findData() {
                 if (this.showNumTab !== 'third') {
@@ -831,31 +765,29 @@
                 this.editShow = true;
                 this.showNumTab = 'second';
                 this.tabName = '新增接口';
-                this.caseData.header = [];
                 this.form.choiceType = 'data';
-                this.caseData.variable = [];
-                this.caseData.param = [];
-                this.caseData.jsonVariable = '';
-                this.caseData.extract = [];
-                this.caseData.validate = [];
-                this.caseData.name = '';
-                this.caseData.num = '';
-                this.form.choiceUrl = '';
-                this.caseData.funcAddress = '';
-                this.caseData.upFunc = '';
-                this.caseData.downFunc = '';
-                this.caseData.desc = '';
-                this.caseData.id = '';
-                this.caseData.url = '';
+                this.form.choiceUrl = String();
+                this.caseData.header = Array();
+                this.caseData.variable = Array();
+                this.caseData.param = Array();
+                this.caseData.jsonVariable = String();
+                this.caseData.extract = Array();
+                this.caseData.validate = Array();
+                this.caseData.name = null;
+                this.caseData.num = null;
+                this.caseData.funcAddress = null;
+                this.caseData.upFunc = null;
+                this.caseData.downFunc = null;
+                this.caseData.desc = null;
+                this.caseData.id = null;
+                this.caseData.url = String();
                 // this.caseData.modelFormVisible = true;
             },
             saveAndRun() {
                 this.addCase(false);
                 if (this.caseData.id) {
-                    this.test([{'caseId': this.caseData.id, 'num': '1'}], false);
+                    this.apiTest([{'caseId': this.caseData.id, 'num': '1'}], false);
                 }
-
-
             },
             addCase(status = true) {
                 let variable;
@@ -929,6 +861,14 @@
                             this.caseData.num = '';
                             this.caseData.id = '';
                         }
+                        if (response.data['data']['variableType'] === 'data') {
+                            this.caseData.variable = response.data['data']['caseVariable'];
+                            this.caseData.jsonVariable = String()
+                        }
+                        else {
+                            this.caseData.jsonVariable = response.data['data']['caseVariable'];
+                            this.caseData.variable = Array()
+                        }
                         this.caseData.desc = response.data['data']['caseDesc'];
                         this.caseData.funcAddress = response.data['data']['funcAddress'];
                         this.caseData.upFunc = response.data['data']['up_func'];
@@ -937,19 +877,9 @@
                         this.caseData.header = response.data['data']['caseHeader'];
                         this.form.choiceType = response.data['data']['variableType'];
                         this.caseData.param = response.data['data']['param'];
-                        if (this.form.choiceType === 'data') {
-                            this.caseData.variable = response.data['data']['caseVariable'];
-                            this.caseData.jsonVariable = ''
-                        }
-                        else {
-                            this.caseData.jsonVariable = response.data['data']['caseVariable'];
-                            this.caseData.variable = []
-                        }
                         this.caseData.extract = response.data['data']['caseExtract'];
                         this.caseData.validate = response.data['data']['caseValidate'];
                         this.caseData.method = response.data['data']['caseMethod'];
-
-                        // this.form.choiceUrl = response.data['data']['status_url'];
                         this.form.choiceUrl = this.proUrlData[this.form.projectName][response.data['data']['status_url']];
                         this.caseData.modelFormVisible = true;
                     }
@@ -961,7 +891,7 @@
             delCases(caseId) {
                 this.$axios.post('/api/api/cases/del', {'caseId': caseId}).then((response) => {
                         this.messageShow(this, response);
-                        this.form.apiName = '';
+                        this.form.apiName = null;
                         if ((this.currentPage - 1) * this.sizePage + 1 === this.total) {
                             this.currentPage = this.currentPage - 1
                         }
@@ -972,7 +902,7 @@
             delSuite(suiteId) {
                 this.$axios.post('/api/api/suite/del', {'suiteId': suiteId}).then((response) => {
                         this.messageShow(this, response);
-                        this.form.apiName = '';
+                        this.form.apiName = null;
                         if ((this.currentPage - 1) * this.sizePage + 1 === this.total) {
                             this.currentPage = this.currentPage - 1
                         }
@@ -980,7 +910,6 @@
                     }
                 )
             },
-
             suiteTest(suiteData) {
                 this.loading = true;
                 this.$axios.post('/api/api/cases/run', {
@@ -1016,7 +945,6 @@
                 else {
                     this.saveRunStatus = true;
                 }
-
                 this.$axios.post('/api/api/cases/run', {
                     'caseData': caseData,
                     'projectName': this.form.projectName,
@@ -1049,8 +977,7 @@
                     }
                 )
             },
-            suiteView() {
-
+            initSuiteView() {
                 if (this.casesList.length === 0) {
                     this.$message({
                         showClose: true,
@@ -1059,27 +986,27 @@
                     });
                 }
                 else {
-                    this.suiteData.name = '';
-                    this.suiteData.num = '';
-                    this.suiteData.id = '';
-                    this.apiList = JSON.parse(JSON.stringify(this.casesList));
-                    this.suiteViewStatus = true;
+                    this.suiteData.name = null;
+                    this.suiteData.num = null;
+                    this.suiteData.id = null;
+                    this.suiteData.apiList = JSON.parse(JSON.stringify(this.casesList));
+                    this.suiteData.suiteViewStatus = true;
                 }
             },
             editSuite(suiteId) {
                 this.$axios.post('/api/api/suite/edit', {'suiteId': suiteId}).then((response) => {
-                        this.apiList = response['data']['data']['apiData'];
+                        this.suiteData.apiList = response['data']['data']['apiData'];
                         this.suiteData.num = response['data']['data']['num'];
                         this.suiteData.name = response['data']['data']['name'];
                         this.suiteData.id = response['data']['data']['id'];
-                        this.suiteViewStatus = true;
+                        this.suiteData.suiteViewStatus = true;
                     }
                 )
             },
             addSuite() {
                 let apiData = Array();
-                for (let i = 0; i < this.apiList.length; i++) {
-                    apiData.push(this.apiList[i].caseId);
+                for (let i = 0; i < this.suiteData.apiList.length; i++) {
+                    apiData.push(this.suiteData.apiList[i].caseId);
                 }
                 this.$axios.post('/api/api/suite/add', {
                     'projectName': this.form.projectName,
@@ -1089,7 +1016,6 @@
                     'suiteName': this.suiteData.name,
                     'apiData': apiData,
                 }).then((response) => {
-
                         if (response.data['status'] === 0) {
                             this.$message({
                                 showClose: true,
@@ -1104,21 +1030,19 @@
                                 type: 'success',
                             });
                             this.findSuite();
-                            this.suiteViewStatus = false;
+                            this.suiteData.suiteViewStatus = false;
                             this.cancelSelection();
                         }
                     }
                 )
             },
             importCase() {
-
                 this.$axios.post('/api/api/cases/fileChange', {
-                    'importApiAddress': this.importApiAddress,
+                    'importApiAddress': this.importApiData.importApiAddress,
                     'projectName': this.form.projectName,
                     'gatherName': this.form.modelName,
-                    'importFormat': this.importFormat,
+                    'importFormat': this.importApiData.importFormat,
                 }).then((response) => {
-
                         if (response.data['status'] === 0) {
                             this.$message({
                                 showClose: true,
@@ -1132,8 +1056,8 @@
                                 message: response.data['msg'],
                                 type: 'success',
                             });
-                            this.importApiStatus = false;
-                            this.importApiAddress = '';
+                            this.importApiData.importApiStatus = false;
+                            this.importApiAddress = null;
                             this.findCases();
                         }
                     }
@@ -1154,19 +1078,19 @@
             },
             addTableList(type) {
                 if (type === 'variable') {
-                    this.caseData.variable.push({key: '', value: '', param_type: 'string', remark: ''});
+                    this.caseData.variable.push({key: null, value: null, param_type: 'string', remark: null});
                 }
                 else if (type === 'header') {
-                    this.caseData.header.push({key: '', value: ''});
+                    this.caseData.header.push({key: null, value: null});
                 }
                 else if (type === 'validate') {
-                    this.caseData.validate.push({key: '', value: ''});
+                    this.caseData.validate.push({key: null, value: null});
                 }
                 else if (type === 'extract') {
-                    this.caseData.extract.push({key: '', value: '', remark: ''});
+                    this.caseData.extract.push({key: null, value: null, remark: null});
                 }
                 else if (type === 'param') {
-                    this.caseData.param.push({key: '', value: ''});
+                    this.caseData.param.push({key: null, value: null});
                 }
             },
             delTableList(type, i) {
@@ -1214,8 +1138,8 @@
                 }
 
             },
-            getApiAddress1(response, file, fileList) {
-                this.importApiAddress = response['data'];
+            getFileAddress(response, file, fileList) {
+                this.importApiData.importApiAddress = response['data'];
                 if (response['status'] === 0) {
                     this.$message({
                         showClose: true,
@@ -1235,8 +1159,8 @@
                 this.temp_num = i;
             },
             clearChoice() {
-                this.form.modelName = '';
-                this.form.configName = '';
+                this.form.modelName = null;
+                this.form.configName = null;
             },
             methodChange(i) {
                 if (i === 'GET') {
@@ -1244,17 +1168,17 @@
                 }
             },
             upNum(i) {
-                let d = this.apiList[i];
-                this.apiList.splice(i, 1);
-                this.apiList.splice(i - 1, 0, d);
+                let d = this.suiteData.apiList[i];
+                this.suiteData.apiList.splice(i, 1);
+                this.suiteData.apiList.splice(i - 1, 0, d);
             },
             downNum(i) {
-                let d = this.apiList[i];
-                this.apiList.splice(i, 1);
-                this.apiList.splice(i + 1, 0, d);
+                let d = this.suiteData.apiList[i];
+                this.suiteData.apiList.splice(i, 1);
+                this.suiteData.apiList.splice(i + 1, 0, d);
             },
-            delNum(i){
-                this.apiList.splice(i, 1);
+            delNum(i) {
+                this.suiteData.apiList.splice(i, 1);
             },
 
         },

@@ -78,7 +78,7 @@
                     this.title = ['接口管理', '接口模块']
                 }
                 else if (path === '/manage/caseManage') {
-                    this.title = ['接口管理', '接口用例']
+                    this.title = ['接口管理', '接口信息']
                 }
                 else if (path === '/manage/reportManage') {
                     this.title = ['报告管理', '接口报告']

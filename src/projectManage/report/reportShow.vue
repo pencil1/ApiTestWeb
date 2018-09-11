@@ -111,12 +111,12 @@
                         </el-tooltip>
                     </div>
                     <div :style={height:picHeight}>
-                        <table  style="padding:10px;font-size: 14px;line-height: 25px" border="0"
-                               cellpadding="0" cellspacing="0">
+                        <table  style="padding:10px;font-size: 14px;line-height: 25px;width: 100%"
+                                border="0" cellpadding="0" cellspacing="0">
                             <thead>
                             <tr>
-                                <th style="border-bottom:1px solid #d0d0d0;">Identity</th>
-                                <th style="border-bottom:1px solid #d0d0d0;">Details</th>
+                                <th style="border-bottom:1px solid #d0d0d0;width: 100px">Identity</th>
+                                <th style="border-bottom:1px solid #d0d0d0;width: 90%">Details</th>
                             </tr>
                             </thead>
                             <tbody>

@@ -9,41 +9,38 @@
                 </el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click.native="findTask()" size="small">
-                    搜索
-                </el-button>
-                <el-button type="primary" size="small" @click.native="initTaskData()">添加任务
+                <el-button type="primary" icon="el-icon-search" @click.native="findTask()">搜索</el-button>
+                <el-button type="primary" @click.native="initTaskData()">添加任务
                 </el-button>
             </el-form-item>
         </el-form>
 
         <el-tabs value="first" style="padding-left: 10px">
             <el-tab-pane label="任务列表" name="first" style="margin: 0 0 -10px;">
-
                 <el-table :data="tableData" stripe>
                     <el-table-column
                             prop="num"
                             label="编号"
-                            width="80">
+                            min-width="40">
                     </el-table-column>
                     <el-table-column
                             prop="task_name"
                             label="任务名称"
-                            width="190">
+                            min-width="100">
                     </el-table-column>
                     <el-table-column
                             prop="task_config_time"
                             label="cron"
-                    >
+                            min-width="100">
                     </el-table-column>
                     <el-table-column
                             prop="status"
                             label="状态"
-                    >
+                            min-width="100">
                     </el-table-column>
                     <el-table-column
                             label="操作"
-                    >
+                            min-width="200">
                         <template slot-scope="scope">
                             <el-button type="primary" size="mini" v-if="tableData[scope.$index]['status'] === '创建'"
                                        @click.native="editTask(tableData[scope.$index]['id'])">修改
@@ -85,7 +82,7 @@
         <el-dialog title="任务配置" :visible.sync="taskData.modelFormVisible" width="40%">
             <el-tabs>
                 <el-tab-pane label="messages" style="margin-top: 10px">
-                    <el-form :model="taskData">
+                    <el-form>
                         <el-form-item label="任务序号" :label-width="taskData.formLabelWidth"
                                       prop="num"
                                       :rules="[{ required: true, type:'number', message: '请输入数字', trigger: 'blur' },]">
@@ -129,6 +126,50 @@
                         <el-form-item label="时间配置" :label-width="taskData.formLabelWidth">
                             <el-input v-model="taskData.timeConfig" auto-complete="off">
                             </el-input>
+                        </el-form-item>
+                        <el-form-item label="时间配置" :label-width="taskData.formLabelWidth">
+                            <el-select v-model="form.scenes" multiple placeholder="秒" style="width: 90px;">
+                                <el-option
+                                        v-for="item in proSceneData[this.form.projectName]"
+                                        :key="item.id"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                            <el-select v-model="form.scenes" multiple placeholder="分" style="width: 90px;">
+                                <el-option
+                                        v-for="item in proSceneData[this.form.projectName]"
+                                        :key="item.id"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                            <el-select v-model="form.scenes" multiple placeholder="时" style="width: 90px;">
+                                <el-option
+                                        v-for="item in proSceneData[this.form.projectName]"
+                                        :key="item.id"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                            <el-select v-model="form.scenes" multiple placeholder="日" style="width: 90px;">
+                                <el-option
+                                        v-for="item in proSceneData[this.form.projectName]"
+                                        :key="item.id"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                            <el-select v-model="form.scenes" multiple placeholder="月" style="width: 90px;">
+                                <el-option
+                                        v-for="item in proSceneData[this.form.projectName]"
+                                        :key="item.id"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                            <el-select v-model="form.scenes" multiple placeholder="星期" style="width: 90px;">
+                                <el-option
+                                        v-for="item in proSceneData[this.form.projectName]"
+                                        :key="item.id"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
 
 
