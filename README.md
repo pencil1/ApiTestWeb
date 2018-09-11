@@ -16,3 +16,8 @@
 
 ## Build
     npm run build
+
+
+## 页面展示
+
+![image](https://github.com/pencil1/ApiTestWeb/blob/master/picture/api_view.png)
