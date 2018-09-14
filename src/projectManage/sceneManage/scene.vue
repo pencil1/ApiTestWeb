@@ -438,7 +438,7 @@
                     </el-table>
                 </el-tab-pane>
                 <el-tab-pane label="接口参数" style="margin-top: 10px">
-                    <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
+                    <el-button type="primary" size="small"
                                :disabled="form.choiceTypeStatus"
                                @click="addCaseVariable()">添加
                     </el-button>
@@ -463,7 +463,7 @@
                         </div>
                         <el-input
                                 type="textarea"
-                                :rows="10"
+                                :rows="27"
                                 placeholder="请输入内容"
                                 v-model="caseConfig.variable">
                         </el-input>
@@ -1095,7 +1095,9 @@
                 }).then((response) => {
                         this.loading = false;
                         this.messageShow(this, response);
-                        this.$router.push({path: 'reportShow', query: {reportId: response.data['data']['report_id']}});
+                        // this.$router.push({path: 'reportShow', query: {reportId: response.data['data']['report_id']}});
+                        let {href} = this.$router.resolve({path: 'reportShow', query: {reportId: response.data['data']['report_id']}});
+                        window.open(href, '_blank');
                     }
                 );
             },

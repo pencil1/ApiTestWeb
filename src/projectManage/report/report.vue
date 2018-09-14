@@ -233,7 +233,10 @@
                 )
             },
             check(reportId) {
-                this.$router.push({path: 'reportShow', query: {reportId: reportId}});
+
+                // this.$router.push({path: 'reportShow', query: {reportId: reportId}});
+                let {href} = this.$router.resolve({path: 'reportShow', query: {reportId: reportId}});
+                window.open(href, '_blank');
             },
             downReport(reportId) {
                 this.$axios.post('/api/api/report/download', {'reportId': reportId}).then((response) => {

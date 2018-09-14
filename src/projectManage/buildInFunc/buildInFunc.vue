@@ -99,6 +99,7 @@
                 )
             },
             checkFunc() {
+                this.saveFunc();
                 this.$axios.post('/api/api/func/check', {'funcName': this.comparator}).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({

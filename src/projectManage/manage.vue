@@ -111,6 +111,11 @@
             collapse: function () {
                 this.collapsed = !this.collapsed;
             },
+            closeNavigation(){
+                if(this.$route.path === '/manage/reportShow'){
+                    this.collapsed = true;
+                }
+            }
         },
         watch: {
             "$route": function (to, from) {
@@ -123,6 +128,7 @@
             }
         },
         mounted() {
+            this.closeNavigation()
         },
     }
 </script>

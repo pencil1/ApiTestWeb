@@ -302,7 +302,7 @@
 
                             <div v-if="form.choiceType === 'json'">
                                 <div style="border-style:solid;border-width: 1px;border-color: rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234)">
-                                    <codemirror :value="caseData.jsonVariable" :options="options">
+                                    <codemirror v-model="caseData.jsonVariable" :options="options">
                                     </codemirror>
                                 </div>
                             </div>
