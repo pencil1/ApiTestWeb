@@ -19,69 +19,105 @@
                 <el-button type="primary" icon="el-icon-search" @click.native="findScenes()">搜索</el-button>
                 <el-button type="primary" @click.native="initSceneData()">添加接口用例</el-button>
                 <el-button type="primary" @click.native="runScene(sceneList,true)">批量运行</el-button>
+                <el-button type="primary" icon="el-icon-search" @click.native="findOldScenes()">搜索旧数据</el-button>
             </el-form-item>
         </el-form>
-        <el-scrollbar wrapStyle="height:800px;">
-            <el-tabs value="first" style="padding-left: 10px">
-                <el-tab-pane label="业务列表" name="first">
-                    <el-table
-                            ref="sceneMultipleTable"
-                            @selection-change="handleSceneSelection"
-                            :data="sceneAll" stripe>
-                        <el-table-column
-                                type="selection"
-                                width="40">
-                        </el-table-column>
-                        <el-table-column
-                                prop="num"
-                                label="编号"
-                                min-width="10">
-                        </el-table-column>
-                        <el-table-column
-                                prop="name"
-                                label="名称"
-                                min-width="50">
-                        </el-table-column>
-                        <el-table-column
-                                prop="desc"
-                                label="描述"
-                                min-width="50">
-                        </el-table-column>
-                        <el-table-column
-                                label="操作">
-                            <template slot-scope="scope">
-                                <el-button type="primary" icon="el-icon-edit" size="mini"
-                                           @click.native="editScene(sceneAll[scope.$index]['sceneId'])">编辑
-                                </el-button>
-                                <el-button type="primary" icon="el-icon-tickets" size="mini"
-                                           @click.native="editScene(sceneAll[scope.$index]['sceneId'],true)">复制
-                                </el-button>
-                                <el-button type="primary" icon="el-icon-setting" size="mini"
-                                           @click.native="runScene(sceneAll[scope.$index]['name'])">运行
-                                </el-button>
-                                <el-button type="danger" icon="el-icon-delete" size="mini"
-                                           @click.native="sureView(delScene,sceneAll[scope.$index]['sceneId'])">删除
-                                </el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
 
-                    <el-button @click="cancelSelection()" size="mini" style="position: absolute;margin-top: 2px;">取消选择
-                    </el-button>
+        <el-row>
+            <el-col :span="3"
+                    style="border-style:solid;border-color: #ffffff rgb(234, 234, 234) #ffffff #ffffff;border-width: 1px;">
+                <el-row>
+                    <el-col style="border-style:solid;border-color: #ead4d4;border-width: 1px;padding:2px">
+                        <el-button-group style="float:right;">
+                            <el-button size="mini" type="primary" @click.native="initSet()">添加</el-button>
+                            <el-button size="mini" type="primary" @click.native="editSet()">编辑</el-button>
+                            <el-button size="mini" type="success" @click.native="stickSet()">置顶</el-button>
+                            <el-button size="mini" type="danger" @click.native="sureView(delSet)">删除</el-button>
+                        </el-button-group>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-scrollbar>
+                        <el-tree
+                                ref="testTree"
+                                @node-click="handleNodeClick"
+                                class="filter-tree"
+                                highlight-current
+                                node-key="id"
+                                :data="setDataList"
+                                :props="defaultProps"
+                                :filter-node-method="filterNode"
+                                style="height: 800px;">
+                        </el-tree>
+                    </el-scrollbar>
+                </el-row>
+            </el-col>
+            <el-col :span="21">
+                <el-scrollbar wrapStyle="height:800px;">
+                    <el-tabs value="first" style="padding-left: 10px">
+                        <el-tab-pane label="业务列表" name="first">
+                            <el-table
+                                    ref="sceneMultipleTable"
+                                    @selection-change="handleSceneSelection"
+                                    :data="sceneAll" stripe>
+                                <el-table-column
+                                        type="selection"
+                                        width="40">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="num"
+                                        label="编号"
+                                        min-width="10">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="name"
+                                        label="名称"
+                                        min-width="50">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="desc"
+                                        label="描述"
+                                        min-width="50">
+                                </el-table-column>
+                                <el-table-column
+                                        label="操作">
+                                    <template slot-scope="scope">
+                                        <el-button type="primary" icon="el-icon-edit" size="mini"
+                                                   @click.native="editScene(sceneAll[scope.$index]['sceneId'])">编辑
+                                        </el-button>
+                                        <el-button type="primary" icon="el-icon-tickets" size="mini"
+                                                   @click.native="editScene(sceneAll[scope.$index]['sceneId'],true)">复制
+                                        </el-button>
+                                        <el-button type="primary" icon="el-icon-setting" size="mini"
+                                                   @click.native="runScene(sceneAll[scope.$index]['name'])">运行
+                                        </el-button>
+                                        <el-button type="danger" icon="el-icon-delete" size="mini"
+                                                   @click.native="sureView(delScene,sceneAll[scope.$index]['sceneId'])">
+                                            删除
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
 
-                    <div class="pagination">
-                        <el-pagination
-                                @current-change="handleCurrentChange"
-                                @size-change="handleSizeChange"
-                                :page-size="20"
-                                layout="total, sizes, prev, pager, next, jumper"
-                                :total="this.total">
-                        </el-pagination>
-                    </div>
-                </el-tab-pane>
-            </el-tabs>
-        </el-scrollbar>
+                            <el-button @click="cancelSelection()" size="mini"
+                                       style="position: absolute;margin-top: 2px;">取消选择
+                            </el-button>
 
+                            <div class="pagination">
+                                <el-pagination
+                                        @current-change="handleCurrentChange"
+                                        @size-change="handleSizeChange"
+                                        :page-size="20"
+                                        layout="total, sizes, prev, pager, next, jumper"
+                                        :total="this.total">
+                                </el-pagination>
+                            </div>
+                        </el-tab-pane>
+                    </el-tabs>
+                </el-scrollbar>
+            </el-col>
+
+        </el-row>
         <el-dialog title="用例" :visible.sync="sceneData.modelFormVisible" width="50%" top="5vh">
 
 
@@ -103,17 +139,33 @@
                             <el-input v-model="sceneData.desc" auto-complete="off">
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="项目名称" :label-width="sceneData.formLabelWidth">
-                            <!--<el-input v-model="form.projectName" auto-complete="off" :disabled="true">-->
-                            <!--</el-input>-->
-                            <el-select v-model="form.projectName" placeholder="请选择项目">
-                                <el-option
-                                        v-for="(item, key) in proModelData"
-                                        :key="key"
-                                        :value="key">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
+
+                        <el-form :inline="true">
+                            <el-form-item label="项目名称" :label-width="sceneData.formLabelWidth">
+                                <!--<el-input v-model="form.projectName" auto-complete="off" :disabled="true">-->
+                                <!--</el-input>-->
+                                <el-select v-model="form.projectName" placeholder="请选择项目">
+                                    <el-option
+                                            v-for="(item, key) in proModelData"
+                                            :key="key"
+                                            :value="key">
+                                    </el-option>
+                                </el-select>
+                                <el-select v-model="form.setName" placeholder="请选择用例集" @change="getSetId" value-key>
+                                    <el-option
+                                            v-for="item in setDataList"
+                                            :key="item.id"
+                                            :label="item.label"
+                                            :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="执行次数" label-width="70px">
+                                <el-input-number v-model="sceneData.times" :min="1" :max="1000">
+                                </el-input-number>
+                            </el-form-item>
+                        </el-form>
+
 
 
                     </el-form>
@@ -187,7 +239,7 @@
                 <el-tab-pane label="接口信息" name="third">
                     <el-form :inline="true" class="demo-form-inline search-style" size="small">
                         <el-form-item label=" " labelWidth="10px">
-                            <el-select v-model="form.projectName" placeholder="请选择项目" @change="clearGathers">
+                            <el-select v-model="form.projectName2" placeholder="请选择项目" @change="clearGathers">
                                 <el-option
                                         v-for="(item, key) in proModelData"
                                         :key="key"
@@ -197,7 +249,7 @@
 
                             <el-select v-model="form.modelName" placeholder="请选择模块">
                                 <el-option
-                                        v-for="item in proModelData[this.form.projectName]"
+                                        v-for="item in proModelData[this.form.projectName2]"
                                         :key="item"
                                         :value="item">
                                 </el-option>
@@ -628,6 +680,20 @@
                 </el-button>
             </div>
         </el-dialog>
+
+
+        <el-dialog title="用例集配置" :visible.sync="setData.viewStatus" width="30%">
+            <el-form>
+                <el-form-item label="用例集名称" label-width="100px">
+                    <el-input v-model="setData.name">
+                    </el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button size="small" @click="importApiData.viewStatus = false">取 消</el-button>
+                <el-button type="primary" size="small" @click.native="addSet()">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -636,6 +702,11 @@
         name: 'modeManage',
         data() {
             return {
+                defaultProps: {
+                    children: 'children',
+                    label: 'label'
+                },
+                setDataList: [],
                 tempNum: '',
                 sceneList: [],
                 apiSuiteViewStatus: true,
@@ -684,32 +755,54 @@
                     value: '选项2',
                     label: 'json'
                 }],
+                tempSetName:'',
                 form: {
                     modelName: '',
                     projectName: '',
+                    projectName2: '',
                     sceneName: '',
                     configName: '',
                     caseName: '',
                     choiceType: 'data',
                     choiceTypeStatus: false,
+                    setName: '',
                 },
+
                 sceneData: {
                     id: '',
+                    set_id: '',
                     num: '',
                     funcAddress: '',
                     modelFormVisible: false,
                     projectName: '',
                     variable: [],
                     desc: '',
+                    times:'',
                     name: '',
-                    formLabelWidth: '120px',
+                    formLabelWidth: '70px',
                     apiCases: [],
-                }
+                },
+                setData: {
+                    one_id: '',
+                    viewStatus: false,
+                    id: '',
+                    num: '',
+                    name: '',
+                },
             }
         },
 
 
         methods: {
+            handleNodeClick(data) {
+                this.setData.one_id = data['id'];
+                this.tempSetName = data['label'];
+                this.findScenes();
+            },
+            filterNode(value, data) {
+                if (!value) return true;
+                return data.label.indexOf(value) !== -1;
+            },
             querySearch(queryString, cb) {
                 // 调用 callback 返回建议列表的数据
                 cb(this.comparators);
@@ -717,7 +810,7 @@
             findCases() {
                 this.apiSuiteViewStatus = true,
                     this.$axios.post('/api/api/cases/find', {
-                        'projectName': this.form.projectName,
+                        'projectName': this.form.projectName2,
                         'gatName': this.form.modelName,
                         'caseName': this.form.caseName,
                         'page': this.scenePage.currentPage,
@@ -742,7 +835,7 @@
                     this.$axios.post('/api/api/suite/find', {
                         'suiteName': this.form.caseName,
                         'modelName': this.form.modelName,
-                        'projectName': this.form.projectName,
+                        'projectName': this.form.projectName2,
                         'page': this.scenePage.currentPage,
                         'sizePage': this.scenePage.sizePage,
                     }).then((response) => {
@@ -762,6 +855,28 @@
             },
             findScenes() {
                 this.$axios.post('/api/api/scene/find', {
+                    'setId': this.setData.one_id,
+                    'projectName': this.form.projectName,
+                    'sceneName': this.form.sceneName,
+                    'page': this.currentPage,
+                    'sizePage': this.sizePage,
+                }).then((response) => {
+                        if (response.data['status'] === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'warning',
+                            });
+                        }
+                        else {
+                            this.sceneAll = response.data['data'];
+                            this.total = response.data['total'];
+                        }
+                    }
+                )
+            },
+            findOldScenes() {
+                this.$axios.post('/api/api/scene/findOld', {
                     'projectName': this.form.projectName,
                     'sceneName': this.form.sceneName,
                     'page': this.currentPage,
@@ -787,15 +902,30 @@
                         this.configNameData = response.data['config_name_list'];
                         this.proUrlData = response.data['urlData'];
                         this.form.projectName = response.data['user_pro']['pro_name'];
+                        this.form.projectName2 = this.form.projectName;
                         this.form.configName = response.data['config_name_list'][this.form.projectName][0].toString();
                         this.form.modelName = response.data['user_pro']['model_list'][0].toString();
-                        this.findScenes()
+                        this.findSet();
+
+
                     }
                 );
                 this.$axios.post('/api/api/func/getAddress').then((response) => {
                         this.funcAddress = response['data']['data'];
                     }
-                )
+                );
+            },
+            findSet() {
+                this.$axios.post('/api/api/set/find', {'projectName': this.form.projectName,}).then((response) => {
+                        this.setDataList = response.data['data'][this.form.projectName];
+                        this.setData.one_id = response.data['data'][this.form.projectName][0]['id'];
+                        this.tempSetName = response.data['data'][this.form.projectName][0]['label'];
+                        this.$nextTick(function () {
+                            this.$refs.testTree.setCurrentKey(this.setData.one_id);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
+                        });
+                        this.findScenes();
+                    }
+                );
             },
             handleCurrentChange(val) {
                 this.currentPage = val;
@@ -834,6 +964,7 @@
                 this.$axios.post('/api/api/scene/add', {
                     'num': this.sceneData.num,
                     'name': this.sceneData.name,
+                    'setId': this.sceneData.set_id,
                     'desc': this.sceneData.desc,
                     'funcAddress': this.sceneData.funcAddress,
                     'variable': JSON.stringify(this.sceneData.variable),
@@ -865,9 +996,12 @@
                 this.caseList = [];
                 this.caseData = [];
                 this.suiteData = [];
+                this.sceneData.set_id = this.setData.one_id;
+                this.form.setName = this.tempSetName;
                 this.sceneData.header = [];
                 this.sceneData.variable = [];
                 this.sceneData.name = '';
+                this.sceneData.times = '';
                 this.sceneData.desc = '';
                 this.sceneData.id = '';
                 this.sceneData.funcAddress = '';
@@ -1064,6 +1198,8 @@
                         this.sceneData.funcAddress = response.data['data']['func_address'];
                         this.caseList = response.data['data']['cases'];
                         this.sceneData.variable = response.data['data']['variables'];
+                        this.sceneData.set_id = response.data['data']['setId'];
+                        this.form.setName = this.tempSetName;
                         this.caseData = [];
                         this.suiteData = [];
                         if (copyEditStatus) {
@@ -1094,9 +1230,29 @@
                     'projectName': this.form.projectName
                 }).then((response) => {
                         this.loading = false;
-                        this.messageShow(this, response);
+                        if (response.data['status'] === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'warning',
+                            });
+                            this.$alert('<pre style="color: #d04a4a;width: 600px;">' + response.data['error'] + '</pre>', '错误信息', {
+                                dangerouslyUseHTMLString: true
+                            });
+
+                        }
+                        else {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'success',
+                            });
+                        }
                         // this.$router.push({path: 'reportShow', query: {reportId: response.data['data']['report_id']}});
-                        let {href} = this.$router.resolve({path: 'reportShow', query: {reportId: response.data['data']['report_id']}});
+                        let {href} = this.$router.resolve({
+                            path: 'reportShow',
+                            query: {reportId: response.data['data']['report_id']}
+                        });
                         window.open(href, '_blank');
                     }
                 );
@@ -1132,6 +1288,101 @@
             cancelSelection() {
                 this.$refs.sceneMultipleTable.clearSelection();
             },
+            initSet() {
+                this.setData.viewStatus = true;
+                this.setData.name = '';
+                this.setData.id = '';
+            },
+            editSet() {
+                this.$axios.post('/api/api/set/edit', {
+                    'id': this.setData.one_id,
+                }).then((response) => {
+                        if (response.data['status'] === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'warning',
+                            });
+                        }
+                        else {
+                            this.setData.name = response.data['data']['name'];
+                            this.setData.id = this.setData.one_id;
+                            this.setData.viewStatus = true;
+                            // this.findModel();
+                        }
+                    }
+                )
+            },
+            stickSet() {
+                this.$axios.post('/api/api/set/stick', {
+                    'id': this.setData.one_id,
+                    'projectName': this.form.projectName
+                }).then((response) => {
+                        this.messageShow(this, response);
+                        this.findSet();
+                    }
+                )
+            },
+            delSet() {
+                this.$axios.post('/api/api/set/del', {
+                    'id': this.setData.one_id,
+                }).then((response) => {
+                        if (response.data['status'] === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'warning',
+                            });
+                        }
+                        else {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'success',
+                            });
+                            this.findSet();
+                            // this.findModel();
+                        }
+                    }
+                )
+            },
+            addSet() {
+                this.$axios.post('/api/api/set/add', {
+                    'projectName': this.form.projectName,
+                    'name': this.setData.name,
+                    'id': this.setData.id,
+                    'num': this.setData.num,
+                }).then((response) => {
+                        if (response.data['status'] === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'warning',
+                            });
+                        }
+                        else {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'success',
+                            });
+                            this.findSet();
+                            this.setData.viewStatus = false;
+                            // this.findModel();
+                        }
+                    }
+                )
+            },
+            getSetId(label) {
+                console.log(label);
+                this.sceneData.set_id = label;
+
+                // let obj = {};
+                // obj = this.options.find((item)=>{
+                //     return item.value === value;
+                // });
+                // console.log(obj.label);
+            },
 
         },
         mounted() {
@@ -1142,4 +1393,7 @@
 </script>
 
 <style>
+    .el-message-box {
+        width: 800px;
+    }
 </style>

@@ -17,6 +17,7 @@
         <el-button type="primary" size="small" @click.native="dealSql()">执行语句</el-button>
         <el-button type="primary" size="small" @click.native="sqlData()">数据库修改</el-button>
         <el-button type="primary" size="small" @click.native="sqlData1()">数据库修改1</el-button>
+        <el-button type="primary" size="small" @click.native="optimizeError()">错误信息优化显示</el-button>
         <div style="margin: 20px 0;"></div>
         <div>
             <el-input
@@ -134,7 +135,7 @@
             },
             sqlData1() {
                 // 调用 callback 返回建议列表的数据
-                this.$axios.post('/api/api/dealData', {
+                this.$axios.post('/api/api/delSql', {
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
@@ -150,6 +151,29 @@
                                 type: 'success',
                             });
 
+                        }
+                    }
+                )
+            },
+            optimizeError() {
+                // 调用 callback 返回建议列表的数据
+                this.$axios.post('/api/api/optimizeError', {
+                    'errorData': this.showData,
+                }).then((response) => {
+                        if (response.data['status'] === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'warning',
+                            });
+                        }
+                        else {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'success',
+                            });
+                            this.showData = response.data['data'];
                         }
                     }
                 )

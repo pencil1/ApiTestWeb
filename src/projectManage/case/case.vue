@@ -1,6 +1,5 @@
 <template>
     <div class="caseManage" v-loading="this.loading">
-
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目、模块" labelWidth="110px">
                 <el-select v-model="form.projectName" placeholder="请选择项目" @change="clearChoice" style="width: 150px">
@@ -47,9 +46,7 @@
                 <el-button type="primary" v-if="showNumTab === 'third'"
                            @click.native="suiteTest(suiteList)">测试
                 </el-button>
-                <el-tooltip content="查看最近一次接口结果" placement="top-start">
-                    <el-button type="primary" icon="el-icon-view" @click="resultViewStatus = true"></el-button>
-                </el-tooltip>
+                <el-button type="primary" icon="el-icon-view" @click="resultViewStatus = true"></el-button>
                 <el-button type="primary" @click.native="initSuiteView()">添加套件</el-button>
                 <el-button type="primary" @click="importApiData.importApiStatus = true">导入信息</el-button>
             </el-form-item>
@@ -457,7 +454,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="套件名称" label-width="75px">
-                    <el-input v-model.number="suiteData.name">
+                    <el-input v-model="suiteData.name">
                     </el-input>
                 </el-form-item>
             </el-form>
@@ -523,7 +520,6 @@
             </div>
         </el-dialog>
 
-
         <el-dialog title="测试结果" :visible.sync="resultViewStatus" width="45%">
             <el-collapse accordion>
                 <el-collapse-item
@@ -568,7 +564,6 @@
     import 'codemirror/addon/lint/lint'
     import 'codemirror/addon/lint/json-lint'
     import 'codemirror/mode/javascript/javascript'
-
     // import 'codemirror/addon/scroll/annotatescrollbar.js'
     import 'codemirror/addon/scroll/simplescrollbars.js'
     import 'codemirror/addon/scroll/simplescrollbars.css'
@@ -606,12 +601,14 @@
                         name: null,
                         attachment: null,
                         meta_data: {
-                            request: {body: null, url: null, headers: null, data: null, params: null, json:null},
+                            request: {body: null, url: null, headers: null, data: null, params: null, json: null},
                             response: {content: null, json: null}
                         },
                     },
                 ],
                 resultViewStatus: false,
+                errorViewStatus: false,
+                errorData: '',
                 variableDialog: false,
                 importApiData: {importApiStatus: false, importFormat: null, importApiAddress: null,},
                 saveRunStatus: false,
@@ -924,6 +921,10 @@
                                 message: response.data['msg'],
                                 type: 'warning',
                             });
+                            this.$alert('<pre style="color: #d04a4a">' + response.data['error'] + '</pre>', '错误信息', {
+                                dangerouslyUseHTMLString: true
+                            });
+
                         }
                         else {
                             this.$message({
@@ -956,6 +957,10 @@
                                 showClose: true,
                                 message: response.data['msg'],
                                 type: 'warning',
+                            });
+                            // this.errorViewStatus = true;
+                            this.$alert('<pre style="color: #d04a4a">' + response.data['error'] + '</pre>', '错误信息', {
+                                dangerouslyUseHTMLString: true
                             });
                         }
                         else {
@@ -1329,6 +1334,10 @@
 
     .CodeMirror-gutter {
         width: 40px;
+    }
+
+    .el-message-box {
+        width: 800px;
     }
 
     .cm-s-default .cm-string {
