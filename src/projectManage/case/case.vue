@@ -37,7 +37,7 @@
             </el-form-item>
 
             <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click.native="findData()">搜索</el-button>
+                <el-button type="primary" icon="el-icon-search" @click.native="findDataBtin()">搜索</el-button>
                 <el-button type="primary" @click.native="initCaseData()">录入接口信息</el-button>
                 <el-button type="primary"
                            v-if="showNumTab === 'first'"
@@ -159,7 +159,7 @@
                                 @size-change="handleSizeChange"
                                 :page-size="20"
                                 layout="total, sizes, prev, pager, next, jumper"
-                                :total="this.total">
+                                :total="this.suitePage.total">
                         </el-pagination>
                     </div>
                 </el-tab-pane>
@@ -637,6 +637,12 @@
                 currentPage: 1,
                 sizePage: 20,
 
+                suitePage:{
+                    total: 1,
+                    currentPage: 1,
+                    sizePage: 20,
+                },
+
                 form: {
                     projectName: null,
                     configName: null,
@@ -697,14 +703,35 @@
                 )
             },
             handleCurrentChange(val) {
-                this.currentPage = val;
-                this.findCases();
-                this.findSuite();
+
+                if (this.showNumTab === 'first') {
+                    this.currentPage = val;
+                    this.findCases();
+                }
+                else if(this.showNumTab === 'third') {
+                    this.suitePage.currentPage = val;
+                    this.findSuite();
+                }
             },
             handleSizeChange(val) {
-                this.sizePage = val;
-                this.findCases();
-                this.findSuite();
+                if (this.showNumTab === 'first') {
+                    this.sizePage = val;
+                    this.findCases();
+                }
+                else if(this.showNumTab === 'third'){
+                    this.suitePage.sizePage = val;
+                    this.findSuite();
+                }
+            },
+            findDataBtin(){
+                if (this.showNumTab !== 'third') {
+                    this.findCases();
+                    this.showNumTab = 'first'
+                }
+                else {
+                    this.findSuite();
+                    this.showNumTab = 'third'
+                }
             },
             findData() {
                 if (this.showNumTab !== 'third') {
@@ -719,8 +746,8 @@
                     'suiteName': this.form.suiteName,
                     'projectName': this.form.projectName,
                     'modelName': this.form.modelName,
-                    'page': this.currentPage,
-                    'sizePage': this.sizePage,
+                    'page': this.suitePage.currentPage,
+                    'sizePage': this.suitePage.sizePage,
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
@@ -731,7 +758,7 @@
                         }
                         else {
                             this.suiteTableData = response.data['data'];
-                            this.total = response.data['total'];
+                            this.suitePage.total = response.data['total'];
                         }
                     }
                 )
@@ -781,10 +808,63 @@
                 // this.caseData.modelFormVisible = true;
             },
             saveAndRun() {
-                this.addCase(false);
-                if (this.caseData.id) {
-                    this.apiTest([{'caseId': this.caseData.id, 'num': '1'}], false);
+                let variable;
+                if (this.form.choiceType === 'data') {
+                    variable = JSON.stringify(this.caseData.variable)
                 }
+                else {
+                    variable = this.caseData.jsonVariable;
+                    try {
+                        JSON.parse(variable)
+                    }
+                    catch (err) {
+                        this.$message({
+                            showClose: true,
+                            message: 'json格式错误',
+                            type: 'warning',
+                        });
+                        return
+                    }
+                }
+                this.$axios.post('/api/api/cases/add', {
+                    'gatherName': this.form.modelName,
+                    'projectName': this.form.projectName,
+                    'caseName': this.caseData.name,
+                    'caseNum': this.caseData.num,
+                    // 'choiceUrl': this.form.choiceUrl,
+                    'choiceUrl': this.proUrlData[this.form.projectName].indexOf(this.form.choiceUrl),
+                    'variableType': this.form.choiceType,
+                    'caseDesc': this.caseData.desc,
+                    'funcAddress': this.caseData.funcAddress,
+                    'upFunc': this.caseData.upFunc,
+                    'downFunc': this.caseData.downFunc,
+                    'caseUrl': this.caseData.url,
+                    'caseId': this.caseData.id,
+                    'param': JSON.stringify(this.caseData.param),
+                    'caseHeader': JSON.stringify(this.caseData.header),
+                    'caseVariable': variable,
+                    'caseExtract': JSON.stringify(this.caseData.extract),
+                    'caseMethod': this.caseData.method,
+                    'caseValidate': JSON.stringify(this.caseData.validate)
+                }).then((response) => {
+                        if (response.data['status'] === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'warning',
+                            });
+                        }
+                        else {
+                            this.tabName = '编辑接口';
+                            this.caseData.id = response.data['api_msg_id'];
+                            this.caseData.num = response.data['num'];
+                            if (this.caseData.id) {
+                                this.apiTest([{'caseId': this.caseData.id, 'num': '1'}], false);
+                            }
+                        }
+                    }
+                )
+
             },
             addCase(status = true) {
                 let variable;
@@ -836,6 +916,9 @@
                         else {
                             if (status) {
                                 this.caseData.modelFormVisible = false;
+                                this.tabName = '编辑接口';
+                                this.caseData.id = response.data['api_msg_id'];
+                                this.caseData.num = response.data['num'];
                                 this.$message({
                                     showClose: true,
                                     message: response.data['msg'],
@@ -959,9 +1042,12 @@
                                 type: 'warning',
                             });
                             // this.errorViewStatus = true;
-                            this.$alert('<pre style="color: #d04a4a">' + response.data['error'] + '</pre>', '错误信息', {
-                                dangerouslyUseHTMLString: true
-                            });
+                            if(response.data['msg'] !== '请勾选信息后，再进行测试'){
+                                this.$alert('<pre style="color: #d04a4a">' + response.data['error'] + '</pre>', '错误信息', {
+                                    dangerouslyUseHTMLString: true
+                                });
+                            }
+
                         }
                         else {
                             this.$message({
@@ -1214,13 +1300,19 @@
         watch: {
             monitorUrl(newValue, oldValue) {
                 if (!this.caseData.url) {
+                    this.caseData.param = [{key: '', value: ''}];
                     return
                 }
                 if (this.caseData.url.indexOf('?') === -1) {
-
+                    this.caseData.param = [{key: '', value: ''}];
                     return
                 }
+
                 let url = this.caseData.url.split("?");
+                if(!url[1]){
+                    this.caseData.param = [{key: '', value: ''}];
+                    return
+                }
                 let strParam = url[1].split("&");
                 if (strParam[0]) {
                     this.caseData.param = Array();

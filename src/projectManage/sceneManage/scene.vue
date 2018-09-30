@@ -16,7 +16,7 @@
                 </el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click.native="findScenes()">搜索</el-button>
+                <el-button type="primary" icon="el-icon-search" @click.native="findSet()">搜索</el-button>
                 <el-button type="primary" @click.native="initSceneData()">添加接口用例</el-button>
                 <el-button type="primary" @click.native="runScene(sceneList,true)">批量运行</el-button>
                 <el-button type="primary" icon="el-icon-search" @click.native="findOldScenes()">搜索旧数据</el-button>
@@ -144,7 +144,7 @@
                             <el-form-item label="项目名称" :label-width="sceneData.formLabelWidth">
                                 <!--<el-input v-model="form.projectName" auto-complete="off" :disabled="true">-->
                                 <!--</el-input>-->
-                                <el-select v-model="form.projectName" placeholder="请选择项目">
+                                <el-select v-model="form.projectName" placeholder="请选择项目" @change="resetSetChoice" >
                                     <el-option
                                             v-for="(item, key) in proModelData"
                                             :key="key"
@@ -153,7 +153,7 @@
                                 </el-select>
                                 <el-select v-model="form.setName" placeholder="请选择用例集" @change="getSetId" value-key>
                                     <el-option
-                                            v-for="item in setDataList"
+                                            v-for="item in allSetList[this.form.projectName]"
                                             :key="item.id"
                                             :label="item.label"
                                             :value="item.id">
@@ -239,7 +239,7 @@
                 <el-tab-pane label="接口信息" name="third">
                     <el-form :inline="true" class="demo-form-inline search-style" size="small">
                         <el-form-item label=" " labelWidth="10px">
-                            <el-select v-model="form.projectName2" placeholder="请选择项目" @change="clearGathers">
+                            <el-select v-model="form.projectName2" placeholder="请选择项目" @change="apiFindChoice">
                                 <el-option
                                         v-for="(item, key) in proModelData"
                                         :key="key"
@@ -707,6 +707,7 @@
                     label: 'label'
                 },
                 setDataList: [],
+                allSetList:'',
                 tempNum: '',
                 sceneList: [],
                 apiSuiteViewStatus: true,
@@ -918,11 +919,14 @@
             findSet() {
                 this.$axios.post('/api/api/set/find', {'projectName': this.form.projectName,}).then((response) => {
                         this.setDataList = response.data['data'][this.form.projectName];
-                        this.setData.one_id = response.data['data'][this.form.projectName][0]['id'];
-                        this.tempSetName = response.data['data'][this.form.projectName][0]['label'];
-                        this.$nextTick(function () {
-                            this.$refs.testTree.setCurrentKey(this.setData.one_id);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
-                        });
+                        this.allSetList = response.data['data'];
+                        if(response.data['data'][this.form.projectName][0]){
+                            this.setData.one_id = response.data['data'][this.form.projectName][0]['id'];
+                            this.tempSetName = response.data['data'][this.form.projectName][0]['label'];
+                            this.$nextTick(function () {
+                                this.$refs.testTree.setCurrentKey(this.setData.one_id);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
+                            });
+                        }
                         this.findScenes();
                     }
                 );
@@ -964,6 +968,7 @@
                 this.$axios.post('/api/api/scene/add', {
                     'num': this.sceneData.num,
                     'name': this.sceneData.name,
+                    'times': this.sceneData.times,
                     'setId': this.sceneData.set_id,
                     'desc': this.sceneData.desc,
                     'funcAddress': this.sceneData.funcAddress,
@@ -987,7 +992,7 @@
                                 message: response.data['msg'],
                                 type: 'success',
                             });
-                            this.findScenes();
+                            this.findSet();
                         }
                     }
                 )
@@ -996,8 +1001,16 @@
                 this.caseList = [];
                 this.caseData = [];
                 this.suiteData = [];
-                this.sceneData.set_id = this.setData.one_id;
-                this.form.setName = this.tempSetName;
+                if(this.allSetList[this.form.projectName][0]){
+                    this.sceneData.set_id = this.allSetList[this.form.projectName][0].id;
+                    this.form.setName = this.allSetList[this.form.projectName][0].label
+                }
+                else{
+                    this.sceneData.set_id = '';
+                    this.form.setName = '';
+                }
+                // this.sceneData.set_id = this.setData.one_id;
+                // this.form.setName = this.tempSetName;
                 this.sceneData.header = [];
                 this.sceneData.variable = [];
                 this.sceneData.name = '';
@@ -1195,10 +1208,19 @@
 
                         this.sceneData.name = response.data['data']['name'];
                         this.sceneData.desc = response.data['data']['desc'];
+                        this.sceneData.times = response.data['data']['times'];
                         this.sceneData.funcAddress = response.data['data']['func_address'];
                         this.caseList = response.data['data']['cases'];
                         this.sceneData.variable = response.data['data']['variables'];
                         this.sceneData.set_id = response.data['data']['setId'];
+                        // if(!this.sceneData.set_id && this.allSetList[this.form.projectName][0]){
+                        //     this.sceneData.set_id = this.allSetList[this.form.projectName][0].id;
+                        //     this.form.setName = this.allSetList[this.form.projectName][0].label
+                        // }
+                        // else{
+                        //     this.sceneData.set_id = '';
+                        //     this.form.setName = '';
+                        // }
                         this.form.setName = this.tempSetName;
                         this.caseData = [];
                         this.suiteData = [];
@@ -1281,6 +1303,9 @@
             clearGathers() {
                 this.form.gathers = '';
                 this.form.configName = '';
+            },
+            apiFindChoice() {
+                this.form.modelName = this.proModelData[this.form.projectName2][0];
             },
             handleSceneSelection(val) {
                 this.sceneList = val;
@@ -1373,10 +1398,27 @@
                     }
                 )
             },
-            getSetId(label) {
-                console.log(label);
-                this.sceneData.set_id = label;
+            resetSetChoice() {
+                if(this.allSetList[this.form.projectName][0]){
+                    this.form.setName = this.allSetList[this.form.projectName][0].label;
+                    this.sceneData.set_id = this.allSetList[this.form.projectName][0].id;
+                }
+                else{
+                    this.form.setName = '';
+                    this.sceneData.set_id = '';
 
+                }
+
+
+
+                // let obj = {};
+                // obj = this.options.find((item)=>{
+                //     return item.value === value;
+                // });
+                // console.log(obj.label);
+            },
+            getSetId(label) {
+                this.sceneData.set_id = label;
                 // let obj = {};
                 // obj = this.options.find((item)=>{
                 //     return item.value === value;

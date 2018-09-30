@@ -16,9 +16,9 @@
             </el-button-group>
         </div>
         <el-button-group style="float: right;margin-bottom: 10px">
-            <el-tooltip content="检查语法" placement="top-start">
-                <el-button type="primary" icon="el-icon-view" @click.native="checkFunc()" size="small"></el-button>
-            </el-tooltip>
+            <!--<el-tooltip content="检查语法" placement="top-start">-->
+                <!--<el-button type="primary" icon="el-icon-view" @click.native="checkFunc()" size="small"></el-button>-->
+            <!--</el-tooltip>-->
             <el-tooltip content="重置文档" placement="top-start">
                 <el-button type="info" icon="el-icon-refresh" @click.native="findFunc()" size="small"></el-button>
             </el-tooltip>
@@ -99,7 +99,6 @@
                 )
             },
             checkFunc() {
-                this.saveFunc();
                 this.$axios.post('/api/api/func/check', {'funcName': this.comparator}).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
@@ -124,6 +123,7 @@
                     'funcName': this.comparator
                 }).then((response) => {
                         this.messageShow(this, response);
+                        this.checkFunc();
                     }
                 )
             },

@@ -151,13 +151,14 @@
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
                     this.proModelData = response.data['data'];
                     this.form.projectName = response.data['user_pro']['pro_name'];
+                    this.$axios.get('/api/api/proScene/list').then((response) => {
+                            this.proSceneData = response.data;
+                            this.findReport()
+                        }
+                    );
                     }
                 );
-                this.$axios.get('/api/api/proScene/list').then((response) => {
-                        this.proSceneData = response.data;
-                        setTimeout(this.findReport(), 1000)
-                    }
-                );
+
 
             },
             findReport() {
