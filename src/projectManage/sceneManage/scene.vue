@@ -690,7 +690,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button size="small" @click="importApiData.viewStatus = false">取 消</el-button>
+                <el-button size="small" @click="setData.viewStatus = false">取 消</el-button>
                 <el-button type="primary" size="small" @click.native="addSet()">确 定</el-button>
             </div>
         </el-dialog>
