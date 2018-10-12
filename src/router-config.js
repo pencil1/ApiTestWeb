@@ -9,6 +9,7 @@ import caseManage from './projectManage/case/case.vue'
 import manage from './projectManage/manage.vue'
 import test from './projectManage/test/index.vue'
 import modelManage from './projectManage/model/model.vue'
+
 import projectManage from './projectManage/project/project.vue'
 import reportManage from './projectManage/report/report.vue'
 import reportShow from './projectManage/report/reportShow.vue'

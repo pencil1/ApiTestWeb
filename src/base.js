@@ -23,13 +23,21 @@ exports.install = function (Vue, options) {
                 message: response.data['msg'],
                 type: 'warning',
             });
+            // if(response.data['error']){
+            //     return 'error'
+            // }
+            return false
         }
         else {
-            _this.$message({
-                showClose: true,
-                message: response.data['msg'],
-                type: 'success',
-            });
+            if(response.data['msg']){
+                _this.$message({
+                    showClose: true,
+                    message: response.data['msg'],
+                    type: 'success',
+                });
+            }
+
+            return true
         }
     };
 };

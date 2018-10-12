@@ -100,6 +100,7 @@
                 </el-button>
             </div>
         </el-dialog>
+        <modelManage2></modelManage2>
     </div>
 </template>
 
