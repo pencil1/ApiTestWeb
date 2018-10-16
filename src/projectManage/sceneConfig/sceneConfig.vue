@@ -26,30 +26,30 @@
 
         <el-tabs value="first" style="padding-left: 10px">
             <el-tab-pane label="模块列表" name="first" style="margin: 0 0 -10px;">
-                    <el-table :data="tableData" stripe>
-                        <el-table-column
-                                prop="num"
-                                label="编号"
-                                min-width="40">
-                        </el-table-column>
-                        <el-table-column
-                                prop="name"
-                                label="模块名称"
-                                min-width="250">
-                        </el-table-column>
-                        <el-table-column
-                                label="操作"
-                                min-width="250">
-                            <template slot-scope="scope">
-                                <el-button type="primary" icon="el-icon-edit" size="mini"
-                                           @click.native="editSceneConfig(tableData[scope.$index]['id'])">编辑
-                                </el-button>
-                                <el-button type="danger" icon="el-icon-delete" size="mini"
-                                           @click.native="sureView(delConfig,tableData[scope.$index]['id'])">删除
-                                </el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
+                <el-table :data="tableData" stripe>
+                    <el-table-column
+                            prop="num"
+                            label="编号"
+                            min-width="40">
+                    </el-table-column>
+                    <el-table-column
+                            prop="name"
+                            label="模块名称"
+                            min-width="250">
+                    </el-table-column>
+                    <el-table-column
+                            label="操作"
+                            min-width="250">
+                        <template slot-scope="scope">
+                            <el-button type="primary" icon="el-icon-edit" size="mini"
+                                       @click.native="editSceneConfig(tableData[scope.$index]['id'])">编辑
+                            </el-button>
+                            <el-button type="danger" icon="el-icon-delete" size="mini"
+                                       @click.native="sureView(delConfig,tableData[scope.$index]['id'])">删除
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
 
                 <div class="pagination">
                     <el-pagination
@@ -170,9 +170,9 @@
         methods: {
             httpSend() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
-                    this.proModelData = response.data['data'];
-                    this.form.projectName = response.data['user_pro']['pro_name'];
-                    this.findSceneConfig();
+                        this.proModelData = response.data['data'];
+                        this.form.projectName = response.data['user_pro']['pro_name'];
+                        this.findSceneConfig();
                     }
                 );
                 this.$axios.post(this.$api.getFuncAddressApi).then((response) => {
@@ -201,14 +201,7 @@
                     'page': this.currentPage,
                     'sizePage': this.sizePage,
                 }).then((response) => {
-                        if (response.data['status'] === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'warning',
-                            });
-                        }
-                        else {
+                        if (this.messageShow(this, response)) {
                             this.tableData = response.data['data'];
                             this.total = response.data['total'];
                         }
@@ -233,19 +226,7 @@
                     'id': this.configData.id,
                     'variable': JSON.stringify(this.configData.variable),
                 }).then((response) => {
-                        if (response.data['status'] === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'warning',
-                            });
-                        }
-                        else {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'success',
-                            });
+                        if (this.messageShow(this, response)) {
                             this.configData.modelFormVisible = false;
                             this.findSceneConfig();
                         }

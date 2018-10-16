@@ -50,20 +50,7 @@
             },
             getFileAddress(response, file, fileList) {
                 this.importApiData.importApiAddress = response['data'];
-                if (response['status'] === 0) {
-                    this.$message({
-                        showClose: true,
-                        message: response['msg'],
-                        type: 'warning',
-                    });
-                }
-                else {
-                    this.$message({
-                        showClose: true,
-                        message: response['msg'],
-                        type: 'success',
-                    });
-                }
+                this.messageShow(this, response);
             },
             importCase() {
                 this.$axios.post('/api/api/cases/fileChange', {

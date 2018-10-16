@@ -40,53 +40,53 @@
             <el-tab-pane label="报告列表" name="first" style="margin: 0 0 -10px;">
 
                 <!--<el-scrollbar wrap-class="scrollbarList">-->
-                    <el-table :data="tableData" stripe>
+                <el-table :data="tableData" stripe>
 
-                        <el-table-column
-                                prop="belong"
-                                label="所属项目"
-                                minWidth="50">
-                        </el-table-column>
+                    <el-table-column
+                            prop="belong"
+                            label="所属项目"
+                            minWidth="50">
+                    </el-table-column>
 
-                        <el-table-column
-                                :show-overflow-tooltip=true
-                                minWidth="200"
-                                prop="name"
-                                label="执行业务集"
-                        >
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                label="时间"
-                                minWidth="100">
-                        </el-table-column>
-                        <el-table-column
-                                prop="read_status"
-                                label="状态"
-                                width="80">
-                            <template slot-scope="scope">
-                                <div :style="scope.row.read_status === '已读' ? 'color:#2bef2b': 'color:rgb(255, 74, 74)'">
-                                    {{scope.row.read_status}}
-                                </div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                label="操作"
-                                width="300"
-                        >
-                            <template slot-scope="scope">
-                                <el-button type="primary" icon="el-icon-zoom-in" size="mini"
-                                           @click.native="check(tableData[scope.$index]['id'])">查看
-                                </el-button>
-                                <!--<el-button type="primary" icon="el-icon-download" size="mini"-->
-                                           <!--@click.native="downReport(tableData[scope.$index]['id'])">下载-->
-                                <!--</el-button>-->
-                                <el-button type="danger" icon="el-icon-delete" size="mini"
-                                           @click.native="sureView(delReport, tableData[scope.$index]['address'])">删除
-                                </el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
+                    <el-table-column
+                            :show-overflow-tooltip=true
+                            minWidth="200"
+                            prop="name"
+                            label="执行业务集"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                            prop="address"
+                            label="时间"
+                            minWidth="100">
+                    </el-table-column>
+                    <el-table-column
+                            prop="read_status"
+                            label="状态"
+                            width="80">
+                        <template slot-scope="scope">
+                            <div :style="scope.row.read_status === '已读' ? 'color:#2bef2b': 'color:rgb(255, 74, 74)'">
+                                {{scope.row.read_status}}
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            label="操作"
+                            width="300"
+                    >
+                        <template slot-scope="scope">
+                            <el-button type="primary" icon="el-icon-zoom-in" size="mini"
+                                       @click.native="check(tableData[scope.$index]['id'])">查看
+                            </el-button>
+                            <!--<el-button type="primary" icon="el-icon-download" size="mini"-->
+                            <!--@click.native="downReport(tableData[scope.$index]['id'])">下载-->
+                            <!--</el-button>-->
+                            <el-button type="danger" icon="el-icon-delete" size="mini"
+                                       @click.native="sureView(delReport, tableData[scope.$index]['address'])">删除
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
                 <!--</el-scrollbar>-->
                 <div class="pagination">
                     <el-pagination
@@ -149,13 +149,13 @@
             },
             httpSend() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
-                    this.proModelData = response.data['data'];
-                    this.form.projectName = response.data['user_pro']['pro_name'];
-                    this.$axios.get('/api/api/proScene/list').then((response) => {
-                            this.proSceneData = response.data;
-                            this.findReport()
-                        }
-                    );
+                        this.proModelData = response.data['data'];
+                        this.form.projectName = response.data['user_pro']['pro_name'];
+                        this.$axios.get('/api/api/proScene/list').then((response) => {
+                                this.proSceneData = response.data;
+                                this.findReport()
+                            }
+                        );
                     }
                 );
 
@@ -167,19 +167,10 @@
                     'belong': this.form.projectName,
                     'sizePage': this.sizePage,
                 }).then((response) => {
-                        if (response.data['status'] === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['data'],
-                                type: 'warning',
-                            });
-                        }
-                        else {
+                        if (this.messageShow(this, response)) {
                             this.tableData = response.data['data'];
                             this.total = response.data['total'];
                         }
-
-
                     }
                 )
             },

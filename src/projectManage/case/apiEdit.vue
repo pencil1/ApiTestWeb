@@ -368,6 +368,7 @@
                 }
             },
             formatData() {
+                // 格式化json字符串
                 try {
                     this.caseData.jsonVariable = JSON.parse(this.caseData.jsonVariable);
                     this.caseData.jsonVariable = JSON.stringify(this.caseData.jsonVariable, null, 4);
@@ -523,9 +524,7 @@
                                 message: response.data['msg'],
                                 type: 'success',
                             });
-                            // this.resultData.resultShowData = response['data']['data']['details'][0]['records'];
                             this.$refs.resultFunc.showData(response['data']['data']['details'][0]['records']);
-                            // this.$refs.resultFunc.showData();
                         }
                         this.saveRunStatus = false;
 
@@ -568,9 +567,11 @@
             },
         },
         computed: {
+            monitorParam() {
+                return this.caseData.param;
+            },
             monitorUrl() {
                 return this.caseData.url;
-
             },
             monitorMethod() {
                 return this.caseData.method;
@@ -587,11 +588,38 @@
             monitorValidate() {
                 return this.caseData.validate;
             },
-            monitorParam() {
-                return this.caseData.param;
-            },
+
         },
         watch: {
+            monitorParam: {
+                handler: function () {
+                    if (this.caseData.param.length === 0) {
+                        this.addTableList('param')
+                    }
+                    else if (this.caseData.param[this.caseData.param.length - 1]['key'] || this.caseData.param[this.caseData.param.length - 1]['value']) {
+                        this.addTableList('param')
+                    }
+                    let strParam = '';
+                    for (let i in this.caseData.param) {
+                        if (parseInt(i) + 2 === this.caseData.param.length && this.caseData.param[i].key) {
+                            if (this.caseData.param[i].value) {
+                                strParam += this.caseData.param[i].key + '=' + this.caseData.param[i].value;
+                            }
+                            else {
+                                strParam += this.caseData.param[i].key;
+                            }
+                        }
+                        else if (this.caseData.param[i].key) {
+                            strParam += this.caseData.param[i].key + '=' + this.caseData.param[i].value + '&';
+                        }
+                    }
+                    if (strParam.substr(strParam.length - 1, 1) === '&') {
+                        strParam = strParam.substring(0, strParam.length - 1)
+                    }
+                    this.caseData.url = this.caseData.url.split("?")[0] + '?' + strParam
+                },
+                deep: true
+            },
             monitorUrl(newValue, oldValue) {
                 if (!this.caseData.url) {
                     this.caseData.param = [{key: '', value: ''}];
@@ -672,35 +700,7 @@
                 },
                 deep: true
             },
-            monitorParam: {
-                handler: function () {
-                    if (this.caseData.param.length === 0) {
-                        this.addTableList('param')
-                    }
-                    else if (this.caseData.param[this.caseData.param.length - 1]['key'] || this.caseData.param[this.caseData.param.length - 1]['value']) {
-                        this.addTableList('param')
-                    }
-                    let strParam = '';
-                    for (let i in this.caseData.param) {
-                        if (parseInt(i) + 2 === this.caseData.param.length && this.caseData.param[i].key) {
-                            if (this.caseData.param[i].value) {
-                                strParam += this.caseData.param[i].key + '=' + this.caseData.param[i].value;
-                            }
-                            else {
-                                strParam += this.caseData.param[i].key;
-                            }
-                        }
-                        else if (this.caseData.param[i].key) {
-                            strParam += this.caseData.param[i].key + '=' + this.caseData.param[i].value + '&';
-                        }
-                    }
-                    if (strParam.substr(strParam.length - 1, 1) === '&') {
-                        strParam = strParam.substring(0, strParam.length - 1)
-                    }
-                    this.caseData.url = this.caseData.url.split("?")[0] + '?' + strParam
-                },
-                deep: true
-            },
+
         },
         mounted() {
         },

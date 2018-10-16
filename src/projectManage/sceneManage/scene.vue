@@ -992,7 +992,8 @@
                                 message: response.data['msg'],
                                 type: 'success',
                             });
-                            this.findSet();
+                            this.findScenes();
+                            // this.findSet();
                         }
                     }
                 )

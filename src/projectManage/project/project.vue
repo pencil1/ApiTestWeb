@@ -217,14 +217,7 @@
                     'page': this.currentPage,
                     'sizePage': this.sizePage,
                 }).then((response) => {
-                        if (response.data['status'] === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'warning',
-                            });
-                        }
-                        else {
+                        if (this.messageShow(this, response)) {
                             this.tableData = response.data['data'];
                             this.total = response.data['total'];
                         }
@@ -255,22 +248,9 @@
                     'header': JSON.stringify(this.projectData.header),
                     'variable': JSON.stringify(this.projectData.variable),
                 }).then((response) => {
-                        if (response.data['status'] === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'warning',
-                            });
-                        }
-                        else {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'success',
-                            });
+                        if (this.messageShow(this, response)) {
                             this.projectData.modelFormVisible = false;
                             this.findProject();
-
                         }
                     }
                 )

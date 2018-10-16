@@ -163,7 +163,7 @@
                         </el-pagination>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="接口配置" name="second" v-if="editShow"
+                <el-tab-pane label="接口配置" name="second" v-if="apiEditViewStatus"
                              style="background-color: rgb(250, 250, 250);min-height: 780px">
                     <apiEdit
                             :projectName="form.projectName"
@@ -224,7 +224,7 @@
         name: 'caseManage',
         data() {
             return {
-                editShow: false,
+                apiEditViewStatus: false,//接口配置组件显示控制
                 showNumTab: 'first',
                 loading: false,
                 proModelData: '',
@@ -329,7 +329,7 @@
                 )
             },
             initData() {
-                this.editShow = true;
+                this.apiEditViewStatus = true;
                 this.showNumTab = 'second';
                 setTimeout(() => {
                     this.$refs.apiFunc.initCaseData();
@@ -338,7 +338,7 @@
             },
 
             editCopyCase(caseId, status) {
-                this.editShow = true;
+                this.apiEditViewStatus = true;
                 this.showNumTab = 'second';
                 setTimeout(() => {
                     this.$refs.apiFunc.editCopyCase(caseId, status);

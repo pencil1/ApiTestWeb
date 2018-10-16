@@ -13,6 +13,7 @@
                 </div>
                 <el-scrollbar wrap-class="specialList">
                     <el-menu
+                            :default-active="navigationName"
                             background-color="#545c64"
                             text-color="#fff"
                             active-text-color="#ffd04b"
@@ -20,24 +21,25 @@
                             :collapse="collapsed"
                             class="el-menu-vertical-demo" >
 
-                        <el-submenu index="1">
-                            <template slot="title">
-                                <i class="el-icon-menu"></i>
-                                <span>项目管理</span>
-                            </template>
+                        <!--<el-submenu index="1">-->
+                            <!--<template slot="title">-->
+                                <!--<i class="el-icon-menu"></i>-->
+                                <!--<span>项目管理</span>-->
+                            <!--</template>-->
 
-                            <el-menu-item-group>
-                                <el-menu-item index="/manage/projectManage">项目</el-menu-item>
-                                <!--<el-menu-item index="/manage/test">测试</el-menu-item>-->
+                            <!--<el-menu-item-group>-->
+                                <!--<el-menu-item index="/manage/projectManage">项目</el-menu-item>-->
+                                <!--&lt;!&ndash;<el-menu-item index="/manage/test">测试</el-menu-item>&ndash;&gt;-->
 
-                            </el-menu-item-group>
-                        </el-submenu>
+                            <!--</el-menu-item-group>-->
+                        <!--</el-submenu>-->
                         <el-submenu index="2">
                             <template slot="title">
                                 <i class="el-icon-document"></i>
                                 <span>接口管理</span>
                             </template>
                             <el-menu-item-group>
+                                <el-menu-item index="/manage/projectManage">项目管理</el-menu-item>
                                 <el-menu-item index="/manage/modelManage">接口模块</el-menu-item>
                                 <el-menu-item index="/manage/caseManage">接口信息</el-menu-item>
                                 <el-menu-item index="/manage/sceneConfig">业务配置</el-menu-item>
@@ -104,6 +106,7 @@
 
         data() {
             return {
+                navigationName:'/manage/projectManage',
                 collapsed:false
             }
         },
@@ -112,6 +115,7 @@
                 this.collapsed = !this.collapsed;
             },
             closeNavigation(){
+                this.navigationName = this.$route.path;
                 if(this.$route.path === '/manage/reportShow'){
                     this.collapsed = true;
                 }
@@ -119,6 +123,7 @@
         },
         watch: {
             "$route": function (to, from) {
+
                 if (to.path === '/manage/reportShow'){
                     this.collapsed = true
                 }

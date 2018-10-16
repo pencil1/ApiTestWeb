@@ -100,20 +100,7 @@
             },
             checkFunc() {
                 this.$axios.post('/api/api/func/check', {'funcName': this.comparator}).then((response) => {
-                        if (response.data['status'] === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'warning',
-                            });
-                        }
-                        else {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'success',
-                            });
-                        }
+                    this.messageShow(this, response);
                     }
                 )
             },

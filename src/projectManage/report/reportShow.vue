@@ -4,15 +4,16 @@
             <el-col :span="24">
                 <div class="grid-content" style="background-color: #f5f5f5 !important;">
                     <el-button type="primary" round style="padding: 4px 10px ;" v-show="false"></el-button>
-                    <el-button type="primary" size="mini" round style="margin-top: 5px;padding: 4px 10px ;" @click.native="hideShowPic(false)"
+                    <el-button type="primary" size="mini" round style="margin-top: 5px;padding: 4px 10px ;"
+                               @click.native="hideShowPic(false)"
                                v-show="this.picStatus">隐藏图表
                     </el-button>
                     <el-button type="primary" round style="padding: 4px 10px ;" @click.native="hideShowPic(true)"
                                v-show="!this.picStatus">展示图表
                     </el-button>
                     <!--<el-button-group>-->
-                        <!--<el-button type="primary" icon="el-icon-check" style="padding: 4px 10px ;"></el-button>-->
-                        <!--<el-button type="danger" icon="el-icon-close" style="padding: 4px 10px ;"></el-button>-->
+                    <!--<el-button type="primary" icon="el-icon-check" style="padding: 4px 10px ;"></el-button>-->
+                    <!--<el-button type="danger" icon="el-icon-close" style="padding: 4px 10px ;"></el-button>-->
                     <!--</el-button-group>-->
                     <el-dropdown @command="handleCommand" style="line-height:15px;margin-left:10px;color: #3a8ee6;">
                           <span class="el-dropdown-link">
@@ -111,8 +112,8 @@
                         </el-tooltip>
                     </div>
                     <div :style={height:picHeight}>
-                        <table  style="padding:10px;font-size: 14px;line-height: 25px;width: 100%"
-                                border="0" cellpadding="0" cellspacing="0">
+                        <table style="padding:10px;font-size: 14px;line-height: 25px;width: 100%"
+                               border="0" cellpadding="0" cellspacing="0">
                             <thead>
                             <tr>
                                 <th style="border-bottom:1px solid #d0d0d0;width: 100px">Identity</th>
@@ -177,7 +178,8 @@
                                 <td class="my-table">resp_data</td>
                                 <td class="content">
                                     <pre style="white-space: pre-wrap;word-wrap: break-word;">{{this.meta_data['response']['json']}}</pre>
-                                    <pre v-show="this.meta_data['response']['json'] !== ''" style="white-space: pre-wrap;word-wrap: break-word;">{{this.meta_data['response']['content']}}</pre>
+                                    <pre v-show="this.meta_data['response']['json'] !== ''"
+                                         style="white-space: pre-wrap;word-wrap: break-word;">{{this.meta_data['response']['content']}}</pre>
                                 </td>
                             </tr>
 
@@ -254,7 +256,7 @@
                 picHeight: '640px',
                 picStatus: true,
                 active: true,
-                showScene:[true,true],
+                showScene: [true, true],
                 statusShow: [true, true, true, true, true, true, true, true, true],
                 showColor: [],
                 attachment: '',
@@ -310,13 +312,13 @@
             },
             handleCommand(command) {
                 // this.showData(command);
-                if (command === 'error'){
+                if (command === 'error') {
                     this.showScene = [false, true]
                 }
-                else if(command === 'success'){
+                else if (command === 'success') {
                     this.showScene = [true, false]
                 }
-                else{
+                else {
                     this.showScene = [true, true]
                 }
             },
@@ -341,20 +343,13 @@
                 this.statusShow = [false, false, false, false, false, false, false, false, false];
 
             },
-            showData(state='None') {
+            showData(state = 'None') {
                 this.reportAddress = this.$route.query.reportId;
                 this.$axios.post('/api/api/report/list', {
                     'reportId': this.reportAddress,
                     'state': state,
                 }).then((response) => {
-                        if (response.data['status'] === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'warning',
-                            });
-                        }
-                        else {
+                        if (this.messageShow(this, response)) {
                             this.reportData = response['data'];
                             this.meta_data = response['data']['details'][0]['records'][0]['meta_data'];
                             this.attachment = response['data']['details'][0]['records'][0]['attachment'];
@@ -365,7 +360,6 @@
                             this.suiteChartData['rows'][1]['num'] = this.reportData['stat']['failures_scene'];
 
                         }
-
                     }
                 )
 
@@ -391,22 +385,23 @@
 </script>
 
 <style scoped>
-    .el-main{
+    .el-main {
         line-height: 36px;
     }
+
     .wire {
         border-top: 1px solid #eee;
 
     }
-    .remote-line{
-        list-style-type:none;
+
+    .remote-line {
+        list-style-type: none;
     }
 
     .active {
         background: #f7f7f7;
         font-weight: 600;
     }
-
 
     .test-name {
         display: inline-block;
@@ -426,7 +421,6 @@
         min-height: 36px;
     }
 
-
     .content {
         height: auto;
         word-wrap: break-word;
@@ -435,9 +429,9 @@
         border-bottom: 1px solid #d0d0d0;
     }
 
-    .my-table{
-        border-bottom:1px solid #d0d0d0;
-        font-weight:600;
+    .my-table {
+        border-bottom: 1px solid #d0d0d0;
+        font-weight: 600;
         color: #66b1ff
     }
 </style>
