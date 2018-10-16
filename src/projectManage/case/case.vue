@@ -39,6 +39,7 @@
             <el-form-item>
                 <el-button type="primary" icon="el-icon-search" @click.native="findDataBtn()">搜索</el-button>
                 <el-button type="primary" @click.native="initData()">录入接口信息</el-button>
+                <el-button type="primary" @click.native="initData()">录入接口信息</el-button>
                 <el-button type="primary"
                            v-if="showNumTab === 'first'"
                            @click.native="apiTest(casesList)">测试
