@@ -20,7 +20,7 @@ import testTool from './projectManage/testTool/testTool.vue'
 import taskManage from './projectManage/taskManage/task.vue'
 import batch from './projectManage/batchAdd/batch.vue'
 import sqlCheck from './projectManage/sqlCheck/sqlCheck.vue'
-import sceneConfig from './projectManage/sceneConfig/sceneConfig.vue'
+import sceneConfig from './projectManage/config/config.vue'
 import login from './login/login.vue'
 
 Vue.use(VueRouter);

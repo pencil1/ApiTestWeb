@@ -12,7 +12,7 @@ const editModelApi = '/api/api/model/edit';
 const delModelApi = '/api/api/model/del';
 
 const findConfigApi = '/api/api/config/find';
-const addConfigApi = '/api/api/sceneConfig/add';
+const addConfigApi = '/api/api/config/add';
 const editConfigApi = '/api/api/config/edit';
 const delConfigApi = '/api/api/config/del';
 export default {

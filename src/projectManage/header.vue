@@ -101,7 +101,7 @@
                 else if (path === '/manage/sqlCheck') {
                     this.title = ['其他程序', '数据库查询']
                 }
-                else if (path === '/manage/sceneConfig') {
+                else if (path === '/manage/config') {
                     this.title = ['接口管理', '业务配置']
                 }
             },

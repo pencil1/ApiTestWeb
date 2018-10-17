@@ -141,7 +141,7 @@
 
 <script>
     export default {
-        name: 'sceneConfig',
+        name: 'config',
         data() {
             return {
                 proModelData: null,
