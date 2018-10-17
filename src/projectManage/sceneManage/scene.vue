@@ -977,6 +977,14 @@
                 this.sceneData.variable.splice(i, 1);
             },
             initSceneData() {
+                if(this.allSetList[this.form.projectName].length === 0){
+                    this.$message({
+                        showClose: true,
+                        message: '请先创建用例集',
+                        type: 'warning',
+                    });
+                    return
+                };
                 this.caseList = [];
                 this.caseData = [];
                 this.suiteData = [];
