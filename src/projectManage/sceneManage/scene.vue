@@ -207,10 +207,12 @@
                         </el-table-column>
                         <el-table-column
                                 label="次数"
-                                minWidth="40">
+                                width="140">
                             <template slot-scope="scope">
-                                <el-input v-model="caseList[scope.$index]['time']" auto-complete="off">
-                                </el-input>
+                                <el-input-number size="small" :precision="0" v-model="caseList[scope.$index]['time']" :min="1" :max="1000">
+                                </el-input-number>
+                                <!--<el-input v-model="caseList[scope.$index]['time']" auto-complete="off">-->
+                                <!--</el-input>-->
                             </template>
                         </el-table-column>
 

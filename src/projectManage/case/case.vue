@@ -19,7 +19,8 @@
                     </el-option>
                 </el-select>
 
-                <el-select v-model="form.config" placeholder="请选择配置" clearable value-key="configId" style="width: 150px">
+                <el-select v-model="form.config" placeholder="请选择配置" clearable value-key="configId"
+                           style="width: 150px">
                     <el-option
 
                             v-for="item in configNameData[this.form.projectName]"
@@ -115,63 +116,63 @@
                 </el-tab-pane>
 
                 <!--<el-tab-pane label="接口套件" name="third">-->
-                    <!--<el-table-->
-                            <!--ref="suiteMultipleTable"-->
-                            <!--@selection-change="handleSuiteSelection"-->
-                            <!--:data="suiteTableData"-->
-                            <!--stripe>-->
-                        <!--<el-table-column-->
-                                <!--type="selection"-->
-                                <!--width="55">-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column-->
-                                <!--prop="num"-->
-                                <!--label="编号"-->
-                                <!--width="60">-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column-->
-                                <!--:show-overflow-tooltip=true-->
-                                <!--prop="name"-->
-                                <!--label="套件名称"-->
-                                <!--width="200">-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column-->
-                                <!--:show-overflow-tooltip=true-->
-                                <!--prop="api_names"-->
-                                <!--label="接口信息">-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column-->
-                                <!--label="操作"-->
-                                <!--width="320">-->
-                            <!--<template slot-scope="scope">-->
-                                <!--<el-button type="primary" icon="el-icon-edit" size="mini"-->
-                                           <!--@click.native="editSuite(suiteTableData[scope.$index]['id'])">编辑-->
-                                <!--</el-button>-->
-                                <!--<el-button type="danger" icon="el-icon-delete" size="mini"-->
-                                           <!--@click.native="sureView(delSuite,suiteTableData[scope.$index]['id'])">删除-->
-                                <!--</el-button>-->
-                            <!--</template>-->
-                        <!--</el-table-column>-->
-                    <!--</el-table>-->
+                <!--<el-table-->
+                <!--ref="suiteMultipleTable"-->
+                <!--@selection-change="handleSuiteSelection"-->
+                <!--:data="suiteTableData"-->
+                <!--stripe>-->
+                <!--<el-table-column-->
+                <!--type="selection"-->
+                <!--width="55">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                <!--prop="num"-->
+                <!--label="编号"-->
+                <!--width="60">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                <!--:show-overflow-tooltip=true-->
+                <!--prop="name"-->
+                <!--label="套件名称"-->
+                <!--width="200">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                <!--:show-overflow-tooltip=true-->
+                <!--prop="api_names"-->
+                <!--label="接口信息">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                <!--label="操作"-->
+                <!--width="320">-->
+                <!--<template slot-scope="scope">-->
+                <!--<el-button type="primary" icon="el-icon-edit" size="mini"-->
+                <!--@click.native="editSuite(suiteTableData[scope.$index]['id'])">编辑-->
+                <!--</el-button>-->
+                <!--<el-button type="danger" icon="el-icon-delete" size="mini"-->
+                <!--@click.native="sureView(delSuite,suiteTableData[scope.$index]['id'])">删除-->
+                <!--</el-button>-->
+                <!--</template>-->
+                <!--</el-table-column>-->
+                <!--</el-table>-->
 
-                    <!--<el-button @click="cancelSelection()" size="mini" style="position: absolute;margin-top: 2px;">取消选择-->
-                    <!--</el-button>-->
-                    <!--<div class="pagination">-->
-                        <!--<el-pagination-->
-                                <!--@current-change="handleCurrentChange"-->
-                                <!--@size-change="handleSizeChange"-->
-                                <!--:page-size="20"-->
-                                <!--layout="total, sizes, prev, pager, next, jumper"-->
-                                <!--:total="this.suitePage.total">-->
-                        <!--</el-pagination>-->
-                    <!--</div>-->
+                <!--<el-button @click="cancelSelection()" size="mini" style="position: absolute;margin-top: 2px;">取消选择-->
+                <!--</el-button>-->
+                <!--<div class="pagination">-->
+                <!--<el-pagination-->
+                <!--@current-change="handleCurrentChange"-->
+                <!--@size-change="handleSizeChange"-->
+                <!--:page-size="20"-->
+                <!--layout="total, sizes, prev, pager, next, jumper"-->
+                <!--:total="this.suitePage.total">-->
+                <!--</el-pagination>-->
+                <!--</div>-->
                 <!--</el-tab-pane>-->
                 <el-tab-pane label="接口配置" name="second" v-if="apiEditViewStatus"
                              style="background-color: rgb(250, 250, 250);min-height: 780px">
                     <apiEdit
                             :projectName="form.projectName"
                             :module="form.module"
-                            :configId="form.config.configId"
+                            :configData="form.config"
                             :proModelData="proModelData"
                             :proUrlData="proUrlData"
                             @findApi="findCases"
@@ -185,10 +186,10 @@
         </el-scrollbar>
 
         <!--<suiteEdit-->
-                <!--:projectName="form.projectName"-->
-                <!--:model="form.model"-->
-                <!--:casesList="casesList"-->
-                <!--ref="suiteFunc">-->
+        <!--:projectName="form.projectName"-->
+        <!--:model="form.model"-->
+        <!--:casesList="casesList"-->
+        <!--ref="suiteFunc">-->
         <!--</suiteEdit>-->
 
         <importApi
@@ -329,7 +330,14 @@
                 )
             },
             findCases() {
-
+                if (this.form.module=== null) {
+                    this.$message({
+                        showClose: true,
+                        message: '请选择模块',
+                        type: 'warning',
+                    });
+                    return
+                }
                 this.$axios.post('/api/api/cases/find', {
                     'caseName': this.form.apiName,
                     'projectName': this.form.projectName,

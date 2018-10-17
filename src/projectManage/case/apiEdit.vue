@@ -304,7 +304,7 @@
             errorView: errorView,
         },
         name: 'apiEdit',
-        props: ['proModelData', 'projectName', 'module', 'proUrlData', 'configId'],
+        props: ['proModelData', 'projectName', 'module', 'proUrlData', 'configData'],
         data() {
             return {
                 options: {
@@ -529,7 +529,7 @@
                 this.$axios.post('/api/api/cases/run', {
                     'caseData': caseData,
                     'projectName': this.form.projectName,
-                    'configId': this.configId,
+                    'configId': this.configData.configId,
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
