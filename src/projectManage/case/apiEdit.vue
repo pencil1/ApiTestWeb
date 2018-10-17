@@ -10,10 +10,11 @@
                     </el-option>
                 </el-select>
 
-                <el-select v-model="form.modelName" placeholder="请选择模块" size="small">
+                <el-select v-model="form.module" placeholder="请选择模块" value-key="moduleId"  size="small">
                     <el-option
                             v-for="item in proModelData[this.form.projectName]"
-                            :key="item"
+                            :key="item.moduleId"
+                            :label="item.name"
                             :value="item">
                     </el-option>
                 </el-select>
@@ -303,7 +304,7 @@
             errorView: errorView,
         },
         name: 'apiEdit',
-        props: ['proModelData', 'projectName', 'modelName', 'proUrlData', 'configName'],
+        props: ['proModelData', 'projectName', 'module', 'proUrlData', 'configId'],
         data() {
             return {
                 options: {
@@ -325,7 +326,10 @@
                     configName: null,
                     suiteName: null,
                     apiName: null,
-                    modelName: null,
+                    module:{
+                        name: null,
+                        moduleId: null,
+                    },
                     choiceUrl: '基础url1',
                     choiceType: 'data',
                 },
@@ -392,6 +396,7 @@
             initCaseData() {
                 this.form.choiceType = 'data';
                 this.form.choiceUrl = String();
+
                 this.caseData.header = Array();
                 this.caseData.variable = Array();
                 this.caseData.param = Array();
@@ -407,7 +412,7 @@
                 this.caseData.id = null;
                 this.caseData.url = String();
             },
-            addCase() {
+            addCase(messageClose=false) {
                 // test()
                 let variable;
                 if (this.form.choiceType === 'data') {
@@ -428,7 +433,7 @@
                     }
                 }
                 return this.$axios.post('/api/api/cases/add', {
-                    'gatherName': this.form.modelName,
+                    'moduleId': this.form.module.moduleId,
                     'projectName': this.form.projectName,
                     'caseName': this.caseData.name,
                     'caseNum': this.caseData.num,
@@ -448,12 +453,31 @@
                     'caseMethod': this.caseData.method,
                     'caseValidate': JSON.stringify(this.caseData.validate)
                 }).then((response) => {
+                    if(messageClose){
+                        if (response.data['status'] === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'warning',
+                            });
+                            return false
+                        }
+                        else {
+                            this.caseData.id = response.data['api_msg_id'];
+                            this.caseData.num = response.data['num'];
+                            this.$emit('findApi');
+                            return true
+                        }
+                    }
+                    else{
                         if (this.messageShow(this, response)) {
                             this.caseData.id = response.data['api_msg_id'];
                             this.caseData.num = response.data['num'];
                             this.$emit('findApi');
                             return true
                         }
+                    }
+
                     }
                 )
             },
@@ -489,12 +513,12 @@
                         this.caseData.method = response.data['data']['caseMethod'];
                         this.form.choiceUrl = this.proUrlData[this.projectName][response.data['data']['status_url']];
                         this.form.projectName = this.projectName;
-                        this.form.modelName = this.modelName;
+                        this.form.module = this.module;
                     }
                 );
             },
             saveAndRun() {
-                this.addCase().then(res => {
+                this.addCase(true).then(res => {
                     if (res) {
                         this.apiTest([{'caseId': this.caseData.id, 'num': '1'}], false);
                     }
@@ -505,8 +529,7 @@
                 this.$axios.post('/api/api/cases/run', {
                     'caseData': caseData,
                     'projectName': this.form.projectName,
-                    'gathers': this.form.modelName,
-                    'configName': this.configName,
+                    'configId': this.configId,
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
