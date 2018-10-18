@@ -1217,6 +1217,14 @@
                 )
             },
             addScene() {
+                if(this.caseList.length === 0){
+                    this.$message({
+                        showClose: true,
+                        message: '请添加接口信息到用例上',
+                        type: 'warning',
+                    });
+                    return
+                }
                 for (let i = 0; i < this.caseList.length; i++) {
                     if (!(/(^[1-9]\d*$)/.test(this.caseList[i]['time']))) {
                         this.$message({
