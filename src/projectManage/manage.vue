@@ -156,14 +156,6 @@
     .el-menu {
         border-right: solid 0px #e6e6e6;
     }
-
-    .el-header {
-        background-color: #ffffff;
-        color: #333;
-        text-align: center;
-        line-height: 60px;
-    }
-
     .el-footer {
         background-color: #8db7ef;
         color: #333;
