@@ -547,7 +547,7 @@
                                 message: response.data['msg'],
                                 type: 'success',
                             });
-                            this.$refs.resultFunc.showData(response['data']['data']['details'][0]['records']);
+                            this.$refs.resultFunc.showData(response['data']['data']);
                         }
                         this.saveRunStatus = false;
 
@@ -639,7 +639,13 @@
                     if (strParam.substr(strParam.length - 1, 1) === '&') {
                         strParam = strParam.substring(0, strParam.length - 1)
                     }
-                    this.caseData.url = this.caseData.url.split("?")[0] + '?' + strParam
+                    if(strParam){
+                        this.caseData.url = this.caseData.url.split("?")[0] + '?' + strParam
+                    }
+                    else{
+                        this.caseData.url = this.caseData.url.split("?")[0]
+                    }
+
                 },
                 deep: true
             },
@@ -730,4 +736,7 @@
     }
 </script>
 <style>
+    .CodeMirror {
+        min-height: 575px;
+    }
 </style>

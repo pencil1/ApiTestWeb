@@ -19,7 +19,7 @@
                 <el-button type="primary" icon="el-icon-search" @click.native="findConfig()">
                     搜索
                 </el-button>
-                <el-button type="primary" @click.native="initConfigData()">添加配置
+                <el-button type="primary" @click.native="$refs.configEditFunc.initConfigData()">添加配置
                 </el-button>
             </el-form-item>
         </el-form>
@@ -42,7 +42,7 @@
                             min-width="250">
                         <template slot-scope="scope">
                             <el-button type="primary" icon="el-icon-edit" size="mini"
-                                       @click.native="editSceneConfig(tableData[scope.$index]['id'])">编辑
+                                       @click.native="$refs.configEditFunc.editSceneConfig(tableData[scope.$index]['id'])">编辑
                             </el-button>
                             <el-button type="danger" icon="el-icon-delete" size="mini"
                                        @click.native="sureView(delConfig,tableData[scope.$index]['id'])">删除
@@ -131,19 +131,6 @@
                         }
                     }
                 )
-            },
-            initConfigData() {
-                this.$refs.configEditFunc.initConfigData();
-                // this.configData.name = null;
-                // this.configData.funcAddress = null;
-                // this.configData.id = null;
-                // this.configData.num = null;
-                // this.configData.variable = [{key: null, value: null, remark: null}];
-                // this.configData.modelFormVisible = true;
-
-            },
-            editSceneConfig(id) {
-                this.$refs.configEditFunc.editSceneConfig(id);
             },
             delConfig(id) {
                 this.$axios.post(this.$api.delConfigApi, {'id': id}).then((response) => {

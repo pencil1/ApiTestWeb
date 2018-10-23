@@ -13,7 +13,7 @@ import modelManage from './projectManage/model/model.vue'
 import projectManage from './projectManage/project/project.vue'
 import reportManage from './projectManage/report/report.vue'
 import reportShow from './projectManage/report/reportShow.vue'
-import reportHeader2 from './projectManage/report/reportHeader2.vue'
+import reportHeader from './projectManage/report/reportHeader.vue'
 import buildInFunc from './projectManage/buildInFunc/buildInFunc.vue'
 import sceneManage from './projectManage/sceneManage/scene.vue'
 import testTool from './projectManage/testTool/testTool.vue'
@@ -109,7 +109,7 @@ const routes = [
                     requireAuth: true,
                 },
                 components: {
-                    Header: reportHeader2,
+                    Header: reportHeader,
                     Manage: reportShow,
                 }
             },

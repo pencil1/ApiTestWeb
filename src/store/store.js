@@ -34,8 +34,8 @@ export default new Vuex.Store({
             state.proModelData = data;
         },
         [types.CONFIGNAMEDATA]: (state, data) => {
-            localStorage.configNameData = data;
-            state.configNameData = data;
+            localStorage.configData = data;
+            state.configData = data;
         },
         [types.URLDATA]: (state, data) => {
             localStorage.urlData = data;

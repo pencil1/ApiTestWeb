@@ -60,6 +60,7 @@
                     lineWrapping: true,
                     scrollbarStyle:'simple',
                 },
+                height1:'700px',
                 funcData: '',
                 comparator: '',
                 comparators: [],
@@ -124,7 +125,9 @@
 </script>
 
 <style>
-
+    .CodeMirror {
+        min-height: 810px;
+    }
     .cm-s-default .cm-keyword{
         color:#ce22e6
     }
@@ -135,4 +138,5 @@
     .cm-s-default .cm-builtin{
         color:#409eff
     }
+
 </style>

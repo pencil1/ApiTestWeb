@@ -8,7 +8,7 @@
                 <el-tab-pane label="基础信息" name="second" style="margin-top: 10px">
                     <el-form :inline="true">
                         <el-form :model="configData">
-                            <el-form-item label="项目名称" >
+                            <el-form-item label="项目名称">
                                 <el-select v-model="configData.projectName" placeholder="请选择项目" size="small">
                                     <el-option
                                             v-for="(item, key) in proModelData"
@@ -17,7 +17,7 @@
                                     </el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="配置名称" >
+                            <el-form-item label="配置名称">
                                 <el-input v-model="configData.name" size="small">
                                 </el-input>
                             </el-form-item>
@@ -48,19 +48,19 @@
                     <el-table :data="configData.variable" stripe :show-header="false">
                         <el-table-column label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.key" size="small"  placeholder="key">
+                                <el-input v-model="scope.row.key" size="small" placeholder="key">
                                 </el-input>
                             </template>
                         </el-table-column>
                         <el-table-column label="Value" header-align="center" minWidth="200">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.value" size="small"  placeholder="Value">
+                                <el-input v-model="scope.row.value" size="small" placeholder="Value">
                                 </el-input>
                             </template>
                         </el-table-column>
                         <el-table-column label="备注" header-align="center" minWidth="80">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.remark" size="small"  placeholder="备注">
+                                <el-input v-model="scope.row.remark" size="small" placeholder="备注">
                                 </el-input>
                             </template>
                         </el-table-column>
@@ -85,7 +85,7 @@
 <script>
     export default {
         name: 'configEdit',
-        props: ['proModelData','funcAddress','projectName'],
+        props: ['proModelData', 'funcAddress', 'projectName'],
         data() {
             return {
                 configData: {
@@ -127,7 +127,10 @@
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
                             this.configData.modelFormVisible = false;
-                            this.$parent.findConfig();
+                            if (typeof this.$parent.findConfig === "function") {
+                                this.$parent.findConfig();
+                            }
+
                             // this.findConfig();
                         }
                     }

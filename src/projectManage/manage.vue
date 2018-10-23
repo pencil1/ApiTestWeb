@@ -3,7 +3,7 @@
     <div id="manage">
         <el-container>
 
-            <el-aside width="auto" style="min-height: 900px">
+            <el-aside width="auto" style="min-height: 937px">
                 <!--<div style="margin: 0 0 40px;line-height: 30px;">-->
                     <!--测试平台-->
                 <!--</div>-->
@@ -240,9 +240,7 @@
         position: relative;
         margin-right: 40px
     }
-    .CodeMirror {
-        min-height: 575px;
-    }
+
     /*.el-scrollbar__wrap {*/
         /*overflow-x: hidden;*/
     /*}*/

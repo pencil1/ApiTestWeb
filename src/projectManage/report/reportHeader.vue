@@ -1,15 +1,12 @@
 <template>
-    <div class="reportHeader2" style="margin: 0 0 0 -20px;">
+    <div class="reportHeader2" style="margin: 0 -20px 0 -20px;">
         <el-container>
             <el-container>
 
                 <el-header style="height: 40px;">
-                    <div style="margin: 0 0 -12px;">
-                    </div>
                     <el-row :gutter="20">
-
                         <el-col :span="20" style="text-align:left">
-                            <div style="font-size: 22px;font-family: KaiTi;color: #ffffff">Test Report: 测试报告
+                            <div style="font-size: 22px;font-family: KaiTi;color: #ffffff;margin-top: 5px">Test Report: 测试报告
                             </div>
                         </el-col>
                     </el-row>

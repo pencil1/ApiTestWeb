@@ -23,7 +23,7 @@
                            style="width: 150px">
                     <el-option
 
-                            v-for="item in configNameData[this.form.projectName]"
+                            v-for="item in configData[this.form.projectName]"
                             :key="item.configId"
                             :label="item.name"
                             :value="item">
@@ -53,6 +53,9 @@
                 <el-button type="primary" icon="el-icon-view" @click.native="$refs.resultFunc.lastResult()"></el-button>
                 <!--<el-button type="primary" @click.native="initSuiteView()">添加套件</el-button>-->
                 <el-button type="primary" @click.native="$refs.importApiFunc.initData()">导入信息</el-button>
+                <el-button type="primary"
+                           v-if="form.config !== null && form.config !== '' "
+                           @click.native="$refs.configEditFunc.editSceneConfig(form.config.configId)">配置修改</el-button>
             </el-form-item>
         </el-form>
 
@@ -206,6 +209,12 @@
         </errorView>
 
 
+        <configEdit
+                :proModelData="proModelData"
+                :projectName="form.projectName"
+                :funcAddress="funcAddress"
+                ref="configEditFunc">
+        </configEdit>
     </div>
 </template>
 
@@ -215,6 +224,7 @@
     import suiteEdit from './suiteEdit.vue'
     import apiEdit from './apiEdit.vue'
     import errorView from '../common/errorView.vue'
+    import configEdit from '../config/configEdit.vue'
 
     export default {
         components: {
@@ -223,6 +233,7 @@
             suiteEdit: suiteEdit,
             apiEdit: apiEdit,
             errorView: errorView,
+            configEdit:configEdit,
 
         },
         name: 'caseManage',
@@ -232,12 +243,13 @@
                 showNumTab: 'first',
                 loading: false,
                 proModelData: '',
-                configNameData: '',
+                configData: '',
                 proUrlData: null,
                 caseTableData: Array(),//接口表单数据
                 suiteTableData: Array(),//套件表单数据
                 casesList: Array(),
                 suiteList: Array(),
+                funcAddress:null,
                 apiPage: {
                     total: 1,
                     currentPage: 1,
@@ -270,7 +282,7 @@
             initBaseData() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
                         this.proModelData = response.data['data'];
-                        this.configNameData = response.data['config_name_list'];
+                        this.configData = response.data['config_name_list'];
                         this.proUrlData = response.data['urlData'];
                         this.form.projectName = response.data['user_pro']['pro_name'];
                         // this.form.config.configName = response.data['config_name_list'][this.form.projectName][0]['name'].toString();
@@ -278,8 +290,12 @@
                         // this.form.modelName = response.data['user_pro']['model_list'][0]['name'].toString();
                         // this.form.modelId = response.data['user_pro']['model_list'][0]['moduleId'].toString();
                         this.form.module = response.data['user_pro']['model_list'][0];
-                        this.form.config = this.configNameData[this.form.projectName][0];
+                        this.form.config = this.configData[this.form.projectName][0];
                         this.findCases();
+                    this.$axios.post(this.$api.getFuncAddressApi).then((response) => {
+                            this.funcAddress = response['data']['data'];
+                        }
+                    )
                         // this.findSuite();
                     }
                 )
@@ -330,7 +346,7 @@
                 )
             },
             findCases() {
-                if (this.form.module=== null) {
+                if (this.form.module === null) {
                     this.$message({
                         showClose: true,
                         message: '请选择模块',
@@ -414,7 +430,7 @@
                                 message: response.data['msg'],
                                 type: 'success',
                             });
-                            this.$refs.resultFunc.showData(response['data']['data']['details'][0]['records']);
+                            this.$refs.resultFunc.showData(response['data']['data']);
                         }
                         this.loading = false;
                     }

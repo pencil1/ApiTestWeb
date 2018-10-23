@@ -96,7 +96,7 @@
 
 
                 <el-scrollbar>
-                    <div style="float:right;padding-right:15px">
+                    <div style="float:right;padding-right:15px;position:absolute;z-index:100;right: 0px;top:-2px">
                         <el-tooltip content="查看主要信息" placement="top-start" @click.native="showInfo()">
                             <el-button size="mini" type="info" icon="el-icon-info" circle></el-button>
                         </el-tooltip>
@@ -112,7 +112,7 @@
                         </el-tooltip>
                     </div>
                     <div :style={height:picHeight}>
-                        <table style="padding:10px;font-size: 14px;line-height: 25px;width: 100%"
+                        <table style="padding:10px;font-size: 14px;line-height: 25px;width: 100%;position:relative;"
                                border="0" cellpadding="0" cellspacing="0">
                             <thead>
                             <tr>
@@ -253,7 +253,7 @@
             };
             return {
                 reportAddress: '',
-                picHeight: '640px',
+                picHeight: '635px',
                 picStatus: true,
                 active: true,
                 showScene: [true, true],
@@ -367,11 +367,11 @@
             hideShowPic(s) {
                 if (s) {
                     this.picStatus = true;
-                    this.picHeight = '640px';
+                    this.picHeight = '635px';
                 }
                 else {
                     this.picStatus = false;
-                    this.picHeight = '840px';
+                    this.picHeight = '835px';
                 }
             },
         },

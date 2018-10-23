@@ -23,9 +23,11 @@
                     <div v-if="item.meta_data.request.json">{{item.meta_data.request.json}}</div>
                     <div style="color: red">请求头：</div>
                     <div>{{item.meta_data.request.headers}}</div>
+                    <div style="color: red">信息提取：</div>
+                    <pre style="overflow: auto">{{resultData.out}}</pre>
                     <div style="color: red">返回结果：</div>
                     <div>
-                        <pre style="overflow: auto">{{item.meta_data.response.json}}</pre>
+                        <pre>{{item.meta_data.response.json}}</pre>
                     </div>
                     <div style="color: red">错误信息：</div>
                     <div>
@@ -44,6 +46,7 @@
             return {
                 resultViewStatus:false,
                 resultData: {
+                    out:'',
                     resultShowData: [
                         {
                             name: null,
@@ -58,12 +61,14 @@
             }
         },
         methods: {
+
             lastResult(){
                 this.resultViewStatus = true;
             },
             showData(data){
                 this.resultViewStatus = true;
-                this.resultData.resultShowData = data;
+                this.resultData.resultShowData = data['details'][0]['records'];
+                this.resultData.out = data['details'][0]['in_out']['out'];
             },
         },
 

@@ -15,7 +15,7 @@ export const PROMODELDATA = 'proModelData';
 
 export const PROJECTNAME = 'projectName';
 
-export const CONFIGNAMEDATA = 'configNameData';
+export const CONFIGNAMEDATA = 'configData';
 
 export const URLDATA = 'urlData';
 

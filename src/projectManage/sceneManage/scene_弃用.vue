@@ -734,7 +734,7 @@
                 paramVisible: false,
                 proModelData: '',
                 loading: false,
-                configNameData: '',
+                configData: '',
                 proUrlData: '',
                 funcAddress: '',
                 temp_num: '',
@@ -938,7 +938,7 @@
             httpSend() {
                 return this.$axios.get(this.$api.baseDataApi).then((response) => {
                         this.proModelData = response.data['data'];
-                        this.configNameData = response.data['config_name_list'];
+                        this.configData = response.data['config_name_list'];
                         this.proUrlData = response.data['urlData'];
                         this.form.projectName = response.data['user_pro']['pro_name'];
                         this.form.apiMesProjectName = this.form.projectName;
@@ -1441,12 +1441,10 @@
             },
             resetSetChoice() {
                 if(this.allSetList[this.form.projectName][0]){
-                    this.form.setName = this.allSetList[this.form.projectName][0].label;
-                    this.sceneData.set_id = this.allSetList[this.form.projectName][0].id;
+                    this.form.set = this.allSetList[this.form.projectName][0];
                 }
                 else{
-                    this.form.setName = '';
-                    this.sceneData.set_id = '';
+                    this.form.set = null
 
                 }
 
