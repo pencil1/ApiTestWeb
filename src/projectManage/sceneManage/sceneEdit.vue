@@ -503,7 +503,15 @@
                 if (this.sceneData.apiCases.length === 0) {
                     this.$message({
                         showClose: true,
-                        message: '请添加接口信息到用例上',
+                        message: '请添加接口信息到执行步骤',
+                        type: 'warning',
+                    });
+                    return
+                }
+                if (this.sceneData.name === '' || this.sceneData.name === null) {
+                    this.$message({
+                        showClose: true,
+                        message: '用例名字不能为空',
                         type: 'warning',
                     });
                     return

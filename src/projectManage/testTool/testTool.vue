@@ -1,11 +1,18 @@
 <template>
     <div class="test">
-        <el-form :model="caseData">
+        <div style="margin: 10px"></div>
+        <el-form>
 
-            <el-form-item label="名字" :label-width="caseData.formLabelWidth">
-                <el-input v-model="caseData.name" auto-complete="off">
-                </el-input>
-            </el-form-item>
+            <div class="block">
+
+                <el-date-picker
+                        v-model="value6"
+                        type="year"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                </el-date-picker>
+            </div>
         </el-form>
         <el-button type="primary"
                    @click.native="buildIdentity()" size="small">生成身份证
@@ -42,6 +49,7 @@
         name: 'test',
         data() {
             return {
+                value6:'',
                 num:[1,2,3,4,5,6,7,8,9,0],
                 token: '',
                 message: '啦啦啦，这是复制的内容！',
