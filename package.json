@@ -12,13 +12,13 @@
     "echarts": "^4.1.0",
     "element-ui": "^2.4.5",
     "v-charts": "^1.17.9",
-    "vue": "^2.5.2",
+    "vue": "^2.5.17",
     "vue-clipboard2": "^0.1.1",
     "vue-codemirror-lite": "^1.0.4",
     "vue-resource": "^1.4.0",
     "vue-router": "^3.0.1",
     "vue-scrollbar": "^1.0.4",
-    "vue-template-compiler": "^2.5.2",
+    "vue-template-compiler": "^2.5.17",
     "vuex": "^3.0.1"
   },
   "engines": {
