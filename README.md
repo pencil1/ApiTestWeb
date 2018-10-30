@@ -4,12 +4,17 @@
 后端传送门：https://github.com/pencil1/ApiTestManage
 
 ## Environment
-目前本人使用的是Node == 8.9.4，理论上Node >= 6应该也是没问题的
 
-## start
-    yarn
+1. 首先安装  node  版本8以上即可; 确保 node -V
+2. 安装 yarn 工具包
+```
+npm install -g yarn
+```
 
-不过我把node_modules都上传上去了，理论上你们download下来应该是直接可以用得
+## 安装依赖
+```
+yarn install
+```
 
 ## Develop
     npm run dev

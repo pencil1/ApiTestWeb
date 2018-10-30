@@ -3,53 +3,123 @@
 
         <el-dialog title="用例" :visible.sync="sceneData.modelFormVisible" width="50%" top="5vh">
 
-            <el-tabs value="fourth">
+            <el-tabs value="first">
                 <el-tab-pane label="用例信息" name="first" style="margin-top: 10px">
-                    <el-form>
-                        <el-form-item label="业务编号" :label-width="sceneData.formLabelWidth" v-if="sceneData.id"
-                        >
-                            <el-input v-model.number="sceneData.num">
-                            </el-input>
-                        </el-form-item>
-                        <el-form-item label="业务名称" :label-width="sceneData.formLabelWidth">
+                    <el-form size="small" :inline="true">
+                        <el-form-item label="用例名称" :label-width="sceneData.formLabelWidth">
                             <el-input v-model="sceneData.name">
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="业务描述" :label-width="sceneData.formLabelWidth">
+                        <el-form-item label="项目选择" :label-width="sceneData.formLabelWidth">
+                            <el-select v-model="form.projectName" placeholder="请选择项目" @change="changeSetChoice">
+                                <el-option
+                                        v-for="(item, key) in proModelData"
+                                        :key="key"
+                                        :value="key">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="用例编号" :label-width="sceneData.formLabelWidth" v-if="sceneData.id">
+                            <el-input v-model.number="sceneData.num" :minlength="215">
+                            </el-input>
+                        </el-form-item>
+                    </el-form>
+                    <el-form :inline="true" size="small">
+                        <el-form-item label="用例描述" :label-width="sceneData.formLabelWidth">
                             <el-input v-model="sceneData.desc">
                             </el-input>
                         </el-form-item>
 
-                        <el-form :inline="true">
-                            <el-form-item label="项目名称" :label-width="sceneData.formLabelWidth">
-                                <el-select v-model="form.projectName" placeholder="请选择项目" @change="changeSetChoice">
-                                    <el-option
-                                            v-for="(item, key) in proModelData"
-                                            :key="key"
-                                            :value="key">
-                                    </el-option>
-                                </el-select>
-                                <el-select v-model="form.set" placeholder="请选择用例集" value-key="id">
-                                    <el-option
-                                            v-for="item in allSetList[this.projectName]"
-                                            :key="item.id"
-                                            :label="item.label"
-                                            :value="item">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item label="执行次数" label-width="70px">
-                                <el-input-number v-model="sceneData.times" :min="1" :max="1000">
-                                </el-input-number>
-                            </el-form-item>
-                        </el-form>
+                        <el-form-item label="集合选择" :label-width="sceneData.formLabelWidth">
+                            <el-select v-model="form.set" placeholder="请选择用例集" value-key="id">
+                                <el-option
+                                        v-for="item in allSetList[this.projectName]"
+                                        :key="item.id"
+                                        :label="item.label"
+                                        :value="item">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="执行次数" label-width="70px">
+                            <el-input-number v-model="sceneData.times" :min="1" :max="1000">
+                            </el-input-number>
+                        </el-form-item>
                     </el-form>
+                    <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
+                    <el-form :inline="true" class="demo-form-inline " size="small">
+                        <el-form-item label=" " labelWidth="10px">
+                            <el-select v-model="form.sceneVariableProjectName" placeholder="请选择项目"
+                                       @change="changeConfigChoice">
+                                <el-option
+                                        v-for="(item, key) in proModelData"
+                                        :key="key"
+                                        :value="key">
+                                </el-option>
+                            </el-select>
+
+                            <el-select v-model="form.config" value-key="configId" placeholder="请选择配置">
+                                <el-option
+                                        v-for="item in configData[form.sceneVariableProjectName]"
+                                        :key="item.configId"
+                                        :label="item.name"
+                                        :value="item">
+                                </el-option>
+                            </el-select>
+                            <el-select v-model="sceneData.funcAddress" clearable placeholder="请选择导入函数文件" size="small">
+                                <el-option
+                                        v-for="(item, key) in this.funcAddress"
+                                        :key="item['value']"
+                                        :label="item['value']"
+                                        :value="item['value']">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" size="small" @click.native="addConfigData()">添加配置
+                            </el-button>
+                            <el-button type="primary" size="small"
+                                       @click="addConfigVariable()">添加变量
+                            </el-button>
+                        </el-form-item>
+                    </el-form>
+                    <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
+                    <el-table :data="sceneData.variable"
+                              style="width:100%"
+                              :show-header="false"
+                              size="mini"
+                              stripe>
+                        <el-table-column property="key" label="Key" header-align="center" minWidth="100">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.key" size="small" placeholder="key">
+                                </el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column property="value" label="Value" header-align="center" minWidth="150">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.value" size="small" placeholder="Value">
+                                </el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="备注" header-align="center" minWidth="70">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.remark" size="small" placeholder="备注">
+                                </el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column property="value" label="操作" header-align="center" width="80">
+                            <template slot-scope="scope">
+                                <el-button type="danger" icon="el-icon-delete" size="mini"
+                                           @click.native="delConfigVariable(scope.$index)">删除
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
                 </el-tab-pane>
 
                 <el-tab-pane label="执行步骤" name="second">
                     <el-table
                             :data="sceneData.apiCases"
-                            height="660"
+                            height="685"
                             stripe>
                         <el-table-column
                                 prop="num"
@@ -157,7 +227,7 @@
                             ref="multipleTable"
                             @selection-change="handleCaseSelection"
                             :data="caseData"
-                            height="550"
+                            height="600"
                             stripe>
                         <el-table-column
                                 type="selection"
@@ -198,75 +268,6 @@
                         </el-pagination>
                     </div>
                 </el-tab-pane>
-
-                <el-tab-pane label="业务变量" name="fourth">
-                    <el-form :inline="true" class="demo-form-inline search-style" size="small">
-                        <el-form-item label=" " labelWidth="10px">
-                            <el-select v-model="form.sceneVariableProjectName" placeholder="请选择项目"
-                                       @change="changeConfigChoice">
-                                <el-option
-                                        v-for="(item, key) in proModelData"
-                                        :key="key"
-                                        :value="key">
-                                </el-option>
-                            </el-select>
-
-                            <el-select v-model="form.config" value-key="configId" placeholder="请选择配置">
-                                <el-option
-                                        v-for="item in configData[form.sceneVariableProjectName]"
-                                        :key="item.configId"
-                                        :label="item.name"
-                                        :value="item">
-                                </el-option>
-                            </el-select>
-                            <el-select v-model="sceneData.funcAddress" clearable placeholder="请选择导入函数文件" size="small">
-                                <el-option
-                                        v-for="(item, key) in this.funcAddress"
-                                        :key="item['value']"
-                                        :label="item['value']"
-                                        :value="item['value']">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button type="primary" size="small" @click.native="addConfigData()">添加配置
-                            </el-button>
-                            <el-button type="primary" size="small"
-                                       @click="addConfigVariable()">添加变量
-                            </el-button>
-
-                        </el-form-item>
-
-                    </el-form>
-
-                    <el-table :data="sceneData.variable" style="width:100%" size="mini" stripe>
-                        <el-table-column property="key" label="Key" header-align="center" minWidth="100">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.key" size="medium">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column property="value" label="Value" header-align="center" minWidth="150">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.value" size="medium">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="备注" header-align="center" minWidth="70">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.remark" size="medium">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column property="value" label="操作" header-align="center" width="80">
-                            <template slot-scope="scope">
-                                <el-button type="danger" icon="el-icon-delete" size="mini"
-                                           @click.native="delConfigVariable(scope.$index)">删除
-                                </el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-tab-pane>
             </el-tabs>
 
             <div slot="footer" class="dialog-footer">
@@ -287,6 +288,7 @@
 
 <script>
     import apiMessageEdit from './apiMessageEdit.vue'
+
     export default {
         components: {
             apiMessageEdit: apiMessageEdit,
@@ -360,7 +362,7 @@
                     return
                 }
                 this.sceneData.apiCases = [];
-                this.sceneData.variable = [];
+                this.sceneData.variable = [{key: '', value: '', remark: ''}];
                 this.sceneData.name = '';
                 this.sceneData.times = '';
                 this.sceneData.desc = '';
@@ -369,6 +371,7 @@
                 this.sceneData.num = '';
                 this.sceneData.modelFormVisible = true;
                 this.caseVessel = [];
+                this.findCases();
                 // this.cancelSelection();
                 // this.toggleSelection();
             },
@@ -394,6 +397,7 @@
                             this.sceneData.num = response.data['data']['num'];
                         }
                         this.sceneData.modelFormVisible = true;
+                        this.findCases();
                     }
                 )
             },
@@ -417,16 +421,38 @@
                 }
             },
             upNum(i) {
+                if (i === 0) {
+                    this.$message({
+                        showClose: true,
+                        message: '当前序号已最高',
+                        type: 'warning',
+                    });
+                    return
+                }
                 let d = this.sceneData.apiCases[i];
                 this.sceneData.apiCases.splice(i, 1);
                 this.sceneData.apiCases.splice(i - 1, 0, d);
+                this.againSort()
             },
             downNum(i) {
+                if (i === (this.sceneData.apiCases.length - 1)) {
+                    this.$message({
+                        showClose: true,
+                        message: '当前序号已最低',
+                        type: 'warning',
+                    });
+                    return
+                }
                 let d = this.sceneData.apiCases[i];
                 this.sceneData.apiCases.splice(i, 1);
                 this.sceneData.apiCases.splice(i + 1, 0, d);
+                this.againSort()
             },
-
+            againSort() {
+                for (let i = 0; i < this.sceneData.apiCases.length; i++) {
+                    this.sceneData.apiCases[i]['num'] = i
+                }
+            },
             delApiCase(i) {
                 //判断caseList中是否存在id，存在则在数据库删除信息，否则在前端删除临时数据
                 if ('id' in this.sceneData.apiCases[i]) {
@@ -469,7 +495,6 @@
                 )
             },
             addCaseData() {
-                console.log(this.caseVessel)
                 if (this.caseVessel.length === 0) {
                     this.$message({
                         showClose: true,
@@ -481,7 +506,7 @@
                 this.sceneData.apiCases = this.sceneData.apiCases.concat(this.caseVessel);
                 this.sceneData.apiCases = JSON.parse(JSON.stringify(this.sceneData.apiCases));
                 this.$refs.multipleTable.clearSelection();
-
+                this.againSort()
             },
             addConfigData() {
                 this.$axios.post('/api/api/config/data', {

@@ -60,15 +60,17 @@
         </el-form>
 
 
-        <el-scrollbar wrapStyle="height:840px;">
-            <el-tabs v-model="showNumTab" style="padding-left: 10px;">
+            <el-tabs v-model="showNumTab" class="table_padding">
                 <el-tab-pane label="接口信息" name="first">
                     <el-table
+
                             ref="apiMultipleTable"
                             @selection-change="handleCaseSelection"
                             :data="caseTableData"
-                            stripe>
+                            stripe
+                            height="745">
                         <el-table-column
+
                                 type="selection"
                                 width="40">
                         </el-table-column>
@@ -186,7 +188,6 @@
 
             </el-tabs>
 
-        </el-scrollbar>
 
         <!--<suiteEdit-->
         <!--:projectName="form.projectName"-->
@@ -474,14 +475,15 @@
     }
 </script>
 <style>
+    .CodeMirror-gutter {
+        width: 40px;
+    }
+
     .cm-s-default .cm-property {
         color: rgb(183, 40, 135);
         /*color: rgb(137, 21, 99);*/
     }
 
-    .CodeMirror-gutter {
-        width: 40px;
-    }
 
     .cm-s-default .cm-string {
         /*color: rgb(116,88,255);*/

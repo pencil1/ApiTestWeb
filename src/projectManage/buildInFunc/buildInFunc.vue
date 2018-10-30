@@ -33,7 +33,9 @@
                     <!--placeholder="请输入内容"-->
                     <!--v-model="funcData">-->
             <!--</el-input>-->
-            <codemirror v-model="funcData" :options="options">
+            <codemirror v-model="funcData"
+                        :options="options"
+                        height="810px">
             </codemirror>
         </div>
     </div>
@@ -60,7 +62,6 @@
                     lineWrapping: true,
                     scrollbarStyle:'simple',
                 },
-                height1:'700px',
                 funcData: '',
                 comparator: '',
                 comparators: [],
@@ -115,7 +116,6 @@
                     }
                 )
             },
-
         },
         mounted() {
 
@@ -125,9 +125,7 @@
 </script>
 
 <style>
-    .CodeMirror {
-        min-height: 810px;
-    }
+
     .cm-s-default .cm-keyword{
         color:#ce22e6
     }
@@ -138,5 +136,6 @@
     .cm-s-default .cm-builtin{
         color:#409eff
     }
+
 
 </style>

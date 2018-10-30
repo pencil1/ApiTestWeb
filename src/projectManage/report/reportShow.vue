@@ -95,7 +95,7 @@
                     style="border-style:solid;border-color:rgb(234, 234, 234) #ffffff rgb(234, 234, 234) rgb(234, 234, 234);border-width: 1px;font-family:Serif">
 
 
-                <el-scrollbar>
+                <el-scrollbar :wrapStyle={height:picHeight}>
                     <div style="float:right;padding-right:15px;position:absolute;z-index:100;right: 0px;top:-2px">
                         <el-tooltip content="查看主要信息" placement="top-start" @click.native="showInfo()">
                             <el-button size="mini" type="info" icon="el-icon-info" circle></el-button>

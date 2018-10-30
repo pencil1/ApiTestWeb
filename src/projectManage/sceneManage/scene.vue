@@ -49,7 +49,7 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-scrollbar>
+                    <el-scrollbar wrapStyle="height:776px;">
                         <el-tree
                                 ref="testTree"
                                 @node-click="handleNodeClick"
@@ -58,19 +58,29 @@
                                 node-key="id"
                                 :data="setDataList"
                                 :props="defaultProps"
-                                style="height: 800px;">
+
+                        >
                         </el-tree>
                     </el-scrollbar>
+                    <el-pagination
+                            small
+                            @current-change="handleSetCurrentChange"
+                            @size-change="handleSetSizeChange"
+                            :page-size="30"
+                            layout="prev, pager, next"
+                            :total="this.setPage.total">
+                    </el-pagination>
                 </el-row>
             </el-col>
             <el-col :span="21">
-                <el-scrollbar wrapStyle="height:800px;">
-                    <el-tabs value="first" style="padding-left: 10px">
+                    <el-tabs value="first" style="padding-left: 10px;padding-right:5px;">
                         <el-tab-pane label="业务列表" name="first">
                             <el-table
                                     ref="sceneMultipleTable"
                                     @selection-change="handleSceneSelection"
-                                    :data="sceneAll" stripe>
+                                    :data="sceneAll"
+                                    height="748"
+                                    stripe>
                                 <el-table-column
                                         type="selection"
                                         width="40">
@@ -118,16 +128,15 @@
 
                             <div class="pagination">
                                 <el-pagination
-                                        @current-change="handleCurrentChange"
-                                        @size-change="handleSizeChange"
+                                        @current-change="handleSceneCurrentChange"
+                                        @size-change="handleSceneSizeChange"
                                         :page-size="20"
                                         layout="total, sizes, prev, pager, next, jumper"
-                                        :total="this.total">
+                                        :total="this.scenePage.total">
                                 </el-pagination>
                             </div>
                         </el-tab-pane>
                     </el-tabs>
-                </el-scrollbar>
             </el-col>
 
         </el-row>
@@ -188,9 +197,16 @@
                 loading: false,
                 configData: '',
                 sceneAll: [],
-                total: 1,
-                currentPage: 1,
-                sizePage: 20,
+                scenePage: {
+                    total: 1,
+                    currentPage: 1,
+                    sizePage: 20,
+                },
+                setPage: {
+                    total: 1,
+                    currentPage: 1,
+                    sizePage: 30,
+                },
                 setTempData: {
                     name: null,
                     setId: null,
@@ -235,12 +251,12 @@
                     'setId': this.setTempData.setId,
                     'projectName': this.form.projectName,
                     'sceneName': this.form.sceneName,
-                    'page': this.currentPage,
-                    'sizePage': this.sizePage,
+                    'page': this.scenePage.currentPage,
+                    'sizePage': this.scenePage.sizePage,
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
                             this.sceneAll = response.data['data'];
-                            this.total = response.data['total'];
+                            this.scenePage.total = response.data['total'];
                         }
                     }
                 )
@@ -264,6 +280,7 @@
                         this.proModelData = response.data['data'];
                         this.configData = response.data['config_name_list'];
                         this.form.projectName = response.data['user_pro']['pro_name'];
+                        this.allSetList = response.data['set_list'];
                         this.findSet();
                     }
                 );
@@ -273,12 +290,17 @@
                 );
             },
             findSet() {
-                this.$axios.post('/api/api/set/find', {'projectName': this.form.projectName,}).then((response) => {
-                        this.setDataList = response.data['data'][this.form.projectName];
-                        this.allSetList = response.data['data'];
-                        if (response.data['data'][this.form.projectName][0]) {
-                            this.setTempData.setId = response.data['data'][this.form.projectName][0]['id'];
-                            this.setTempData.name = response.data['data'][this.form.projectName][0]['label'];
+                this.$axios.post('/api/api/set/find', {
+                    'projectName': this.form.projectName,
+                    'page': this.setPage.currentPage,
+                    'sizePage': this.setPage.sizePage,
+                }).then((response) => {
+                        this.setDataList = response.data['data'];
+                        this.allSetList[this.form.projectName] = response.data['all_set'];
+                        this.setPage.total = response.data['total'];
+                        if (this.setDataList[0]) {
+                            this.setTempData.setId = this.setDataList[0]['id'];
+                            this.setTempData.name = this.setDataList[0]['label'];
                             this.$nextTick(function () {
                                 this.$refs.testTree.setCurrentKey(this.setTempData.setId);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
                             });
@@ -287,13 +309,21 @@
                     }
                 );
             },
-            handleCurrentChange(val) {
-                this.currentPage = val;
+            handleSceneCurrentChange(val) {
+                this.scenePage.currentPage = val;
                 this.findScenes()
             },
-            handleSizeChange(val) {
-                this.sizePage = val;
+            handleSceneSizeChange(val) {
+                this.scenePage.sizePage = val;
                 this.findScenes()
+            },
+            handleSetCurrentChange(val) {
+                this.setPage.currentPage = val;
+                this.findSet()
+            },
+            handleSetSizeChange(val) {
+                this.setPage.sizePage = val;
+                this.findSet()
             },
             delScene(sceneId) {
                 this.$axios.post('/api/api/scene/del', {'sceneId': sceneId}).then((response) => {

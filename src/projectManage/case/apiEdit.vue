@@ -1,6 +1,6 @@
 <template>
     <div class="apiEdit">
-        <el-form :inline="true" :model="caseData" style="padding: 10px 20px -10px 10px;">
+        <el-form :inline="true" style="padding: 10px 20px -10px 10px;">
             <el-form-item label="基础信息" labelWidth="80px" style="margin-bottom: 5px">
                 <el-select v-model="form.projectName" placeholder="请选择项目" size="small">
                     <el-option
@@ -134,7 +134,9 @@
 
                 <div v-if="form.choiceType === 'json'">
                     <div style="border-style:solid;border-width: 1px;border-color: rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234)">
-                        <codemirror v-model="caseData.jsonVariable" :options="options">
+                        <codemirror v-model="caseData.jsonVariable"
+                                    :options="options"
+                                    height="575px">
                         </codemirror>
                     </div>
                 </div>
@@ -736,7 +738,5 @@
     }
 </script>
 <style>
-    .CodeMirror {
-        min-height: 575px;
-    }
+
 </style>

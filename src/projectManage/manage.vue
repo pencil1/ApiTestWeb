@@ -235,13 +235,32 @@
     .el-input--mini .el-input__inner{
         line-height:20px;
     }
+
+    /*分页的基本样式*/
     .pagination{
         float: right;
         position: relative;
         margin-right: 40px
     }
 
-    /*.el-scrollbar__wrap {*/
-        /*overflow-x: hidden;*/
-    /*}*/
+    /**/
+    .table_padding{
+        padding-left: 10px;
+        padding-right:5px;
+    }
+
+    /*改变el-table的默认滚动条样式*/
+    .el-table__body-wrapper::-webkit-scrollbar {
+        width: 6px;
+        height: 10px;
+    }
+    .el-table__body-wrapper::-webkit-scrollbar-thumb {
+          background-color: rgba(69, 100, 160, 0.3);
+          border-radius: 4px;
+      }
+
+    /*改变代码编辑器左边的行数宽度*/
+    .CodeMirror-gutter {
+        width: 40px;
+    }
 </style>

@@ -1,6 +1,8 @@
 <template>
     <div class="apiMessageEdit">
-        <el-dialog title="配置" :visible.sync="paramVisible" width="50%">
+        <el-dialog title="配置"
+                   :visible.sync="paramVisible"
+                   width="50%">
 
             <el-tabs>
                 <el-tab-pane label="接口信息" style="margin-top: 10px">
@@ -83,12 +85,18 @@
                     <div v-if="form.choiceType.toString() === 'json'">
                         <div style="margin: 0 0 15px;">
                         </div>
-                        <el-input
-                                type="textarea"
-                                :rows="27"
-                                placeholder="请输入内容"
-                                v-model="caseConfig.variable">
-                        </el-input>
+                        <div style="border-style:solid;border-width: 1px;border-color: rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234)">
+                            <codemirror v-model="caseConfig.variable"
+                                        :options="options"
+                                        height="500px">
+                            </codemirror>
+                        </div>
+                        <!--<el-input-->
+                                <!--type="textarea"-->
+                                <!--:rows="27"-->
+                                <!--placeholder="请输入内容"-->
+                                <!--v-model="caseConfig.variable">-->
+                        <!--</el-input>-->
                     </div>
                     <el-table :data="caseConfig.variable" size="mini" stripe
                               v-if="form.choiceType === 'data'">
@@ -255,11 +263,22 @@
 </template>
 
 <script>
+    import {codemirror} from 'vue-codemirror-lite'
     export default {
+        components: {
+            codemirror,
+        },
         name: 'apiMessageEdit',
         props: ['apiCases'],
         data() {
             return {
+                options: {
+                    mode: 'application/ld+json',
+                    tabSize: 4,
+                    lineNumbers: true,
+                    lineWrapping: true,
+                    scrollbarStyle: 'simple',
+                },
                 choiceVariableType: [{
                     value: '选项1',
                     label: 'data'
@@ -387,7 +406,7 @@
                     });
                     return
                 }
-                // this.apiCases[this.tempNum]['variables'] = this.caseConfig.variable;
+                this.apiCases[this.tempNum]['variables'] = this.caseConfig.variable;
                 this.paramVisible = false;
 
             },
@@ -397,4 +416,18 @@
     }
 </script>
 <style>
+    .cm-s-default .cm-property {
+        color: rgb(183, 40, 135);
+        /*color: rgb(137, 21, 99);*/
+    }
+
+
+    .cm-s-default .cm-string {
+        /*color: rgb(116,88,255);*/
+        color: rgb(71, 35, 255);
+    }
+
+    .cm-s-default .cm-atom {
+        color: #000000;
+    }
 </style>
