@@ -100,9 +100,14 @@
         methods: {
             httpSend() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
-                        this.proModelData = response.data['data'];
+                    if (response.data['user_pro']){
                         this.form.projectName = response.data['user_pro']['pro_name'];
                         this.findConfig();
+                    }
+                        this.proModelData = response.data['data'];
+
+
+
                     }
                 );
                 this.$axios.post(this.$api.getFuncAddressApi).then((response) => {

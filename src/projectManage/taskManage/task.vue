@@ -228,20 +228,23 @@
         methods: {
             httpSend() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
+                    if (response.data['user_pro']){
+                        this.form.projectName = response.data['user_pro']['pro_name'];
+                        this.$axios.get('/api/api/proScene/list').then((response) => {
+                                this.proSceneData = response.data;
+                                for (let key in response.data) {
+                                    this.form.projectName = key;
+                                    // this.form.gathers = response.data[key][0].toString();
+                                    break
+                                }
+                                this.findTask();
+                            }
+                        );
+                    }
                     this.proModelData = response.data['data'];
-                    this.form.projectName = response.data['user_pro']['pro_name'];
                     }
                 );
-                this.$axios.get('/api/api/proScene/list').then((response) => {
-                        this.proSceneData = response.data;
-                        for (var key in response.data) {
-                            this.form.projectName = key;
-                            // this.form.gathers = response.data[key][0].toString();
-                            break
-                        }
-                        this.findTask();
-                    }
-                );
+
 
             },
             handleCurrentChange(val) {

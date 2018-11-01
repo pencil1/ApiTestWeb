@@ -198,7 +198,7 @@
 
         <importApi
                 :projectName="form.projectName"
-                :modelName="form.modelName"
+                :moduleData="form.module"
                 ref="importApiFunc">
 
         </importApi>
@@ -285,18 +285,22 @@
                         this.proModelData = response.data['data'];
                         this.configData = response.data['config_name_list'];
                         this.proUrlData = response.data['urlData'];
+                    if (response.data['user_pro']){
                         this.form.projectName = response.data['user_pro']['pro_name'];
+                        this.form.module = response.data['user_pro']['model_list'][0];
+                        this.form.config = this.configData[this.form.projectName][0];
+                        this.findCases();
+                    }
                         // this.form.config.configName = response.data['config_name_list'][this.form.projectName][0]['name'].toString();
                         // this.form.config.configId = response.data['config_name_list'][this.form.projectName][0]['configId'].toString();
                         // this.form.modelName = response.data['user_pro']['model_list'][0]['name'].toString();
                         // this.form.modelId = response.data['user_pro']['model_list'][0]['moduleId'].toString();
-                        this.form.module = response.data['user_pro']['model_list'][0];
-                        this.form.config = this.configData[this.form.projectName][0];
-                        this.findCases();
-                    this.$axios.post(this.$api.getFuncAddressApi).then((response) => {
-                            this.funcAddress = response['data']['data'];
-                        }
-                    )
+
+                        this.$axios.post(this.$api.getFuncAddressApi).then((response) => {
+                                this.funcAddress = response['data']['data'];
+                            }
+                        )
+
                         // this.findSuite();
                     }
                 )

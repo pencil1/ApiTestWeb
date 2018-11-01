@@ -279,9 +279,14 @@
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
                         this.proModelData = response.data['data'];
                         this.configData = response.data['config_name_list'];
-                        this.form.projectName = response.data['user_pro']['pro_name'];
+                        if (response.data['user_pro']){
+                            this.form.projectName = response.data['user_pro']['pro_name'];
+                            this.findSet();
+                        }
+
                         this.allSetList = response.data['set_list'];
-                        this.findSet();
+
+
                     }
                 );
                 this.$axios.post('/api/api/func/getAddress').then((response) => {

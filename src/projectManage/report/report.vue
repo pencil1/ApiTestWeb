@@ -149,13 +149,17 @@
             },
             httpSend() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
-                        this.proModelData = response.data['data'];
+                    if (response.data['user_pro']){
                         this.form.projectName = response.data['user_pro']['pro_name'];
                         this.$axios.get('/api/api/proScene/list').then((response) => {
                                 this.proSceneData = response.data;
                                 this.findReport()
                             }
                         );
+                    }
+                        this.proModelData = response.data['data'];
+
+
                     }
                 );
 

@@ -36,7 +36,7 @@
 <script>
     export default {
         name: 'importApi',
-        props: ['projectName', 'modelName'],
+        props: ['projectName', 'moduleData'],
         data() {
             return {
                 importApiData: {importApiStatus: false, importFormat: null, importApiAddress: null,},
@@ -56,7 +56,7 @@
                 this.$axios.post('/api/api/cases/fileChange', {
                     'importApiAddress': this.importApiData.importApiAddress,
                     'projectName': this.projectName,
-                    'gatherName': this.modelName,
+                    'moduleId': this.moduleData.moduleId,
                     'importFormat': this.importApiData.importFormat,
                 }).then((response) => {
                         if (this.messageShow(this, response)) {

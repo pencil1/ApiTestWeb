@@ -130,9 +130,13 @@
         methods: {
             initData() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
-                        this.proModelData = response.data['data'];
+                    if (response.data['user_pro']){
                         this.form.projectName = response.data['user_pro']['pro_name'];
                         this.findModel();
+                    }
+                        this.proModelData = response.data['data'];
+
+
                     }
                 )
             },
