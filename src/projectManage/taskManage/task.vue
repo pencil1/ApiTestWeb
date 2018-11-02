@@ -12,6 +12,7 @@
                 <el-button type="primary" icon="el-icon-search" @click.native="findTask()">搜索</el-button>
                 <el-button type="primary" @click.native="initTaskData()">添加任务
                 </el-button>
+                <el-button @click.native="test1()" size="small">test</el-button>
             </el-form-item>
         </el-form>
 
@@ -79,7 +80,7 @@
         </el-tabs>
 
 
-        <el-dialog title="任务配置" :visible.sync="taskData.modelFormVisible" width="40%">
+        <el-dialog title="任务配置" :visible.sync="taskData.modelFormVisible" width="50%">
             <el-tabs>
                 <el-tab-pane label="messages" style="margin-top: 10px">
                     <el-form>
@@ -93,27 +94,39 @@
                             <el-input v-model="taskData.name" auto-complete="off">
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="执行类别" :label-width="taskData.formLabelWidth">
-                            <el-select v-model="taskData.taskType" size="medium">
-                                <el-option v-for="item in taskTypes" :key="item" :value="item">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
+                        <!--<el-form-item label="执行类别" :label-width="taskData.formLabelWidth">-->
+                            <!--<el-select v-model="taskData.taskType" size="medium">-->
+                                <!--<el-option v-for="item in taskTypes" :key="item" :value="item">-->
+                                <!--</el-option>-->
+                            <!--</el-select>-->
+                        <!--</el-form-item>-->
                         <el-form-item label="项目名称" :label-width="taskData.formLabelWidth">
-                            <el-select v-model="form.projectName" placeholder="请选择项目">
+                            <el-select v-model="form.projectName" placeholder="选择项目"  >
                                 <el-option
                                         v-for="(item, key) in proModelData"
                                         :key="key"
                                         :value="key">
                                 </el-option>
                             </el-select>
-                            <el-select v-model="form.scenes" multiple placeholder="请选择业务集" style="width: 400px;">
+
+                            <el-select v-model="form.set" multiple placeholder="选择用例集" value-key="id"  @change="changeSceneChoice">
                                 <el-option
-                                        v-for="item in proSceneData[this.form.projectName]"
+                                        v-for="item in allSetList[this.form.projectName]"
                                         :key="item.id"
-                                        :value="item.value">
+                                        :label="item.label"
+                                        :value="item">
                                 </el-option>
                             </el-select>
+
+                            <el-select v-model="form.scenes" multiple placeholder="选择用例" value-key="id"  :disabled="sceneStatus">
+                                <el-option
+                                        v-for="item in allSceneList[this.form.set_id]"
+                                        :key="item.id"
+                                        :label="item.label"
+                                        :value="item">
+                                </el-option>
+                            </el-select>
+
                         </el-form-item>
                         <el-form-item label="收件人邮箱" :label-width="taskData.formLabelWidth">
                             <el-input v-model="taskData.toEmail" auto-complete="off">
@@ -127,50 +140,50 @@
                             <el-input v-model="taskData.timeConfig" auto-complete="off">
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="时间配置" :label-width="taskData.formLabelWidth">
-                            <el-select v-model="form.scenes" multiple placeholder="秒" style="width: 90px;">
-                                <el-option
-                                        v-for="item in proSceneData[this.form.projectName]"
-                                        :key="item.id"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
-                            <el-select v-model="form.scenes" multiple placeholder="分" style="width: 90px;">
-                                <el-option
-                                        v-for="item in proSceneData[this.form.projectName]"
-                                        :key="item.id"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
-                            <el-select v-model="form.scenes" multiple placeholder="时" style="width: 90px;">
-                                <el-option
-                                        v-for="item in proSceneData[this.form.projectName]"
-                                        :key="item.id"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
-                            <el-select v-model="form.scenes" multiple placeholder="日" style="width: 90px;">
-                                <el-option
-                                        v-for="item in proSceneData[this.form.projectName]"
-                                        :key="item.id"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
-                            <el-select v-model="form.scenes" multiple placeholder="月" style="width: 90px;">
-                                <el-option
-                                        v-for="item in proSceneData[this.form.projectName]"
-                                        :key="item.id"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
-                            <el-select v-model="form.scenes" multiple placeholder="星期" style="width: 90px;">
-                                <el-option
-                                        v-for="item in proSceneData[this.form.projectName]"
-                                        :key="item.id"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
+                        <!--<el-form-item label="时间配置" :label-width="taskData.formLabelWidth">-->
+                            <!--<el-select v-model="form.scenes" multiple placeholder="秒" style="width: 90px;">-->
+                                <!--<el-option-->
+                                        <!--v-for="item in proSceneData[this.form.projectName]"-->
+                                        <!--:key="item.id"-->
+                                        <!--:value="item.value">-->
+                                <!--</el-option>-->
+                            <!--</el-select>-->
+                            <!--<el-select v-model="form.scenes" multiple placeholder="分" style="width: 90px;">-->
+                                <!--<el-option-->
+                                        <!--v-for="item in proSceneData[this.form.projectName]"-->
+                                        <!--:key="item.id"-->
+                                        <!--:value="item.value">-->
+                                <!--</el-option>-->
+                            <!--</el-select>-->
+                            <!--<el-select v-model="form.scenes" multiple placeholder="时" style="width: 90px;">-->
+                                <!--<el-option-->
+                                        <!--v-for="item in proSceneData[this.form.projectName]"-->
+                                        <!--:key="item.id"-->
+                                        <!--:value="item.value">-->
+                                <!--</el-option>-->
+                            <!--</el-select>-->
+                            <!--<el-select v-model="form.scenes" multiple placeholder="日" style="width: 90px;">-->
+                                <!--<el-option-->
+                                        <!--v-for="item in proSceneData[this.form.projectName]"-->
+                                        <!--:key="item.id"-->
+                                        <!--:value="item.value">-->
+                                <!--</el-option>-->
+                            <!--</el-select>-->
+                            <!--<el-select v-model="form.scenes" multiple placeholder="月" style="width: 90px;">-->
+                                <!--<el-option-->
+                                        <!--v-for="item in proSceneData[this.form.projectName]"-->
+                                        <!--:key="item.id"-->
+                                        <!--:value="item.value">-->
+                                <!--</el-option>-->
+                            <!--</el-select>-->
+                            <!--<el-select v-model="form.scenes" multiple placeholder="星期" style="width: 90px;">-->
+                                <!--<el-option-->
+                                        <!--v-for="item in proSceneData[this.form.projectName]"-->
+                                        <!--:key="item.id"-->
+                                        <!--:value="item.value">-->
+                                <!--</el-option>-->
+                            <!--</el-select>-->
+                        <!--</el-form-item>-->
 
 
                     </el-form>
@@ -197,16 +210,28 @@
             return {
                 proModelData: '',
                 proSceneData: '',
+                sceneStatus:false,
+                allSetList:'',
+                allSceneList:'',
                 tableData: [],
                 taskTypes: ['cron', 'date'],
                 total: 1,
                 currentPage: 1,
                 sizePage: 10,
                 form: {
+                    set: {
+                        label: null,
+                        id: null,
+                    },
+                    scenes: {
+                        label: null,
+                        id: null,
+                    },
+                    set_id:'',
                     projectName: '',
                     modelName: '',
                     taskName: '',
-                    scenes: [],
+
 
                 },
                 taskData: {
@@ -230,22 +255,26 @@
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
                     if (response.data['user_pro']){
                         this.form.projectName = response.data['user_pro']['pro_name'];
-                        this.$axios.get('/api/api/proScene/list').then((response) => {
-                                this.proSceneData = response.data;
-                                for (let key in response.data) {
-                                    this.form.projectName = key;
-                                    // this.form.gathers = response.data[key][0].toString();
-                                    break
-                                }
-                                this.findTask();
-                            }
-                        );
+                        this.findTask();
                     }
                     this.proModelData = response.data['data'];
+                    this.allSetList = response.data['set_list'];
+                    this.allSceneList = response.data['scene_list'];
                     }
                 );
 
+            },
+            changeSceneChoice() {
+                if (this.form.set.length === 1) {
+                    this.sceneStatus = false;
+                    this.form.set_id = this.form.set[0].id;
+                }
+                else {
+                    this.sceneStatus = true;
+                    this.form.scenes=[];
+                    this.form.set_id = ''
 
+                }
             },
             handleCurrentChange(val) {
                 this.currentPage = val;
@@ -284,10 +313,15 @@
                 this.taskData.SendEmail = '';
                 this.taskData.timeConfig = '';
                 this.form.projectName = '';
-                this.form.scenes = [];
+                // this.form.scenes = [];
                 this.taskData.num = '';
                 this.taskData.modelFormVisible = true;
 
+            },
+            test1(){
+                console.log(this.allSetList[this.form.projectName]);
+                console.log(this.allSceneList['abc']);
+                // console.log(this.form.scenes)
             },
             addTask() {
                 this.$axios.post('/api/api/task/add', {

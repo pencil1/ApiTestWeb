@@ -146,6 +146,7 @@
                                 this.$store.commit(types.LOGIN, this.token);
                                 this.$store.commit(types.USERNAME, response.data['name']);
                                 this.$store.commit('userName', response.data['name']);
+
                                 let redirect = decodeURIComponent(this.$route.query.redirect || '/manage/projectManage');
                                 this.$router.push({path: redirect})
                             }

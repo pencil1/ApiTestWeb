@@ -18,29 +18,31 @@
                 <!--:value="item.value">-->
                 <!--</el-option>-->
                 <!--</el-select>-->
-                <el-select v-model="form.scenes" multiple placeholder="请选择业务集" style="width: 400px;">
-                    <el-option
-                            v-for="item in proSceneData[this.form.projectName]"
-                            :key="item.id"
-                            :value="item.value">
-                    </el-option>
-                </el-select>
+                <!--<el-select v-model="form.scenes" multiple placeholder="请选择业务集" style="width: 400px;">-->
+                    <!--<el-option-->
+                            <!--v-for="item in proSceneData[this.form.projectName]"-->
+                            <!--:key="item.id"-->
+                            <!--:value="item.value">-->
+                    <!--</el-option>-->
+                <!--</el-select>-->
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click.native="findReport()" size="small">搜索</el-button>
-                <el-button type="primary" @click.native="reset()" size="small">重置</el-button>
+                <!--<el-button type="primary" @click.native="reset()" size="small">重置</el-button>-->
                 <!--<el-button type="primary" size="small" @click.native="runProject()">跑项目</el-button>-->
                 <!--<el-button type="primary" size="small"@click.native="runModel()" >跑模块</el-button>-->
-                <el-button type="primary" size="small" @click.native="runScene()" :loading="this.loading">跑业务
-                </el-button>
+                <!--<el-button type="primary" size="small" @click.native="runScene()" :loading="this.loading">跑业务-->
+                <!--</el-button>-->
             </el-form-item>
         </el-form>
 
-        <el-tabs value="first" style="padding-left: 10px">
+        <el-tabs value="first" style="padding-left: 10px;padding-right:5px;">
             <el-tab-pane label="报告列表" name="first" style="margin: 0 0 -10px;">
 
                 <!--<el-scrollbar wrap-class="scrollbarList">-->
-                <el-table :data="tableData" stripe>
+                <el-table :data="tableData"
+                          height="748"
+                          stripe>
 
                     <el-table-column
                             prop="belong"
@@ -92,7 +94,7 @@
                     <el-pagination
                             @current-change="handleCurrentChange"
                             @size-change="handleSizeChange"
-                            :page-size="10"
+                            :page-size="20"
                             layout="total, sizes, prev, pager, next, jumper"
                             :total="this.total">
                     </el-pagination>
@@ -115,7 +117,7 @@
                 tableData: [],
                 total: 1,
                 currentPage: 1,
-                sizePage: 10,
+                sizePage: 20,
                 form: {
                     projectName: '',
                     gathers: [],
