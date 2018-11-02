@@ -137,6 +137,17 @@
                 )
             },
             editSceneConfig(id) {
+                if (!id) {
+                    this.$message({
+                        showClose: true,
+                        message: '请选择配置',
+                        type: 'warning',
+                    });
+                    // if(response.data['error']){
+                    //     return 'error'
+                    // }
+                    return
+                }
                 this.$axios.post(this.$api.editConfigApi, {'id': id}).then((response) => {
                         this.configData.name = response.data['data']['name'];
                         this.configData.num = response.data['data']['num'];

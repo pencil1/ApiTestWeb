@@ -33,7 +33,7 @@
                         <el-form-item label="集合选择" :label-width="sceneData.formLabelWidth">
                             <el-select v-model="form.set" placeholder="请选择用例集" value-key="id">
                                 <el-option
-                                        v-for="item in allSetList[this.projectName]"
+                                        v-for="item in allSetList[form.projectName]"
                                         :key="item.id"
                                         :label="item.label"
                                         :value="item">
@@ -349,18 +349,22 @@
                 this.form.projectName = this.projectName;
                 this.form.apiMesProjectName = this.projectName;
                 this.form.sceneVariableProjectName = this.projectName;
+
             },
 
             initSceneData() {
-                this.synchronousData();
-                if (this.allSetList[this.projectName].length === 0) {
-                    this.$message({
-                        showClose: true,
-                        message: '请先创建用例集',
-                        type: 'warning',
-                    });
-                    return
+                if (this.projectName) {
+                    this.synchronousData();
+                    if (this.allSetList[this.projectName].length === 0) {
+                        this.$message({
+                            showClose: true,
+                            message: '请先创建用例集',
+                            type: 'warning',
+                        });
+                        return
+                    }
                 }
+
                 this.sceneData.apiCases = [];
                 this.sceneData.variable = [{key: '', value: '', remark: ''}];
                 this.sceneData.name = '';
@@ -525,6 +529,7 @@
                 this.sceneData.variable.splice(i, 1);
             },
             addScene() {
+
                 if (this.sceneData.apiCases.length === 0) {
                     this.$message({
                         showClose: true,

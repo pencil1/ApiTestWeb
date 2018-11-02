@@ -263,8 +263,8 @@
                 },
                 form: {
                     config: {
-                        name: null,
-                        configId: null,
+                        name: '',
+                        configId: '',
                     },
                     module: {
                         name: null,
@@ -374,6 +374,7 @@
                 )
             },
             initData() {
+
                 this.apiEditViewStatus = true;
                 this.showNumTab = 'second';
                 setTimeout(() => {
@@ -467,8 +468,8 @@
                 this.$refs.suiteMultipleTable.clearSelection();
             },
             clearChoice() {
-                this.form.config = null;
-                this.form.module = null;
+                this.form.config = {name: null, configId: null,};
+                this.form.module = {name: null, moduleId: null,};
             },
 
         },

@@ -44,6 +44,14 @@
         },
         methods: {
             initData() {
+                if (!this.moduleData.moduleId) {
+                    this.$message({
+                        showClose: true,
+                        message: '请选择模块',
+                        type: 'warning',
+                    });
+                    return
+                }
                 this.importApiData.importFormat = null;
                 this.importApiData.importApiAddress = null;
                 this.importApiData.importApiStatus = true

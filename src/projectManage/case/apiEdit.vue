@@ -398,7 +398,6 @@
             initCaseData() {
                 this.form.choiceType = 'data';
                 this.form.choiceUrl = String();
-
                 this.caseData.header = Array();
                 this.caseData.variable = Array();
                 this.caseData.param = Array();
@@ -413,6 +412,8 @@
                 this.caseData.desc = null;
                 this.caseData.id = null;
                 this.caseData.url = String();
+                this.form.projectName = this.projectName;
+                this.form.module = this.module;
             },
             addCase(messageClose=false) {
                 // test()
