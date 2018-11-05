@@ -28,6 +28,7 @@
                     <div style="color: red">返回结果：</div>
                     <div>
                         <pre>{{item.meta_data.response.json}}</pre>
+                        <pre style="overflow: auto" v-if="!item.meta_data.response.json">{{item.meta_data.response.content}}</pre>
                     </div>
                     <div style="color: red">错误信息：</div>
                     <div>
