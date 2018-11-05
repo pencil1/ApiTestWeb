@@ -79,7 +79,7 @@
                                     ref="sceneMultipleTable"
                                     @selection-change="handleSceneSelection"
                                     :data="sceneAll"
-                                    height="748"
+                                    max-height="748"
                                     stripe>
                                 <el-table-column
                                         type="selection"

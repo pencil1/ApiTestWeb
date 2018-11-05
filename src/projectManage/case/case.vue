@@ -68,7 +68,7 @@
                             @selection-change="handleCaseSelection"
                             :data="caseTableData"
                             stripe
-                            height="745">
+                            max-height="745">
                         <el-table-column
 
                                 type="selection"

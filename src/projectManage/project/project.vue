@@ -17,12 +17,13 @@
         </el-form>
 
         <el-tabs value="first" style="padding-left: 10px">
-            <el-tab-pane label="项目列表" name="first" style="margin: 0 0 -10px;">
+            <el-tab-pane label="项目列表" name="first" class="table_padding">
                 <el-table :data="tableData" stripe>
                     <el-table-column
                             prop="id"
                             label="id"
-                            width="80">
+                            width="80"
+                            max-height="745">
                     </el-table-column>
                     <el-table-column
                             prop="name"
@@ -62,7 +63,7 @@
                     <el-pagination
                             @current-change="proHandleCurrentChange"
                             @size-change="proHandleSizeChange"
-                            :page-size="10"
+                            :page-size="20"
                             layout="total, sizes, prev, pager, next, jumper"
                             :total="this.total">
                     </el-pagination>
@@ -183,7 +184,7 @@
                 tableData: Array(),
                 total: 1,
                 currentPage: 1,
-                sizePage: 10,
+                sizePage: 20,
                 form: {
                     projectName: null,
                 },

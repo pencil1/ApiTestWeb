@@ -87,6 +87,7 @@
                               style="width:100%"
                               :show-header="false"
                               size="mini"
+                              max-height="538"
                               stripe>
                         <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
@@ -119,7 +120,7 @@
                 <el-tab-pane label="执行步骤" name="second">
                     <el-table
                             :data="sceneData.apiCases"
-                            height="685"
+                            max-height="685"
                             stripe>
                         <el-table-column
                                 prop="num"

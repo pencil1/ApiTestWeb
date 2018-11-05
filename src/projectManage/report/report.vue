@@ -36,12 +36,12 @@
             </el-form-item>
         </el-form>
 
-        <el-tabs value="first" style="padding-left: 10px;padding-right:5px;">
+        <el-tabs value="first" class="table_padding">
             <el-tab-pane label="报告列表" name="first" style="margin: 0 0 -10px;">
 
                 <!--<el-scrollbar wrap-class="scrollbarList">-->
                 <el-table :data="tableData"
-                          height="748"
+                          max-height="748"
                           stripe>
 
                     <el-table-column

@@ -24,9 +24,11 @@
             </el-form-item>
         </el-form>
 
-        <el-tabs value="first" style="padding-left: 10px">
+        <el-tabs value="first" class="table_padding">
             <el-tab-pane label="模块列表" name="first" style="margin: 0 0 -10px;">
-                <el-table :data="tableData" stripe>
+                <el-table :data="tableData"
+                          max-height="748"
+                          stripe>
                     <el-table-column
                             prop="num"
                             label="编号"
@@ -55,7 +57,7 @@
                     <el-pagination
                             @current-change="configHandleCurrentChange"
                             @size-change="configHandleSizeChange"
-                            :page-size="10"
+                            :page-size="20"
                             layout="total, sizes, prev, pager, next, jumper"
                             :total="this.total">
                     </el-pagination>
@@ -88,7 +90,7 @@
                 tableData: Array(),
                 total: 1,
                 currentPage: 1,
-                sizePage: 10,
+                sizePage: 20,
                 form: {
                     projectName: null,
                     configName: null,
