@@ -27,8 +27,9 @@
                     <pre style="overflow: auto">{{resultData.out}}</pre>
                     <div style="color: red">返回结果：</div>
                     <div>
-                        <pre>{{item.meta_data.response.json}}</pre>
-                        <pre style="overflow: auto" v-if="!item.meta_data.response.json">{{item.meta_data.response.content}}</pre>
+                        <pre style="overflow: auto" >{{resultDeal(item.meta_data.response.content)}}</pre>
+                        <!--<pre>{{item.meta_data.response.json}}</pre>-->
+                        <!--<pre style="overflow: auto" v-if="!item.meta_data.response.json">{{item.meta_data.response.content}}</pre>-->
                     </div>
                     <div style="color: red">错误信息：</div>
                     <div>
@@ -62,7 +63,15 @@
             }
         },
         methods: {
-
+            resultDeal(data){
+                try {
+                    data = JSON.parse(data);
+                    data = JSON.stringify(data, null, 4);
+                }
+                catch (err) {
+                }
+                return data
+            },
             lastResult(){
                 this.resultViewStatus = true;
             },
