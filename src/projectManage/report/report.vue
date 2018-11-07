@@ -11,14 +11,14 @@
                     </el-option>
                 </el-select>
 
-                <!--<el-select v-model="form.gathers" multiple placeholder="请选择模块" style="width: 400px;">-->
+                <!--<el-select v-module="form.gathers" multiple placeholder="请选择模块" style="width: 400px;">-->
                 <!--<el-option-->
                 <!--v-for="item in proModelData[this.form.projectName]"-->
                 <!--:key="item.id"-->
                 <!--:value="item.value">-->
                 <!--</el-option>-->
                 <!--</el-select>-->
-                <!--<el-select v-model="form.scenes" multiple placeholder="请选择业务集" style="width: 400px;">-->
+                <!--<el-select v-module="form.scenes" multiple placeholder="请选择业务集" style="width: 400px;">-->
                     <!--<el-option-->
                             <!--v-for="item in proSceneData[this.form.projectName]"-->
                             <!--:key="item.id"-->
@@ -153,11 +153,7 @@
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
                     if (response.data['user_pro']){
                         this.form.projectName = response.data['user_pro']['pro_name'];
-                        this.$axios.get('/api/api/proScene/list').then((response) => {
-                                this.proSceneData = response.data;
-                                this.findReport()
-                            }
-                        );
+                        this.findReport()
                     }
                         this.proModelData = response.data['data'];
 
@@ -168,7 +164,7 @@
 
             },
             findReport() {
-                this.$axios.post('/api/api/report/find', {
+                this.$axios.post(this.$api.findReportApi, {
                     'page': this.currentPage,
                     'belong': this.form.projectName,
                     'sizePage': this.sizePage,
@@ -181,7 +177,7 @@
                 )
             },
             delReport(address) {
-                this.$axios.post('/api/api/report/del', {'address': address}).then((response) => {
+                this.$axios.post(this.$api.delReportApi, {'address': address}).then((response) => {
                         this.messageShow(this, response);
                         if ((this.currentPage - 1) * this.sizePage + 1 === this.total) {
                             this.currentPage = this.currentPage - 1
@@ -203,33 +199,19 @@
             reset() {
                 this.form.scenes = []
             },
-            runScene() {
-                this.loading = true;
-                this.$axios.post('/api/api/report/run', {
-                    'sceneNames': this.form.scenes,
-                    'projectName': this.form.projectName
-                }).then((response) => {
-                        this.findReport();
-                        this.loading = false;
-                        this.messageShow(this, response);
-                    }
-                );
-                setTimeout(this.findReport(), 1500);
-            },
-            runProject() {
-                this.loading = true;
-                this.$axios.post('/api/api/report/run', {'projectName': this.form.projectName}).then((response) => {
-                        this.findReport();
-                        this.loading = false;
-                        this.messageShow(this, response);
-                        // this.$message({
-                        //     showClose: true,
-                        //     message: response.data['data'],
-                        //     type: 'success',
-                        // });
-                    }
-                )
-            },
+            // runScene() {
+            //     this.loading = true;
+            //     this.$axios.post('/apiManage/apiManage/report/run', {
+            //         'sceneNames': this.form.scenes,
+            //         'projectName': this.form.projectName
+            //     }).then((response) => {
+            //             this.findReport();
+            //             this.loading = false;
+            //             this.messageShow(this, response);
+            //         }
+            //     );
+            //     setTimeout(this.findReport(), 1500);
+            // },
             check(reportId) {
 
                 // this.$router.push({path: 'reportShow', query: {reportId: reportId}});
@@ -237,7 +219,7 @@
                 window.open(href, '_blank');
             },
             downReport(reportId) {
-                this.$axios.post('/api/api/report/download', {'reportId': reportId}).then((response) => {
+                this.$axios.post('/apiManage/apiManage/report/download', {'reportId': reportId}).then((response) => {
                         // console.log(response.data['data']);
                         // download(response.data['data'], "测试报告.html", "text/html")
                         this.download(response.data['data'], "测试报告.html", "text/html")

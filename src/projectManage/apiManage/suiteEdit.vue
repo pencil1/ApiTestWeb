@@ -48,7 +48,7 @@
 <script>
     export default {
         name: 'suiteEdit',
-        props: ['projectName', 'modelName', 'casesList'],
+        props: ['projectName', 'modelName', 'apiMsgList'],
         data() {
             return {
                 suiteData: {
@@ -68,11 +68,11 @@
                 this.suiteData.name = null;
                 this.suiteData.num = null;
                 this.suiteData.id = null;
-                this.suiteData.apiList = JSON.parse(JSON.stringify(this.casesList));
+                this.suiteData.apiList = JSON.parse(JSON.stringify(this.apiMsgList));
                 this.suiteData.suiteViewStatus = true
             },
             editData(suiteId) {
-                this.$axios.post('/api/api/suite/edit', {'suiteId': suiteId}).then((response) => {
+                this.$axios.post('/apiManage/apiManage/suite/edit', {'suiteId': suiteId}).then((response) => {
                         this.suiteData.apiList = response['data']['data']['apiData'];
                         this.suiteData.num = response['data']['data']['num'];
                         this.suiteData.name = response['data']['data']['name'];
@@ -86,7 +86,7 @@
                 for (let i = 0; i < this.suiteData.apiList.length; i++) {
                     apiData.push(this.suiteData.apiList[i].caseId);
                 }
-                this.$axios.post('/api/api/suite/add', {
+                this.$axios.post('/apiManage/apiManage/suite/add', {
                     'projectName': this.projectName,
                     'gatherName': this.modelName,
                     'num': this.suiteData.num,

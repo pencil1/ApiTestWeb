@@ -108,21 +108,21 @@
                 cb(this.comparators);
             },
             findFunc() {
-                this.$axios.post('/api/api/func/find', {'funcName': this.comparator}).then((response) => {
+                this.$axios.post('/apiManage/apiManage/func/find', {'funcName': this.comparator}).then((response) => {
                         this.messageShow(this, response);
                         this.funcData = response['data']['func_data'];
                     }
                 )
             },
             createFunc() {
-                this.$axios.post('/api/api/func/create', {'funcName': this.comparator}).then((response) => {
+                this.$axios.post('/apiManage/apiManage/func/create', {'funcName': this.comparator}).then((response) => {
                         this.messageShow(this, response);
                         this.getFuncAddress()
                     }
                 )
             },
             removeFunc() {
-                this.$axios.post('/api/api/func/remove', {'funcName': this.comparator}).then((response) => {
+                this.$axios.post('/apiManage/apiManage/func/remove', {'funcName': this.comparator}).then((response) => {
                         this.comparator = '';
                         this.messageShow(this, response);
                         this.getFuncAddress()
@@ -130,19 +130,19 @@
                 )
             },
             getFuncAddress() {
-                this.$axios.post('/api/api/func/getAddress').then((response) => {
+                this.$axios.post('/apiManage/apiManage/func/getAddress').then((response) => {
                         this.comparators = response['data']['data'];
                     }
                 )
             },
             checkFunc() {
-                this.$axios.post('/api/api/func/check', {'funcName': this.comparator}).then((response) => {
+                this.$axios.post('/apiManage/apiManage/func/check', {'funcName': this.comparator}).then((response) => {
                         this.messageShow(this, response);
                     }
                 )
             },
             saveFunc() {
-                this.$axios.post('/api/api/func/save', {
+                this.$axios.post('/apiManage/apiManage/func/save', {
                     'funcData': this.funcData,
                     'funcName': this.comparator
                 }).then((response) => {

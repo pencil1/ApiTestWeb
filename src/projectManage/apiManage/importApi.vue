@@ -18,7 +18,7 @@
                 <el-form-item>
                     <el-upload
                             class="upload-demo"
-                            action="/api/api/upload"
+                            :action="this.$api.fileUploadingApi"
                             :show-file-list='false'
                             :on-success="getFileAddress">
                         <el-button size="small" type="primary">点击上传</el-button>
@@ -61,7 +61,7 @@
                 this.messageShow(this, response);
             },
             importCase() {
-                this.$axios.post('/api/api/cases/fileChange', {
+                this.$axios.post(this.$api.importApiApi, {
                     'importApiAddress': this.importApiData.importApiAddress,
                     'projectName': this.projectName,
                     'moduleId': this.moduleData.moduleId,
@@ -70,7 +70,7 @@
                         if (this.messageShow(this, response)) {
                             this.importApiData.importApiStatus = false;
                             this.importApiAddress = null;
-                            this.$parent.findCases();
+                            this.$parent.findApiMsg();
                         }
                     }
                 )

@@ -73,8 +73,8 @@
                 // 调用 callback 返回建议列表的数据
                 console.log(this.token)
             },
-            findCases() {
-                this.$axios.post('/api/api/register', {
+            findApiMsg() {
+                this.$axios.post('/apiManage/apiManage/register', {
                     'name': this.caseData.name,
                     'username': this.caseData.username,
                     'password': this.caseData.password,
@@ -107,7 +107,7 @@
             },
             findCases2() {
                 console.log(555);
-                this.$axios.post('/api/api/login', {
+                this.$axios.post('/apiManage/apiManage/login', {
                     'username': this.caseData.username,
                     'password': this.caseData.password,
                 }).then((response) => {
@@ -130,7 +130,7 @@
             findCases3() {
                 this.$store.commit(types.LOGOUT);
                 this.$router.push({path: '/login'});
-                // this.$axios.post('/api/api/logout', {}).then((response) => {
+                // this.$axios.post('/apiManage/apiManage/logout', {}).then((response) => {
                 //         if (response.data['status'] === 0) {
                 //             this.$message({
                 //                 showClose: true,
@@ -146,7 +146,7 @@
                 // )
             },
             findCases1() {
-                this.$axios.post('/api/api/proGather/list1', {}).then((response) => {
+                this.$axios.post('/apiManage/apiManage/proGather/list1', {}).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
                                 showClose: true,

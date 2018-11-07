@@ -1,5 +1,5 @@
 <template>
-    <div class="apiMessageEdit">
+    <div class="apiMsgDataEdit">
         <el-dialog title="配置"
                    :visible.sync="paramVisible"
                    width="50%">
@@ -8,15 +8,15 @@
                 <el-tab-pane label="接口信息" style="margin-top: 10px">
                     <el-form>
                         <el-form-item label="用例名称"  prop="name" label-width="120px" >
-                            <el-input v-model="caseConfig.name">
+                            <el-input v-model="apiCaseData.name">
                             </el-input>
                         </el-form-item>
                         <el-form-item label="up函数" label-width="120px" >
-                            <el-input v-model="caseConfig.upFunc">
+                            <el-input v-model="apiCaseData.upFunc">
                             </el-input>
                         </el-form-item>
                         <el-form-item label="down函数" label-width="120px" >
-                            <el-input v-model="caseConfig.downFunc">
+                            <el-input v-model="apiCaseData.downFunc">
                             </el-input>
                         </el-form-item>
                     </el-form>
@@ -26,14 +26,14 @@
                                @click="addCaseParam()">添加
                     </el-button>
                     <el-switch
-                            v-model="caseConfig.statusCase.param[0]"
+                            v-model="apiCaseData.statusCase.param[0]"
                             inactive-text="启动功能">
                     </el-switch>
                     <el-switch
-                            v-model="caseConfig.statusCase.param[1]"
+                            v-model="apiCaseData.statusCase.param[1]"
                             inactive-text="启动新参数">
                     </el-switch>
-                    <el-table :data="caseConfig.param" size="mini" stripe>
+                    <el-table :data="apiCaseData.param" size="mini" stripe>
                         <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.key" size="medium">
@@ -75,18 +75,18 @@
                         </el-option>
                     </el-select>
                     <el-switch
-                            v-model="caseConfig.statusCase.variable[0]"
+                            v-model="apiCaseData.statusCase.variable[0]"
                             inactive-text="启动功能">
                     </el-switch>
                     <el-switch
-                            v-model="caseConfig.statusCase.variable[1]"
+                            v-model="apiCaseData.statusCase.variable[1]"
                             inactive-text="启动新参数">
                     </el-switch>
                     <div v-if="form.choiceType.toString() === 'json'">
                         <div style="margin: 0 0 15px;">
                         </div>
                         <div style="border-style:solid;border-width: 1px;border-color: rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234)">
-                            <codemirror v-model="caseConfig.variable"
+                            <codemirror v-model="apiCaseData.variable"
                                         :options="options"
                                         height="500px">
                             </codemirror>
@@ -95,10 +95,10 @@
                                 <!--type="textarea"-->
                                 <!--:rows="27"-->
                                 <!--placeholder="请输入内容"-->
-                                <!--v-model="caseConfig.variable">-->
+                                <!--v-module="apiCaseData.variable">-->
                         <!--</el-input>-->
                     </div>
-                    <el-table :data="caseConfig.variable" size="mini" stripe
+                    <el-table :data="apiCaseData.variable" size="mini" stripe
                               v-if="form.choiceType === 'data'">
                         <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
@@ -108,7 +108,7 @@
                         </el-table-column>
                         <el-table-column property="type" label="type" header-align="center" width="100">
                             <template slot-scope="scope">
-                                <!--<el-input v-model="scope.row.param_type" size="medium">-->
+                                <!--<el-input v-module="scope.row.param_type" size="medium">-->
                                 <!--</el-input>-->
                                 <el-select v-model="scope.row.param_type" size="medium">
                                     <el-option v-for="item in paramTypes" :key="item" :value="item">
@@ -170,14 +170,14 @@
                                @click="addCaseExtract()">添加
                     </el-button>
                     <el-switch
-                            v-model="caseConfig.statusCase.extract[0]"
+                            v-model="apiCaseData.statusCase.extract[0]"
                             inactive-text="启动功能">
                     </el-switch>
                     <el-switch
-                            v-model="caseConfig.statusCase.extract[1]"
+                            v-model="apiCaseData.statusCase.extract[1]"
                             inactive-text="启动新参数">
                     </el-switch>
-                    <el-table :data="caseConfig.extract" size="mini" stripe>
+                    <el-table :data="apiCaseData.extract" size="mini" stripe>
                         <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.key" size="medium">
@@ -210,15 +210,15 @@
                                @click="addCaseValidate()">添加
                     </el-button>
                     <el-switch
-                            v-model="caseConfig.statusCase.validate[0]"
+                            v-model="apiCaseData.statusCase.validate[0]"
                             inactive-text="启动功能">
                     </el-switch>
                     <el-switch
 
-                            v-model="caseConfig.statusCase.validate[1]"
+                            v-model="apiCaseData.statusCase.validate[1]"
                             inactive-text="启动新参数">
                     </el-switch>
-                    <el-table :data="caseConfig.validate" size="mini" stripe>
+                    <el-table :data="apiCaseData.validate" size="mini" stripe>
                         <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.key" size="medium">
@@ -268,7 +268,7 @@
         components: {
             codemirror,
         },
-        name: 'apiMessageEdit',
+        name: 'apiMsgDataEdit',
         props: ['apiCases'],
         data() {
             return {
@@ -299,7 +299,7 @@
                     choiceTypeStatus: false,
                     choiceType: 'data',
                 },
-                caseConfig: {
+                apiCaseData: {
                     name: '',
                     time: '',
                     upFunc: '',
@@ -314,16 +314,17 @@
         },
         methods: {
             initData(i) {
-                this.caseConfig.param = this.apiCases[i]['param'];
-                this.caseConfig.variable = this.apiCases[i]['variables'];
-                this.caseConfig.extract = this.apiCases[i]['extract'];
-                this.caseConfig.validate = this.apiCases[i]['validate'];
-                this.caseConfig.statusCase = this.apiCases[i]['statusCase'];
+                console.log(this.apiCases[i])
+                this.apiCaseData.param = this.apiCases[i]['param'];
+                this.apiCaseData.variable = this.apiCases[i]['variable'];
+                this.apiCaseData.extract = this.apiCases[i]['extract'];
+                this.apiCaseData.validate = this.apiCases[i]['validate'];
+                this.apiCaseData.statusCase = this.apiCases[i]['statusCase'];
                 this.form.choiceType = this.apiCases[i]['variableType'];
-                this.caseConfig.name = this.apiCases[i]['case_name'];
-                this.caseConfig.time = this.apiCases[i]['time'];
-                this.caseConfig.upFunc = this.apiCases[i]['up_func'];
-                this.caseConfig.downFunc = this.apiCases[i]['down_func'];
+                this.apiCaseData.name = this.apiCases[i]['case_name'];
+                this.apiCaseData.time = this.apiCases[i]['time'];
+                this.apiCaseData.upFunc = this.apiCases[i]['up_func'];
+                this.apiCaseData.downFunc = this.apiCases[i]['down_func'];
                 this.tempNum = i;
                 this.paramVisible = true;
                 if (this.form.choiceType.toString() === 'json') {
@@ -339,31 +340,31 @@
                 cb(this.comparators);
             },
             addCaseVariable() {
-                this.caseConfig.variable.push({key: '', value: '', param_type: 'string', remark: ''});
+                this.apiCaseData.variable.push({key: '', value: '', param_type: 'string', remark: ''});
             },
             delCaseVariable(i) {
-                this.caseConfig.variable.splice(i, 1);
+                this.apiCaseData.variable.splice(i, 1);
             },
             addCaseExtract() {
-                this.caseConfig.extract.push({key: '', value: '', remark: ''});
+                this.apiCaseData.extract.push({key: '', value: '', remark: ''});
             },
             delCaseExtract(i) {
-                this.caseConfig.extract.splice(i, 1);
+                this.apiCaseData.extract.splice(i, 1);
             },
             addCaseParam() {
-                this.caseConfig.param.push({key: '', value: '', remark: ''});
+                this.apiCaseData.param.push({key: '', value: '', remark: ''});
             },
             delCaseParam(i) {
-                this.caseConfig.param.splice(i, 1);
+                this.apiCaseData.param.splice(i, 1);
             },
             addCaseValidate() {
-                this.caseConfig.validate.push({key: '', value: ''});
+                this.apiCaseData.validate.push({key: '', value: ''});
             },
             delCaseValidate(i) {
-                this.caseConfig.validate.splice(i, 1);
+                this.apiCaseData.validate.splice(i, 1);
             },
             fileChange(response, file, fileList) {
-                this.caseConfig.variable[this.temp_num]['value'] = response['data'];
+                this.apiCaseData.variable[this.temp_num]['value'] = response['data'];
                 this.messageShow(this, response);
             },
             tempNumTwo(i) {
@@ -372,7 +373,7 @@
             sureConfigBtn() {
                 if (this.form.choiceType.toString() === 'json') {
                     try {
-                        JSON.parse(this.caseConfig.variable)
+                        JSON.parse(this.apiCaseData.variable)
                     }
                     catch (err) {
                         this.$message({
@@ -383,20 +384,20 @@
                         return
                     }
                 }
-                if (this.caseConfig.downFunc) {
-                    this.apiCases[this.tempNum]['down_func'] = this.caseConfig.downFunc;
+                if (this.apiCaseData.downFunc) {
+                    this.apiCases[this.tempNum]['down_func'] = this.apiCaseData.downFunc;
                 }
                 else {
                     this.apiCases[this.tempNum]['down_func'] = '';
                 }
-                if (this.caseConfig.upFunc) {
-                    this.apiCases[this.tempNum]['up_func'] = this.caseConfig.upFunc;
+                if (this.apiCaseData.upFunc) {
+                    this.apiCases[this.tempNum]['up_func'] = this.apiCaseData.upFunc;
                 }
                 else {
                     this.apiCases[this.tempNum]['up_func'] = '';
                 }
-                if (this.caseConfig.name) {
-                    this.apiCases[this.tempNum]['case_name'] = this.caseConfig.name;
+                if (this.apiCaseData.name) {
+                    this.apiCases[this.tempNum]['case_name'] = this.apiCaseData.name;
                 }
                 else {
                     this.$message({
@@ -406,7 +407,7 @@
                     });
                     return
                 }
-                this.apiCases[this.tempNum]['variables'] = this.caseConfig.variable;
+                this.apiCases[this.tempNum]['variables'] = this.apiCaseData.variable;
                 this.paramVisible = false;
 
             },

@@ -345,7 +345,7 @@
             },
             showData(state = 'None') {
                 this.reportAddress = this.$route.query.reportId;
-                this.$axios.post('/api/api/report/list', {
+                this.$axios.post('/api/report/list', {
                     'reportId': this.reportAddress,
                     'state': state,
                 }).then((response) => {

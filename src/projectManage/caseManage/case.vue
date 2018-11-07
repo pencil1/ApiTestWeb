@@ -12,13 +12,13 @@
 
             </el-form-item>
             <el-form-item label="用例名称">
-                <el-input placeholder="请输入用例" v-model="form.sceneName">
+                <el-input placeholder="请输入用例" v-model="form.caseName">
                 </el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" icon="el-icon-search" @click.native="findSet()">搜索</el-button>
-                <el-button type="primary" @click.native="$refs.sceneEditFunc.initSceneData()">添加接口用例</el-button>
-                <el-button type="primary" @click.native="runScene(sceneList,true)">批量运行</el-button>
+                <el-button type="primary" @click.native="$refs.sceneEditFunc.initCaseData()">添加接口用例</el-button>
+                <el-button type="primary" @click.native="runScene(caseList,true)">批量运行</el-button>
                 <el-button type="primary" icon="el-icon-search" @click.native="findOldScenes()">搜索旧数据</el-button>
                 <el-switch
                         v-model="switchStatus"
@@ -77,8 +77,8 @@
                         <el-tab-pane label="业务列表" name="first">
                             <el-table
                                     ref="sceneMultipleTable"
-                                    @selection-change="handleSceneSelection"
-                                    :data="sceneAll"
+                                    @selection-change="handleCaseSelection"
+                                    :data="caseAll"
                                     max-height="748"
                                     stripe>
                                 <el-table-column
@@ -104,18 +104,18 @@
                                         label="操作">
                                     <template slot-scope="scope">
                                         <el-button type="primary" icon="el-icon-edit" size="mini"
-                                                   @click.native="$refs.sceneEditFunc.editScene(sceneAll[scope.$index]['sceneId'])">
+                                                   @click.native="$refs.caseEditFunc.editCase(caseAll[scope.$index]['sceneId'])">
                                             编辑
                                         </el-button>
                                         <el-button type="primary" icon="el-icon-tickets" size="mini"
-                                                   @click.native="$refs.sceneEditFunc.editScene(sceneAll[scope.$index]['sceneId'],true)">
+                                                   @click.native="$refs.caseEditFunc.editCase(caseAll[scope.$index]['sceneId'],true)">
                                             复制
                                         </el-button>
                                         <el-button type="primary" icon="el-icon-setting" size="mini"
-                                                   @click.native="runScene(sceneAll[scope.$index]['sceneId'])">运行
+                                                   @click.native="runScene(caseAll[scope.$index]['sceneId'])">运行
                                         </el-button>
                                         <el-button type="danger" icon="el-icon-delete" size="mini"
-                                                   @click.native="sureView(delScene,sceneAll[scope.$index]['sceneId'])">
+                                                   @click.native="sureView(delCase,caseAll[scope.$index]['sceneId'])">
                                             删除
                                         </el-button>
                                     </template>
@@ -128,11 +128,11 @@
 
                             <div class="pagination">
                                 <el-pagination
-                                        @current-change="handleSceneCurrentChange"
-                                        @size-change="handleSceneSizeChange"
+                                        @current-change="handleCaseCurrentChange"
+                                        @size-change="handleCaseSizeChange"
                                         :page-size="20"
                                         layout="total, sizes, prev, pager, next, jumper"
-                                        :total="this.scenePage.total">
+                                        :total="this.casePage.total">
                                 </el-pagination>
                             </div>
                         </el-tab-pane>
@@ -146,16 +146,16 @@
                 ref="setEditFunc">
 
         </setEdit>
-        <sceneEdit
+        <caseEdit
                 :allSetList="allSetList"
                 :proModelData="proModelData"
                 :projectName="form.projectName"
                 :setTempData="setTempData"
                 :configData="configData"
                 :funcAddress="funcAddress"
-                ref="sceneEditFunc">
+                ref="caseEditFunc">
 
-        </sceneEdit>
+        </caseEdit>
 
         <errorView ref="errorViewFunc">
         </errorView>
@@ -168,14 +168,14 @@
 
 <script>
     import setEdit from './setEdit.vue'
-    import sceneEdit from './sceneEdit.vue'
+    import caseEdit from './caseEdit.vue'
     import errorView from '../common/errorView.vue'
-    import result from '../case/result.vue'
+    import result from '../apiManage/result.vue'
 
     export default {
         components: {
             setEdit: setEdit,
-            sceneEdit: sceneEdit,
+            caseEdit: caseEdit,
             errorView: errorView,
             result: result,
 
@@ -192,12 +192,12 @@
                 setDataList: [],
                 funcAddress: '',
                 tempNum: '',
-                sceneList: [],
+                caseList: [],
                 proModelData: '',
                 loading: false,
                 configData: '',
-                sceneAll: [],
-                scenePage: {
+                caseAll: [],
+                casePage: {
                     total: 1,
                     currentPage: 1,
                     sizePage: 20,
@@ -213,7 +213,7 @@
                 },
                 form: {
                     projectName: '',
-                    sceneName: '',
+                    caseName: '',
                 },
 
             }
@@ -224,7 +224,7 @@
             handleNodeClick(data) {
                 this.setTempData.setId = data['id'];
                 this.setTempData.name = data['label'];
-                this.findScenes();
+                this.findCase();
             },
             querySearch(queryString, cb) {
                 // 调用 callback 返回建议列表的数据
@@ -232,50 +232,50 @@
             },
             findSuite() {
                 this.apiSuiteViewStatus = false;
-                this.$axios.post('/api/api/suite/find', {
+                this.$axios.post('/apiManage/apiManage/suite/find', {
                     'suiteName': this.form.caseName,
                     'modelName': this.form.modelName,
                     'projectName': this.form.apiMesProjectName,
-                    'page': this.scenePage.currentPage,
-                    'sizePage': this.scenePage.sizePage,
+                    'page': this.casePage.currentPage,
+                    'sizePage': this.casePage.sizePage,
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
                             this.suiteData = response.data['data'];
-                            this.scenePage.total = response.data['total'];
+                            this.casePage.total = response.data['total'];
                         }
                     }
                 )
             },
-            findScenes() {
-                this.$axios.post('/api/api/scene/find', {
+            findCase() {
+                this.$axios.post(this.$api.findCaseApi, {
                     'setId': this.setTempData.setId,
                     'projectName': this.form.projectName,
-                    'sceneName': this.form.sceneName,
-                    'page': this.scenePage.currentPage,
-                    'sizePage': this.scenePage.sizePage,
+                    'caseName': this.form.caseName,
+                    'page': this.casePage.currentPage,
+                    'sizePage': this.casePage.sizePage,
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
-                            this.sceneAll = response.data['data'];
-                            this.scenePage.total = response.data['total'];
+                            this.caseAll = response.data['data'];
+                            this.casePage.total = response.data['total'];
                         }
                     }
                 )
             },
             findOldScenes() {
-                this.$axios.post('/api/api/scene/findOld', {
+                this.$axios.post('/api/scene/findOld', {
                     'projectName': this.form.projectName,
-                    'sceneName': this.form.sceneName,
+                    'caseName': this.form.caseName,
                     'page': this.currentPage,
                     'sizePage': this.sizePage,
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
-                            this.sceneAll = response.data['data'];
+                            this.caseAll = response.data['data'];
                             this.total = response.data['total'];
                         }
                     }
                 )
             },
-            initSceneViewData() {
+            initCaseViewData() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
                         this.proModelData = response.data['data'];
                         this.configData = response.data['config_name_list'];
@@ -289,13 +289,13 @@
 
                     }
                 );
-                this.$axios.post('/api/api/func/getAddress').then((response) => {
+                this.$axios.post(this.$api.getFuncAddressApi).then((response) => {
                         this.funcAddress = response['data']['data'];
                     }
                 );
             },
             findSet() {
-                this.$axios.post('/api/api/set/find', {
+                this.$axios.post(this.$api.findCaseSetApi, {
                     'projectName': this.form.projectName,
                     'page': this.setPage.currentPage,
                     'sizePage': this.setPage.sizePage,
@@ -310,17 +310,17 @@
                                 this.$refs.testTree.setCurrentKey(this.setTempData.setId);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
                             });
                         }
-                        this.findScenes();
+                        this.findCase();
                     }
                 );
             },
-            handleSceneCurrentChange(val) {
-                this.scenePage.currentPage = val;
-                this.findScenes()
+            handleCaseCurrentChange(val) {
+                this.casePage.currentPage = val;
+                this.findCase()
             },
-            handleSceneSizeChange(val) {
-                this.scenePage.sizePage = val;
-                this.findScenes()
+            handleCaseSizeChange(val) {
+                this.casePage.sizePage = val;
+                this.findCase()
             },
             handleSetCurrentChange(val) {
                 this.setPage.currentPage = val;
@@ -330,11 +330,11 @@
                 this.setPage.sizePage = val;
                 this.findSet()
             },
-            delScene(sceneId) {
-                this.$axios.post('/api/api/scene/del', {'sceneId': sceneId}).then((response) => {
+            delCase(caseId) {
+                this.$axios.post(this.$api.delCaseApi, {'caseId': caseId}).then((response) => {
                         this.messageShow(this, response);
-                        this.form.sceneName = '';
-                        this.findScenes();
+                        this.form.caseName = '';
+                        this.findCase();
                     }
                 )
             },
@@ -349,7 +349,7 @@
                     _sceneIds.push(sceneIds)
                 }
                 this.loading = true;
-                this.$axios.post('/api/api/report/run', {
+                this.$axios.post(this.$api.runCaseApi, {
                     'reportStatus': this.switchStatus,
                     'sceneIds': _sceneIds,
                     'projectName': this.form.projectName
@@ -393,14 +393,14 @@
                 );
             },
 
-            handleSceneSelection(val) {
-                this.sceneList = val;
+            handleCaseSelection(val) {
+                this.caseList = val;
             },
             cancelSelection() {
                 this.$refs.sceneMultipleTable.clearSelection();
             },
             delSet() {
-                this.$axios.post('/api/api/set/del', {
+                this.$axios.post(this.$api.delCaseSetApi, {
                     'id': this.setTempData.setId,
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
@@ -411,7 +411,7 @@
             },
         },
         mounted() {
-            this.initSceneViewData();
+            this.initCaseViewData();
 
         },
     }

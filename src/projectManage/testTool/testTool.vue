@@ -70,7 +70,7 @@
         methods: {
             buildIdentity() {
                 // 调用 callback 返回建议列表的数据
-                this.$axios.get('/api/api/buildIdentity', {
+                this.$axios.get('/apiManage/apiManage/buildIdentity', {
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
@@ -88,7 +88,7 @@
             },
             testTask() {
                 // 调用 callback 返回建议列表的数据
-                this.$axios.post('/api/api/task/test', {
+                this.$axios.post('/apiManage/apiManage/task/test', {
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
@@ -120,7 +120,7 @@
                         }
                         // console.log(this.showData.substring(4787-3,4787+3))
                     }
-                // this.$axios.post('/api/api/runCmd', {
+                // this.$axios.post('/apiManage/apiManage/runCmd', {
                 //     'funcName':'sql_func',
                 // }).then((response) => {
                 //         if (response.data['status'] === 0) {
@@ -143,7 +143,7 @@
             },
             sqlData1() {
                 // 调用 callback 返回建议列表的数据
-                this.$axios.post('/api/api/delSql', {
+                this.$axios.post('/apiManage/apiManage/delSql', {
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
@@ -165,7 +165,7 @@
             },
             optimizeError() {
                 // 调用 callback 返回建议列表的数据
-                this.$axios.post('/api/api/optimizeError', {
+                this.$axios.post('/apiManage/apiManage/optimizeError', {
                     'errorData': this.showData,
                 }).then((response) => {
                         if (response.data['status'] === 0) {
@@ -188,7 +188,7 @@
             },
             dealSql() {
                 // 调用 callback 返回建议列表的数据
-                this.$axios.get('/api/api/delSql', {
+                this.$axios.get('/apiManage/apiManage/delSql', {
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
@@ -203,8 +203,8 @@
                     }
                 )
             },
-            findCases() {
-                this.$axios.post('/api/api/register', {
+            findApiMsg() {
+                this.$axios.post('/apiManage/apiManage/register', {
                     'name': this.caseData.name,
                     'username': this.caseData.username,
                     'password': this.caseData.password,

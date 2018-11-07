@@ -144,7 +144,7 @@
 
                         <el-form :inline="true">
                             <el-form-item label="项目名称" :label-width="sceneData.formLabelWidth">
-                                <!--<el-input v-model="form.projectName" auto-complete="off" :disabled="true">-->
+                                <!--<el-input v-module="form.projectName" auto-complete="off" :disabled="true">-->
                                 <!--</el-input>-->
                                 <el-select v-model="form.projectName" placeholder="请选择项目" @change="resetSetChoice" >
                                     <el-option
@@ -352,7 +352,7 @@
                                 :page-size="20"
 
                                 layout="total, sizes, prev, pager, next, jumper"
-                                :total="this.scenePage.total">
+                                :total="this.casePage.total">
                         </el-pagination>
                     </div>
                 </el-tab-pane>
@@ -532,7 +532,7 @@
                         </el-table-column>
                         <el-table-column property="type" label="type" header-align="center" width="100">
                             <template slot-scope="scope">
-                                <!--<el-input v-model="scope.row.param_type" size="medium">-->
+                                <!--<el-input v-module="scope.row.param_type" size="medium">-->
                                 <!--</el-input>-->
                                 <el-select v-model="scope.row.param_type" size="medium">
                                     <el-option v-for="item in paramTypes" :key="item" :value="item">
@@ -712,7 +712,7 @@
                 setDataList: [],
                 allSetList:'',
                 tempNum: '',
-                sceneList: [],
+                caseList: [],
                 apiSuiteViewStatus: true,
                 comparators: [{'value': 'equals'}, {'value': 'less_than'}, {'value': 'less_than_or_equals'},
                     {'value': 'greater_than'}, {'value': 'greater_than_or_equals'}, {'value': 'not_equals'},
@@ -720,7 +720,7 @@
                     {'value': 'count_greater_than_or_equals'}, {'value': 'length_less_than'},
                     {'value': 'length_less_than_or_equals'}],
                 statusCase: {variable: [true, true], extract: [true, true], validate: [true, true],},
-                caseConfig: {
+                apiCaseData: {
                     name: '',
                     time: '',
                     upFunc: '',
@@ -741,10 +741,10 @@
                 paramTypes: ['string', 'file'],
                 caseData: [],
                 suiteData: [],
-                sceneAll: [],
-                caseVessel: Array, //接口用例容器，勾选的内容都存在此变量
+                caseAll: [],
+                apiMsgVessel: Array, //接口用例容器，勾选的内容都存在此变量
                 caseList: [],
-                scenePage: {
+                casePage: {
                     total: 1,
                     currentPage: 1,
                     sizePage: 20,
@@ -820,9 +820,9 @@
                 if (node.level === 1){
                     this.setData.one_id = node.data.id;
                     this.tempSetName = node.data.label;
-                    this.findScenes().then(res => {
+                    this.findCase().then(res => {
                         if (res) {
-                            resolve(this.sceneAll);
+                            resolve(this.caseAll);
                         }
                     });
 
@@ -835,7 +835,7 @@
             handleNodeClick(data) {
                 this.setData.one_id = data['id'];
                 this.tempSetName = data['label'];
-                this.findScenes();
+                this.findCase();
             },
             filterNode(value, data) {
                 if (!value) return true;
@@ -845,14 +845,14 @@
                 // 调用 callback 返回建议列表的数据
                 cb(this.comparators);
             },
-            findCases() {
+            findApiMsg() {
                 this.apiSuiteViewStatus = true,
-                    this.$axios.post('/api/api/cases/find', {
+                    this.$axios.post('/apiManage/apiManage/cases/find', {
                         'projectName': this.form.apiMesProjectName,
                         'gatName': this.form.modelName,
                         'caseName': this.form.caseName,
-                        'page': this.scenePage.currentPage,
-                        'sizePage': this.scenePage.sizePage,
+                        'page': this.casePage.currentPage,
+                        'sizePage': this.casePage.sizePage,
                     }).then((response) => {
                             if (response.data['status'] === 0) {
                                 this.$message({
@@ -863,19 +863,19 @@
                             }
                             else {
                                 this.caseData = response.data['data'];
-                                this.scenePage.total = response.data['total'];
+                                this.casePage.total = response.data['total'];
                             }
                         }
                     )
             },
             findSuite() {
                 this.apiSuiteViewStatus = false,
-                    this.$axios.post('/api/api/suite/find', {
+                    this.$axios.post('/apiManage/apiManage/suite/find', {
                         'suiteName': this.form.caseName,
                         'modelName': this.form.modelName,
                         'projectName': this.form.apiMesProjectName,
-                        'page': this.scenePage.currentPage,
-                        'sizePage': this.scenePage.sizePage,
+                        'page': this.casePage.currentPage,
+                        'sizePage': this.casePage.sizePage,
                     }).then((response) => {
                             if (response.data['status'] === 0) {
                                 this.$message({
@@ -886,13 +886,13 @@
                             }
                             else {
                                 this.suiteData = response.data['data'];
-                                this.scenePage.total = response.data['total'];
+                                this.casePage.total = response.data['total'];
                             }
                         }
                     )
             },
-            findScenes() {
-                return this.$axios.post('/api/api/scene/find', {
+            findCase() {
+                return this.$axios.post('/apiManage/apiManage/scene/find', {
                     'setId': this.setData.one_id,
                     'projectName': this.form.projectName,
                     'sceneName': this.form.sceneName,
@@ -907,7 +907,7 @@
                             });
                         }
                         else {
-                            this.sceneAll = response.data['data'];
+                            this.caseAll = response.data['data'];
                             this.total = response.data['total'];
                             return true
                         }
@@ -915,7 +915,7 @@
                 )
             },
             findOldScenes() {
-                this.$axios.post('/api/api/scene/findOld', {
+                this.$axios.post('/apiManage/apiManage/scene/findOld', {
                     'projectName': this.form.projectName,
                     'sceneName': this.form.sceneName,
                     'page': this.currentPage,
@@ -929,7 +929,7 @@
                             });
                         }
                         else {
-                            this.sceneAll = response.data['data'];
+                            this.caseAll = response.data['data'];
                             this.total = response.data['total'];
                         }
                     }
@@ -951,13 +951,13 @@
                 );
             },
             getA(){
-                this.$axios.post('/api/api/func/getAddress').then((response) => {
+                this.$axios.post('/apiManage/apiManage/func/getAddress').then((response) => {
                         this.funcAddress = response['data']['data'];
                     }
                 );
             },
             findSet() {
-                return this.$axios.post('/api/api/set/find', {'projectName': this.form.projectName,}).then((response) => {
+                return this.$axios.post('/apiManage/apiManage/set/find', {'projectName': this.form.projectName,}).then((response) => {
                         this.setDataList = response.data['data'][this.form.projectName];
                         this.allSetList = response.data['data'];
                         if(response.data['data'][this.form.projectName][0]){
@@ -967,25 +967,25 @@
                                 this.$refs.testTree.setCurrentKey(this.setData.one_id);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
                             });
                         }
-                        this.findScenes();
+                        this.findCase();
                     }
                 );
             },
             handleCurrentChange(val) {
                 this.currentPage = val;
-                this.findScenes()
+                this.findCase()
             },
             handleSizeChange(val) {
                 this.sizePage = val;
-                this.findScenes()
+                this.findCase()
             },
             handleCurrentCase(val) {
-                this.scenePage.currentPage = val;
-                this.findCases()
+                this.casePage.currentPage = val;
+                this.findApiMsg()
             },
             handleSizeCase(val) {
-                this.scenePage.sizePage = val;
-                this.findCases()
+                this.casePage.sizePage = val;
+                this.findApiMsg()
             },
             addConfigVariable() {
                 this.sceneData.variable.push({key: '', value: '', remark: ''});
@@ -993,7 +993,7 @@
             delConfigVariable(i) {
                 this.sceneData.variable.splice(i, 1);
             },
-            addScene() {
+            addCase() {
                 for (let i = 0; i < this.caseList.length; i++) {
                     if (!(/(^[1-9]\d*$)/.test(this.caseList[i]['time']))) {
                         this.$message({
@@ -1005,7 +1005,7 @@
                     }
 
                 }
-                this.$axios.post('/api/api/scene/add', {
+                this.$axios.post('/apiManage/apiManage/scene/add', {
                     'num': this.sceneData.num,
                     'name': this.sceneData.name,
                     'times': this.sceneData.times,
@@ -1032,7 +1032,7 @@
                                 message: response.data['msg'],
                                 type: 'success',
                             });
-                            this.findScenes();
+                            this.findCase();
                             // this.findSet();
                         }
                     }
@@ -1062,30 +1062,30 @@
                 this.sceneData.num = '';
                 this.sceneData.url = '';
                 this.sceneData.modelFormVisible = true;
-                this.caseVessel = [];
+                this.apiMsgVessel = [];
                 this.caseList = [];
                 // this.cancelSelection();
                 // this.toggleSelection();
 
             },
             moreRun() {
-                console.log(this.sceneList)
+                console.log(this.caseList)
             },
             handleCaseSelection(val) {
-                this.caseVessel = val;
+                this.apiMsgVessel = val;
             },
-            addCaseData() {
+            addApiData() {
                 if (this.apiSuiteViewStatus) {
-                    this.caseList = this.caseList.concat(this.caseVessel);
+                    this.caseList = this.caseList.concat(this.apiMsgVessel);
                     this.caseList = JSON.parse(JSON.stringify(this.caseList));
                     this.$refs.multipleTable.clearSelection();
                 }
                 else {
                     let suiteIds = Array();
-                    for (let i = 0; i < this.caseVessel.length; i++) {
-                        suiteIds.push(this.caseVessel[i].id);
+                    for (let i = 0; i < this.apiMsgVessel.length; i++) {
+                        suiteIds.push(this.apiMsgVessel[i].id);
                     }
-                    this.$axios.post('/api/api/suite/findApi', {
+                    this.$axios.post('/apiManage/apiManage/suite/findApi', {
                         'suiteIds': suiteIds
                     }).then((response) => {
                             this.caseList = this.caseList.concat(response.data['data']);
@@ -1097,7 +1097,7 @@
                 }
             },
             addConfigData() {
-                this.$axios.post('/api/api/config/data', {
+                this.$axios.post('/apiManage/apiManage/config/data', {
                     'name': this.form.configName
                 }).then((response) => {
                         this.sceneData.variable = this.sceneData.variable.concat(response.data['data']['variables']);
@@ -1109,7 +1109,7 @@
             delApiCase(i) {
                 //判断caseList中是否存在id，存在则在数据库删除信息，否则在前端删除临时数据
                 if ('id' in this.caseList[i]) {
-                    this.$axios.post('/api/api/apiCase/del', {'id': this.caseList[i]['id']}).then((response) => {
+                    this.$axios.post('/apiManage/apiManage/apiCase/del', {'id': this.caseList[i]['id']}).then((response) => {
                             this.caseList.splice(i, 1);
                         }
                     )
@@ -1119,16 +1119,16 @@
                 }
             },
             caseConfigBtn(i) {
-                this.caseConfig.param = this.caseList[i]['param'];
-                this.caseConfig.variable = this.caseList[i]['variables'];
-                this.caseConfig.extract = this.caseList[i]['extract'];
-                this.caseConfig.validate = this.caseList[i]['validate'];
-                this.caseConfig.statusCase = this.caseList[i]['statusCase'];
+                this.apiCaseData.param = this.caseList[i]['param'];
+                this.apiCaseData.variable = this.caseList[i]['variables'];
+                this.apiCaseData.extract = this.caseList[i]['extract'];
+                this.apiCaseData.validate = this.caseList[i]['validate'];
+                this.apiCaseData.statusCase = this.caseList[i]['statusCase'];
                 this.form.choiceType = this.caseList[i]['variableType'];
-                this.caseConfig.name = this.caseList[i]['case_name'];
-                this.caseConfig.time = this.caseList[i]['time'];
-                this.caseConfig.upFunc = this.caseList[i]['up_func'];
-                this.caseConfig.downFunc = this.caseList[i]['down_func'];
+                this.apiCaseData.name = this.caseList[i]['case_name'];
+                this.apiCaseData.time = this.caseList[i]['time'];
+                this.apiCaseData.upFunc = this.caseList[i]['up_func'];
+                this.apiCaseData.downFunc = this.caseList[i]['down_func'];
                 this.tempNum = i;
                 this.paramVisible = true;
                 if (this.form.choiceType.toString() === 'json') {
@@ -1142,7 +1142,7 @@
             sureConfigBtn() {
                 if (this.form.choiceType.toString() === 'json') {
                     try {
-                        JSON.parse(this.caseConfig.variable)
+                        JSON.parse(this.apiCaseData.variable)
                     }
                     catch (err) {
                         this.$message({
@@ -1153,21 +1153,21 @@
                         return
                     }
                 }
-                if (this.caseConfig.downFunc) {
-                    this.caseList[this.tempNum]['down_func'] = this.caseConfig.downFunc;
+                if (this.apiCaseData.downFunc) {
+                    this.caseList[this.tempNum]['down_func'] = this.apiCaseData.downFunc;
                 }
                 else {
                     this.caseList[this.tempNum]['down_func'] = '';
                 }
-                if (this.caseConfig.upFunc) {
-                    this.caseList[this.tempNum]['up_func'] = this.caseConfig.upFunc;
+                if (this.apiCaseData.upFunc) {
+                    this.caseList[this.tempNum]['up_func'] = this.apiCaseData.upFunc;
 
                 }
                 else {
                     this.caseList[this.tempNum]['up_func'] = '';
                 }
-                if (this.caseConfig.name) {
-                    this.caseList[this.tempNum]['case_name'] = this.caseConfig.name;
+                if (this.apiCaseData.name) {
+                    this.caseList[this.tempNum]['case_name'] = this.apiCaseData.name;
                 }
                 else {
                     this.$message({
@@ -1177,7 +1177,7 @@
                     });
                     return
                 }
-                this.caseList[this.tempNum]['variables'] = this.caseConfig.variable;
+                this.caseList[this.tempNum]['variables'] = this.apiCaseData.variable;
                 this.paramVisible = false;
 
             },
@@ -1210,39 +1210,39 @@
                 this.$refs.multipleTable.clearSelection();
             },
             addCaseVariable() {
-                this.caseConfig.variable.push({key: '', value: '', param_type: 'string', remark: ''});
+                this.apiCaseData.variable.push({key: '', value: '', param_type: 'string', remark: ''});
             },
             delCaseVariable(i) {
-                this.caseConfig.variable.splice(i, 1);
+                this.apiCaseData.variable.splice(i, 1);
             },
             addCaseExtract() {
-                this.caseConfig.extract.push({key: '', value: '', remark: ''});
+                this.apiCaseData.extract.push({key: '', value: '', remark: ''});
             },
             delCaseExtract(i) {
-                this.caseConfig.extract.splice(i, 1);
+                this.apiCaseData.extract.splice(i, 1);
             },
             addCaseParam() {
-                this.caseConfig.param.push({key: '', value: '', remark: ''});
+                this.apiCaseData.param.push({key: '', value: '', remark: ''});
             },
             delCaseParam(i) {
-                this.caseConfig.param.splice(i, 1);
+                this.apiCaseData.param.splice(i, 1);
             },
             addCaseValidate() {
-                this.caseConfig.validate.push({key: '', value: ''});
+                this.apiCaseData.validate.push({key: '', value: ''});
             },
             delCaseValidate(i) {
-                this.caseConfig.validate.splice(i, 1);
+                this.apiCaseData.validate.splice(i, 1);
             },
-            delScene(sceneId) {
-                this.$axios.post('/api/api/scene/del', {'sceneId': sceneId}).then((response) => {
+            delCase(sceneId) {
+                this.$axios.post('/apiManage/apiManage/scene/del', {'sceneId': sceneId}).then((response) => {
                         this.messageShow(this, response);
                         this.form.sceneName = '';
-                        this.findScenes();
+                        this.findCase();
                     }
                 )
             },
-            editScene(sceneId, copyEditStatus = false) {
-                this.$axios.post('/api/api/scene/edit', {
+            editCase(sceneId, copyEditStatus = false) {
+                this.$axios.post('/apiManage/apiManage/scene/edit', {
                     'sceneId': sceneId,
                     'copyEditStatus': copyEditStatus
                 }).then((response) => {
@@ -1288,7 +1288,7 @@
                     names.push(name)
                 }
                 this.loading = true;
-                this.$axios.post('/api/api/report/run', {
+                this.$axios.post('/apiManage/apiManage/report/run', {
                     'sceneNames': names,
                     'projectName': this.form.projectName
                 }).then((response) => {
@@ -1321,7 +1321,7 @@
                 );
             },
             fileChange(response, file, fileList) {
-                this.caseConfig.variable[this.temp_num]['value'] = response['data'];
+                this.apiCaseData.variable[this.temp_num]['value'] = response['data'];
                 if (response['status'] === 0) {
                     this.$message({
                         showClose: true,
@@ -1348,8 +1348,8 @@
             apiFindChoice() {
                 this.form.modelName = this.proModelData[this.form.apiMesProjectName][0];
             },
-            handleSceneSelection(val) {
-                this.sceneList = val;
+            handleCaseSelection(val) {
+                this.caseList = val;
             },
             cancelSelection() {
                 this.$refs.sceneMultipleTable.clearSelection();
@@ -1360,7 +1360,7 @@
                 this.setData.id = '';
             },
             editSet() {
-                this.$axios.post('/api/api/set/edit', {
+                this.$axios.post('/apiManage/apiManage/set/edit', {
                     'id': this.setData.one_id,
                 }).then((response) => {
                         if (response.data['status'] === 0) {
@@ -1380,7 +1380,7 @@
                 )
             },
             stickSet() {
-                this.$axios.post('/api/api/set/stick', {
+                this.$axios.post('/apiManage/apiManage/set/stick', {
                     'id': this.setData.one_id,
                     'projectName': this.form.projectName
                 }).then((response) => {
@@ -1390,7 +1390,7 @@
                 )
             },
             delSet() {
-                this.$axios.post('/api/api/set/del', {
+                this.$axios.post('/apiManage/apiManage/set/del', {
                     'id': this.setData.one_id,
                 }).then((response) => {
                         if (response.data['status'] === 0) {
@@ -1413,7 +1413,7 @@
                 )
             },
             addSet() {
-                this.$axios.post('/api/api/set/add', {
+                this.$axios.post('/apiManage/apiManage/set/add', {
                     'projectName': this.form.projectName,
                     'name': this.setData.name,
                     'id': this.setData.id,

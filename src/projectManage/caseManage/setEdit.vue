@@ -32,7 +32,7 @@
         },
         methods: {
             addSet() {
-                this.$axios.post('/api/api/set/add', {
+                this.$axios.post(this.$api.addCaseSetApi, {
                     'projectName': this.projectName,
                     'name': this.setData.name,
                     'id': this.setData.id,
@@ -54,14 +54,14 @@
                 this.setData.name = this.setTempData.name;
                 this.setData.id = this.setTempData.setId;
                 this.setData.viewStatus = true;
-                // this.$axios.post('/api/api/set/edit', {
+                // this.$axios.post('/apiManage/apiManage/set/edit', {
                 //     'id': this.form.set.id,
                 // }).then((response) => {
                 //     }
                 // )
             },
             stickSet(id) {
-                this.$axios.post('/api/api/set/stick', {
+                this.$axios.post(this.$api.stickCaseSetApi, {
                     'id': id,
                     'projectName': this.projectName,
                 }).then((response) => {

@@ -45,7 +45,7 @@
                 <el-button type="primary" @click.native="initData()">录入接口信息</el-button>
                 <el-button type="primary"
                            v-if="showNumTab === 'first'"
-                           @click.native="apiTest(casesList)">测试
+                           @click.native="apiTest(apiMsgList)">测试
                 </el-button>
                 <el-button type="primary" v-if="showNumTab === 'third'"
                            @click.native="apiTest(null, suiteList)">测试
@@ -65,8 +65,8 @@
                     <el-table
 
                             ref="apiMultipleTable"
-                            @selection-change="handleCaseSelection"
-                            :data="caseTableData"
+                            @selection-change="handleApiMsgSelection"
+                            :data="ApiMsgTableData"
                             stripe
                             max-height="745">
                         <el-table-column
@@ -95,13 +95,13 @@
                                 width="320">
                             <template slot-scope="scope">
                                 <el-button type="primary" icon="el-icon-edit" size="mini"
-                                           @click.native="editCopyCase(caseTableData[scope.$index]['caseId'],'edit')">编辑
+                                           @click.native="editCopyCase(ApiMsgTableData[scope.$index]['apiMsgId'],'edit')">编辑
                                 </el-button>
                                 <el-button type="primary" icon="el-icon-tickets" size="mini"
-                                           @click.native="editCopyCase(caseTableData[scope.$index]['caseId'],'copy')">复制
+                                           @click.native="editCopyCase(ApiMsgTableData[scope.$index]['apiMsgId'],'copy')">复制
                                 </el-button>
                                 <el-button type="danger" icon="el-icon-delete" size="mini"
-                                           @click.native="sureView(delCases,caseTableData[scope.$index]['caseId'])">删除
+                                           @click.native="sureView(delCases,ApiMsgTableData[scope.$index]['apiMsgId'])">删除
                                 </el-button>
                             </template>
                         </el-table-column>
@@ -115,7 +115,7 @@
                                 @size-change="handleSizeChange"
                                 :page-size="20"
                                 layout="total, sizes, prev, pager, next, jumper"
-                                :total="this.apiPage.total">
+                                :total="this.apiMsgPage.total">
                         </el-pagination>
                     </div>
                 </el-tab-pane>
@@ -191,8 +191,8 @@
 
         <!--<suiteEdit-->
         <!--:projectName="form.projectName"-->
-        <!--:model="form.model"-->
-        <!--:casesList="casesList"-->
+        <!--:module="form.module"-->
+        <!--:apiMsgList="apiMsgList"-->
         <!--ref="suiteFunc">-->
         <!--</suiteEdit>-->
 
@@ -246,12 +246,12 @@
                 proModelData: '',
                 configData: '',
                 proUrlData: null,
-                caseTableData: Array(),//接口表单数据
+                ApiMsgTableData: Array(),//接口表单数据
                 suiteTableData: Array(),//套件表单数据
-                casesList: Array(),
+                apiMsgList: Array(),
                 suiteList: Array(),
                 funcAddress:null,
-                apiPage: {
+                apiMsgPage: {
                     total: 1,
                     currentPage: 1,
                     sizePage: 20,
@@ -289,7 +289,7 @@
                         this.form.projectName = response.data['user_pro']['pro_name'];
                         this.form.module = response.data['user_pro']['model_list'][0];
                         this.form.config = this.configData[this.form.projectName][0];
-                        this.findCases();
+                        this.findApiMsg();
                     }
                         // this.form.config.configName = response.data['config_name_list'][this.form.projectName][0]['name'].toString();
                         // this.form.config.configId = response.data['config_name_list'][this.form.projectName][0]['configId'].toString();
@@ -307,8 +307,8 @@
             },
             handleCurrentChange(val) {
                 if (this.showNumTab === 'first') {
-                    this.apiPage.currentPage = val;
-                    this.findCases();
+                    this.apiMsgPage.currentPage = val;
+                    this.findApiMsg();
                 }
                 else if (this.showNumTab === 'third') {
                     this.suitePage.currentPage = val;
@@ -317,8 +317,8 @@
             },
             handleSizeChange(val) {
                 if (this.showNumTab === 'first') {
-                    this.apiPage.sizePage = val;
-                    this.findCases();
+                    this.apiMsgPage.sizePage = val;
+                    this.findApiMsg();
                 }
                 else if (this.showNumTab === 'third') {
                     this.suitePage.sizePage = val;
@@ -327,7 +327,7 @@
             },
             findDataBtn() {
                 if (this.showNumTab !== 'third') {
-                    this.findCases();
+                    this.findApiMsg();
                     this.showNumTab = 'first'
                 }
                 else {
@@ -335,7 +335,7 @@
                 }
             },
             findSuite() {
-                this.$axios.post('/api/api/suite/find', {
+                this.$axios.post('/apiManage/apiManage/suite/find', {
                     'suiteName': this.form.suiteName,
                     'projectName': this.form.projectName,
                     'modelName': this.form.modelName,
@@ -350,7 +350,7 @@
                     }
                 )
             },
-            findCases() {
+            findApiMsg() {
                 if (this.form.module === null) {
                     this.$message({
                         showClose: true,
@@ -359,16 +359,16 @@
                     });
                     return
                 }
-                this.$axios.post('/api/api/cases/find', {
+                this.$axios.post(this.$api.findApiApi, {
                     'caseName': this.form.apiName,
                     'projectName': this.form.projectName,
                     'moduleId': this.form.module.moduleId,
-                    'page': this.apiPage.currentPage,
-                    'sizePage': this.apiPage.sizePage,
+                    'page': this.apiMsgPage.currentPage,
+                    'sizePage': this.apiMsgPage.sizePage,
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
-                            this.caseTableData = response.data['data'];
-                            this.apiPage.total = response.data['total'];
+                            this.ApiMsgTableData = response.data['data'];
+                            this.apiMsgPage.total = response.data['total'];
                         }
                     }
                 )
@@ -378,31 +378,31 @@
                 this.apiEditViewStatus = true;
                 this.showNumTab = 'second';
                 setTimeout(() => {
-                    this.$refs.apiFunc.initCaseData();
+                    this.$refs.apiFunc.initApiMsgData();
                 }, 0)
                 // this.$refs.suiteFunc.initData();
             },
 
-            editCopyCase(caseId, status) {
+            editCopyCase(apiMsgId, status) {
                 this.apiEditViewStatus = true;
                 this.showNumTab = 'second';
                 setTimeout(() => {
-                    this.$refs.apiFunc.editCopyCase(caseId, status);
+                    this.$refs.apiFunc.editCopyApiMsg(apiMsgId, status);
                 }, 0)
             },
-            delCases(caseId) {
-                this.$axios.post('/api/api/cases/del', {'caseId': caseId}).then((response) => {
+            delCases(apiMsgId) {
+                this.$axios.post(this.$api.delApiApi, {'apiMsgId': apiMsgId}).then((response) => {
                         this.messageShow(this, response);
                         this.form.apiName = null;
                         if ((this.currentPage - 1) * this.sizePage + 1 === this.total) {
                             this.currentPage = this.currentPage - 1
                         }
-                        this.findCases();
+                        this.findApiMsg();
                     }
                 )
             },
             delSuite(suiteId) {
-                this.$axios.post('/api/api/suite/del', {'suiteId': suiteId}).then((response) => {
+                this.$axios.post('/apiManage/apiManage/suite/del', {'suiteId': suiteId}).then((response) => {
                         this.messageShow(this, response);
                         this.form.apiName = null;
                         if ((this.currentPage - 1) * this.sizePage + 1 === this.total) {
@@ -412,10 +412,10 @@
                     }
                 )
             },
-            apiTest(caseData = null, suiteData = null) {
+            apiTest(apiMsgData = null, suiteData = null) {
                 this.loading = true;
-                this.$axios.post('/api/api/cases/run', {
-                    'caseData': caseData,
+                this.$axios.post(this.$api.runApiApi, {
+                    'apiMsgData': apiMsgData,
                     'suiteData': suiteData,
                     'projectName': this.form.projectName,
                     'configId': this.form.config.configId,
@@ -443,7 +443,7 @@
                 )
             },
             initSuiteView() {
-                if (this.casesList.length === 0) {
+                if (this.apiMsgList.length === 0) {
                     this.$message({
                         showClose: true,
                         message: '请至少选择1条接口信息',
@@ -457,8 +457,8 @@
             editSuite(suiteId) {
                 this.$refs.suiteFunc.editData(suiteId);
             },
-            handleCaseSelection(val) {
-                this.casesList = val;
+            handleApiMsgSelection(val) {
+                this.apiMsgList = val;
             },
             handleSuiteSelection(val) {
                 this.suiteList = val;

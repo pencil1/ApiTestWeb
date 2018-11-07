@@ -100,7 +100,7 @@
                     <el-form>
 
                         <!--<el-form-item label="执行类别" :label-width="taskData.formLabelWidth">-->
-                        <!--<el-select v-model="taskData.taskType" size="medium">-->
+                        <!--<el-select v-module="taskData.taskType" size="medium">-->
                         <!--<el-option v-for="item in taskTypes" :key="item" :value="item">-->
                         <!--</el-option>-->
                         <!--</el-select>-->
@@ -252,7 +252,7 @@
                 this.findTask()
             },
             findTask() {
-                this.$axios.post('/api/api/task/find', {
+                this.$axios.post(this.$api.findTaskApi, {
                     'projectName': this.form.projectName,
                     'taskName': this.form.taskName,
                     'page': this.currentPage,
@@ -293,7 +293,7 @@
                 // console.log(this.form.scenes)
             },
             addTask() {
-                this.$axios.post('/api/api/task/add', {
+                this.$axios.post(this.$api.addTaskApi, {
                     'projectName': this.form.projectName,
                     'setIds': this.form.set,
                     'sceneIds': this.form.scenes,
@@ -327,7 +327,7 @@
                 )
             },
             editTask(id) {
-                this.$axios.post('/api/api/task/edit', {'id': id}).then((response) => {
+                this.$axios.post(this.$api.editTaskApi, {'id': id}).then((response) => {
                         this.taskData.name = response.data['data']['task_name'];
                         this.taskData.timeConfig = response.data['data']['task_config_time'];
                         this.form.projectName = response.data['data']['project_name'];
@@ -352,28 +352,28 @@
                 )
             },
             startTask(id) {
-                this.$axios.post('/api/api/task/start', {'id': id}).then((response) => {
+                this.$axios.post(this.$api.startTaskApi, {'id': id}).then((response) => {
                         this.messageShow(this, response);
                         this.findTask();
                     }
                 )
             },
             pauseTask(id) {
-                this.$axios.post('/api/api/task/pause', {'id': id}).then((response) => {
+                this.$axios.post(this.$api.pauseTaskApi, {'id': id}).then((response) => {
                         this.messageShow(this, response);
                         this.findTask();
                     }
                 )
             },
             resumeTask(id) {
-                this.$axios.post('/api/api/task/resume', {'id': id}).then((response) => {
+                this.$axios.post(this.$api.resumeTaskApi, {'id': id}).then((response) => {
                         this.messageShow(this, response);
                         this.findTask();
                     }
                 )
             },
             removeTask(id) {
-                this.$axios.post('/api/api/task/remove', {'id': id}).then((response) => {
+                this.$axios.post(this.$api.removeTaskApi, {'id': id}).then((response) => {
                         this.messageShow(this, response);
                         this.findTask();
                     }
@@ -381,7 +381,7 @@
             },
             runNow(id) {
                 this.runStatus = true;
-                this.$axios.post('/api/api/task/run', {'id': id}).then((response) => {
+                this.$axios.post(this.$api.runTaskApi, {'id': id}).then((response) => {
                         if (this.messageShow(this, response)) {
                             this.findTask();
                             let {href} = this.$router.resolve({
@@ -395,7 +395,7 @@
                 )
             },
             delTask(id) {
-                this.$axios.post('/api/api/task/del', {'id': id}).then((response) => {
+                this.$axios.post(this.$api.delTaskApi, {'id': id}).then((response) => {
                         this.messageShow(this, response);
                         this.form.taskName = '';
                         if ((this.currentPage - 1) * this.sizePage + 1 === this.total) {

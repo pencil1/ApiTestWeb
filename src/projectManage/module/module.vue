@@ -151,7 +151,7 @@
                 this.findModel()
             },
             findModel() {
-                this.$axios.post(this.$api.findModelApi, {
+                this.$axios.post(this.$api.findModuleApi, {
                     'projectName': this.form.projectName,
                     'modelName': this.form.modelName,
                     'page': this.currentPage,
@@ -171,7 +171,7 @@
                 this.modelData.modelFormVisible = true;
             },
             addModel() {
-                this.$axios.post(this.$api.addModelApi, {
+                this.$axios.post(this.$api.addModuleApi, {
                     'projectName': this.form.projectName,
                     'gatherName': this.modelData.name,
                     'id': this.modelData.id,
@@ -185,7 +185,7 @@
                 )
             },
             editModel(id) {
-                this.$axios.post(this.$api.editModelApi, {'id': id}).then((response) => {
+                this.$axios.post(this.$api.editModuleApi, {'id': id}).then((response) => {
                         this.modelData.name = response.data['data']['gatherName'];
                         this.modelData.num = response.data['data']['num'];
                         this.modelData.projectName = this.form.projectName;
@@ -195,7 +195,7 @@
                 )
             },
             delModel(id) {
-                this.$axios.post(this.$api.delModelApi, {'id': id}).then((response) => {
+                this.$axios.post(this.$api.delModuleApi, {'id': id}).then((response) => {
                         this.messageShow(this, response);
                         this.form.modelName = null;
                         if ((this.currentPage - 1) * this.sizePage + 1 === this.total) {

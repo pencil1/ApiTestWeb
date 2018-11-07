@@ -105,7 +105,7 @@
         },
         methods: {
             register() {
-                this.$axios.post('/api/api/register', {
+                this.$axios.post(this.$api.registerApi, {
                     'name': this.caseData.name,
                     'username': this.caseData.username,
                     'password': this.caseData.password,
@@ -129,7 +129,7 @@
                 )
             },
             login() {
-                this.$axios.post('/api/api/login', {
+                this.$axios.post(this.$api.loginApi, {
                     'username': this.caseData.username,
                     'password': this.caseData.password,
                 }).then((response) => {

@@ -54,7 +54,7 @@
 
                     this.$store.commit(types.LOGOUT);
                     this.$router.push({path: '/login'});
-                    this.$axios.get('/api/api/logout').then((response) => {
+                    this.$axios.get(this.$api.logoutApi).then((response) => {
                             if (response.data['status'] === 0) {
                                 this.$message({
                                     showClose: true,
@@ -83,7 +83,7 @@
                 else if (path === '/manage/reportManage') {
                     this.title = ['报告管理', '接口报告']
                 }
-                else if (path === '/manage/sceneManage') {
+                else if (path === '/manage/caseManage') {
                     this.title = ['接口管理', '接口用例']
                 }
                 else if (path === '/manage/buildInFunc') {
