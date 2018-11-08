@@ -26,7 +26,7 @@
                 </el-input>
                 <!--</el-form-item>-->
 
-                <el-button type="success" @click.native="checkFunc()" size="small">函数调试</el-button>
+                <el-button type="primary" @click.native="checkFunc()" size="small">函数调试</el-button>
                 <!--</el-form>-->
 
             </el-col>
@@ -152,6 +152,14 @@
                     this.$message({
                         showClose: true,
                         message: '函数名不能为空',
+                        type: 'warning',
+                    });
+                    return
+                }
+                if (!this.funcData) {
+                    this.$message({
+                        showClose: true,
+                        message: '请点击文件读取后再调试',
                         type: 'warning',
                     });
                     return
