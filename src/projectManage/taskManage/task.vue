@@ -124,8 +124,8 @@
                                 </el-option>
                             </el-select>
 
-                            <el-select v-model="form.scenes" multiple placeholder="选择用例" value-key="id"
-                                       :disabled="sceneStatus">
+                            <el-select v-model="form.case" multiple placeholder="选择用例" value-key="id"
+                                       :disabled="caseStatus">
                                 <el-option
                                         v-for="item in allSceneList[this.form.set_id]"
                                         :key="item.id"
@@ -177,7 +177,7 @@
                 proModelData: '',
                 proSceneData: '',
                 runStatus: false,
-                sceneStatus: false,
+                caseStatus: false,
                 allSetList: '',
                 allSceneList: '',
                 tableData: [],
@@ -190,7 +190,7 @@
                         label: null,
                         id: null,
                     },
-                    scenes: {
+                    case: {
                         label: null,
                         id: null,
                     },
@@ -233,12 +233,12 @@
             },
             changeSceneChoice() {
                 if (this.form.set.length === 1) {
-                    this.sceneStatus = false;
+                    this.caseStatus = false;
                     this.form.set_id = this.form.set[0].id;
                 }
                 else {
-                    this.sceneStatus = true;
-                    this.form.scenes = [];
+                    this.caseStatus = true;
+                    this.form.case = [];
                     this.form.set_id = ''
 
                 }
@@ -282,7 +282,7 @@
                 this.taskData.timeConfig = '';
                 // this.form.projectName = '';
                 this.form.set = [];
-                this.form.scenes = [];
+                this.form.case = [];
                 this.taskData.num = '';
                 this.taskData.modelFormVisible = true;
 
@@ -290,13 +290,13 @@
             test1() {
                 console.log(this.allSetList[this.form.projectName]);
                 console.log(this.allSceneList['abc']);
-                // console.log(this.form.scenes)
+                // console.log(this.form.case)
             },
             addTask() {
                 this.$axios.post(this.$api.addTaskApi, {
                     'projectName': this.form.projectName,
                     'setIds': this.form.set,
-                    'sceneIds': this.form.scenes,
+                    'caseIds': this.form.case,
                     'id': this.taskData.id,
                     'num': this.taskData.num,
                     'name': this.taskData.name,
@@ -344,9 +344,9 @@
                             this.form.set_id = response.data['data']['set_ids'][0]['id']
                         }
                         else {
-                            this.sceneStatus = true;
+                            this.caseStatus = true;
                         }
-                        this.form.scenes = response.data['data']['scene_ids'];
+                        this.form.case = response.data['data']['case_ids'];
                         this.taskData.modelFormVisible = true;
                     }
                 )

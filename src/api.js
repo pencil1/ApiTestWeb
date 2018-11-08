@@ -55,12 +55,22 @@ const configDataApi = '/api/config/data';
 const fileUploadingApi = '/api/upload';
 const importApiApi = '/api/apiMsg/fileChange';
 
+const findFuncApi = '/api/func/find';
+const createFuncApi = '/api/func/create';
+const checkFuncApi = '/api/func/check';
+const saveFuncApi = '/api/func/save';
+
 export default {
     baseDataApi,
     getFuncAddressApi,
 
     findReportApi,
     delReportApi,
+
+    findFuncApi,
+    createFuncApi,
+    checkFuncApi,
+    saveFuncApi,
 
     startTaskApi,
     pauseTaskApi,

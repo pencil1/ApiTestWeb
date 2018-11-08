@@ -26,7 +26,7 @@
                 </el-input>
                 <!--</el-form-item>-->
 
-                <el-button type="success" @click.native="findFunc()" size="small">函数调试</el-button>
+                <el-button type="success" @click.native="checkFunc()" size="small">函数调试</el-button>
                 <!--</el-form>-->
 
             </el-col>
@@ -66,9 +66,12 @@
                             height="810px">
                 </codemirror>
             </el-col>
-            <el-col :span="8">
-                <div style="padding-left: 20px">{{this.funcData}}
+            <el-col :span="8" style="margin-top: 10px;padding-left:10px;">
+                <div>
+                    测试结果：
                 </div>
+                <pre style="white-space: pre-wrap;word-wrap: break-word;padding-left:10px;">{{this.result}}
+                </pre>
             </el-col>
         </el-row>
     </div>
@@ -96,10 +99,11 @@
                     lineWrapping: true,
                     scrollbarStyle: 'simple',
                 },
-                funcName:'',
+                funcName: '',
                 funcData: '',
                 comparator: '',
                 comparators: [],
+                result: '',
             }
         },
         methods: {
@@ -108,14 +112,14 @@
                 cb(this.comparators);
             },
             findFunc() {
-                this.$axios.post('/apiManage/apiManage/func/find', {'funcName': this.comparator}).then((response) => {
+                this.$axios.post(this.$api.findFuncApi, {'funcName': this.comparator}).then((response) => {
                         this.messageShow(this, response);
                         this.funcData = response['data']['func_data'];
                     }
                 )
             },
             createFunc() {
-                this.$axios.post('/apiManage/apiManage/func/create', {'funcName': this.comparator}).then((response) => {
+                this.$axios.post(this.$api.createFuncApi, {'funcName': this.comparator}).then((response) => {
                         this.messageShow(this, response);
                         this.getFuncAddress()
                     }
@@ -130,24 +134,60 @@
                 )
             },
             getFuncAddress() {
-                this.$axios.post('/apiManage/apiManage/func/getAddress').then((response) => {
+                this.$axios.post(this.$api.getFuncAddressApi).then((response) => {
                         this.comparators = response['data']['data'];
                     }
                 )
             },
             checkFunc() {
-                this.$axios.post('/apiManage/apiManage/func/check', {'funcName': this.comparator}).then((response) => {
-                        this.messageShow(this, response);
+                if (!this.comparator) {
+                    this.$message({
+                        showClose: true,
+                        message: '请先选择函数文件',
+                        type: 'warning',
+                    });
+                    return
+                }
+                if (!this.funcName) {
+                    this.$message({
+                        showClose: true,
+                        message: '函数名不能为空',
+                        type: 'warning',
+                    });
+                    return
+                }
+                this.$axios.post(this.$api.saveFuncApi, {
+                    'funcData': this.funcData,
+                    'funcName': this.comparator
+                }).then((response) => {
+                        this.$axios.post(this.$api.checkFuncApi, {
+                            'funcFileName': this.comparator,
+                            'funcName': this.funcName,
+                        }).then((response) => {
+                                this.messageShow(this, response);
+                                this.result = response['data']['result'];
+                                // this.messageShow(this, response);
+                            }
+                        )
                     }
                 )
+
             },
             saveFunc() {
-                this.$axios.post('/apiManage/apiManage/func/save', {
+                if (!this.funcData) {
+                    this.$message({
+                        showClose: true,
+                        message: '文件为空，请输入内容后再保存',
+                        type: 'warning',
+                    });
+                    return
+                }
+                this.$axios.post(this.$api.saveFuncApi, {
                     'funcData': this.funcData,
                     'funcName': this.comparator
                 }).then((response) => {
                         this.messageShow(this, response);
-                        this.checkFunc();
+                        // this.checkFunc();
                     }
                 )
             },

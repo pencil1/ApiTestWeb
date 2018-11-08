@@ -483,7 +483,6 @@
                 this.$refs.multipleTable.clearSelection();
             },
             findApiMsg() {
-                console.log(this.caseData.apiCases)
                 this.$axios.post(this.$api.findApiApi, {
                     'projectName': this.form.apiMesProjectName,
                     'moduleId': this.form.module.moduleId,
@@ -511,7 +510,6 @@
                 this.caseData.apiCases = JSON.parse(JSON.stringify(this.caseData.apiCases));
                 this.$refs.multipleTable.clearSelection();
                 this.againSort()
-                console.log(this.caseData.apiCases)
             },
             addConfigData() {
                 this.$axios.post(this.$api.configDataApi, {

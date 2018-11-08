@@ -17,7 +17,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" icon="el-icon-search" @click.native="findSet()">搜索</el-button>
-                <el-button type="primary" @click.native="$refs.sceneEditFunc.initCaseData()">添加接口用例</el-button>
+                <el-button type="primary" @click.native="$refs.caseEditFunc.initCaseData()">添加接口用例</el-button>
                 <el-button type="primary" @click.native="runScene(caseList,true)">批量运行</el-button>
                 <el-button type="primary" icon="el-icon-search" @click.native="findOldScenes()">搜索旧数据</el-button>
                 <el-switch
@@ -377,7 +377,6 @@
 
                             for (let i = 0; i < response['data']['data']['data']['details'].length; i++) {
                                 tempData['details'][0]['records'] = tempData['details'][0]['records'].concat(response['data']['data']['data']['details'][i]['records'])
-                                console.log(response['data']['data']['data']['details'][i]['records'])
                             }
                             this.$refs.resultFunc.showData(tempData);
                         }
