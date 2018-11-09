@@ -180,7 +180,7 @@
                             :configData="form.config"
                             :proModelData="proModelData"
                             :proUrlData="proUrlData"
-                            @findApi="findCases"
+                            @findApiMsg="findApiMsg"
                             ref="apiFunc">
                     </apiEdit>
 

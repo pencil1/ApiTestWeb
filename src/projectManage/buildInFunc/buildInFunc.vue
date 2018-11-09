@@ -2,7 +2,7 @@
     <div class="buildInFunc" style="padding: 10px 10px 10px 10px">
         <el-row>
             <el-col :span="7">
-                <span>内置函数文档</span>
+                <span>函数文件</span>
                 <el-autocomplete
                         class="inline-input"
                         v-model="comparator"

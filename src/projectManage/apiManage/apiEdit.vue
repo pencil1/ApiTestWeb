@@ -10,7 +10,7 @@
                     </el-option>
                 </el-select>
 
-                <el-select v-model="form.module" placeholder="请选择模块" value-key="moduleId"  size="small">
+                <el-select v-model="form.module" placeholder="请选择模块" value-key="moduleId" size="small">
                     <el-option
                             v-for="item in proModelData[this.form.projectName]"
                             :key="item.moduleId"
@@ -172,7 +172,7 @@
                                     <el-col :span="2">
                                         <el-upload
                                                 class="upload-demo"
-                                                action="/api/api/upload"
+                                                action="/api/upload"
                                                 :show-file-list='false'
                                                 :on-success="fileChange">
                                             <el-button size="mini" type="primary"
@@ -328,7 +328,7 @@
                     configName: null,
                     suiteName: null,
                     apiName: null,
-                    module:{
+                    module: {
                         name: null,
                         moduleId: null,
                     },
@@ -415,25 +415,18 @@
                 this.form.projectName = this.projectName;
                 this.form.module = this.module;
             },
-            addApiMsg(messageClose=false) {
+            addApiMsg(messageClose = false) {
                 // test()
-                let variable;
-                if (this.form.choiceType === 'data') {
-                    variable = JSON.stringify(this.apiMsgData.variable)
+                try {
+                    JSON.parse(this.apiMsgData.jsonVariable)
                 }
-                else {
-                    variable = this.apiMsgData.jsonVariable;
-                    try {
-                        JSON.parse(variable)
-                    }
-                    catch (err) {
-                        this.$message({
-                            showClose: true,
-                            message: 'json格式错误',
-                            type: 'warning',
-                        });
-                        return
-                    }
+                catch (err) {
+                    this.$message({
+                        showClose: true,
+                        message: 'json格式错误',
+                        type: 'warning',
+                    });
+                    return
                 }
                 return this.$axios.post(this.$api.addApiApi, {
                     'moduleId': this.form.module.moduleId,
@@ -451,35 +444,36 @@
                     'apiMsgId': this.apiMsgData.id,
                     'param': JSON.stringify(this.apiMsgData.param),
                     'header': JSON.stringify(this.apiMsgData.header),
-                    'variable': variable,
+                    'variable': JSON.stringify(this.apiMsgData.variable),
+                    'jsonVariable': this.apiMsgData.jsonVariable,
                     'extract': JSON.stringify(this.apiMsgData.extract),
                     'method': this.apiMsgData.method,
                     'validate': JSON.stringify(this.apiMsgData.validate)
                 }).then((response) => {
-                    if(messageClose){
-                        if (response.data['status'] === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'warning',
-                            });
-                            return false
+                        if (messageClose) {
+                            if (response.data['status'] === 0) {
+                                this.$message({
+                                    showClose: true,
+                                    message: response.data['msg'],
+                                    type: 'warning',
+                                });
+                                return false
+                            }
+                            else {
+                                this.apiMsgData.id = response.data['api_msg_id'];
+                                this.apiMsgData.num = response.data['num'];
+                                this.$emit('findApiMsg');
+                                return true
+                            }
                         }
                         else {
-                            this.apiMsgData.id = response.data['api_msg_id'];
-                            this.apiMsgData.num = response.data['num'];
-                            this.$emit('findApi');
-                            return true
+                            if (this.messageShow(this, response)) {
+                                this.apiMsgData.id = response.data['api_msg_id'];
+                                this.apiMsgData.num = response.data['num'];
+                                this.$emit('findApiMsg');
+                                return true
+                            }
                         }
-                    }
-                    else{
-                        if (this.messageShow(this, response)) {
-                            this.apiMsgData.id = response.data['api_msg_id'];
-                            this.apiMsgData.num = response.data['num'];
-                            this.$emit('findApi');
-                            return true
-                        }
-                    }
 
                     }
                 )
@@ -495,14 +489,16 @@
                             this.apiMsgData.num = '';
                             this.apiMsgData.id = '';
                         }
-                        if (response.data['data']['variableType'] === 'data') {
-                            this.apiMsgData.variable = response.data['data']['variable'];
-                            this.apiMsgData.jsonVariable = String()
-                        }
-                        else {
-                            this.apiMsgData.jsonVariable = response.data['data']['variable'];
-                            this.apiMsgData.variable = Array()
-                        }
+                        // if (response.data['data']['variableType'] === 'data') {
+                        //     this.apiMsgData.variable = response.data['data']['variable'];
+                        //     this.apiMsgData.jsonVariable = String()
+                        // }
+                        // else {
+                        //     this.apiMsgData.jsonVariable = response.data['data']['variable'];
+                        //     this.apiMsgData.variable = Array()
+                        // }
+                        this.apiMsgData.variable = response.data['data']['variable'];
+                        this.apiMsgData.jsonVariable = response.data['data']['json_variable'];
                         this.apiMsgData.desc = response.data['data']['desc'];
                         this.apiMsgData.funcAddress = response.data['data']['funcAddress'];
                         this.apiMsgData.upFunc = response.data['data']['up_func'];
@@ -642,10 +638,10 @@
                     if (strParam.substr(strParam.length - 1, 1) === '&') {
                         strParam = strParam.substring(0, strParam.length - 1)
                     }
-                    if(strParam){
+                    if (strParam) {
                         this.apiMsgData.url = this.apiMsgData.url.split("?")[0] + '?' + strParam
                     }
-                    else{
+                    else {
                         this.apiMsgData.url = this.apiMsgData.url.split("?")[0]
                     }
 

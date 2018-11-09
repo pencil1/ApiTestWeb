@@ -1,7 +1,10 @@
 <template>
     <div class="sceneEdit">
 
-        <el-dialog title="用例" :visible.sync="caseData.modelFormVisible" width="50%" top="5vh">
+        <el-dialog title="用例"
+                   :visible.sync="caseData.modelFormVisible"
+                   :close-on-click-modal="false"
+                   width="50%" top="5vh">
 
             <el-tabs value="first">
                 <el-tab-pane label="用例信息" name="first" style="margin-top: 10px">

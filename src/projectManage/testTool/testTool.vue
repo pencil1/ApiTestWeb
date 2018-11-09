@@ -70,7 +70,7 @@
         methods: {
             buildIdentity() {
                 // 调用 callback 返回建议列表的数据
-                this.$axios.get('/apiManage/apiManage/buildIdentity', {
+                this.$axios.get('/api/buildIdentity', {
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
@@ -188,7 +188,7 @@
             },
             dealSql() {
                 // 调用 callback 返回建议列表的数据
-                this.$axios.get('/apiManage/apiManage/delSql', {
+                this.$axios.post('/api/delSql', {
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({

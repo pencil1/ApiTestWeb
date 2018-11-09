@@ -86,7 +86,7 @@
                         <div style="margin: 0 0 15px;">
                         </div>
                         <div style="border-style:solid;border-width: 1px;border-color: rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234)">
-                            <codemirror v-model="apiCaseData.variable"
+                            <codemirror v-model="apiCaseData.json_variable"
                                         :options="options"
                                         height="500px">
                             </codemirror>
@@ -130,7 +130,7 @@
                                         <el-col :span="3">
                                             <el-upload
                                                     class="upload-demo"
-                                                    action="/api/api/upload"
+                                                    action="/api/upload"
                                                     :show-file-list='false'
                                                     :on-success="fileChange"
                                             >
@@ -306,6 +306,7 @@
                     downFunc: '',
                     statusCase: {variable: [], extract: [], validate: [], param: []},
                     variable: [{key: '', value: '', param_type: '', remark: ''}],
+                    json_variable:'[]',
                     extract: [{key: '', value: ''}],
                     validate: [{key: '', value: '', comparator: ''}],
                     param: [{key: '', value: '', remark: ''}],
@@ -314,9 +315,9 @@
         },
         methods: {
             initData(i) {
-                console.log(this.apiCases[i])
                 this.apiCaseData.param = this.apiCases[i]['param'];
                 this.apiCaseData.variable = this.apiCases[i]['variable'];
+                this.apiCaseData.json_variable = this.apiCases[i]['json_variable'];
                 this.apiCaseData.extract = this.apiCases[i]['extract'];
                 this.apiCaseData.validate = this.apiCases[i]['validate'];
                 this.apiCaseData.statusCase = this.apiCases[i]['statusCase'];
@@ -407,7 +408,7 @@
                     });
                     return
                 }
-                this.apiCases[this.tempNum]['variables'] = this.apiCaseData.variable;
+                this.apiCases[this.tempNum]['variable'] = this.apiCaseData.variable;
                 this.paramVisible = false;
 
             },

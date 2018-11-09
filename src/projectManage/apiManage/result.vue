@@ -16,8 +16,8 @@
                     <div>{{item.meta_data.request.url}}</div>
                     <div style="color: red">请求params：</div>
                     <div>{{item.meta_data.request.params}}</div>
-                    <div style="color: red">请求body：</div>
-                    <div>{{item.meta_data.request.body}}</div>
+                    <!--<div style="color: red">请求body：</div>-->
+                    <!--<div>{{item.meta_data.request.body}}</div>-->
                     <div style="color: red">请求参数：</div>
                     <div v-if="item.meta_data.request.data !== '{}'">{{item.meta_data.request.data}}</div>
                     <div v-if="item.meta_data.request.json">{{item.meta_data.request.json}}</div>
