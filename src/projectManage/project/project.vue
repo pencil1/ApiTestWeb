@@ -30,16 +30,16 @@
                             label="项目名称"
                             width="150">
                     </el-table-column>
-                    <el-table-column
-                            prop="host"
-                            label="基础url1"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                            prop="host_two"
-                            label="基础url2"
-                    >
-                    </el-table-column>
+                    <!--<el-table-column-->
+                            <!--prop="host"-->
+                            <!--label="基础url1"-->
+                    <!--&gt;-->
+                    <!--</el-table-column>-->
+                    <!--<el-table-column-->
+                            <!--prop="host_two"-->
+                            <!--label="基础url2"-->
+                    <!--&gt;-->
+                    <!--</el-table-column>-->
                     <el-table-column
                             prop="principal"
                             label="负责人"
@@ -84,23 +84,93 @@
                             <el-input v-model="projectData.principal">
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="基础url1" :label-width="projectData.formLabelWidth">
-                            <el-input v-model="projectData.host">
-                            </el-input>
-                        </el-form-item>
-                        <el-form-item label="基础url2" :label-width="projectData.formLabelWidth">
-                            <el-input v-model="projectData.hostTwo">
-                            </el-input>
-                        </el-form-item>
-                        <el-form-item label="基础url3" :label-width="projectData.formLabelWidth">
-                            <el-input v-model="projectData.hostThree">
-                            </el-input>
-                        </el-form-item>
-                        <el-form-item label="基础url4" :label-width="projectData.formLabelWidth">
-                            <el-input v-model="projectData.hostFour">
-                            </el-input>
-                        </el-form-item>
+                        <!--<el-form-item label="基础url1" :label-width="projectData.formLabelWidth">-->
+                            <!--<el-input v-model="projectData.host">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                        <!--<el-form-item label="基础url2" :label-width="projectData.formLabelWidth">-->
+                            <!--<el-input v-model="projectData.hostTwo">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                        <!--<el-form-item label="基础url3" :label-width="projectData.formLabelWidth">-->
+                            <!--<el-input v-model="projectData.hostThree">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                        <!--<el-form-item label="基础url4" :label-width="projectData.formLabelWidth">-->
+                            <!--<el-input v-model="projectData.hostFour">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
                     </el-form>
+                    <el-tabs v-model="environmentChoice" type="card">
+                        <el-tab-pane label="测试环境" name="first">
+                            <el-table :data="environment.environmentTest" size="mini" stripe :show-header="false">
+                                <el-table-column property="value" label="Value" header-align="center" minWidth="200">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.value" size="mini" placeholder="value">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column property="value" label="操作" header-align="center" width="80">
+                                    <template slot-scope="scope">
+                                        <el-button type="danger" icon="el-icon-delete" size="mini"
+                                                   @click.native="delTableList('test',scope.$index)">
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-tab-pane>
+                        <el-tab-pane label="开发环境" name="second">
+                            <el-table :data="environment.environmentDevelop" size="mini" stripe :show-header="false">
+                                <el-table-column property="value" label="Value" header-align="center" minWidth="200">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.value" size="mini" placeholder="value">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column property="value" label="操作" header-align="center" width="80">
+                                    <template slot-scope="scope">
+                                        <el-button type="danger" icon="el-icon-delete" size="mini"
+                                                   @click.native="delTableList('develop',scope.$index)">
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-tab-pane>
+                        <el-tab-pane label="线上环境" name="third">
+                            <el-table :data="environment.environmentProduction" size="mini" stripe :show-header="false">
+                                <el-table-column property="value" label="Value" header-align="center" minWidth="200">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.value" size="mini" placeholder="value">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column property="value" label="操作" header-align="center" width="80">
+                                    <template slot-scope="scope">
+                                        <el-button type="danger" icon="el-icon-delete" size="mini"
+                                                   @click.native="delTableList('production',scope.$index)">
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-tab-pane>
+                        <el-tab-pane label="备用环境" name="fourth">
+                            <el-table :data="environment.environmentStandby" size="mini" stripe :show-header="false">
+                                <el-table-column property="value" label="Value" header-align="center" minWidth="200">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.value" size="mini" placeholder="value">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column property="value" label="操作" header-align="center" width="80">
+                                    <template slot-scope="scope">
+                                        <el-button type="danger" icon="el-icon-delete" size="mini"
+                                                   @click.native="delTableList('standby',scope.$index)">
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-tab-pane>
+                    </el-tabs>
                 </el-tab-pane>
 
                 <el-tab-pane label="公用变量" style="margin-top: 10px">
@@ -181,6 +251,14 @@
         name: 'projectManage',
         data() {
             return {
+
+                environmentChoice: 'first',
+                environment: {
+                    environmentTest: [{value: ''}],
+                    environmentDevelop: [{value: ''}],
+                    environmentProduction: [{value: ''}],
+                    environmentStandby: [{value: ''}],
+                },
                 tableData: Array(),
                 total: 1,
                 currentPage: 1,
@@ -204,6 +282,8 @@
             }
         },
         methods: {
+
+
             proHandleCurrentChange(val) {
                 this.currentPage = val;
                 this.findProject()
@@ -227,24 +307,50 @@
             },
             initProjectData() {
                 this.projectData.projectName = null;
-                this.projectData.host = null;
-                this.projectData.hostTwo = null;
-                this.projectData.hostThree = null;
-                this.projectData.hostFour = null;
+                this.environment.environmentTest = Array();
+                this.environment.environmentDevelop = Array();
+                this.environment.environmentProduction = Array();
+                this.environment.environmentStandby = Array();
+                // this.projectData.host = null;
+                // this.projectData.hostTwo = null;
+                // this.projectData.hostThree = null;
+                // this.projectData.hostFour = null;
                 this.projectData.principal = null;
                 this.projectData.header = Array();
                 this.projectData.variable = Array();
                 this.projectData.id = null;
                 this.projectData.modelFormVisible = true;
             },
+            dealHostList(data) {
+                let host = Array();
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].value) {
+                        host.push(data[i].value);
+                    }
+
+                }
+                return host
+            },
+            dealHostDict(data) {
+                let host = Array();
+                console.log(data)
+                if(!data){
+                    return host
+                }
+                for (let i = 0; i < data.length; i++) {
+                    host.push({value: data[i]});
+                }
+                return host
+            },
             addProject() {
                 this.$axios.post(this.$api.addProApi, {
                     'projectName': this.projectData.projectName,
                     'principal': this.projectData.principal,
-                    'host': this.projectData.host,
-                    'hostTwo': this.projectData.hostTwo,
-                    'hostThree': this.projectData.hostThree,
-                    'hostFour': this.projectData.hostFour,
+                    'environmentChoice': this.environmentChoice,
+                    'host': this.dealHostList(this.environment.environmentTest),
+                    'hostTwo': this.dealHostList(this.environment.environmentDevelop),
+                    'hostThree': this.dealHostList(this.environment.environmentProduction),
+                    'hostFour': this.dealHostList(this.environment.environmentStandby),
                     'id': this.projectData.id,
                     'header': JSON.stringify(this.projectData.header),
                     'variable': JSON.stringify(this.projectData.variable),
@@ -260,10 +366,12 @@
                 this.$axios.post(this.$api.editProApi, {'id': id}).then((response) => {
                         this.projectData.projectName = response.data['data']['pro_name'];
                         this.projectData.principal = response.data['data']['principal'];
-                        this.projectData.host = response.data['data']['host'];
-                        this.projectData.hostTwo = response.data['data']['host_two'];
-                        this.projectData.hostThree = response.data['data']['host_three'];
-                        this.projectData.hostFour = response.data['data']['host_four'];
+                        this.environmentChoice = response.data['data']['environment_choice'];
+                        this.environment.environmentTest = this.dealHostDict(response.data['data']['host']);
+                        this.environment.environmentDevelop = this.dealHostDict(response.data['data']['host_two']);
+                        this.environment.environmentProduction = this.dealHostDict(response.data['data']['host_three']);
+                        this.environment.environmentStandby = this.dealHostDict(response.data['data']['host_four']);
+
                         this.projectData.header = response.data['data']['headers'];
                         this.projectData.variable = response.data['data']['variables'];
                         this.projectData.id = id;
@@ -294,6 +402,102 @@
             },
             delProjectHeader(i) {
                 this.projectData.header.splice(i, 1);
+            },
+            delTableList(type, i) {
+                this.$confirm('删除url为影响到整体排序,接口引用是url的序号,请认真考虑一下?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    if (type === 'test') {
+                        this.environment.environmentTest.splice(i, 1);
+                    }
+                    else if (type === 'develop') {
+                        this.environment.environmentDevelop.splice(i, 1);
+                    }
+                    else if (type === 'production') {
+                        this.environment.environmentProduction.splice(i, 1);
+                    }
+                    else if (type === 'standby') {
+                        this.environment.environmentStandby.splice(i, 1);
+                    }
+                }).catch(() => {
+                });
+
+            },
+            addTableList(type) {
+                if (type === 'test') {
+                    this.environment.environmentTest.push({value: ''});
+                }
+                else if (type === 'develop') {
+                    this.environment.environmentDevelop.push({value: ''});
+                }
+                else if (type === 'production') {
+                    this.environment.environmentProduction.push({value: ''});
+                }
+                else if (type === 'standby') {
+                    this.environment.environmentStandby.push({value: ''});
+                }
+            },
+        },
+        computed: {
+            monitorEnvironmentTest() {
+                return this.environment.environmentTest;
+            },
+            monitorEnvironmentDevelop() {
+                return this.environment.environmentDevelop;
+            },
+            monitorEnvironmentProduction() {
+                return this.environment.environmentProduction;
+            },
+            monitorEnvironmentStandby() {
+                return this.environment.environmentStandby;
+            },
+        },
+        watch: {
+            monitorEnvironmentTest: {
+                handler: function () {
+                    if (this.environment.environmentTest.length === 0) {
+                        this.addTableList('test')
+                    }
+                    if (this.environment.environmentTest[this.environment.environmentTest.length - 1]['value']) {
+                        this.addTableList('test')
+                    }
+                },
+                deep: true
+            },
+            monitorEnvironmentDevelop: {
+                handler: function () {
+                    if (this.environment.environmentDevelop.length === 0) {
+                        this.addTableList('develop')
+                    }
+                    if (this.environment.environmentDevelop[this.environment.environmentDevelop.length - 1]['value']) {
+                        this.addTableList('develop')
+                    }
+                },
+                deep: true
+            },
+            monitorEnvironmentProduction: {
+                handler: function () {
+                    if (this.environment.environmentProduction.length === 0) {
+                        this.addTableList('production')
+                    }
+                    if (this.environment.environmentProduction[this.environment.environmentProduction.length - 1]['value']) {
+                        this.addTableList('production')
+                    }
+                },
+                deep: true
+            },
+            monitorEnvironmentStandby: {
+                handler: function () {
+                    if (this.environment.environmentStandby.length === 0) {
+                        this.addTableList('standby')
+                    }
+                    if (this.environment.environmentStandby[this.environment.environmentStandby.length - 1]['value']) {
+                        this.addTableList('standby')
+                    }
+                },
+                deep: true
             },
         },
         mounted() {
