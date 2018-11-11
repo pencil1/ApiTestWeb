@@ -19,7 +19,8 @@
     "vue-router": "^3.0.1",
     "vue-scrollbar": "^1.0.4",
     "vue-template-compiler": "^2.5.17",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "yarn": "^1.12.3"
   },
   "engines": {
     "node": ">=6"

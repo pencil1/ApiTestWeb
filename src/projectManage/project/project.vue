@@ -31,13 +31,13 @@
                             width="150">
                     </el-table-column>
                     <!--<el-table-column-->
-                            <!--prop="host"-->
-                            <!--label="基础url1"-->
+                    <!--prop="host"-->
+                    <!--label="基础url1"-->
                     <!--&gt;-->
                     <!--</el-table-column>-->
                     <!--<el-table-column-->
-                            <!--prop="host_two"-->
-                            <!--label="基础url2"-->
+                    <!--prop="host_two"-->
+                    <!--label="基础url2"-->
                     <!--&gt;-->
                     <!--</el-table-column>-->
                     <el-table-column
@@ -75,32 +75,17 @@
         <el-dialog title="项目配置" :visible.sync="projectData.modelFormVisible" width="40%">
             <el-tabs>
                 <el-tab-pane label="基础信息" style="margin-top: 10px">
-                    <el-form>
+                    <el-form :inline="true">
                         <el-form-item label="项目名称" :label-width="projectData.formLabelWidth">
-                            <el-input v-model="projectData.projectName">
+                            <el-input v-model="projectData.projectName" size="small">
                             </el-input>
                         </el-form-item>
                         <el-form-item label="负责人" :label-width="projectData.formLabelWidth">
-                            <el-input v-model="projectData.principal">
+                            <el-input v-model="projectData.principal" size="small">
                             </el-input>
                         </el-form-item>
-                        <!--<el-form-item label="基础url1" :label-width="projectData.formLabelWidth">-->
-                            <!--<el-input v-model="projectData.host">-->
-                            <!--</el-input>-->
-                        <!--</el-form-item>-->
-                        <!--<el-form-item label="基础url2" :label-width="projectData.formLabelWidth">-->
-                            <!--<el-input v-model="projectData.hostTwo">-->
-                            <!--</el-input>-->
-                        <!--</el-form-item>-->
-                        <!--<el-form-item label="基础url3" :label-width="projectData.formLabelWidth">-->
-                            <!--<el-input v-model="projectData.hostThree">-->
-                            <!--</el-input>-->
-                        <!--</el-form-item>-->
-                        <!--<el-form-item label="基础url4" :label-width="projectData.formLabelWidth">-->
-                            <!--<el-input v-model="projectData.hostFour">-->
-                            <!--</el-input>-->
-                        <!--</el-form-item>-->
                     </el-form>
+                    <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -10px"/>
                     <el-tabs v-model="environmentChoice" type="card">
                         <el-tab-pane label="测试环境" name="first">
                             <el-table :data="environment.environmentTest" size="mini" stripe :show-header="false">
@@ -237,7 +222,7 @@
             <div slot="footer" class="dialog-footer">
                 <el-button @click="projectData.modelFormVisible = false" size="small">取 消</el-button>
                 <el-button type="primary"
-                           @click.native="addProject()" size="small">确 定
+                           @click.native="addProjectBtn()" size="small">确 定
                 </el-button>
             </div>
         </el-dialog>
@@ -333,14 +318,55 @@
             },
             dealHostDict(data) {
                 let host = Array();
-                console.log(data)
-                if(!data){
+                if (!data) {
                     return host
                 }
                 for (let i = 0; i < data.length; i++) {
                     host.push({value: data[i]});
                 }
                 return host
+            },
+            environmentJudge() {
+                this.$confirm('当前所选环境的url数量和测试环境不一致,可能会影响到接口测试~~', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.addProject()
+                }).catch(() => {
+                });
+
+            },
+            addProjectBtn() {
+                let test_length = this.dealHostList(this.environment.environmentTest).length;
+                if (this.environmentChoice === 'second') {
+                    if (this.dealHostList(this.environment.environmentDevelop).length !== test_length) {
+                        this.environmentJudge()
+                    }
+                    else {
+                        this.addProject()
+                    }
+                }
+                else if (this.environmentChoice === 'third') {
+                    if (this.dealHostList(this.environment.environmentProduction).length !== test_length) {
+                        this.environmentJudge()
+                    }
+                    else {
+                        this.addProject()
+                    }
+                }
+                else if (this.environmentChoice === 'fourth') {
+                    if (this.dealHostList(this.environment.environmentStandby).length !== test_length) {
+                        this.environmentJudge()
+                    }
+                    else {
+                        this.addProject()
+                    }
+                }
+                else {
+                    this.addProject()
+                }
+
             },
             addProject() {
                 this.$axios.post(this.$api.addProApi, {
@@ -361,7 +387,8 @@
                         }
                     }
                 )
-            },
+            }
+            ,
             editProject(id) {
                 this.$axios.post(this.$api.editProApi, {'id': id}).then((response) => {
                         this.projectData.projectName = response.data['data']['pro_name'];
@@ -378,7 +405,8 @@
                         this.projectData.modelFormVisible = true;
                     }
                 )
-            },
+            }
+            ,
             delProject(id) {
                 this.$axios.post(this.$api.delProApi, {'id': id}).then((response) => {
                         this.messageShow(this, response);
@@ -390,19 +418,24 @@
                         this.findProject();
                     }
                 )
-            },
+            }
+            ,
             addProjectVariable() {
                 this.projectData.variable.push({key: null, value: null, remark: null});
-            },
+            }
+            ,
             delProjectVariable(i) {
                 this.projectData.variable.splice(i, 1);
-            },
+            }
+            ,
             addProjectHeader() {
                 this.projectData.header.push({key: null, value: null});
-            },
+            }
+            ,
             delProjectHeader(i) {
                 this.projectData.header.splice(i, 1);
-            },
+            }
+            ,
             delTableList(type, i) {
                 this.$confirm('删除url为影响到整体排序,接口引用是url的序号,请认真考虑一下?', '提示', {
                     confirmButtonText: '确定',
@@ -424,7 +457,8 @@
                 }).catch(() => {
                 });
 
-            },
+            }
+            ,
             addTableList(type) {
                 if (type === 'test') {
                     this.environment.environmentTest.push({value: ''});
@@ -438,22 +472,29 @@
                 else if (type === 'standby') {
                     this.environment.environmentStandby.push({value: ''});
                 }
-            },
-        },
+            }
+            ,
+        }
+        ,
         computed: {
             monitorEnvironmentTest() {
                 return this.environment.environmentTest;
-            },
+            }
+            ,
             monitorEnvironmentDevelop() {
                 return this.environment.environmentDevelop;
-            },
+            }
+            ,
             monitorEnvironmentProduction() {
                 return this.environment.environmentProduction;
-            },
+            }
+            ,
             monitorEnvironmentStandby() {
                 return this.environment.environmentStandby;
-            },
-        },
+            }
+            ,
+        }
+        ,
         watch: {
             monitorEnvironmentTest: {
                 handler: function () {
@@ -463,9 +504,11 @@
                     if (this.environment.environmentTest[this.environment.environmentTest.length - 1]['value']) {
                         this.addTableList('test')
                     }
-                },
+                }
+                ,
                 deep: true
-            },
+            }
+            ,
             monitorEnvironmentDevelop: {
                 handler: function () {
                     if (this.environment.environmentDevelop.length === 0) {
@@ -474,9 +517,11 @@
                     if (this.environment.environmentDevelop[this.environment.environmentDevelop.length - 1]['value']) {
                         this.addTableList('develop')
                     }
-                },
+                }
+                ,
                 deep: true
-            },
+            }
+            ,
             monitorEnvironmentProduction: {
                 handler: function () {
                     if (this.environment.environmentProduction.length === 0) {
@@ -485,9 +530,11 @@
                     if (this.environment.environmentProduction[this.environment.environmentProduction.length - 1]['value']) {
                         this.addTableList('production')
                     }
-                },
+                }
+                ,
                 deep: true
-            },
+            }
+            ,
             monitorEnvironmentStandby: {
                 handler: function () {
                     if (this.environment.environmentStandby.length === 0) {
@@ -496,13 +543,17 @@
                     if (this.environment.environmentStandby[this.environment.environmentStandby.length - 1]['value']) {
                         this.addTableList('standby')
                     }
-                },
+                }
+                ,
                 deep: true
-            },
-        },
+            }
+            ,
+        }
+        ,
         mounted() {
             this.findProject();
-        },
+        }
+        ,
     }
 </script>
 <style>
