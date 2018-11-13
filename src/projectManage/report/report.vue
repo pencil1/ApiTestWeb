@@ -80,9 +80,9 @@
                             <el-button type="primary" icon="el-icon-zoom-in" size="mini"
                                        @click.native="check(tableData[scope.$index]['id'])">查看
                             </el-button>
-                            <!--<el-button type="primary" icon="el-icon-download" size="mini"-->
-                            <!--@click.native="downReport(tableData[scope.$index]['id'])">下载-->
-                            <!--</el-button>-->
+                            <el-button type="primary" icon="el-icon-download" size="mini"
+                            @click.native="downReport(tableData[scope.$index]['id'])">下载
+                            </el-button>
                             <el-button type="danger" icon="el-icon-delete" size="mini"
                                        @click.native="sureView(delReport, tableData[scope.$index]['address'])">删除
                             </el-button>
@@ -219,7 +219,7 @@
                 window.open(href, '_blank');
             },
             downReport(reportId) {
-                this.$axios.post('/apiManage/apiManage/report/download', {'reportId': reportId}).then((response) => {
+                this.$axios.post('/api/report/download', {'reportId': reportId,'dataOrReport':true}).then((response) => {
                         // console.log(response.data['data']);
                         // download(response.data['data'], "测试报告.html", "text/html")
                         this.download(response.data['data'], "测试报告.html", "text/html")

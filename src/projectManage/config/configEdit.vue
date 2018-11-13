@@ -6,8 +6,7 @@
 
 
                 <el-tab-pane label="基础信息" name="second" style="margin-top: 10px">
-                    <el-form :inline="true">
-                        <el-form :model="configData">
+                        <el-form :inline="true"  size="small" >
                             <el-form-item label="项目名称">
                                 <el-select v-model="configData.projectName" placeholder="请选择项目" size="small">
                                     <el-option
@@ -22,9 +21,7 @@
                                 </el-input>
                             </el-form-item>
                         </el-form>
-
-                    </el-form>
-                    <el-form :inline="true">
+                    <el-form :inline="true"  size="small" class="demo-form-inline" >
                         <el-form-item label="函数文件">
                             <el-select v-model="configData.funcAddress" clearable placeholder="请选择导入函数文件" size="small">
                                 <el-option
@@ -44,23 +41,24 @@
                             <el-button type="primary" size="small" @click="addConfigVariable()">添加变量</el-button>
                         </el-form-item>
                     </el-form>
+
                     <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
                     <el-table :data="configData.variable" stripe :show-header="false">
                         <el-table-column label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.key" size="small" placeholder="key">
+                                <el-input v-model="scope.row.key" size="mini" placeholder="key">
                                 </el-input>
                             </template>
                         </el-table-column>
                         <el-table-column label="Value" header-align="center" minWidth="200">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.value" size="small" placeholder="Value">
+                                <el-input v-model="scope.row.value" size="mini" placeholder="Value">
                                 </el-input>
                             </template>
                         </el-table-column>
                         <el-table-column label="备注" header-align="center" minWidth="80">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.remark" size="small" placeholder="备注">
+                                <el-input v-model="scope.row.remark" size="mini" placeholder="备注">
                                 </el-input>
                             </template>
                         </el-table-column>

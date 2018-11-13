@@ -33,9 +33,9 @@
 
         <el-row>
             <el-col :span="3"
-                    style="border-style:solid;border-color: #ffffff rgb(234, 234, 234) #ffffff #ffffff;border-width: 1px;">
+                    style="border:1px solid;;border-color: #ffffff rgb(234, 234, 234) #ffffff #ffffff;">
                 <el-row>
-                    <el-col style="border-style:solid;border-color: #ead4d4;border-width: 1px;padding:2px">
+                    <el-col style="border:1px solid;border-color: #ffffff #ffffff rgb(234, 234, 234) #ffffff;padding:2px">
                         <el-button-group style="float:right;">
                             <el-button size="mini" type="primary" @click.native="$refs.setEditFunc.initSet()">添加
                             </el-button>

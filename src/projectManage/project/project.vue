@@ -95,7 +95,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column property="value" label="操作" header-align="center" width="80">
+                                <el-table-column property="value" label="操作" header-align="center" width="50">
                                     <template slot-scope="scope">
                                         <el-button type="danger" icon="el-icon-delete" size="mini"
                                                    @click.native="delTableList('test',scope.$index)">
@@ -112,7 +112,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column property="value" label="操作" header-align="center" width="80">
+                                <el-table-column property="value" label="操作" header-align="center" width="50">
                                     <template slot-scope="scope">
                                         <el-button type="danger" icon="el-icon-delete" size="mini"
                                                    @click.native="delTableList('develop',scope.$index)">
@@ -129,7 +129,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column property="value" label="操作" header-align="center" width="80">
+                                <el-table-column property="value" label="操作" header-align="center" width="50">
                                     <template slot-scope="scope">
                                         <el-button type="danger" icon="el-icon-delete" size="mini"
                                                    @click.native="delTableList('production',scope.$index)">
@@ -146,7 +146,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column property="value" label="操作" header-align="center" width="80">
+                                <el-table-column property="value" label="操作" header-align="center" width="50">
                                     <template slot-scope="scope">
                                         <el-button type="danger" icon="el-icon-delete" size="mini"
                                                    @click.native="delTableList('standby',scope.$index)">
@@ -326,22 +326,26 @@
                 }
                 return host
             },
-            environmentJudge() {
-                this.$confirm('当前所选环境的url数量和测试环境不一致,可能会影响到接口测试~~', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.addProject()
-                }).catch(() => {
-                });
-
-            },
+            // environmentJudge() {
+            //     this.$confirm('当前所选环境的url数量和测试环境不一致,可能会影响到接口测试~~', '提示', {
+            //         confirmButtonText: '确定',
+            //         cancelButtonText: '取消',
+            //         type: 'warning'
+            //     }).then(() => {
+            //         this.addProject()
+            //     }).catch(() => {
+            //     });
+            //
+            // },
             addProjectBtn() {
                 let test_length = this.dealHostList(this.environment.environmentTest).length;
                 if (this.environmentChoice === 'second') {
                     if (this.dealHostList(this.environment.environmentDevelop).length !== test_length) {
-                        this.environmentJudge()
+                        this.$message({
+                            showClose: true,
+                            message: '当前所选环境的url数量和测试环境不一致,会影响到接口测试',
+                            type: 'warning',
+                        });
                     }
                     else {
                         this.addProject()
@@ -349,7 +353,11 @@
                 }
                 else if (this.environmentChoice === 'third') {
                     if (this.dealHostList(this.environment.environmentProduction).length !== test_length) {
-                        this.environmentJudge()
+                        this.$message({
+                            showClose: true,
+                            message: '当前所选环境的url数量和测试环境不一致,会影响到接口测试',
+                            type: 'warning',
+                        });
                     }
                     else {
                         this.addProject()
@@ -357,7 +365,11 @@
                 }
                 else if (this.environmentChoice === 'fourth') {
                     if (this.dealHostList(this.environment.environmentStandby).length !== test_length) {
-                        this.environmentJudge()
+                        this.$message({
+                            showClose: true,
+                            message: '当前所选环境的url数量和测试环境不一致,会影响到接口测试',
+                            type: 'warning',
+                        });
                     }
                     else {
                         this.addProject()
@@ -366,7 +378,6 @@
                 else {
                     this.addProject()
                 }
-
             },
             addProject() {
                 this.$axios.post(this.$api.addProApi, {
@@ -437,7 +448,7 @@
             }
             ,
             delTableList(type, i) {
-                this.$confirm('删除url为影响到整体排序,接口引用是url的序号,请认真考虑一下?', '提示', {
+                this.$confirm('删除url为影响到整体排序,接口引用是依据url的序号来得,请认真考虑一下?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
