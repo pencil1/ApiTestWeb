@@ -6,26 +6,26 @@
                         v-for="(item, index) in resultData.resultShowData"
                         :key="index">
                     <template slot="title">
-                        <div :style="item.attachment ? 'color:rgb(255, 74, 74)': 'color:#303133'">{{item.name}}</div>
+                        <div :style="item.attachment ? 'color:rgb(255, 74, 74)': 'color:#45b90c'">{{item.name}}</div>
                     </template>
                     <!--<el-button type="primary" v-clipboard:copy="JSON.stringify(item.meta_data.response_body)"-->
                     <!--size="small"-->
                     <!--style="position:absolute;right: 3%;">复制-->
                     <!--</el-button>-->
-                    <div style="color: red">url：</div>
+                    <div style="color: #409eff">url：</div>
                     <div>{{item.meta_data.request.url}}</div>
-                    <div style="color: red">请求params：</div>
+                    <div style="color: #409eff">请求params：</div>
                     <div>{{item.meta_data.request.params}}</div>
                     <!--<div style="color: red">请求body：</div>-->
                     <!--<div>{{item.meta_data.request.body}}</div>-->
-                    <div style="color: red">请求参数：</div>
+                    <div style="color: #409eff">请求参数：</div>
                     <div v-if="item.meta_data.request.data !== '{}'">{{item.meta_data.request.data}}</div>
                     <div v-if="item.meta_data.request.json">{{item.meta_data.request.json}}</div>
-                    <div style="color: red">请求头：</div>
+                    <div style="color: #409eff">请求头：</div>
                     <div>{{item.meta_data.request.headers}}</div>
-                    <div style="color: red">信息提取：</div>
+                    <div style="color: #409eff">信息提取：</div>
                     <pre style="overflow: auto">{{resultData.out}}</pre>
-                    <div style="color: red">返回结果：</div>
+                    <div style="color: #409eff">返回结果：</div>
                     <div>
                         <pre style="overflow: auto" >{{resultDeal(item.meta_data.response.content)}}</pre>
                         <!--<pre>{{item.meta_data.response.json}}</pre>-->

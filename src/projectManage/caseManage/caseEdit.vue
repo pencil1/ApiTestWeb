@@ -462,7 +462,7 @@
             delApiCase(i) {
                 //判断caseList中是否存在id，存在则在数据库删除信息，否则在前端删除临时数据
                 if ('id' in this.caseData.apiCases[i]) {
-                    this.$axios.post('/apiManage/apiManage/apiCase/del', {'id': this.caseData.apiCases[i]['id']}).then((response) => {
+                    this.$axios.post('/api/apiCase/del', {'id': this.caseData.apiCases[i]['id']}).then((response) => {
                             this.caseData.apiCases.splice(i, 1);
                         }
                     )

@@ -2,7 +2,7 @@
     <div class="sceneManage" v-loading="this.loading">
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目名称" labelWidth="110px">
-                <el-select v-model="form.projectName" placeholder="请选择项目">
+                <el-select v-model="form.projectName" placeholder="请选择项目" @change="findSet">
                     <el-option
                             v-for="(item, key) in proModelData"
                             :key="key"
@@ -33,7 +33,7 @@
 
         <el-row>
             <el-col :span="3"
-                    style="border:1px solid;;border-color: #ffffff rgb(234, 234, 234) #ffffff #ffffff;">
+                    style="border:1px solid;border-color: #ffffff rgb(234, 234, 234) #ffffff #ffffff;">
                 <el-row>
                     <el-col style="border:1px solid;border-color: #ffffff #ffffff rgb(234, 234, 234) #ffffff;padding:2px">
                         <el-button-group style="float:right;">

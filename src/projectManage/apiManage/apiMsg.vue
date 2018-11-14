@@ -50,7 +50,7 @@
                 <el-button type="primary" v-if="showNumTab === 'third'"
                            @click.native="apiTest(null, suiteList)">测试
                 </el-button>
-                <el-button type="primary" icon="el-icon-view" @click.native="$refs.resultFunc.lastResult()"></el-button>
+                <el-button type="primary" icon="el-icon-view" @click.native="lookResult()"></el-button>
                 <!--<el-button type="primary" @click.native="initSuiteView()">添加套件</el-button>-->
                 <el-button type="primary" @click.native="$refs.importApiFunc.initData()">导入信息</el-button>
                 <el-button type="primary"
@@ -470,6 +470,15 @@
             clearChoice() {
                 this.form.config = {name: null, configId: null,};
                 this.form.module = {name: null, moduleId: null,};
+            },
+            lookResult() {
+                if(this.showNumTab === 'first'){
+                    this.$refs.resultFunc.lastResult();
+                }
+                else {
+                    this.$refs.apiFunc.lastResult();
+                }
+
             },
 
         },

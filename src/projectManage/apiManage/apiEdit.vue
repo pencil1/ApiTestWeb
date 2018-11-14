@@ -27,13 +27,25 @@
                     </el-option>
                 </el-select>
             </el-form-item>
+        <!--</el-form>-->
+            <!--<el-form :inline="true" style="padding: 10px 20px -10px 10px;">-->
             <el-form-item label="接口编号" label-width="80px" prop="num" v-if="apiMsgData.id"
                           style="margin-bottom: 5px">
-                <el-input v-model.number="apiMsgData.num" auto-complete="off" placeholder="接口编号" size="small">
+                <el-input v-model.number="apiMsgData.num" placeholder="接口编号" size="small" style="width: 70px;text-align:center;">
                 </el-input>
             </el-form-item>
             <el-form-item prop="name" style="margin-bottom: 5px">
-                <el-input v-model="apiMsgData.name" auto-complete="off" placeholder="接口名称" size="small">
+                <el-input v-model="apiMsgData.name" placeholder="接口名称" size="small">
+                </el-input>
+            </el-form-item>
+            <el-form-item prop="name" style="margin-bottom: 5px">
+
+                <el-input v-model="apiMsgData.upFunc" placeholder="set_up_hooks" size="small">
+                </el-input>
+
+            </el-form-item>
+            <el-form-item prop="name" style="margin-bottom: 5px">
+                <el-input v-model="apiMsgData.downFunc" placeholder="set_down_hooks" size="small">
                 </el-input>
             </el-form-item>
         </el-form>
@@ -356,7 +368,7 @@
                     param: [{key: null, value: null}],
                     header: Array(),
                     variable: [],
-                    jsonVariable: String(),
+                    jsonVariable: "",
                     extract: Array(),
                     validate: Array(),
                 },
@@ -401,7 +413,7 @@
                 this.apiMsgData.header = Array();
                 this.apiMsgData.variable = Array();
                 this.apiMsgData.param = Array();
-                this.apiMsgData.jsonVariable = String();
+                this.apiMsgData.jsonVariable = "{}";
                 this.apiMsgData.extract = Array();
                 this.apiMsgData.validate = Array();
                 this.apiMsgData.name = null;
@@ -587,6 +599,9 @@
                     this.apiMsgData.param.push({key: null, value: null});
                 }
             },
+            lastResult(){
+                this.$refs.resultFunc.lastResult();
+            }
         },
         computed: {
             monitorParam() {
