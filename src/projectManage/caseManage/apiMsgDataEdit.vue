@@ -7,15 +7,15 @@
             <el-tabs>
                 <el-tab-pane label="接口信息" style="margin-top: 10px">
                     <el-form>
-                        <el-form-item label="用例名称"  prop="name" label-width="120px" >
+                        <el-form-item label="用例名称" prop="name" label-width="120px">
                             <el-input v-model="apiCaseData.name">
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="up函数" label-width="120px" >
+                        <el-form-item label="up函数" label-width="120px">
                             <el-input v-model="apiCaseData.upFunc">
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="down函数" label-width="120px" >
+                        <el-form-item label="down函数" label-width="120px">
                             <el-input v-model="apiCaseData.downFunc">
                             </el-input>
                         </el-form-item>
@@ -92,10 +92,10 @@
                             </codemirror>
                         </div>
                         <!--<el-input-->
-                                <!--type="textarea"-->
-                                <!--:rows="27"-->
-                                <!--placeholder="请输入内容"-->
-                                <!--v-module="apiCaseData.variable">-->
+                        <!--type="textarea"-->
+                        <!--:rows="27"-->
+                        <!--placeholder="请输入内容"-->
+                        <!--v-module="apiCaseData.variable">-->
                         <!--</el-input>-->
                     </div>
                     <el-table :data="apiCaseData.variable" size="mini" stripe
@@ -264,6 +264,7 @@
 
 <script>
     import {codemirror} from 'vue-codemirror-lite'
+
     export default {
         components: {
             codemirror,
@@ -294,7 +295,7 @@
                 paramTypes: ['string', 'file'],
                 paramVisible: false,
                 temp_num: '',
-                tempNum:'',
+                tempNum: '',
                 form: {
                     choiceTypeStatus: false,
                     choiceType: 'data',
@@ -306,7 +307,7 @@
                     downFunc: '',
                     statusCase: {variable: [], extract: [], validate: [], param: []},
                     variable: [{key: '', value: '', param_type: '', remark: ''}],
-                    json_variable:'[]',
+                    json_variable: '[]',
                     extract: [{key: '', value: ''}],
                     validate: [{key: '', value: '', comparator: ''}],
                     param: [{key: '', value: '', remark: ''}],
@@ -373,16 +374,18 @@
             },
             sureConfigBtn() {
                 if (this.form.choiceType.toString() === 'json') {
-                    try {
-                        JSON.parse(this.apiCaseData.variable)
-                    }
-                    catch (err) {
-                        this.$message({
-                            showClose: true,
-                            message: 'json格式错误',
-                            type: 'warning',
-                        });
-                        return
+                    if (this.apiMsgData.jsonVariable) {
+                        try {
+                            JSON.parse(this.apiCaseData.json_variable)
+                        }
+                        catch (err) {
+                            this.$message({
+                                showClose: true,
+                                message: 'json格式错误',
+                                type: 'warning',
+                            });
+                            return
+                        }
                     }
                 }
                 if (this.apiCaseData.downFunc) {
@@ -422,7 +425,6 @@
         color: rgb(183, 40, 135);
         /*color: rgb(137, 21, 99);*/
     }
-
 
     .cm-s-default .cm-string {
         /*color: rgb(116,88,255);*/

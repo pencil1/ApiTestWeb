@@ -54,11 +54,6 @@
                 this.setData.name = this.setTempData.name;
                 this.setData.id = this.setTempData.setId;
                 this.setData.viewStatus = true;
-                // this.$axios.post('/apiManage/apiManage/set/edit', {
-                //     'id': this.form.set.id,
-                // }).then((response) => {
-                //     }
-                // )
             },
             stickSet(id) {
                 this.$axios.post(this.$api.stickCaseSetApi, {

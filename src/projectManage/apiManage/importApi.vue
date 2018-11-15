@@ -44,7 +44,7 @@
         },
         methods: {
             initData() {
-                if (!this.moduleData.moduleId) {
+                if (!this.moduleData) {
                     this.$message({
                         showClose: true,
                         message: '请选择模块',

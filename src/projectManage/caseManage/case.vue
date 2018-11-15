@@ -224,6 +224,7 @@
             handleNodeClick(data) {
                 this.setTempData.setId = data['id'];
                 this.setTempData.name = data['label'];
+                this.casePage.currentPage = 1;
                 this.findCase();
             },
             querySearch(queryString, cb) {

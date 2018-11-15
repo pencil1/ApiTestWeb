@@ -13,6 +13,7 @@ const findModuleApi = '/api/module/find';
 const addModuleApi = '/api/module/add';
 const editModuleApi = '/api/module/edit';
 const delModuleApi = '/api/module/del';
+const stickModuleApi = '/api/module/stick';
 
 const findConfigApi = '/api/config/find';
 const addConfigApi = '/api/config/add';
@@ -103,6 +104,7 @@ export default {
     addModuleApi,
     editModuleApi,
     delModuleApi,
+    stickModuleApi,
 
     findConfigApi,
     addConfigApi,

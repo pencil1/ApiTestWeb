@@ -71,7 +71,6 @@
             </el-tab-pane>
         </el-tabs>
 
-
         <el-dialog title="项目配置" :visible.sync="projectData.modelFormVisible" width="40%">
             <el-tabs>
                 <el-tab-pane label="基础信息" style="margin-top: 10px">
