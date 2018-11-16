@@ -129,7 +129,7 @@
                                         复制
                                     </el-button>
                                     <el-button type="danger" icon="el-icon-delete" size="mini"
-                                               @click.native="sureView(delCases,ApiMsgTableData[scope.$index]['apiMsgId'])">
+                                               @click.native="sureDelCase(ApiMsgTableData[scope.$index]['apiMsgId'])">
                                         删除
                                     </el-button>
                                 </template>
@@ -352,6 +352,17 @@
                 setTimeout(() => {
                     this.$refs.apiFunc.editCopyApiMsg(apiMsgId, status);
                 }, 0)
+            },
+            sureDelCase(apiMsgId) {
+                this.$confirm('删除该接口信息,会同步删除用例中引用到该接口的执行接口,确定要删除吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.delCases(apiMsgId)
+                }).catch(() => {
+                });
+
             },
             delCases(apiMsgId) {
                 this.$axios.post(this.$api.delApiApi, {'apiMsgId': apiMsgId}).then((response) => {

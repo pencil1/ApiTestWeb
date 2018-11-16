@@ -307,7 +307,7 @@
                     downFunc: '',
                     statusCase: {variable: [], extract: [], validate: [], param: []},
                     variable: [{key: '', value: '', param_type: '', remark: ''}],
-                    json_variable: '[]',
+                    json_variable: '',
                     extract: [{key: '', value: ''}],
                     validate: [{key: '', value: '', comparator: ''}],
                     param: [{key: '', value: '', remark: ''}],
@@ -374,7 +374,7 @@
             },
             sureConfigBtn() {
                 if (this.form.choiceType.toString() === 'json') {
-                    if (this.apiMsgData.jsonVariable) {
+                    if (this.apiCaseData.json_variable) {
                         try {
                             JSON.parse(this.apiCaseData.json_variable)
                         }
@@ -411,7 +411,7 @@
                     });
                     return
                 }
-                this.apiCases[this.tempNum]['variable'] = this.apiCaseData.variable;
+                this.apiCases[this.tempNum]['json_variable'] = this.apiCaseData.json_variable;
                 this.paramVisible = false;
 
             },

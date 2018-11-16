@@ -71,7 +71,6 @@
                            :loading="this.saveRunStatus">Send
                 </el-button>
                 <el-button type="primary" @click.native="addApiMsg()" size="medium">Save</el-button>
-                <el-button type="primary" @click.native="test1()" size="medium">test</el-button>
             </el-form-item>
         </el-form>
 
@@ -370,7 +369,7 @@
                     param: [{key: null, value: null}],
                     header: Array(),
                     variable: [],
-                    jsonVariable: null,
+                    jsonVariable: '',
                     extract: Array(),
                     validate: Array(),
                 },
@@ -415,7 +414,7 @@
                 this.apiMsgData.header = Array();
                 this.apiMsgData.variable = Array();
                 this.apiMsgData.param = Array();
-                this.apiMsgData.jsonVariable = null;
+                this.apiMsgData.jsonVariable = '';
                 this.apiMsgData.extract = Array();
                 this.apiMsgData.validate = Array();
                 this.apiMsgData.name = null;
@@ -515,7 +514,13 @@
                     //     this.apiMsgData.variable = Array()
                     // }
                     this.apiMsgData.variable = response.data['data']['variable'];
-                    this.apiMsgData.jsonVariable = response.data['data']['json_variable'];
+                    if(!response.data['data']['json_variable']){
+                        this.apiMsgData.jsonVariable = ''
+                    }
+                    else{
+                        this.apiMsgData.jsonVariable = response.data['data']['json_variable'];
+                    }
+
                     this.apiMsgData.desc = response.data['data']['desc'];
                     this.apiMsgData.funcAddress = response.data['data']['funcAddress'];
                     this.apiMsgData.upFunc = response.data['data']['up_func'];
