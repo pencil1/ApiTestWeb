@@ -477,7 +477,7 @@
                 cb(this.comparators);
             },
             findApiMsg() {
-                this.$axios.post('/apiManage/apiManage/cases/find', {
+                this.$axios.post('/apiMessage/apiMessage/cases/find', {
                     'proName': this.form.projectName,
                     'gatName': this.form.gathers,
                     'page': this.casePage.currentPage,
@@ -498,7 +498,7 @@
                 )
             },
             findCase() {
-                this.$axios.post('/apiManage/apiManage/scene/find', {
+                this.$axios.post('/apiMessage/apiMessage/scene/find', {
                     'projectName': this.form.projectName,
                     'sceneName': this.form.sceneName,
                     'page': this.currentPage,
@@ -519,7 +519,7 @@
                 )
             },
             httpSend() {
-                this.$axios.get('/apiManage/apiManage/proGather/list').then((response) => {
+                this.$axios.get('/apiMessage/apiMessage/proGather/list').then((response) => {
                         this.proModelData = response.data['data'];
                         this.proUrlData = response.data['urlData'];
                         for (var key in response.data['data']) {
@@ -559,7 +559,7 @@
                 //     temp.variables = this.caseList[scene]['variables'];
                 //     caseData.push(temp);
                 // }
-                this.$axios.post('/apiManage/apiManage/scene/add', {
+                this.$axios.post('/apiMessage/apiMessage/scene/add', {
                     'num': this.sceneData.num,
                     'name': this.sceneData.name,
                     'desc': this.sceneData.desc,
@@ -615,7 +615,7 @@
             },
             delApiCase(i) {
                 if ('id' in this.caseList[i]) {
-                    this.$axios.post('/apiManage/apiManage/apiCase/del', {'id': this.caseList[i]['id']}).then((response) => {
+                    this.$axios.post('/apiMessage/apiMessage/apiCase/del', {'id': this.caseList[i]['id']}).then((response) => {
                             this.caseList.splice(i, 1);
                         }
                     )
@@ -711,7 +711,7 @@
                 this.apiCaseData.validate.splice(i, 1);
             },
             delCase(sceneId) {
-                this.$axios.post('/apiManage/apiManage/scene/del', {'sceneId': sceneId}).then((response) => {
+                this.$axios.post('/apiMessage/apiMessage/scene/del', {'sceneId': sceneId}).then((response) => {
                         this.messageShow(this, response);
                         this.form.sceneName = '';
                         this.findCase();
@@ -719,7 +719,7 @@
                 )
             },
             editCase(sceneId) {
-                this.$axios.post('/apiManage/apiManage/scene/edit', {'sceneId': sceneId}).then((response) => {
+                this.$axios.post('/apiMessage/apiMessage/scene/edit', {'sceneId': sceneId}).then((response) => {
                         this.sceneData.num = response.data['data']['num'];
                         this.sceneData.name = response.data['data']['name'];
                         this.sceneData.desc = response.data['data']['desc'];

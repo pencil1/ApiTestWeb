@@ -847,7 +847,7 @@
             },
             findApiMsg() {
                 this.apiSuiteViewStatus = true,
-                    this.$axios.post('/apiManage/apiManage/cases/find', {
+                    this.$axios.post('/apiMessage/apiMessage/cases/find', {
                         'projectName': this.form.apiMesProjectName,
                         'gatName': this.form.modelName,
                         'caseName': this.form.caseName,
@@ -870,7 +870,7 @@
             },
             findSuite() {
                 this.apiSuiteViewStatus = false,
-                    this.$axios.post('/apiManage/apiManage/suite/find', {
+                    this.$axios.post('/apiMessage/apiMessage/suite/find', {
                         'suiteName': this.form.caseName,
                         'modelName': this.form.modelName,
                         'projectName': this.form.apiMesProjectName,
@@ -892,7 +892,7 @@
                     )
             },
             findCase() {
-                return this.$axios.post('/apiManage/apiManage/scene/find', {
+                return this.$axios.post('/apiMessage/apiMessage/scene/find', {
                     'setId': this.setData.one_id,
                     'projectName': this.form.projectName,
                     'sceneName': this.form.sceneName,
@@ -915,7 +915,7 @@
                 )
             },
             findOldScenes() {
-                this.$axios.post('/apiManage/apiManage/scene/findOld', {
+                this.$axios.post('/apiMessage/apiMessage/scene/findOld', {
                     'projectName': this.form.projectName,
                     'sceneName': this.form.sceneName,
                     'page': this.currentPage,
@@ -951,13 +951,13 @@
                 );
             },
             getA(){
-                this.$axios.post('/apiManage/apiManage/func/getAddress').then((response) => {
+                this.$axios.post('/apiMessage/apiMessage/func/getAddress').then((response) => {
                         this.funcAddress = response['data']['data'];
                     }
                 );
             },
             findSet() {
-                return this.$axios.post('/apiManage/apiManage/set/find', {'projectName': this.form.projectName,}).then((response) => {
+                return this.$axios.post('/apiMessage/apiMessage/set/find', {'projectName': this.form.projectName,}).then((response) => {
                         this.setDataList = response.data['data'][this.form.projectName];
                         this.allSetList = response.data['data'];
                         if(response.data['data'][this.form.projectName][0]){
@@ -1005,7 +1005,7 @@
                     }
 
                 }
-                this.$axios.post('/apiManage/apiManage/scene/add', {
+                this.$axios.post('/apiMessage/apiMessage/scene/add', {
                     'num': this.sceneData.num,
                     'name': this.sceneData.name,
                     'times': this.sceneData.times,
@@ -1085,7 +1085,7 @@
                     for (let i = 0; i < this.apiMsgVessel.length; i++) {
                         suiteIds.push(this.apiMsgVessel[i].id);
                     }
-                    this.$axios.post('/apiManage/apiManage/suite/findApi', {
+                    this.$axios.post('/apiMessage/apiMessage/suite/findApi', {
                         'suiteIds': suiteIds
                     }).then((response) => {
                             this.caseList = this.caseList.concat(response.data['data']);
@@ -1097,7 +1097,7 @@
                 }
             },
             addConfigData() {
-                this.$axios.post('/apiManage/apiManage/config/data', {
+                this.$axios.post('/apiMessage/apiMessage/config/data', {
                     'name': this.form.configName
                 }).then((response) => {
                         this.sceneData.variable = this.sceneData.variable.concat(response.data['data']['variables']);
@@ -1109,7 +1109,7 @@
             delApiCase(i) {
                 //判断caseList中是否存在id，存在则在数据库删除信息，否则在前端删除临时数据
                 if ('id' in this.caseList[i]) {
-                    this.$axios.post('/apiManage/apiManage/apiCase/del', {'id': this.caseList[i]['id']}).then((response) => {
+                    this.$axios.post('/apiMessage/apiMessage/apiCase/del', {'id': this.caseList[i]['id']}).then((response) => {
                             this.caseList.splice(i, 1);
                         }
                     )
@@ -1234,7 +1234,7 @@
                 this.apiCaseData.validate.splice(i, 1);
             },
             delCase(sceneId) {
-                this.$axios.post('/apiManage/apiManage/scene/del', {'sceneId': sceneId}).then((response) => {
+                this.$axios.post('/apiMessage/apiMessage/scene/del', {'sceneId': sceneId}).then((response) => {
                         this.messageShow(this, response);
                         this.form.sceneName = '';
                         this.findCase();
@@ -1242,7 +1242,7 @@
                 )
             },
             editCase(sceneId, copyEditStatus = false) {
-                this.$axios.post('/apiManage/apiManage/scene/edit', {
+                this.$axios.post('/apiMessage/apiMessage/scene/edit', {
                     'sceneId': sceneId,
                     'copyEditStatus': copyEditStatus
                 }).then((response) => {
@@ -1288,7 +1288,7 @@
                     names.push(name)
                 }
                 this.loading = true;
-                this.$axios.post('/apiManage/apiManage/report/run', {
+                this.$axios.post('/apiMessage/apiMessage/report/run', {
                     'sceneNames': names,
                     'projectName': this.form.projectName
                 }).then((response) => {
@@ -1360,7 +1360,7 @@
                 this.setData.id = '';
             },
             editSet() {
-                this.$axios.post('/apiManage/apiManage/set/edit', {
+                this.$axios.post('/apiMessage/apiMessage/set/edit', {
                     'id': this.setData.one_id,
                 }).then((response) => {
                         if (response.data['status'] === 0) {
@@ -1380,7 +1380,7 @@
                 )
             },
             stickSet() {
-                this.$axios.post('/apiManage/apiManage/set/stick', {
+                this.$axios.post('/apiMessage/apiMessage/set/stick', {
                     'id': this.setData.one_id,
                     'projectName': this.form.projectName
                 }).then((response) => {
@@ -1390,7 +1390,7 @@
                 )
             },
             delSet() {
-                this.$axios.post('/apiManage/apiManage/set/del', {
+                this.$axios.post('/apiMessage/apiMessage/set/del', {
                     'id': this.setData.one_id,
                 }).then((response) => {
                         if (response.data['status'] === 0) {
@@ -1413,7 +1413,7 @@
                 )
             },
             addSet() {
-                this.$axios.post('/apiManage/apiManage/set/add', {
+                this.$axios.post('/apiMessage/apiMessage/set/add', {
                     'projectName': this.form.projectName,
                     'name': this.setData.name,
                     'id': this.setData.id,

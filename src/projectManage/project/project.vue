@@ -18,12 +18,12 @@
 
         <el-tabs value="first" style="padding-left: 10px">
             <el-tab-pane label="项目列表" name="first" class="table_padding">
-                <el-table :data="tableData" stripe>
+                <el-table :data="tableData" stripe max-height="745">
                     <el-table-column
                             prop="id"
                             label="id"
                             width="80"
-                            max-height="745">
+                            >
                     </el-table-column>
                     <el-table-column
                             prop="name"

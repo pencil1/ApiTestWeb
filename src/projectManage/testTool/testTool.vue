@@ -88,7 +88,7 @@
             },
             testTask() {
                 // 调用 callback 返回建议列表的数据
-                this.$axios.post('/apiManage/apiManage/task/test', {
+                this.$axios.post('/apiMessage/apiMessage/task/test', {
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
@@ -120,7 +120,7 @@
                         }
                         // console.log(this.showData.substring(4787-3,4787+3))
                     }
-                // this.$axios.post('/apiManage/apiManage/runCmd', {
+                // this.$axios.post('/apiMessage/apiMessage/runCmd', {
                 //     'funcName':'sql_func',
                 // }).then((response) => {
                 //         if (response.data['status'] === 0) {
@@ -143,7 +143,7 @@
             },
             sqlData1() {
                 // 调用 callback 返回建议列表的数据
-                this.$axios.post('/apiManage/apiManage/delSql', {
+                this.$axios.post('/api/show', {
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
@@ -158,14 +158,14 @@
                                 message: response.data['msg'],
                                 type: 'success',
                             });
-
+                            this.showData = response.data['data']
                         }
                     }
                 )
             },
             optimizeError() {
                 // 调用 callback 返回建议列表的数据
-                this.$axios.post('/apiManage/apiManage/optimizeError', {
+                this.$axios.post('/apiMessage/apiMessage/optimizeError', {
                     'errorData': this.showData,
                 }).then((response) => {
                         if (response.data['status'] === 0) {
@@ -204,7 +204,7 @@
                 )
             },
             findApiMsg() {
-                this.$axios.post('/apiManage/apiManage/register', {
+                this.$axios.post('/apiMessage/apiMessage/register', {
                     'name': this.caseData.name,
                     'username': this.caseData.username,
                     'password': this.caseData.password,

@@ -7,7 +7,7 @@
                      background-color:rgba(0, 161, 255, 0.3);padding:50px 40px;border-radius:10px;">
                 <div style="margin-bottom:10px;font-size: 30px;color:#bfc4cc">测试平台</div>
                 <el-form-item prop="num">
-                    <el-input v-model="caseData.username" placeholder="请输入账号" style="width: 400px;">
+                    <el-input v-model="caseData.account" placeholder="请输入账号" style="width: 400px;">
                     </el-input>
                 </el-form-item>
                 <el-form-item
@@ -23,29 +23,25 @@
                     <!--<el-button type="primary"-->
                     <!--@click.native="loGout()" size="small">登出-->
                     <!--</el-button>-->
-                    <el-button type="primary"
-                               @click="centerDialogVisible = true" size="small">注册
-                    </el-button>
+                    <!--<el-button type="primary"-->
+                               <!--@click="centerDialogVisible = true" size="small">注册-->
+                    <!--</el-button>-->
                 </el-form-item>
             </el-form>
             <el-dialog
                     title="注册"
                     :visible.sync="centerDialogVisible"
                     width="30%"
-                    center
-                    >
-                <el-form :model="caseData"
-                         >
+                    center>
+                <el-form :model="caseData">
 
-                    <el-form-item label="名字" :label-width="caseData.formLabelWidth"
-                    >
+                    <el-form-item label="名字" :label-width="caseData.formLabelWidth">
                         <el-input v-model="caseData.name" auto-complete="off">
                         </el-input>
                     </el-form-item>
                     <el-form-item label="账号" :label-width="caseData.formLabelWidth"
-                                  prop="num"
-                    >
-                        <el-input v-model.number="caseData.username" auto-complete="off">
+                                  prop="num">
+                        <el-input v-model.number="caseData.account" auto-complete="off">
                         </el-input>
                     </el-form-item>
                     <el-form-item label="密码" :label-width="caseData.formLabelWidth"
@@ -55,9 +51,9 @@
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
-    <el-button @click="centerDialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click.native="register()">确 定</el-button>
-  </span>
+                    <el-button @click="centerDialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click.native="register()">确 定</el-button>
+                </span>
             </el-dialog>
         </div>
     </div>
@@ -72,7 +68,7 @@
         name: 'test',
         data() {
             return {
-                centerDialogVisible:false,
+                centerDialogVisible: false,
                 img: img,
                 note: {
                     backgroundImage: 'url(' + img + ')',
@@ -90,7 +86,7 @@
                     project: '',
                     method: '',
                     name: '',
-                    username: '',
+                    account: '',
                     formLabelWidth: '120px',
                     password: '',
                     header: [],
@@ -107,7 +103,7 @@
             register() {
                 this.$axios.post(this.$api.registerApi, {
                     'name': this.caseData.name,
-                    'username': this.caseData.username,
+                    'account': this.caseData.account,
                     'password': this.caseData.password,
                 }).then((response) => {
                         if (response.data['status'] === 0) {
@@ -130,7 +126,7 @@
             },
             login() {
                 this.$axios.post(this.$api.loginApi, {
-                    'username': this.caseData.username,
+                    'account': this.caseData.account,
                     'password': this.caseData.password,
                 }).then((response) => {
                         if (response.data['status'] === 0) {

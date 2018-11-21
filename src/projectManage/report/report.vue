@@ -196,12 +196,9 @@
             addModelHeader() {
                 this.modelData.header.push({key: '', value: ''});
             },
-            reset() {
-                this.form.scenes = []
-            },
             // runScene() {
             //     this.loading = true;
-            //     this.$axios.post('/apiManage/apiManage/report/run', {
+            //     this.$axios.post('/apiMessage/apiMessage/report/run', {
             //         'sceneNames': this.form.scenes,
             //         'projectName': this.form.projectName
             //     }).then((response) => {

@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 import store from './store/store'
 import * as types from './store/types'
 import Header from './projectManage/header.vue'
-import caseManage from './projectManage/apiManage/apiMsg.vue'
+import caseManage from './projectManage/apiMessage/apiMsg.vue'
 
 import manage from './projectManage/manage.vue'
 import test from './projectManage/test/index.vue'
@@ -20,6 +20,7 @@ import testTool from './projectManage/testTool/testTool.vue'
 import taskManage from './projectManage/taskManage/task.vue'
 import batch from './projectManage/batchAdd/batch.vue'
 import sqlCheck from './projectManage/sqlCheck/sqlCheck.vue'
+import user from './projectManage/userManage/user.vue'
 import sceneConfig from './projectManage/config/config.vue'
 import login from './login/login.vue'
 
@@ -150,6 +151,16 @@ const routes = [
                 components: {
                     Header: Header,
                     Manage: testTool,
+                }
+            },
+            {
+                path: 'userManage',
+                meta: {
+                    requireAuth: true,
+                },
+                components: {
+                    Header: Header,
+                    Manage: user,
                 }
             },
             {

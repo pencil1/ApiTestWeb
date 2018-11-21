@@ -126,7 +126,7 @@
                 )
             },
             removeFunc() {
-                this.$axios.post('/apiManage/apiManage/func/remove', {'funcName': this.comparator}).then((response) => {
+                this.$axios.post('/apiMessage/apiMessage/func/remove', {'funcName': this.comparator}).then((response) => {
                         this.comparator = '';
                         this.messageShow(this, response);
                         this.getFuncAddress()

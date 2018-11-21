@@ -60,14 +60,15 @@
                             </el-menu-item-group>
                         </el-submenu>
 
-                        <el-submenu index="4">
+                        <el-submenu index="4" v-if="userName === '管理员'">
                             <template slot="title">
                                 <i class="el-icon-setting"></i>
-                                <span>其他程序</span>
+                                <span>系统管理</span>
                             </template>
-                            <el-menu-item-group>
+                            <el-menu-item-group >
+                                <el-menu-item index="/manage/userManage">用户管理</el-menu-item>
                                 <el-menu-item index="/manage/testTool">小工具</el-menu-item>
-                                <el-menu-item index="/manage/sqlCheck">数据库查询</el-menu-item>
+
                                 <!--<el-menu-item index="/manage/batch">批量添加</el-menu-item>-->
                             </el-menu-item-group>
                         </el-submenu>
@@ -107,7 +108,8 @@
         data() {
             return {
                 navigationName:'/manage/projectManage',
-                collapsed:false
+                collapsed:false,
+                userName:'',
             }
         },
         methods: {
@@ -115,6 +117,7 @@
                 this.collapsed = !this.collapsed;
             },
             closeNavigation(){
+                this.userName = this.$store.state.userName;
                 this.navigationName = this.$route.path;
                 if(this.$route.path === '/manage/reportShow'){
                     this.collapsed = true;

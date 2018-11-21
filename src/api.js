@@ -61,9 +61,19 @@ const createFuncApi = '/api/func/create';
 const checkFuncApi = '/api/func/check';
 const saveFuncApi = '/api/func/save';
 
+const findUserApi = '/api/user/find';
+const editUserApi = '/api/user/edit';
+const delUserApi = '/api/user/del';
+const changeStatusUserApi = '/api/user/changeStatus';
+
 export default {
     baseDataApi,
     getFuncAddressApi,
+
+    findUserApi,
+    editUserApi,
+    delUserApi,
+    changeStatusUserApi,
 
     findReportApi,
     delReportApi,

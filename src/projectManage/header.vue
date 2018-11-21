@@ -72,38 +72,42 @@
 
             showTitle(path) {
                 if (path === '/manage/projectManage') {
-                    this.title = ['项目管理', '项目']
-                }
-                else if (path === '/manage/modelManage') {
-                    this.title = ['接口管理', '接口模块']
+                    this.title = ['接口管理', '项目管理']
                 }
                 else if (path === '/manage/caseManage') {
                     this.title = ['接口管理', '接口信息']
                 }
-                else if (path === '/manage/reportManage') {
-                    this.title = ['报告管理', '接口报告']
+                else if (path === '/manage/sceneConfig') {
+                    this.title = ['接口管理', '业务配置']
                 }
-                else if (path === '/manage/caseManage') {
+                else if (path === '/manage/sceneManage') {
                     this.title = ['接口管理', '接口用例']
                 }
                 else if (path === '/manage/buildInFunc') {
                     this.title = ['接口管理', '内置函数']
                 }
-                else if (path === '/manage/testTool') {
-                    this.title = ['其他程序', '测试小工具']
+                else if (path === '/manage/reportManage') {
+                    this.title = ['报告管理', '接口报告']
                 }
                 else if (path === '/manage/taskManage') {
                     this.title = ['报告管理', '定时任务']
                 }
+                else if (path === '/manage/userManage') {
+                    this.title = ['系统管理', '用户管理']
+                }
+
+                else if (path === '/manage/testTool') {
+                    this.title = ['其他程序', '测试小工具']
+                }
+
                 else if (path === '/manage/batch') {
                     this.title = ['其他程序', '批量操作']
                 }
                 else if (path === '/manage/sqlCheck') {
                     this.title = ['其他程序', '数据库查询']
                 }
-                else if (path === '/manage/config') {
-                    this.title = ['接口管理', '业务配置']
-                }
+
+
             },
             getTitle: function () {
                 this.showTitle(this.$route.path);

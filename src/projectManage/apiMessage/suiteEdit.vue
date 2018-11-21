@@ -72,7 +72,7 @@
                 this.suiteData.suiteViewStatus = true
             },
             editData(suiteId) {
-                this.$axios.post('/apiManage/apiManage/suite/edit', {'suiteId': suiteId}).then((response) => {
+                this.$axios.post('/apiMessage/apiMessage/suite/edit', {'suiteId': suiteId}).then((response) => {
                         this.suiteData.apiList = response['data']['data']['apiData'];
                         this.suiteData.num = response['data']['data']['num'];
                         this.suiteData.name = response['data']['data']['name'];
@@ -86,7 +86,7 @@
                 for (let i = 0; i < this.suiteData.apiList.length; i++) {
                     apiData.push(this.suiteData.apiList[i].caseId);
                 }
-                this.$axios.post('/apiManage/apiManage/suite/add', {
+                this.$axios.post('/apiMessage/apiMessage/suite/add', {
                     'projectName': this.projectName,
                     'gatherName': this.modelName,
                     'num': this.suiteData.num,

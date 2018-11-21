@@ -170,7 +170,7 @@
     import setEdit from './setEdit.vue'
     import caseEdit from './caseEdit.vue'
     import errorView from '../common/errorView.vue'
-    import result from '../apiManage/result.vue'
+    import result from '../apiMessage/result.vue'
 
     export default {
         components: {
@@ -233,7 +233,7 @@
             },
             findSuite() {
                 this.apiSuiteViewStatus = false;
-                this.$axios.post('/apiManage/apiManage/suite/find', {
+                this.$axios.post('/apiMessage/apiMessage/suite/find', {
                     'suiteName': this.form.caseName,
                     'modelName': this.form.modelName,
                     'projectName': this.form.apiMesProjectName,

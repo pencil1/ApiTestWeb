@@ -147,6 +147,12 @@
                             <el-input v-model="taskData.SendEmail">
                             </el-input>
                         </el-form-item>
+                        <el-form-item label="邮箱密码" :label-width="taskData.formLabelWidth"
+                                      prop="desc">
+                            <el-input v-model="taskData.password" type="password">
+                            </el-input>
+                        </el-form-item>
+
                         <el-form-item label="时间配置" :label-width="taskData.formLabelWidth">
                             <el-input v-model="taskData.timeConfig"
                                       placeholder="second minute hour day month day_of_week(0 0 12 * * ? 每天中午12点触发)">
@@ -211,7 +217,8 @@
                     toEmail: '',
                     SendEmail: '',
                     timeConfig: '',
-                    formLabelWidth: '120px',
+                    password:'',
+                    formLabelWidth: '90px',
                 }
             }
         },
@@ -280,7 +287,7 @@
                 this.taskData.toEmail = '';
                 this.taskData.SendEmail = '';
                 this.taskData.timeConfig = '';
-                // this.form.projectName = '';
+                this.taskData.password = '';
                 this.form.set = [];
                 this.form.case = [];
                 this.taskData.num = '';
@@ -304,6 +311,7 @@
                     'toEmail': this.taskData.toEmail,
                     'sendEmail': this.taskData.SendEmail,
                     'timeConfig': this.taskData.timeConfig,
+                    'password': this.taskData.password,
                 }).then((response) => {
 
                         if (response.data['status'] === 0) {
@@ -334,6 +342,7 @@
                         this.taskData.taskType = response.data['data']['task_type'];
                         this.taskData.toEmail = response.data['data']['task_to_email_address'];
                         this.taskData.SendEmail = response.data['data']['task_send_email_address'];
+                        this.taskData.password = response.data['data']['password'];
                         this.taskData.num = response.data['data']['num'];
                         this.taskData.projectName = this.form.projectName;
                         this.taskData.id = id;

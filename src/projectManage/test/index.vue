@@ -74,7 +74,7 @@
                 console.log(this.token)
             },
             findApiMsg() {
-                this.$axios.post('/apiManage/apiManage/register', {
+                this.$axios.post('/apiMessage/apiMessage/register', {
                     'name': this.caseData.name,
                     'username': this.caseData.username,
                     'password': this.caseData.password,
@@ -107,7 +107,7 @@
             },
             findCases2() {
                 console.log(555);
-                this.$axios.post('/apiManage/apiManage/login', {
+                this.$axios.post('/apiMessage/apiMessage/login', {
                     'username': this.caseData.username,
                     'password': this.caseData.password,
                 }).then((response) => {
@@ -130,7 +130,7 @@
             findCases3() {
                 this.$store.commit(types.LOGOUT);
                 this.$router.push({path: '/login'});
-                // this.$axios.post('/apiManage/apiManage/logout', {}).then((response) => {
+                // this.$axios.post('/apiMessage/apiMessage/logout', {}).then((response) => {
                 //         if (response.data['status'] === 0) {
                 //             this.$message({
                 //                 showClose: true,
@@ -146,7 +146,7 @@
                 // )
             },
             findCases1() {
-                this.$axios.post('/apiManage/apiManage/proGather/list1', {}).then((response) => {
+                this.$axios.post('/apiMessage/apiMessage/proGather/list1', {}).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
                                 showClose: true,
