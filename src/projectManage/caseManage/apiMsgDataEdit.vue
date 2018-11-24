@@ -121,7 +121,7 @@
                                 <div v-if="scope.row.param_type === 'file'">
                                     <el-row>
                                         <el-col :span="17">
-                                            <el-input v-model="scope.row.value" size="medium">
+                                            <el-input v-model="scope.row.value" size="medium" :disabled="true">
                                             </el-input>
                                         </el-col>
                                         <el-col :span="1">
@@ -366,9 +366,45 @@
                 this.apiCaseData.validate.splice(i, 1);
             },
             fileChange(response, file, fileList) {
-                this.apiCaseData.variable[this.temp_num]['value'] = response['data'];
-                this.messageShow(this, response);
-            },
+                    if (response['status'] === 0) {
+                        // this.$message({
+                        //     showClose: true,
+                        //     message: response['msg'],
+                        //     type: 'warning',
+                        // });
+                        this.$confirm('服务器已存在相同名字文件，是否覆盖?', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            let form = new FormData();
+                            form.append("file", file.raw);
+                            form.append("skip", '1');
+                            this.$axios.post('/api/upload',form ).then((response) => {
+                                    this.$message({
+                                        showClose: true,
+                                        message: response.data['msg'],
+                                        type: 'success',
+                                    });
+                                    this.apiMsgData.variable[this.temp_num]['value'] = response.data['data'];
+                                }
+                            );
+                        }).catch(() => {
+
+                        });
+                    }
+                    else {
+                        if (response['msg']) {
+                            this.$message({
+                                showClose: true,
+                                message: response['msg'],
+                                type: 'success',
+                            });
+                        }
+                        this.apiCaseData.variable[this.temp_num]['value'] = response['data'];
+                    }
+
+                },
             tempNumTwo(i) {
                 this.temp_num = i;
             },

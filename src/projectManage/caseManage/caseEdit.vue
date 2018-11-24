@@ -68,7 +68,7 @@
                                         :value="item">
                                 </el-option>
                             </el-select>
-                            <el-select v-model="caseData.funcAddress" clearable placeholder="请选择导入函数文件" size="small">
+                            <el-select v-model="caseData.funcAddress" clearable multiple placeholder="请选择导入函数文件" size="small">
                                 <el-option
                                         v-for="(item, key) in this.funcAddress"
                                         :key="item['value']"

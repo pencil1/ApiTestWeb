@@ -179,10 +179,7 @@
                                         <el-input v-model="scope.row.value" size="mini" :disabled="true">
                                         </el-input>
                                     </el-col>
-                                    <el-col :span="1">
-                                        <p></p>
-                                    </el-col>
-                                    <el-col :span="2">
+                                    <el-col :span="2" style="padding-left:10px;">
                                         <el-upload
                                                 class="upload-demo"
                                                 action="/api/upload"
@@ -193,6 +190,11 @@
                                             </el-button>
                                         </el-upload>
                                     </el-col>
+                                    <!--<el-col :span="2" style="padding-left:20px;">-->
+                                    <!--<el-button size="mini" type="danger"-->
+                                    <!--@click="delFile(scope.$index)">删除文件-->
+                                    <!--</el-button>-->
+                                    <!--</el-col>-->
                                 </el-row>
                             </div>
                             <div v-else>
@@ -400,9 +402,45 @@
                     });
                 }
             },
+
             fileChange(response, file, fileList) {
-                this.apiMsgData.variable[this.temp_num]['value'] = response['data'];
-                this.messageShow(this, response);
+                if (response['status'] === 0) {
+                    // this.$message({
+                    //     showClose: true,
+                    //     message: response['msg'],
+                    //     type: 'warning',
+                    // });
+                    this.$confirm('服务器已存在相同名字文件，是否覆盖?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        let form = new FormData();
+                        form.append("file", file.raw);
+                        form.append("skip", '1');
+                        this.$axios.post('/api/upload',form ).then((response) => {
+                                this.$message({
+                                    showClose: true,
+                                    message: response.data['msg'],
+                                    type: 'success',
+                                });
+                            this.apiMsgData.variable[this.temp_num]['value'] = response.data['data'];
+                            }
+                        );
+                    }).catch(() => {
+
+                    });
+                }
+                else {
+                    if (response['msg']) {
+                        this.$message({
+                            showClose: true,
+                            message: response['msg'],
+                            type: 'success',
+                        });
+                    }
+                    this.apiMsgData.variable[this.temp_num]['value'] = response['data'];
+                }
 
             },
             tempNum(i) {
@@ -428,8 +466,6 @@
                 this.form.projectName = this.projectName;
                 this.form.module = this.module;
             },
-            test1() {
-            },
             addApiMsg(messageClose = false) {
                 if (this.apiMsgData.jsonVariable) {
                     try {
@@ -444,350 +480,340 @@
                         return
                     }
                 }
-            return this.$axios.post(this.$api.addApiApi, {
-                'moduleId': this.form.module.moduleId,
-                'projectName': this.form.projectName,
-                'apiMsgName': this.apiMsgData.name,
-                'num': this.apiMsgData.num,
-                // 'choiceUrl': this.form.choiceUrl,
-                'choiceUrl': this.proUrlData[this.form.projectName].indexOf(this.form.choiceUrl),
-                'variableType': this.form.choiceType,
-                'desc': this.apiMsgData.desc,
-                'funcAddress': this.apiMsgData.funcAddress,
-                'upFunc': this.apiMsgData.upFunc,
-                'downFunc': this.apiMsgData.downFunc,
-                'url': this.apiMsgData.url,
-                'apiMsgId': this.apiMsgData.id,
-                'param': JSON.stringify(this.apiMsgData.param),
-                'header': JSON.stringify(this.apiMsgData.header),
-                'variable': JSON.stringify(this.apiMsgData.variable),
-                'jsonVariable': this.apiMsgData.jsonVariable,
-                'extract': JSON.stringify(this.apiMsgData.extract),
-                'method': this.apiMsgData.method,
-                'validate': JSON.stringify(this.apiMsgData.validate)
-            }).then((response) => {
-                    if (messageClose) {
+                return this.$axios.post(this.$api.addApiApi, {
+                    'moduleId': this.form.module.moduleId,
+                    'projectName': this.form.projectName,
+                    'apiMsgName': this.apiMsgData.name,
+                    'num': this.apiMsgData.num,
+                    // 'choiceUrl': this.form.choiceUrl,
+                    'choiceUrl': this.proUrlData[this.form.projectName].indexOf(this.form.choiceUrl),
+                    'variableType': this.form.choiceType,
+                    'desc': this.apiMsgData.desc,
+                    'funcAddress': this.apiMsgData.funcAddress,
+                    'upFunc': this.apiMsgData.upFunc,
+                    'downFunc': this.apiMsgData.downFunc,
+                    'url': this.apiMsgData.url,
+                    'apiMsgId': this.apiMsgData.id,
+                    'param': JSON.stringify(this.apiMsgData.param),
+                    'header': JSON.stringify(this.apiMsgData.header),
+                    'variable': JSON.stringify(this.apiMsgData.variable),
+                    'jsonVariable': this.apiMsgData.jsonVariable,
+                    'extract': JSON.stringify(this.apiMsgData.extract),
+                    'method': this.apiMsgData.method,
+                    'validate': JSON.stringify(this.apiMsgData.validate)
+                }).then((response) => {
+                        if (messageClose) {
+                            if (response.data['status'] === 0) {
+                                this.$message({
+                                    showClose: true,
+                                    message: response.data['msg'],
+                                    type: 'warning',
+                                });
+                                return false
+                            }
+                            else {
+                                this.apiMsgData.id = response.data['api_msg_id'];
+                                this.apiMsgData.num = response.data['num'];
+                                // this.$emit('findApiMsg');
+                                return true
+                            }
+                        }
+                        else {
+                            if (this.messageShow(this, response)) {
+                                this.apiMsgData.id = response.data['api_msg_id'];
+                                this.apiMsgData.num = response.data['num'];
+                                // this.$emit('findApiMsg');
+                                return true
+                            }
+                        }
+
+                    }
+                )
+            },
+            editCopyApiMsg(apiMsgId, status) {
+                this.$axios.post(this.$api.editAndCopyApiApi, {'apiMsgId': apiMsgId}).then((response) => {
+                        this.apiMsgData.name = response.data['data']['name'];
+                        if (status === 'edit') {
+                            this.apiMsgData.num = response.data['data']['num'];
+                            this.apiMsgData.id = apiMsgId;
+                        }
+                        else {
+                            this.apiMsgData.num = '';
+                            this.apiMsgData.id = '';
+                        }
+                        // if (response.data['data']['variableType'] === 'data') {
+                        //     this.apiMsgData.variable = response.data['data']['variable'];
+                        //     this.apiMsgData.jsonVariable = String()
+                        // }
+                        // else {
+                        //     this.apiMsgData.jsonVariable = response.data['data']['variable'];
+                        //     this.apiMsgData.variable = Array()
+                        // }
+                        this.apiMsgData.variable = response.data['data']['variable'];
+                        if (!response.data['data']['json_variable']) {
+                            this.apiMsgData.jsonVariable = ''
+                        }
+                        else {
+                            this.apiMsgData.jsonVariable = response.data['data']['json_variable'];
+                        }
+
+                        this.apiMsgData.desc = response.data['data']['desc'];
+                        this.apiMsgData.funcAddress = response.data['data']['funcAddress'];
+                        this.apiMsgData.upFunc = response.data['data']['up_func'];
+                        this.apiMsgData.downFunc = response.data['data']['down_func'];
+                        this.apiMsgData.url = response.data['data']['url'];
+                        this.apiMsgData.header = response.data['data']['header'];
+                        this.form.choiceType = response.data['data']['variableType'];
+                        this.apiMsgData.param = response.data['data']['param'];
+                        this.apiMsgData.extract = response.data['data']['extract'];
+                        this.apiMsgData.validate = response.data['data']['validate'];
+                        this.apiMsgData.method = response.data['data']['method'];
+                        this.form.choiceUrl = this.proUrlData[this.projectName][response.data['data']['status_url']];
+                        this.form.projectName = this.projectName;
+                        this.form.module = this.module;
+                    }
+                );
+            },
+            saveAndRun() {
+                this.addApiMsg(true).then(res => {
+                    if (res) {
+                        this.$emit('apiTest', [{'apiMsgId': this.apiMsgData.id, 'num': '1'}], false);
+                        // this.apiTest([{'apiMsgId': this.apiMsgData.id, 'num': '1'}], false);
+                    }
+                });
+            },
+            apiTest(apiMsgData) {
+                this.saveRunStatus = true;
+                this.$axios.post(this.$api.runApiApi, {
+                    'apiMsgData': apiMsgData,
+                    'projectName': this.form.projectName,
+                    'configId': this.configData.configId,
+                }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
                                 showClose: true,
                                 message: response.data['msg'],
                                 type: 'warning',
                             });
-                            return false
+                            if (response.data['error']) {
+                                this.$refs.errorViewFunc.showData(response.data['error']);
+                            }
                         }
                         else {
-                            this.apiMsgData.id = response.data['api_msg_id'];
-                            this.apiMsgData.num = response.data['num'];
-                            // this.$emit('findApiMsg');
-                            return true
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'success',
+                            });
+                            this.$refs.resultFunc.showData(response['data']['data']);
+                        }
+                        this.saveRunStatus = false;
+
+                    }
+                )
+            },
+            delTableList(type, i) {
+                if (type === 'variable') {
+                    this.apiMsgData.variable.splice(i, 1);
+                }
+                else if (type === 'header') {
+                    this.apiMsgData.header.splice(i, 1);
+                }
+                else if (type === 'validate') {
+                    this.apiMsgData.validate.splice(i, 1);
+                }
+                else if (type === 'extract') {
+                    this.apiMsgData.extract.splice(i, 1);
+                }
+                else if (type === 'param') {
+                    this.apiMsgData.param.splice(i, 1);
+                }
+            },
+            addTableList(type) {
+                if (type === 'variable') {
+                    this.apiMsgData.variable.push({key: null, value: null, param_type: 'string', remark: null});
+                }
+                else if (type === 'header') {
+                    this.apiMsgData.header.push({key: null, value: null});
+                }
+                else if (type === 'validate') {
+                    this.apiMsgData.validate.push({key: null, value: null});
+                }
+                else if (type === 'extract') {
+                    this.apiMsgData.extract.push({key: null, value: null, remark: null});
+                }
+                else if (type === 'param') {
+                    this.apiMsgData.param.push({key: null, value: null});
+                }
+            },
+        }
+        ,
+        computed: {
+            monitorParam() {
+                return this.apiMsgData.param;
+            }
+            ,
+            monitorUrl() {
+                return this.apiMsgData.url;
+            }
+            ,
+            monitorMethod() {
+                return this.apiMsgData.method;
+            }
+            ,
+            monitorVariable() {
+                return this.apiMsgData.variable;
+            }
+            ,
+            monitorHeader() {
+                return this.apiMsgData.header;
+            }
+            ,
+            monitorExtract() {
+                return this.apiMsgData.extract;
+            }
+            ,
+            monitorValidate() {
+                return this.apiMsgData.validate;
+            }
+            ,
+
+        }
+        ,
+        watch: {
+            monitorParam: {
+                handler: function () {
+                    if (this.apiMsgData.param.length === 0) {
+                        this.addTableList('param')
+                    }
+                    else if (this.apiMsgData.param[this.apiMsgData.param.length - 1]['key'] || this.apiMsgData.param[this.apiMsgData.param.length - 1]['value']) {
+                        this.addTableList('param')
+                    }
+                    let strParam = '';
+                    for (let i in this.apiMsgData.param) {
+                        if (parseInt(i) + 2 === this.apiMsgData.param.length && this.apiMsgData.param[i].key) {
+                            if (this.apiMsgData.param[i].value) {
+                                strParam += this.apiMsgData.param[i].key + '=' + this.apiMsgData.param[i].value;
+                            }
+                            else {
+                                strParam += this.apiMsgData.param[i].key;
+                            }
+                        }
+                        else if (this.apiMsgData.param[i].key) {
+                            strParam += this.apiMsgData.param[i].key + '=' + this.apiMsgData.param[i].value + '&';
                         }
                     }
-                    else {
-                        if (this.messageShow(this, response)) {
-                            this.apiMsgData.id = response.data['api_msg_id'];
-                            this.apiMsgData.num = response.data['num'];
-                            // this.$emit('findApiMsg');
-                            return true
-                        }
+                    if (strParam.substr(strParam.length - 1, 1) === '&') {
+                        strParam = strParam.substring(0, strParam.length - 1)
                     }
-
-                }
-            )
-        },
-        editCopyApiMsg(apiMsgId, status) {
-            this.$axios.post(this.$api.editAndCopyApiApi, {'apiMsgId': apiMsgId}).then((response) => {
-                    this.apiMsgData.name = response.data['data']['name'];
-                    if (status === 'edit') {
-                        this.apiMsgData.num = response.data['data']['num'];
-                        this.apiMsgData.id = apiMsgId;
+                    if (strParam) {
+                        this.apiMsgData.url = this.apiMsgData.url.split("?")[0] + '?' + strParam
                     }
                     else {
-                        this.apiMsgData.num = '';
-                        this.apiMsgData.id = '';
-                    }
-                    // if (response.data['data']['variableType'] === 'data') {
-                    //     this.apiMsgData.variable = response.data['data']['variable'];
-                    //     this.apiMsgData.jsonVariable = String()
-                    // }
-                    // else {
-                    //     this.apiMsgData.jsonVariable = response.data['data']['variable'];
-                    //     this.apiMsgData.variable = Array()
-                    // }
-                    this.apiMsgData.variable = response.data['data']['variable'];
-                    if(!response.data['data']['json_variable']){
-                        this.apiMsgData.jsonVariable = ''
-                    }
-                    else{
-                        this.apiMsgData.jsonVariable = response.data['data']['json_variable'];
+                        this.apiMsgData.url = this.apiMsgData.url.split("?")[0]
                     }
 
-                    this.apiMsgData.desc = response.data['data']['desc'];
-                    this.apiMsgData.funcAddress = response.data['data']['funcAddress'];
-                    this.apiMsgData.upFunc = response.data['data']['up_func'];
-                    this.apiMsgData.downFunc = response.data['data']['down_func'];
-                    this.apiMsgData.url = response.data['data']['url'];
-                    this.apiMsgData.header = response.data['data']['header'];
-                    this.form.choiceType = response.data['data']['variableType'];
-                    this.apiMsgData.param = response.data['data']['param'];
-                    this.apiMsgData.extract = response.data['data']['extract'];
-                    this.apiMsgData.validate = response.data['data']['validate'];
-                    this.apiMsgData.method = response.data['data']['method'];
-                    this.form.choiceUrl = this.proUrlData[this.projectName][response.data['data']['status_url']];
-                    this.form.projectName = this.projectName;
-                    this.form.module = this.module;
                 }
-            );
-        },
-        saveAndRun() {
-            this.addApiMsg(true).then(res => {
-                if (res) {
-                    this.$emit('apiTest', [{'apiMsgId': this.apiMsgData.id, 'num': '1'}], false);
-                    // this.apiTest([{'apiMsgId': this.apiMsgData.id, 'num': '1'}], false);
+                ,
+                deep: true
+            }
+            ,
+            monitorUrl(newValue, oldValue) {
+                if (!this.apiMsgData.url) {
+                    this.apiMsgData.param = [{key: '', value: ''}];
+                    return
                 }
-            });
-        },
-        apiTest(apiMsgData) {
-            this.saveRunStatus = true;
-            this.$axios.post(this.$api.runApiApi, {
-                'apiMsgData': apiMsgData,
-                'projectName': this.form.projectName,
-                'configId': this.configData.configId,
-            }).then((response) => {
-                    if (response.data['status'] === 0) {
-                        this.$message({
-                            showClose: true,
-                            message: response.data['msg'],
-                            type: 'warning',
-                        });
-                        if (response.data['error']) {
-                            this.$refs.errorViewFunc.showData(response.data['error']);
-                        }
-                    }
-                    else {
-                        this.$message({
-                            showClose: true,
-                            message: response.data['msg'],
-                            type: 'success',
-                        });
-                        this.$refs.resultFunc.showData(response['data']['data']);
-                    }
-                    this.saveRunStatus = false;
+                if (this.apiMsgData.url.indexOf('?') === -1) {
+                    this.apiMsgData.param = [{key: '', value: ''}];
+                    return
+                }
 
+                let url = this.apiMsgData.url.split("?");
+                if (!url[1]) {
+                    this.apiMsgData.param = [{key: '', value: ''}];
+                    return
                 }
-            )
-        },
-        delTableList(type, i) {
-            if (type === 'variable') {
-                this.apiMsgData.variable.splice(i, 1);
-            }
-            else if (type === 'header') {
-                this.apiMsgData.header.splice(i, 1);
-            }
-            else if (type === 'validate') {
-                this.apiMsgData.validate.splice(i, 1);
-            }
-            else if (type === 'extract') {
-                this.apiMsgData.extract.splice(i, 1);
-            }
-            else if (type === 'param') {
-                this.apiMsgData.param.splice(i, 1);
-            }
-        },
-        addTableList(type) {
-            if (type === 'variable') {
-                this.apiMsgData.variable.push({key: null, value: null, param_type: 'string', remark: null});
-            }
-            else if (type === 'header') {
-                this.apiMsgData.header.push({key: null, value: null});
-            }
-            else if (type === 'validate') {
-                this.apiMsgData.validate.push({key: null, value: null});
-            }
-            else if (type === 'extract') {
-                this.apiMsgData.extract.push({key: null, value: null, remark: null});
-            }
-            else if (type === 'param') {
-                this.apiMsgData.param.push({key: null, value: null});
-            }
-        },
-    }
-    ,
-    computed: {
-        monitorParam()
-        {
-            return this.apiMsgData.param;
-        }
-    ,
-        monitorUrl()
-        {
-            return this.apiMsgData.url;
-        }
-    ,
-        monitorMethod()
-        {
-            return this.apiMsgData.method;
-        }
-    ,
-        monitorVariable()
-        {
-            return this.apiMsgData.variable;
-        }
-    ,
-        monitorHeader()
-        {
-            return this.apiMsgData.header;
-        }
-    ,
-        monitorExtract()
-        {
-            return this.apiMsgData.extract;
-        }
-    ,
-        monitorValidate()
-        {
-            return this.apiMsgData.validate;
-        }
-    ,
-
-    }
-    ,
-    watch: {
-        monitorParam: {
-            handler: function () {
-                if (this.apiMsgData.param.length === 0) {
-                    this.addTableList('param')
-                }
-                else if (this.apiMsgData.param[this.apiMsgData.param.length - 1]['key'] || this.apiMsgData.param[this.apiMsgData.param.length - 1]['value']) {
-                    this.addTableList('param')
-                }
-                let strParam = '';
-                for (let i in this.apiMsgData.param) {
-                    if (parseInt(i) + 2 === this.apiMsgData.param.length && this.apiMsgData.param[i].key) {
-                        if (this.apiMsgData.param[i].value) {
-                            strParam += this.apiMsgData.param[i].key + '=' + this.apiMsgData.param[i].value;
+                let strParam = url[1].split("&");
+                if (strParam[0]) {
+                    this.apiMsgData.param = Array();
+                    for (let i = 0; i < strParam.length; i++) {
+                        if (strParam[i].indexOf('=') !== -1) {
+                            this.apiMsgData.param.push({
+                                key: strParam[i].split("=")[0],
+                                value: unescape(strParam[i].split("=")[1])
+                            });
                         }
                         else {
-                            strParam += this.apiMsgData.param[i].key;
+                            this.apiMsgData.param.push({key: strParam[i], value: ''});
                         }
                     }
-                    else if (this.apiMsgData.param[i].key) {
-                        strParam += this.apiMsgData.param[i].key + '=' + this.apiMsgData.param[i].value + '&';
+                }
+            }
+            ,
+            monitorMethod(newValue, oldValue) {
+                if (newValue === 'GET') {
+                    this.bodyShow = 'first'
+                }
+            }
+            ,
+            monitorVariable: {
+                handler: function () {
+                    if (this.apiMsgData.variable.length === 0) {
+                        this.addTableList('variable')
+                    }
+                    if (this.apiMsgData.variable[this.apiMsgData.variable.length - 1]['key'] || this.apiMsgData.variable[this.apiMsgData.variable.length - 1]['value']) {
+                        this.addTableList('variable')
                     }
                 }
-                if (strParam.substr(strParam.length - 1, 1) === '&') {
-                    strParam = strParam.substring(0, strParam.length - 1)
-                }
-                if (strParam) {
-                    this.apiMsgData.url = this.apiMsgData.url.split("?")[0] + '?' + strParam
-                }
-                else {
-                    this.apiMsgData.url = this.apiMsgData.url.split("?")[0]
-                }
-
+                ,
+                deep: true
             }
-        ,
-            deep: true
-        }
-    ,
-        monitorUrl(newValue, oldValue)
-        {
-            if (!this.apiMsgData.url) {
-                this.apiMsgData.param = [{key: '', value: ''}];
-                return
-            }
-            if (this.apiMsgData.url.indexOf('?') === -1) {
-                this.apiMsgData.param = [{key: '', value: ''}];
-                return
-            }
-
-            let url = this.apiMsgData.url.split("?");
-            if (!url[1]) {
-                this.apiMsgData.param = [{key: '', value: ''}];
-                return
-            }
-            let strParam = url[1].split("&");
-            if (strParam[0]) {
-                this.apiMsgData.param = Array();
-                for (let i = 0; i < strParam.length; i++) {
-                    if (strParam[i].indexOf('=') !== -1) {
-                        this.apiMsgData.param.push({
-                            key: strParam[i].split("=")[0],
-                            value: unescape(strParam[i].split("=")[1])
-                        });
+            ,
+            monitorExtract: {
+                handler: function () {
+                    if (this.apiMsgData.extract.length === 0) {
+                        this.addTableList('extract')
                     }
-                    else {
-                        this.apiMsgData.param.push({key: strParam[i], value: ''});
+                    if (this.apiMsgData.extract[this.apiMsgData.extract.length - 1]['key'] || this.apiMsgData.extract[this.apiMsgData.extract.length - 1]['value']) {
+                        this.addTableList('extract')
                     }
                 }
+                ,
+                deep: true
             }
-        }
-    ,
-        monitorMethod(newValue, oldValue)
-        {
-            if (newValue === 'GET') {
-                this.bodyShow = 'first'
+            ,
+            monitorHeader: {
+                handler: function () {
+                    if (this.apiMsgData.header.length === 0) {
+                        this.addTableList('header')
+                    }
+                    if (this.apiMsgData.header[this.apiMsgData.header.length - 1]['key'] || this.apiMsgData.header[this.apiMsgData.header.length - 1]['value']) {
+                        this.addTableList('header')
+                    }
+                }
+                ,
+                deep: true
             }
-        }
-    ,
-        monitorVariable: {
-            handler: function () {
-                if (this.apiMsgData.variable.length === 0) {
-                    this.addTableList('variable')
+            ,
+            monitorValidate: {
+                handler: function () {
+                    if (this.apiMsgData.validate.length === 0) {
+                        this.addTableList('validate')
+                    }
+                    if (this.apiMsgData.validate[this.apiMsgData.validate.length - 1]['key'] || this.apiMsgData.validate[this.apiMsgData.validate.length - 1]['value']) {
+                        this.addTableList('validate')
+                    }
                 }
-                if (this.apiMsgData.variable[this.apiMsgData.variable.length - 1]['key'] || this.apiMsgData.variable[this.apiMsgData.variable.length - 1]['value']) {
-                    this.addTableList('variable')
-                }
+                ,
+                deep: true
             }
-        ,
-            deep: true
-        }
-    ,
-        monitorExtract: {
-            handler: function () {
-                if (this.apiMsgData.extract.length === 0) {
-                    this.addTableList('extract')
-                }
-                if (this.apiMsgData.extract[this.apiMsgData.extract.length - 1]['key'] || this.apiMsgData.extract[this.apiMsgData.extract.length - 1]['value']) {
-                    this.addTableList('extract')
-                }
-            }
-        ,
-            deep: true
-        }
-    ,
-        monitorHeader: {
-            handler: function () {
-                if (this.apiMsgData.header.length === 0) {
-                    this.addTableList('header')
-                }
-                if (this.apiMsgData.header[this.apiMsgData.header.length - 1]['key'] || this.apiMsgData.header[this.apiMsgData.header.length - 1]['value']) {
-                    this.addTableList('header')
-                }
-            }
-        ,
-            deep: true
-        }
-    ,
-        monitorValidate: {
-            handler: function () {
-                if (this.apiMsgData.validate.length === 0) {
-                    this.addTableList('validate')
-                }
-                if (this.apiMsgData.validate[this.apiMsgData.validate.length - 1]['key'] || this.apiMsgData.validate[this.apiMsgData.validate.length - 1]['value']) {
-                    this.addTableList('validate')
-                }
-            }
-        ,
-            deep: true
-        }
-    ,
+            ,
 
-    }
-    ,
-    mounted()
-    {
-    }
-    ,
+        }
+        ,
+        mounted() {
+        }
+        ,
     }
 </script>
 <style>

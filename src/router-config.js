@@ -18,7 +18,7 @@ import buildInFunc from './projectManage/buildInFunc/buildInFunc.vue'
 import sceneManage from './projectManage/caseManage/case.vue'
 import testTool from './projectManage/testTool/testTool.vue'
 import taskManage from './projectManage/taskManage/task.vue'
-import batch from './projectManage/batchAdd/batch.vue'
+
 import sqlCheck from './projectManage/sqlCheck/sqlCheck.vue'
 import user from './projectManage/userManage/user.vue'
 import sceneConfig from './projectManage/config/config.vue'
@@ -173,16 +173,7 @@ const routes = [
                     Manage: taskManage,
                 }
             },
-            {
-                path: 'batch',
-                meta: {
-                    requireAuth: true,
-                },
-                components: {
-                    Header: Header,
-                    Manage: batch,
-                }
-            },
+
             {
                 path: 'sqlCheck',
                 meta: {

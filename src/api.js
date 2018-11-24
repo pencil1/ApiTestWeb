@@ -54,6 +54,7 @@ const configDataApi = '/api/config/data';
 
 
 const fileUploadingApi = '/api/upload';
+const checkFileApi = '/api/checkFile';
 const importApiApi = '/api/apiMsg/fileChange';
 
 const findFuncApi = '/api/func/find';
@@ -69,6 +70,7 @@ const changeStatusUserApi = '/api/user/changeStatus';
 export default {
     baseDataApi,
     getFuncAddressApi,
+    checkFileApi,
 
     findUserApi,
     editUserApi,

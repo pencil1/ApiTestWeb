@@ -294,11 +294,6 @@
                 this.taskData.modelFormVisible = true;
 
             },
-            test1() {
-                console.log(this.allSetList[this.form.projectName]);
-                console.log(this.allSceneList['abc']);
-                // console.log(this.form.case)
-            },
             addTask() {
                 this.$axios.post(this.$api.addTaskApi, {
                     'projectName': this.form.projectName,
