@@ -68,9 +68,9 @@
                                         :value="item">
                                 </el-option>
                             </el-select>
-                            <el-select v-model="caseData.funcAddress" clearable multiple placeholder="请选择导入函数文件" size="small">
+                            <el-select v-model="caseData.funcAddress" multiple placeholder="请选择导入函数文件" size="small">
                                 <el-option
-                                        v-for="(item, key) in this.funcAddress"
+                                        v-for="item in this.funcAddress"
                                         :key="item['value']"
                                         :label="item['value']"
                                         :value="item['value']">
@@ -330,7 +330,7 @@
                 caseData: {
                     id: '',
                     num: '',
-                    funcAddress: '',
+                    funcAddress: Array(),
                     modelFormVisible: false,
                     projectName: '',
                     variable: [],
@@ -373,7 +373,7 @@
                 this.caseData.times = '';
                 this.caseData.desc = '';
                 this.caseData.id = '';
-                this.caseData.funcAddress = '';
+                this.caseData.funcAddress = Array();
                 this.caseData.num = '';
                 this.caseData.modelFormVisible = true;
                 this.apiMsgVessel = [];

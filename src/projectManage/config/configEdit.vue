@@ -23,12 +23,12 @@
                         </el-form>
                     <el-form :inline="true"  size="small" class="demo-form-inline" >
                         <el-form-item label="函数文件">
-                            <el-select v-model="configData.funcAddress" clearable placeholder="请选择导入函数文件" size="small">
+                            <el-select v-model="configData.funcAddress" multiple  placeholder="请选择导入函数文件" size="small">
                                 <el-option
-                                        v-for="(item, key) in this.funcAddress"
-                                        :key="item['value']"
-                                        :label="item['value']"
-                                        :value="item['value']">
+                                        v-for="item in this.funcAddress"
+                                        :key="item.value"
+                                        :label="item.value"
+                                        :value="item.value">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -38,6 +38,7 @@
                             </el-input>
                         </el-form-item>
                         <el-form-item>
+                            <el-button type="primary" size="small" @click="addConfigVariable1()">test</el-button>
                             <el-button type="primary" size="small" @click="addConfigVariable()">添加变量</el-button>
                         </el-form-item>
                     </el-form>
@@ -87,7 +88,7 @@
         data() {
             return {
                 configData: {
-                    funcAddress: null,
+                    funcAddress: Array(),
                     id: null,
                     num: null,
                     modelFormVisible: false,
@@ -101,7 +102,7 @@
             initConfigData() {
                 this.configData.name = null;
                 this.configData.projectName = this.projectName;
-                this.configData.funcAddress = null;
+                this.configData.funcAddress = Array();
                 this.configData.id = null;
                 this.configData.num = null;
                 this.configData.variable = [{key: null, value: null, remark: null}];
@@ -110,6 +111,10 @@
             },
             addConfigVariable() {
                 this.configData.variable.push({key: null, value: null, remark: null});
+            },
+            addConfigVariable1() {
+                console.log(this.configData.funcAddress)
+                console.log(this.funcAddress)
             },
             delConfigVariable(i) {
                 this.configData.variable.splice(i, 1);
