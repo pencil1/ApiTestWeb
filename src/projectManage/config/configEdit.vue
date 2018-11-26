@@ -38,7 +38,6 @@
                             </el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" size="small" @click="addConfigVariable1()">test</el-button>
                             <el-button type="primary" size="small" @click="addConfigVariable()">添加变量</el-button>
                         </el-form-item>
                     </el-form>

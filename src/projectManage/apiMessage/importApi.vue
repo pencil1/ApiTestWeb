@@ -7,6 +7,7 @@
                     <el-radio-group v-model="importApiData.importFormat">
                         <el-radio label="HAR"></el-radio>
                         <el-radio label="postman(JSON)"></el-radio>
+                        <!--<el-radio label="swagger"></el-radio>-->
                     </el-radio-group>
                 </el-form-item>
             </el-form>

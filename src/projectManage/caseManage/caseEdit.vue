@@ -520,6 +520,7 @@
                 }).then((response) => {
                         this.caseData.variable = this.caseData.variable.concat(response.data['data']['variables']);
                         this.caseData.variable = JSON.parse(JSON.stringify(this.caseData.variable));
+
                         this.caseData.funcAddress = response.data['data']['func_address'];
                     }
                 )
