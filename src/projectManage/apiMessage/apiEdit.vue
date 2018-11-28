@@ -503,20 +503,21 @@
                     'validate': JSON.stringify(this.apiMsgData.validate)
                 }).then((response) => {
                         if (messageClose) {
-                            if (response.data['status'] === 0) {
-                                this.$message({
-                                    showClose: true,
-                                    message: response.data['msg'],
-                                    type: 'warning',
-                                });
-                                return false
-                            }
-                            else {
-                                this.apiMsgData.id = response.data['api_msg_id'];
-                                this.apiMsgData.num = response.data['num'];
-                                // this.$emit('findApiMsg');
-                                return true
-                            }
+                            return response
+                            // if (response.data['status'] === 0) {
+                            //     this.$message({
+                            //         showClose: true,
+                            //         message: response.data['msg'],
+                            //         type: 'warning',
+                            //     });
+                            //     return false
+                            // }
+                            // else {
+                            //     this.apiMsgData.id = response.data['api_msg_id'];
+                            //     this.apiMsgData.num = response.data['num'];
+                            //     // this.$emit('findApiMsg');
+                            //     return true
+                            // }
                         }
                         else {
                             if (this.messageShow(this, response)) {
@@ -576,9 +577,15 @@
             },
             saveAndRun() {
                 this.addApiMsg(true).then(res => {
-                    if (res) {
+                    if (res.data['status'] === 0) {
+                        this.$message({
+                            showClose: true,
+                            message: res.data['msg'],
+                            type: 'warning',
+                        });
+                    }
+                    else {
                         this.$emit('apiTest', [{'apiMsgId': this.apiMsgData.id, 'num': '1'}], false);
-                        // this.apiTest([{'apiMsgId': this.apiMsgData.id, 'num': '1'}], false);
                     }
                 });
             },

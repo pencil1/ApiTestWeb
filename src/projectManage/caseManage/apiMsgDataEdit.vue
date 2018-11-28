@@ -386,7 +386,7 @@
                                         message: response.data['msg'],
                                         type: 'success',
                                     });
-                                    this.apiMsgData.variable[this.temp_num]['value'] = response.data['data'];
+                                    this.apiCaseData.variable[this.temp_num]['value'] = response.data['data'];
                                 }
                             );
                         }).catch(() => {
