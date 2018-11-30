@@ -93,7 +93,7 @@
                             type: 'success',
                         });
                     }
-                    this.importApiData.importApiAddress = response['data']['data'];
+                    this.importApiData.importApiAddress = response['data'];
                 }
 
             },
