@@ -284,10 +284,7 @@
                             this.form.projectName = response.data['user_pro']['pro_name'];
                             this.findSet();
                         }
-
                         this.allSetList = response.data['set_list'];
-
-
                     }
                 );
                 this.$axios.post(this.$api.getFuncAddressApi).then((response) => {

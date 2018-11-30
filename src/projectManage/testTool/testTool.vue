@@ -1,11 +1,12 @@
 <template>
     <div class="test">
         <div style="margin: 10px;padding-left: 10px">
-            <el-button type="primary" @click="testCase.viewStatus = true" size="small">测试用例转化</el-button>
+            <el-button type="primary" @click.native="initCase()" size="small">测试用例转化</el-button>
             <el-button type="primary" @click.native="buildIdentity()" size="small">生成身份证</el-button>
             <el-button type="primary" size="small" @click.native="dealSql()">执行语句</el-button>
             <el-button type="primary" size="small" @click.native="optimizeError()">错误信息优化显示</el-button>
-            <a href="E:\project\source\files\拆红包.xls" download="w3logo">sdf</a>
+            <el-button type="primary" size="small" @click.native="sqlData1()">123</el-button>
+
         </div>
 
         <div style="margin: 20px 0;"></div>
@@ -59,6 +60,10 @@
         mounted() {
         },
         methods: {
+            initCase(){
+                this.testCase.viewStatus = true;
+                this.testCase.address =''
+            },
             getFileAddress(response, file, fileList) {
                 if (response['status'] === 0) {
                     // this.$message({
@@ -161,7 +166,7 @@
             },
             sqlData1() {
                 // 调用 callback 返回建议列表的数据
-                this.$axios.post('/api/show', {}).then((response) => {
+                this.$axios.post('/api/show1', {}).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
                                 showClose: true,
