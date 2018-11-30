@@ -64,6 +64,7 @@
         },
         methods: {
             resultDeal(data){
+
                 try {
                     data = JSON.parse(data);
                     data = JSON.stringify(data, null, 4);

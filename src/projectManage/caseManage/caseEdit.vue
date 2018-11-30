@@ -143,7 +143,7 @@
                             </template>
                         </el-table-column>
                         <el-table-column
-                                label="用例名称"
+                                label="步骤名称"
                                 minWidth="50">
                             <template slot-scope="scope">
                                 <el-input v-model="caseData.apiCases[scope.$index]['case_name']">

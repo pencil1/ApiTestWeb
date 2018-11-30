@@ -58,8 +58,44 @@
                 this.importApiData.importApiStatus = true
             },
             getFileAddress(response, file, fileList) {
-                this.importApiData.importApiAddress = response['data'];
-                this.messageShow(this, response);
+                if (response['status'] === 0) {
+                    // this.$message({
+                    //     showClose: true,
+                    //     message: response['msg'],
+                    //     type: 'warning',
+                    // });
+                    this.$confirm('服务器已存在相同名字文件，是否覆盖?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        let form = new FormData();
+                        form.append("file", file.raw);
+                        form.append("skip", '1');
+                        this.$axios.post('/api/upload',form ).then((response) => {
+                                this.$message({
+                                    showClose: true,
+                                    message: response.data['msg'],
+                                    type: 'success',
+                                });
+                            this.importApiData.importApiAddress = response['data']['data'];
+                            }
+                        );
+                    }).catch(() => {
+
+                    });
+                }
+                else {
+                    if (response['msg']) {
+                        this.$message({
+                            showClose: true,
+                            message: response['msg'],
+                            type: 'success',
+                        });
+                    }
+                    this.importApiData.importApiAddress = response['data']['data'];
+                }
+
             },
             importCase() {
                 this.$axios.post(this.$api.importApiApi, {

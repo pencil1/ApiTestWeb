@@ -480,6 +480,14 @@
                         return
                     }
                 }
+                if (!this.form.projectName) {
+                        this.$message({
+                            showClose: true,
+                            message: '请选择项目',
+                            type: 'warning',
+                        });
+                    return
+                }
                 return this.$axios.post(this.$api.addApiApi, {
                     'moduleId': this.form.module.moduleId,
                     'projectName': this.form.projectName,

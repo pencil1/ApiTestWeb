@@ -18,8 +18,8 @@
                         <span class="el-dropdown-link">{{userName}}<i
                                 class="el-icon-arrow-down el-icon--right"></i></span>
                         <el-dropdown-menu slot="dropdown" style="line-height:10px">
-                            <el-dropdown-item command="a">退出系统</el-dropdown-item>
                             <el-dropdown-item command="b">个人设置</el-dropdown-item>
+                            <el-dropdown-item command="a">退出系统</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-header>
@@ -29,6 +29,33 @@
                 <!--</el-footer>-->
             </el-container>
         </el-container>
+        <el-dialog
+                title="账号设置"
+                :visible.sync="userData.modelFormVisible"
+                width="30%"
+        >
+            <el-form>
+
+                <el-form-item label="姓名" :label-width="userData.formLabelWidth">
+                    <el-input v-model="userData.name">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="账号" :label-width="userData.formLabelWidth"
+                              prop="num">
+                    <el-input v-model.number="userData.account">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="密码" :label-width="userData.formLabelWidth"
+                              prop="desc">
+                    <el-input v-model="userData.password" type="password">
+                    </el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                    <el-button @click="userData.modelFormVisible = false" size="small">取 消</el-button>
+                    <el-button type="primary" @click.native="register()" size="small">确 定</el-button>
+                </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -42,6 +69,15 @@
             return {
                 title: ['项目管理', '项目'],
                 userName: '',
+                userData: {
+                    id: null,
+                    modelFormVisible: false,
+                    name: '',
+                    account: '',
+                    formLabelWidth: '60px',
+                    password: '',
+                    status: '',
+                },
             }
         },
         methods: {
@@ -51,7 +87,6 @@
             },
             logOut(command) {
                 if (command === "a") {
-
                     this.$store.commit(types.LOGOUT);
                     this.$router.push({path: '/login'});
                     this.$axios.get(this.$api.logoutApi).then((response) => {
@@ -67,6 +102,9 @@
                             }
                         }
                     );
+                }
+                else if(command === 'b'){
+
                 }
             },
 

@@ -53,10 +53,20 @@
                                 <span>报告管理</span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="/manage/reportManage">测试报告</el-menu-item>
+                                    <el-menu-item index="/manage/reportManage">测试报告</el-menu-item>
                             </el-menu-item-group>
                             <el-menu-item-group>
                                 <el-menu-item index="/manage/taskManage">定时任务</el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+
+                        <el-submenu index="5">
+                            <template slot="title">
+                                <i class="el-icon-time"></i>
+                                <span>其他程序</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="/manage/testTool">小工具</el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
 
@@ -67,7 +77,7 @@
                             </template>
                             <el-menu-item-group >
                                 <el-menu-item index="/manage/userManage">用户管理</el-menu-item>
-                                <el-menu-item index="/manage/testTool">小工具</el-menu-item>
+
 
                                 <!--<el-menu-item index="/manage/batch">批量添加</el-menu-item>-->
                             </el-menu-item-group>

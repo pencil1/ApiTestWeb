@@ -74,7 +74,7 @@
             </el-col>
             <el-col :span="21">
                     <el-tabs value="first" style="padding-left: 10px;padding-right:5px;">
-                        <el-tab-pane label="业务列表" name="first">
+                        <el-tab-pane label="用例列表" name="first">
                             <el-table
                                     ref="sceneMultipleTable"
                                     @selection-change="handleCaseSelection"
