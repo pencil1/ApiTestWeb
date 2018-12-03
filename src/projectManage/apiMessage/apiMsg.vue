@@ -510,6 +510,9 @@
                                 });
                                 this.findApiMsg();
                             }
+                            else{
+                                this.ApiMsgTableData=[]
+                            }
 
                         }
                     }
