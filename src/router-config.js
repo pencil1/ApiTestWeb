@@ -205,11 +205,15 @@ if (window.localStorage.getItem('token')) {
     store.commit(types.LOGIN, window.localStorage.getItem('token'))
     // store.commit(types.LOGIN, '1111')
 }
-
+if (window.localStorage.getItem('roles')) {
+    store.commit(types.ROLES, window.localStorage.getItem('roles'));
+    // store.commit(types.LOGIN, '1111')
+}
 if (window.localStorage.getItem('userName')) {
     store.commit(types.USERNAME, window.localStorage.getItem('userName'));
     // store.commit(types.LOGIN, '1111')
 }
+
 
 const router = new VueRouter({
     routes

@@ -1,5 +1,5 @@
 <template>
-    <div class="projectManage">
+    <div class="userManage">
 
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
 
@@ -43,7 +43,7 @@
                             <el-button type="primary" icon="el-icon-edit" size="mini"
                                        @click.native="editUser(tableData[scope.$index]['user_id'])">编辑
                             </el-button>
-                            <el-button type="primary" icon="el-icon-sort" size="mini"
+                            <el-button type="primary" size="mini"
                                        @click.native="changeUserStatus(tableData[scope.$index]['user_id'])">置换状态
                             </el-button>
                             <el-button type="danger" icon="el-icon-delete" size="mini"
@@ -86,6 +86,17 @@
                     <el-input v-model="userData.password" type="password">
                     </el-input>
                 </el-form-item>
+                <el-form-item label="角色" :label-width="userData.formLabelWidth"
+                              prop="desc">
+                    <el-select v-model="form.role" value-key="role_id" placeholder="请选择配置">
+                        <el-option
+                                v-for="item in roleData"
+                                :key="item.role_id"
+                                :label="item.role_name"
+                                :value="item">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                     <el-button @click="userData.modelFormVisible = false" size="small">取 消</el-button>
@@ -99,23 +110,17 @@
 <script>
 
     export default {
-        name: 'projectManage',
+        name: 'userManage',
         data() {
             return {
-
-                environmentChoice: 'first',
-                environment: {
-                    environmentTest: [{value: ''}],
-                    environmentDevelop: [{value: ''}],
-                    environmentProduction: [{value: ''}],
-                    environmentStandby: [{value: ''}],
-                },
                 tableData: Array(),
                 total: 1,
                 currentPage: 1,
                 sizePage: 20,
+                roleData:[],
                 form: {
                     userName: null,
+                    role:{},
                 },
                 userData: {
                     id: null,
@@ -133,6 +138,7 @@
                 this.$axios.post(this.$api.registerApi, {
                     'id': this.userData.id,
                     'name': this.userData.name,
+                    'role_id': this.form.role.role_id,
                     'account': this.userData.account,
                     'password': this.userData.password,
                 }).then((response) => {
@@ -173,6 +179,7 @@
                         if (this.messageShow(this, response)) {
                             this.tableData = response.data['data'];
                             this.total = response.data['total'];
+                            this.roleData = response.data['role_data'];
                         }
                     }
                 )
@@ -191,6 +198,8 @@
                         this.userData.name = response.data['data']['name'];
                         this.userData.password = '';
                         this.userData.id = id;
+                        let index = this.roleData.map(item => item.role_id).indexOf(response.data['data']['role_id']);
+                        this.form.role = this.roleData[index];
                         this.userData.modelFormVisible = true;
                     }
                 )

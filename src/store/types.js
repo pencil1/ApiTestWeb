@@ -11,11 +11,7 @@ export const TITLE = 'title';
 
 export const USERNAME = 'userName';
 
-
-
-export const PROJECTNAME = 'projectName';
-
-export const CONFIGNAMEDATA = 'configData';
+export const ROLES = 'roles';
 
 
 

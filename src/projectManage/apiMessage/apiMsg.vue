@@ -278,6 +278,7 @@
 
         methods: {
             initBaseData() {
+                console.log(this.$store.state.role)
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
                         this.proModelData = response.data['data'];
                         this.configData = response.data['config_name_list'];

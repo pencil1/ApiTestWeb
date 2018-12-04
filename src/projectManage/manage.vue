@@ -70,7 +70,7 @@
                             </el-menu-item-group>
                         </el-submenu>
 
-                        <el-submenu index="4" v-if="userName === '管理员'">
+                        <el-submenu index="4" v-show="role === '2'">
                             <template slot="title">
                                 <i class="el-icon-setting"></i>
                                 <span>系统管理</span>
@@ -119,7 +119,9 @@
             return {
                 navigationName:'/manage/projectManage',
                 collapsed:false,
+                role:'',
                 userName:'',
+
             }
         },
         methods: {
@@ -127,7 +129,9 @@
                 this.collapsed = !this.collapsed;
             },
             closeNavigation(){
+                this.role = this.$store.state.roles;
                 this.userName = this.$store.state.userName;
+
                 this.navigationName = this.$route.path;
                 if(this.$route.path === '/manage/reportShow'){
                     this.collapsed = true;

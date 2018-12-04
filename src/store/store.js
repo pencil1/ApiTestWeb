@@ -10,8 +10,8 @@ export default new Vuex.Store({
     state: {
         userName: null,
         token: null,
-        projectName: '',
         title: '',
+        roles:null,
     },
     mutations: {
         [types.LOGIN]: (state, data) => {
@@ -22,9 +22,9 @@ export default new Vuex.Store({
             localStorage.userName = data;
             state.userName = data;
         },
-        [types.PROJECTNAME]: (state, data) => {
-            localStorage.projectName = data;
-            state.projectName = data;
+        [types.ROLES]: (state, data) => {
+            localStorage.roles = data;
+            state.roles = data;
         },
 
         [types.LOGOUT]: (state) => {

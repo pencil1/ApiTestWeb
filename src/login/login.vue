@@ -140,6 +140,10 @@
                             this.token = response.data['token'];
                             if (this.token) {
                                 this.$store.commit(types.LOGIN, this.token);
+                                this.$store.commit(types.ROLES, response.data['roles']);
+                                this.$store.commit('roles', response.data['roles']);
+                                // console.log(this.$store.state.role)
+                                // console.log(this.$store.state.userName)
                                 this.$store.commit(types.USERNAME, response.data['name']);
                                 this.$store.commit('userName', response.data['name']);
 
