@@ -593,7 +593,7 @@
                         });
                     }
                     else {
-                        this.$emit('apiTest', [{'apiMsgId': this.apiMsgData.id, 'num': '1'}], false);
+                        this.$emit('apiTest', [{'apiMsgId': res.data['api_msg_id'], 'num': '1'}], false);
                     }
                 });
             },
