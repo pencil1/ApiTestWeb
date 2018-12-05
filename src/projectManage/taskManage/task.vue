@@ -333,7 +333,7 @@
                 this.$axios.post(this.$api.editTaskApi, {'id': id}).then((response) => {
                         this.taskData.name = response.data['data']['task_name'];
                         this.taskData.timeConfig = response.data['data']['task_config_time'];
-                        this.form.projectName = response.data['data']['project_name'];
+                        // this.form.projectName = response.data['data']['project_name'];
                         this.taskData.taskType = response.data['data']['task_type'];
                         this.taskData.toEmail = response.data['data']['task_to_email_address'];
                         this.taskData.SendEmail = response.data['data']['task_send_email_address'];

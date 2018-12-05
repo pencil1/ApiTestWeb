@@ -60,15 +60,15 @@
                             </el-menu-item-group>
                         </el-submenu>
 
-                        <!--<el-submenu index="5">-->
-                            <!--<template slot="title">-->
-                                <!--<i class="el-icon-time"></i>-->
-                                <!--<span>其他程序</span>-->
-                            <!--</template>-->
-                            <!--<el-menu-item-group>-->
-                                <!--<el-menu-item index="/manage/testTool">小工具</el-menu-item>-->
-                            <!--</el-menu-item-group>-->
-                        <!--</el-submenu>-->
+                        <el-submenu index="5">
+                            <template slot="title">
+                                <i class="el-icon-time"></i>
+                                <span>其他程序</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="/manage/testTool">小工具</el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
 
                         <el-submenu index="4" v-show="role === '2'">
                             <template slot="title">

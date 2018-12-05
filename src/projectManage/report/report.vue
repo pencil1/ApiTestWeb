@@ -45,7 +45,7 @@
                           stripe>
 
                     <el-table-column
-                            prop="belong"
+                            prop="project_name"
                             label="所属项目"
                             minWidth="50">
                     </el-table-column>
@@ -54,7 +54,7 @@
                             :show-overflow-tooltip=true
                             minWidth="200"
                             prop="name"
-                            label="执行业务集"
+                            label="用例"
                     >
                     </el-table-column>
                     <el-table-column
@@ -166,7 +166,7 @@
             findReport() {
                 this.$axios.post(this.$api.findReportApi, {
                     'page': this.currentPage,
-                    'belong': this.form.projectName,
+                    'projectName': this.form.projectName,
                     'sizePage': this.sizePage,
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
