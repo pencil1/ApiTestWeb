@@ -22,6 +22,9 @@ yarn install
 ## Build
     npm run build
 
+## 登陆地址（ip自己替换）
+http://127.0.0.1:8010/#/login
+
 
 ## 页面展示
 
