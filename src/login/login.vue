@@ -23,9 +23,9 @@
                     <!--<el-button type="primary"-->
                     <!--@click.native="loGout()" size="small">登出-->
                     <!--</el-button>-->
-                    <el-button type="primary"
-                               @click="centerDialogVisible = true" size="small">注册
-                    </el-button>
+                    <!--<el-button type="primary"-->
+                               <!--@click="centerDialogVisible = true" size="small">注册-->
+                    <!--</el-button>-->
                 </el-form-item>
             </el-form>
             <el-dialog

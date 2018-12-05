@@ -58,7 +58,8 @@
                                     <el-button size="mini" type="success"
                                                @click.native="stickModule()">置顶
                                     </el-button>
-                                    <el-button size="mini" type="danger" @click.native="sureView(delModule)">删除</el-button>
+                                    <el-button size="mini" type="danger" @click.native="sureView(delModule)">删除
+                                    </el-button>
                                 </el-button-group>
                             </el-col>
                         </el-row>
@@ -265,7 +266,7 @@
                     module: {
                         name: '',
                         moduleId: '',
-                        num:'',
+                        num: '',
                     },
                     projectName: null,
                     projectId: null,
@@ -278,14 +279,15 @@
 
         methods: {
             initBaseData() {
-                console.log(this.$store.state.role)
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
                         this.proModelData = response.data['data'];
                         this.configData = response.data['config_name_list'];
                         this.proUrlData = response.data['urlData'];
                         if (response.data['user_pro']) {
                             this.form.projectName = response.data['user_pro']['pro_name'];
-                            this.form.config = this.configData[this.form.projectName][0];
+                            if (this.configData[this.form.projectName][0]) {
+                                this.form.config = this.configData[this.form.projectName][0];
+                            }
                             this.findModule()
                         }
                         this.$axios.post(this.$api.getFuncAddressApi).then((response) => {
@@ -307,12 +309,12 @@
                 }
             },
             handleSizeChange(val) {
-                    this.apiMsgPage.sizePage = val;
-                    this.findApiMsg();
+                this.apiMsgPage.sizePage = val;
+                this.findApiMsg();
 
             },
             findDataBtn() {
-                    this.findApiMsg();
+                this.findApiMsg();
             },
 
             findApiMsg() {
@@ -378,6 +380,7 @@
             },
             apiTest(apiMsgData = null, suiteData = null) {
                 this.loading = true;
+                console.log(this.form)
                 this.$axios.post(this.$api.runApiApi, {
                     'apiMsgData': apiMsgData,
                     'suiteData': suiteData,
@@ -511,8 +514,8 @@
                                 });
                                 this.findApiMsg();
                             }
-                            else{
-                                this.ApiMsgTableData=[]
+                            else {
+                                this.ApiMsgTableData = []
                             }
 
                         }
