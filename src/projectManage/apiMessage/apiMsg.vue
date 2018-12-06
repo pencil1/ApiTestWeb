@@ -341,6 +341,14 @@
                 )
             },
             initData() {
+                if (!this.form.module) {
+                    this.$message({
+                        showClose: true,
+                        message: '请先创建接口模块',
+                        type: 'warning',
+                    });
+                    return
+                }
                 this.apiEditViewStatus = true;
                 this.showNumTab = 'second';
                 setTimeout(() => {
