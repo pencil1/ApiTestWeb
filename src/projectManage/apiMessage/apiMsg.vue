@@ -4,9 +4,9 @@
             <el-form-item label="项目、模块" labelWidth="110px">
                 <el-select v-model="form.projectName" placeholder="请选择项目" @change="clearChoice" style="width: 150px">
                     <el-option
-                            v-for="(item, key) in proModelData"
-                            :key="key"
-                            :value="key">
+                            v-for="(item, key) in proAndIdData"
+                            :key="item.name"
+                            :value="item.name">
                     </el-option>
                 </el-select>
                 <el-select v-model="form.config" placeholder="请选择配置" clearable value-key="configId"
@@ -230,6 +230,7 @@
                 showNumTab: 'first',
                 loading: false,
                 proModelData: '',
+                proAndIdData: '',
                 configData: '',
                 proUrlData: null,
                 ApiMsgTableData: Array(),//接口表单数据
@@ -281,6 +282,7 @@
             initBaseData() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
                         this.proModelData = response.data['data'];
+                        this.proAndIdData = response.data['pro_and_id'];
                         this.configData = response.data['config_name_list'];
                         this.proUrlData = response.data['urlData'];
                         if (response.data['user_pro']) {
@@ -327,7 +329,7 @@
                     return
                 }
                 this.$axios.post(this.$api.findApiApi, {
-                    'caseName': this.form.apiName,
+                    'apiName': this.form.apiName,
                     'projectName': this.form.projectName,
                     'moduleId': this.form.module.moduleId,
                     'page': this.apiMsgPage.currentPage,

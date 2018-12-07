@@ -5,9 +5,9 @@
             <el-form-item label="项目名称" labelWidth="110px">
                 <el-select v-model="form.projectName" placeholder="请选择项目">
                     <el-option
-                            v-for="(item, key) in proModelData"
-                            :key="key"
-                            :value="key">
+                            v-for="(item, key) in proAndIdData"
+                            :key="item.name"
+                            :value="item.name">
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -87,6 +87,7 @@
             return {
                 proModelData: null,
                 funcAddress: null,
+                proAndIdData:'',
                 tableData: Array(),
                 total: 1,
                 currentPage: 1,
@@ -107,6 +108,7 @@
                         this.findConfig();
                     }
                         this.proModelData = response.data['data'];
+                    this.proAndIdData = response.data['pro_and_id'];
 
 
 

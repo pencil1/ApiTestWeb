@@ -4,9 +4,9 @@
             <el-form-item label="项目名称" labelWidth="110px">
                 <el-select v-model="form.projectName" placeholder="请选择项目" @change="findSet">
                     <el-option
-                            v-for="(item, key) in proModelData"
-                            :key="key"
-                            :value="key">
+                            v-for="(item, key) in proAndIdData"
+                            :key="item.name"
+                            :value="item.name">
                     </el-option>
                 </el-select>
 
@@ -194,6 +194,7 @@
                 tempNum: '',
                 caseList: [],
                 proModelData: '',
+                proAndIdData:'',
                 loading: false,
                 configData: '',
                 caseAll: [],
@@ -263,7 +264,7 @@
                 )
             },
             findOldScenes() {
-                this.$axios.post('/api/scene/findOld', {
+                this.$axios.post('/api/case/findOld', {
                     'projectName': this.form.projectName,
                     'caseName': this.form.caseName,
                     'page': this.currentPage,
@@ -279,6 +280,7 @@
             initCaseViewData() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
                         this.proModelData = response.data['data'];
+                    this.proAndIdData = response.data['pro_and_id'];
                         this.configData = response.data['config_name_list'];
                         if (response.data['user_pro']){
                             this.form.projectName = response.data['user_pro']['pro_name'];
@@ -306,9 +308,10 @@
                             this.setTempData.name = this.setDataList[0]['label'];
                             this.$nextTick(function () {
                                 this.$refs.testTree.setCurrentKey(this.setTempData.setId);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
+                                this.findCase();
                             });
                         }
-                        this.findCase();
+
                     }
                 );
             },

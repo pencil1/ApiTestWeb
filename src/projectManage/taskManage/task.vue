@@ -6,8 +6,8 @@
                 <el-select v-model="form.projectName" placeholder="选择项目">
                     <el-option
                             v-for="(item, key) in proModelData"
-                            :key="key"
-                            :value="key">
+                            :key="item.name"
+                            :value="item.name">
                     </el-option>
                 </el-select>
 
@@ -54,6 +54,7 @@
                             label="操作"
                             min-width="200">
                         <template slot-scope="scope">
+                            <el-button type="primary" v-show="false"></el-button>
                             <el-button type="primary" size="mini" v-if="tableData[scope.$index]['status'] === '创建'"
                                        @click.native="editTask(tableData[scope.$index]['id'])">修改
                             </el-button>
@@ -64,7 +65,6 @@
                                        v-show="tableData[scope.$index]['status'] !== '暂停'"
                                        @click.native="pauseTask(tableData[scope.$index]['id'])">暂停
                             </el-button>
-
                             <el-button type="primary" size="mini" v-if="tableData[scope.$index]['status'] !== '创建'"
                                        v-show="tableData[scope.$index]['status'] !== '启动'"
                                        @click.native="resumeTask(tableData[scope.$index]['id'])">恢复
@@ -231,7 +231,7 @@
                             this.form.projectName = response.data['user_pro']['pro_name'];
                             this.findTask();
                         }
-                        this.proModelData = response.data['data'];
+                        this.proModelData = response.data['pro_and_id'];
                         this.allSetList = response.data['set_list'];
                         this.allSceneList = response.data['scene_list'];
                     }
