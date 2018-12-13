@@ -76,11 +76,11 @@
                 <el-tab-pane label="基础信息" style="margin-top: 10px">
                     <el-form :inline="true">
                         <el-form-item label="项目名称" :label-width="projectData.formLabelWidth">
-                            <el-input v-model="projectData.projectName" size="small">
+                            <el-input v-model="projectData.projectName" size="small" id="project_name">
                             </el-input>
                         </el-form-item>
                         <el-form-item label="负责人" :label-width="projectData.formLabelWidth">
-                            <el-select v-model="form.user" value-key="user_id">
+                            <el-select v-model="form.user" value-key="user_id"  id="user">
                                 <el-option
                                         v-for="item in userData"
                                         :key="item.user_id"
@@ -232,9 +232,8 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="projectData.modelFormVisible = false" size="small">取 消</el-button>
-                <el-button type="primary"
-                           @click.native="addProjectBtn()" size="small">确 定
-                </el-button>
+                <el-button type="primary" id="sure_btn"
+                           @click.native="addProjectBtn()" size="small">确 定</el-button>
             </div>
         </el-dialog>
 

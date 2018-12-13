@@ -390,7 +390,6 @@
             },
             apiTest(apiMsgData = null, suiteData = null) {
                 this.loading = true;
-                console.log(this.form)
                 this.$axios.post(this.$api.runApiApi, {
                     'apiMsgData': apiMsgData,
                     'suiteData': suiteData,

@@ -1,5 +1,5 @@
 /**
- * Created by superman on 17/2/16.
+ * Created by pencil1 on 2018/12/10.
  * vuex types
  */
 

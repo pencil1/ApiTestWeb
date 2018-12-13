@@ -7,17 +7,17 @@
                      background-color:rgba(0, 161, 255, 0.3);padding:50px 40px;border-radius:10px;">
                 <div style="margin-bottom:10px;font-size: 30px;color:#bfc4cc">测试平台</div>
                 <el-form-item prop="num">
-                    <el-input v-model="caseData.account" placeholder="请输入账号" style="width: 400px;">
+                    <el-input v-model="caseData.account" placeholder="请输入账号" style="width: 400px;" id="account">
                     </el-input>
                 </el-form-item>
                 <el-form-item
                         prop="desc">
-                    <el-input v-model="caseData.password" type="password" placeholder="请输入密码" style="width: 400px;">
+                    <el-input v-model="caseData.password" type="password" placeholder="请输入密码" style="width: 400px;" id="password">
                     </el-input>
                 </el-form-item>
 
                 <el-form-item>
-                    <el-button type="primary"
+                    <el-button type="primary" id="login"
                                @click.native="login()" size="small">登录
                     </el-button>
                     <!--<el-button type="primary"-->
@@ -75,8 +75,6 @@
                     backgroundRepeat: "no-repeat",
                     backgroundSize: 'cover',
                     minHeight: '930px',
-                    // backgroundPosition: "center",
-                    // backgroundAttachment: "fixed",
                 },
                 // background: url("../assets/login_background.png"),
                 token: '',
@@ -169,5 +167,11 @@
 </script>
 
 <style>
+    .linear{
 
+        background-image: linear-gradient(to top, #fff,#000);
+
+        height: 900px;
+
+    }
 </style>
