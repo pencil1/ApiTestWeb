@@ -1,5 +1,6 @@
 <template>
     <div class="buildInFunc" style="padding: 10px 10px 10px 10px">
+
         <el-row>
             <el-col :span="7">
                 <span>函数文件</span>
@@ -60,11 +61,27 @@
 
         <el-row>
             <el-col :span="16"
-                    style="margin-top: 10px;border:2px solid rgb(234, 234, 234)">
-                <codemirror v-model="funcData"
-                            :options="options"
-                            height="810px">
-                </codemirror>
+                    style="margin-top: 10px;border:3px solid rgb(189, 189, 189)">
+                <el-container>
+                    <editor
+                            v-model="funcData"
+                            @init="editorInit"
+                            lang="python"
+                            theme="monokai"
+                            width="100%"
+                            height="810px"
+                            :options="{
+                                 enableSnippets:true,
+                                 enableBasicAutocompletion: true,
+                                 enableLiveAutocompletion: true
+                             }"
+                    >
+                    </editor>
+                </el-container>
+                <!--<codemirror v-model="funcData"-->
+                <!--:options="options"-->
+                <!--height="810px">-->
+                <!--</codemirror>-->
             </el-col>
             <el-col :span="8" style="margin-top: 10px;padding-left:10px;">
                 <div>
@@ -78,27 +95,13 @@
 </template>
 
 <script>
-    import {codemirror} from 'vue-codemirror-lite'
-
-    require('codemirror/mode/python/python');
-
-    import 'codemirror/addon/scroll/simplescrollbars.js'
-    import 'codemirror/addon/scroll/simplescrollbars.css'
-
     export default {
         components: {
-            codemirror
+            editor: require('vue2-ace-editor'),
         },
         name: 'buildInFunc',
         data() {
             return {
-                options: {
-                    mode: 'python',
-                    tabSize: 4,
-                    lineNumbers: true,
-                    lineWrapping: true,
-                    scrollbarStyle: 'simple',
-                },
                 funcName: '',
                 funcData: '',
                 comparator: '',
@@ -180,6 +183,12 @@
                     }
                 )
 
+            },
+            editorInit() {
+                require('brace/ext/language_tools')
+                require('brace/mode/python')
+                require('brace/theme/monokai')
+                require('brace/snippets/python')
             },
             saveFunc() {
                 if (!this.funcData) {

@@ -14,11 +14,11 @@
     "v-charts": "^1.17.9",
     "vue": "^2.5.17",
     "vue-clipboard2": "^0.1.1",
-    "vue-codemirror-lite": "^1.0.4",
     "vue-resource": "^1.4.0",
     "vue-router": "^3.0.1",
     "vue-scrollbar": "^1.0.4",
     "vue-template-compiler": "^2.5.17",
+    "vue2-ace-editor": "0.0.11",
     "vuex": "^3.0.1",
     "yarn": "^1.12.3"
   },

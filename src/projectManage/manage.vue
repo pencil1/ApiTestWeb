@@ -276,6 +276,15 @@
           border-radius: 4px;
       }
 
+    .ace_scrollbar::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    .ace_scrollbar::-webkit-scrollbar-thumb {
+        background-color: rgba(138, 135, 135, 0.3);
+        border-radius: 4px;
+    }
+
     /*改变代码编辑器左边的行数宽度*/
     .CodeMirror-gutter {
         width: 40px;

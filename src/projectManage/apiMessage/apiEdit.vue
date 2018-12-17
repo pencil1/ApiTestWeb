@@ -147,10 +147,23 @@
 
                 <div v-if="form.choiceType === 'json'">
                     <div style="border-style:solid;border-width: 1px;border-color: rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234)">
-                        <codemirror v-model="apiMsgData.jsonVariable"
-                                    :options="options"
-                                    height="575px">
-                        </codemirror>
+                        <el-container>
+                            <editor
+                                    v-model="apiMsgData.jsonVariable"
+                                    @init="editorInit"
+                                    lang="json"
+                                    theme="chrome"
+                                    width="100%"
+                                    height="575px"
+                                    :options="{
+                             }"
+                            >
+                            </editor>
+                        </el-container>
+                        <!--<codemirror v-model="apiMsgData.jsonVariable"-->
+                                    <!--:options="options"-->
+                                    <!--height="575px">-->
+                        <!--</codemirror>-->
                     </div>
                 </div>
                 <el-table :data="apiMsgData.variable" size="mini" stripe :show-header="false" height="582"
@@ -303,20 +316,12 @@
 </template>
 
 <script>
-    import 'codemirror/addon/lint/lint.css'
-    import 'codemirror/addon/lint/lint'
-    import 'codemirror/addon/lint/json-lint'
-    import 'codemirror/mode/javascript/javascript'
-    // import 'codemirror/addon/scroll/annotatescrollbar.js'
-    import 'codemirror/addon/scroll/simplescrollbars.js'
-    import 'codemirror/addon/scroll/simplescrollbars.css'
-    import {codemirror} from 'vue-codemirror-lite'
     import result from './result.vue'
     import errorView from '../common/errorView.vue'
 
     export default {
         components: {
-            codemirror,
+            editor: require('vue2-ace-editor'),
             result: result,
             errorView: errorView,
         },
@@ -379,6 +384,12 @@
             }
         },
         methods: {
+            editorInit() {
+                require('brace/ext/language_tools')
+                require('brace/mode/json')
+                require('brace/theme/chrome')
+                require('brace/snippets/json')
+            },
             querySearch(queryString, cb) {
                 // 调用 callback 返回建议列表的数据
                 cb(this.comparators);
