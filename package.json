@@ -19,6 +19,7 @@
     "vue-scrollbar": "^1.0.4",
     "vue-template-compiler": "^2.5.17",
     "vue2-ace-editor": "0.0.11",
+    "vuedraggable": "^2.17.0",
     "vuex": "^3.0.1",
     "yarn": "^1.12.3"
   },

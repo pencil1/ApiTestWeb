@@ -88,6 +88,7 @@
                         <div style="border-style:solid;border-width: 1px;border-color: rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234)">
                             <el-container>
                                 <editor
+                                        style="font-size: 15px"
                                         v-model="apiCaseData.json_variable"
                                         @init="editorInit"
                                         lang="json"

@@ -146,9 +146,10 @@
                 <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);"/>
 
                 <div v-if="form.choiceType === 'json'">
-                    <div style="border-style:solid;border-width: 1px;border-color: rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234)">
+                    <div style="border:1px solid rgb(234, 234, 234) ">
                         <el-container>
                             <editor
+                                    style="font-size: 15px"
                                     v-model="apiMsgData.jsonVariable"
                                     @init="editorInit"
                                     lang="json"

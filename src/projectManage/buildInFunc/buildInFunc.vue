@@ -64,6 +64,7 @@
                     style="margin-top: 10px;border:3px solid rgb(189, 189, 189)">
                 <el-container>
                     <editor
+                            style="font-size: 15px"
                             v-model="funcData"
                             @init="editorInit"
                             lang="python"

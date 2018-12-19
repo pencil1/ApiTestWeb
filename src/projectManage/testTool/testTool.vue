@@ -10,15 +10,37 @@
         </div>
 
         <div style="margin: 20px 0;"></div>
-        <div>
-            <el-input
-                    type="textarea"
-                    :rows="30"
-                    placeholder="请输入内容"
-                    v-model="showData">
-            </el-input>
+        <!--<div>-->
+        <!--<el-input-->
+        <!--type="textarea"-->
+        <!--:rows="30"-->
+        <!--placeholder="请输入内容"-->
+        <!--v-model="showData">-->
+        <!--</el-input>-->
+        <!--</div>-->
+        <h1>Vue Draggable</h1>
+        <div class="drag">
+            <h2>List 1 Draggable</h2>
+            <draggable v-model="list" class="dragArea" :options="{group:{ name:'people',  pull:'clone', put:false }}">
+                <div v-for="element in list">{{element.name}}</div>
+            </draggable>
+            <h2>List 2 Draggable</h2>
+            <draggable v-model="list2" class="dragArea" :options="{group:'people'}" style=" min-height: 10px;">
+                <div v-for="element in list2">{{element.name}}</div>
+            </draggable>
         </div>
 
+        <div class="normal">
+            <h2>List 1 v-for</h2>
+            <div>
+                <div v-for="element in list">{{element.name}}</div>
+            </div>
+
+            <h2>List 2 v-for</h2>
+            <div>
+                <div v-for="element in list2">{{element.name}}</div>
+            </div>
+        </div>
         <el-dialog title="用例转化" :visible.sync="testCase.viewStatus" width="30%">
             <el-form :inline="true" class="demo-form-inline">
                 <el-form-item label="文件地址">
@@ -44,25 +66,38 @@
 </template>
 
 <script>
+    import draggable from 'vuedraggable'
     export default {
+        components: {
+            draggable,
+        },
         name: 'test',
         data() {
             return {
+                list: [{
+                    name: "John"
+                }, {
+                    name: "Joao"
+                }, {
+                    name: "Jean"
+                }],
+                list2: [],
+
                 value6: '',
                 token: '',
                 showData: '',
-                testCase:{
-                    viewStatus:false,
-                    address:'',
+                testCase: {
+                    viewStatus: false,
+                    address: '',
                 },
             };
         },
         mounted() {
         },
         methods: {
-            initCase(){
+            initCase() {
                 this.testCase.viewStatus = true;
-                this.testCase.address =''
+                this.testCase.address = ''
             },
             getFileAddress(response, file, fileList) {
                 if (response['status'] === 0) {
@@ -79,7 +114,7 @@
                         let form = new FormData();
                         form.append("file", file.raw);
                         form.append("skip", '1');
-                        this.$axios.post('/api/upload',form ).then((response) => {
+                        this.$axios.post('/api/upload', form).then((response) => {
                                 this.$message({
                                     showClose: true,
                                     message: response.data['msg'],
@@ -123,7 +158,7 @@
             initCaseChange() {
                 // 调用 callback 返回建议列表的数据
                 this.$axios.post('/api/caseChange', {
-                    'address':this.testCase.address
+                    'address': this.testCase.address
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
