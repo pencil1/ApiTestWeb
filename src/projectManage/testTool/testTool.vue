@@ -1,7 +1,8 @@
 <template>
     <div class="test">
         <div style="margin: 10px;padding-left: 10px">
-            <el-button type="primary" @click.native="initCase()" size="small">测试用例转化</el-button>
+            <el-button type="primary" @click.native="initCase(1)" size="small">测试用例转化</el-button>
+            <el-button type="primary" @click.native="initCase(2)" size="small">测试用例转化2</el-button>
             <el-button type="primary" @click.native="buildIdentity()" size="small">生成身份证</el-button>
             <el-button type="primary" size="small" @click.native="dealSql()">执行语句</el-button>
             <el-button type="primary" size="small" @click.native="optimizeError()">错误信息优化显示</el-button>
@@ -10,36 +11,13 @@
         </div>
 
         <div style="margin: 20px 0;"></div>
-        <!--<div>-->
-        <!--<el-input-->
-        <!--type="textarea"-->
-        <!--:rows="30"-->
-        <!--placeholder="请输入内容"-->
-        <!--v-model="showData">-->
-        <!--</el-input>-->
-        <!--</div>-->
-        <h1>Vue Draggable</h1>
-        <div class="drag">
-            <h2>List 1 Draggable</h2>
-            <draggable v-model="list" class="dragArea" :options="{group:{ name:'people',  pull:'clone', put:false }}">
-                <div v-for="element in list">{{element.name}}</div>
-            </draggable>
-            <h2>List 2 Draggable</h2>
-            <draggable v-model="list2" class="dragArea" :options="{group:'people'}" style=" min-height: 10px;">
-                <div v-for="element in list2">{{element.name}}</div>
-            </draggable>
-        </div>
-
-        <div class="normal">
-            <h2>List 1 v-for</h2>
-            <div>
-                <div v-for="element in list">{{element.name}}</div>
-            </div>
-
-            <h2>List 2 v-for</h2>
-            <div>
-                <div v-for="element in list2">{{element.name}}</div>
-            </div>
+        <div>
+        <el-input
+        type="textarea"
+        :rows="30"
+        placeholder="请输入内容"
+        v-model="showData">
+        </el-input>
         </div>
         <el-dialog title="用例转化" :visible.sync="testCase.viewStatus" width="30%">
             <el-form :inline="true" class="demo-form-inline">
@@ -74,14 +52,8 @@
         name: 'test',
         data() {
             return {
-                list: [{
-                    name: "John"
-                }, {
-                    name: "Joao"
-                }, {
-                    name: "Jean"
-                }],
-                list2: [],
+
+                status: 1,
 
                 value6: '',
                 token: '',
@@ -95,7 +67,8 @@
         mounted() {
         },
         methods: {
-            initCase() {
+            initCase(status) {
+                this.status = status;
                 this.testCase.viewStatus = true;
                 this.testCase.address = ''
             },
@@ -158,7 +131,8 @@
             initCaseChange() {
                 // 调用 callback 返回建议列表的数据
                 this.$axios.post('/api/caseChange', {
-                    'address': this.testCase.address
+                    'address': this.testCase.address,
+                    'choice': this.status
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({

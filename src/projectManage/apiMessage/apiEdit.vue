@@ -135,6 +135,7 @@
                     <el-radio-group v-model="form.choiceType">
                         <el-radio label="data">form-data</el-radio>
                         <el-radio label="json">raw</el-radio>
+                        <el-radio label="text">text</el-radio>
                     </el-radio-group>
                     <el-button type="primary" size="mini"
                                v-show="form.choiceType === 'json'"
@@ -156,20 +157,16 @@
                                     theme="chrome"
                                     width="100%"
                                     height="575px"
-                                    :options="{
-                             }"
+                                    :options="{}"
                             >
                             </editor>
                         </el-container>
-                        <!--<codemirror v-model="apiMsgData.jsonVariable"-->
-                                    <!--:options="options"-->
-                                    <!--height="575px">-->
-                        <!--</codemirror>-->
+
                     </div>
                 </div>
                 <el-table :data="apiMsgData.variable" size="mini" stripe :show-header="false" height="582"
                           style="background-color: rgb(250, 250, 250)"
-                          v-if="form.choiceType === 'data'"
+                          v-if="form.choiceType === 'data' || form.choiceType === 'text'"
                           :row-style="{'background-color': 'rgb(250, 250, 250)'}">
                     <el-table-column label="Key" header-align="center" minWidth="100">
                         <template slot-scope="scope">

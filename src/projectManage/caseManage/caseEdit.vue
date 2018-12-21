@@ -152,47 +152,47 @@
                                     </div>
                                 </el-col>
                             </el-row>
-                                <draggable v-model="caseData.apiCases" :options="{group:'apiData',animation:300}"
-                                           style="width: 99%;min-height: 10px;">
-                                        <div v-for="(_data, index) in caseData.apiCases"
-                                             :key="index"
-                                             class="list-complete-item">
-                                            <el-row :gutter="21">
-                                                <el-col :span="2" style="padding-top: 3px">
-                                                    <el-switch v-model="caseData.apiCases[index]['status']">
-                                                    </el-switch>
-                                                </el-col>
-                                                <el-col :span="5">
-                                                    <el-input v-model="caseData.apiCases[index]['case_name']"
-                                                              size="mini">
-                                                    </el-input>
-                                                </el-col>
-                                                <el-col :span="4" style="padding-top: 3px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" >
-                                                    {{ _data.name }}
-                                                </el-col>
-                                                <el-col :span="4">
-                                                    <el-input-number size="mini" :precision="0"
-                                                                     v-model="caseData.apiCases[index]['time']"
-                                                                     :min="1" :max="1000">
-                                                    </el-input-number>
-                                                </el-col>
-                                                <el-col :span="1">
-                                                </el-col>
-                                                <el-col :span="8" style="padding-left: 50px;padding-top: 3px">
-                                                    <el-button type="danger" size="mini"
-                                                               @click.native="delApiCase(index)">删除
-                                                    </el-button>
-                                                    <el-button type="primary" size="mini"
-                                                               @click.native="$refs.apiMessageEditFunc.initData(index)">
-                                                        配置
-                                                    </el-button>
-                                                </el-col>
-                                            </el-row>
+                            <draggable v-model="caseData.apiCases" :options="{group:'apiData',animation:300}"
+                                       style="width: 99%;min-height: 10px;">
+                                <div v-for="(_data, index) in caseData.apiCases"
+                                     :key="index"
+                                     class="list-complete-item">
+                                    <el-row :gutter="21">
+                                        <el-col :span="2" style="padding-top: 3px">
+                                            <el-switch v-model="caseData.apiCases[index]['status']">
+                                            </el-switch>
+                                        </el-col>
+                                        <el-col :span="5">
+                                            <el-input v-model="caseData.apiCases[index]['case_name']"
+                                                      size="mini">
+                                            </el-input>
+                                        </el-col>
+                                        <el-col :span="4"
+                                                style="padding-top: 3px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                            {{ _data.name }}
+                                        </el-col>
+                                        <el-col :span="4">
+                                            <el-input-number size="mini" :precision="0"
+                                                             v-model="caseData.apiCases[index]['time']"
+                                                             :min="1" :max="1000">
+                                            </el-input-number>
+                                        </el-col>
+                                        <el-col :span="1">
+                                        </el-col>
+                                        <el-col :span="8" style="padding-left: 50px;padding-top: 3px">
+                                            <el-button type="danger" size="mini"
+                                                       @click.native="delApiCase(index)">删除
+                                            </el-button>
+                                            <el-button type="primary" size="mini"
+                                                       @click.native="$refs.apiMessageEditFunc.initData(index)">
+                                                配置
+                                            </el-button>
+                                        </el-col>
+                                    </el-row>
 
-                                        </div>
-                                </draggable>
+                                </div>
+                            </draggable>
                         </el-col>
-
 
 
                         <el-col :span="12" v-show="!showApiDataStatus">
@@ -229,17 +229,17 @@
                                     <el-button type="primary" @click.native="findApiMsg()" size="mini">
                                         搜索接口
                                     </el-button>
-                                    <!--<el-button type="primary" @click.native="findSuite()" size="small">-->
-                                    <!--搜索套件-->
-                                    <!--</el-button>-->
-                                    <!--<el-button type="primary" size="mini" @click.native="addApiData()">添加-->
-                                    <!--</el-button>-->
+                                    <el-button type="primary" size="mini" @click.native="addApiData()">添加
+                                    </el-button>
                                 </el-form-item>
                             </el-form>
                             <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
                             <el-row :gutter="18"
                                     style="margin-top:10px;color: rgb(171, 139, 149);font-weight: 500;font-size: 14px;
-                            padding-left: 5px;padding-top: 3px;">
+                                            padding-left: 5px;padding-top: 3px;">
+                                <el-col :span="1">
+                                    .
+                                </el-col>
                                 <el-col :span="2">
                                     编号
                                 </el-col>
@@ -256,12 +256,20 @@
                             </el-row>
                             <draggable v-model="ApiMsgData"
                                        :options="{group:{ name:'apiData',  pull:'clone', put:false }}"
-                                       >
+                            >
                                 <transition-group name="list-complete">
                                     <div v-for="(_data, index) in ApiMsgData"
                                          :key="index"
                                          class="list-complete-item">
-                                        <el-row :gutter="18">
+                                        <el-row :gutter="24">
+                                            <el-col :span="1">
+                                                <el-radio v-model="radio" @change="addEvent(index)" :label="index">
+                                                    {{null}}
+                                                </el-radio>
+                                                <!--<el-checkbox @change="addEvent" true-label="1" false-label="0">-->
+                                                <!---->
+                                                <!--</el-checkbox>-->
+                                            </el-col>
                                             <el-col :span="2">
                                                 {{ _data.num }}
                                             </el-col>
@@ -269,7 +277,8 @@
                                                     style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
                                                 {{ _data.name }}
                                             </el-col>
-                                            <el-col :span="4" style="padding-top: 1px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"
+                                            <el-col :span="4"
+                                                    style="padding-top: 1px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"
                                             >
                                                 {{ _data.desc }}
                                             </el-col>
@@ -281,9 +290,9 @@
                                     </div>
                                 </transition-group>
                             </draggable>
-                            <el-button @click="cancelSelection()" size="mini"
-                                       style="position: absolute;margin-top: 2px;">取消选择
-                            </el-button>
+                            <!--<el-button @click="cancelSelection()" size="mini"-->
+                                       <!--style="position: absolute;margin-top: 2px;">取消选择-->
+                            <!--</el-button>-->
                             <div class="block" style="float:right; position: relative;">
                                 <el-pagination
                                         @current-change="handleCurrentCase"
@@ -299,54 +308,7 @@
 
                 </el-tab-pane>
 
-                <!--<el-tab-pane label="接口信息" name="third">-->
 
-
-                    <!--<el-table-->
-                            <!--ref="multipleTable"-->
-                            <!--@selection-change="handleApiMsgDataSelection"-->
-                            <!--:data="ApiMsgData"-->
-                            <!--height="600"-->
-                            <!--stripe>-->
-                        <!--<el-table-column-->
-                                <!--type="selection"-->
-                                <!--width="40">-->
-                        <!--</el-table-column>-->
-
-                        <!--<el-table-column-->
-                                <!--prop="num"-->
-                                <!--label="编号"-->
-                                <!--width="50">-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column-->
-                                <!--prop="name"-->
-                                <!--label="用例名称"-->
-                                <!--width="150">-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column-->
-                                <!--prop="desc"-->
-                                <!--label="用例描述"-->
-                                <!--width="100">-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column-->
-                                <!--:show-overflow-tooltip=true-->
-                                <!--prop="url"-->
-                                <!--label="接口地址">-->
-                        <!--</el-table-column>-->
-                    <!--</el-table>-->
-                    <!--<el-button @click="cancelSelection()" size="mini" style="position: absolute;margin-top: 2px;">取消选择-->
-                    <!--</el-button>-->
-                    <!--<div class="block" style="float:right; position: relative;">-->
-                        <!--<el-pagination-->
-                                <!--@current-change="handleCurrentCase"-->
-                                <!--@size-change="handleSizeCase"-->
-                                <!--:page-size="20"-->
-
-                                <!--layout="total, sizes, prev, pager, next, jumper"-->
-                                <!--:total="this.apiMsgPage.total">-->
-                        <!--</el-pagination>-->
-                    <!--</div>-->
-                <!--</el-tab-pane>-->
             </el-tabs>
 
             <div slot="footer" class="dialog-footer">
@@ -380,9 +342,10 @@
                 apiMsgVessel: [], //接口用例容器，勾选的内容都存在此变量
                 ApiMsgData: [], // 接口信息里面的表格数据
                 mainWidth: '50%',
-                list2:[],
-                showApiDataStatus:true,
-                stepSpan:24,
+                list2: [],
+                radio: '',
+                showApiDataStatus: true,
+                stepSpan: 24,
                 apiMsgPage: {
                     total: 1,
                     currentPage: 1,
@@ -423,13 +386,12 @@
             }
         },
         methods: {
-            addEvent(){
-                console.log(this.list2)
-                console.log(this.caseData.apiCases)
+            addEvent(dex) {
+                this.apiMsgVessel = this.ApiMsgData[dex];
             },
             showApiData: function () {
                 this.showApiDataStatus = !this.showApiDataStatus;
-                if(this.showApiDataStatus){
+                if (this.showApiDataStatus) {
                     this.mainWidth = '50%';
                     this.stepSpan = 24
 
@@ -440,12 +402,15 @@
                 }
             },
             changeShow(tab) {
-                // if (tab.label === '用例信息') {
-                //     this.mainWidth = '50%'
-                // }
-                // else {
-                //     this.mainWidth = '80%'
-                // }
+                if (tab.label === '用例信息') {
+                    this.mainWidth = '50%'
+                }
+                else if(this.showApiDataStatus) {
+                    this.mainWidth = '50%'
+                }
+                else {
+                    this.mainWidth = '80%'
+                }
             },
             synchronousData() {
                 let index = this.allSetList[this.projectName].map(item => item.id).indexOf(this.setTempData.setId);
@@ -531,39 +496,39 @@
                     this.form.config = null
                 }
             },
-            upNum(i) {
-                if (i === 0) {
-                    this.$message({
-                        showClose: true,
-                        message: '当前序号已最高',
-                        type: 'warning',
-                    });
-                    return
-                }
-                let d = this.caseData.apiCases[i];
-                this.caseData.apiCases.splice(i, 1);
-                this.caseData.apiCases.splice(i - 1, 0, d);
-                this.againSort()
-            },
-            downNum(i) {
-                if (i === (this.caseData.apiCases.length - 1)) {
-                    this.$message({
-                        showClose: true,
-                        message: '当前序号已最低',
-                        type: 'warning',
-                    });
-                    return
-                }
-                let d = this.caseData.apiCases[i];
-                this.caseData.apiCases.splice(i, 1);
-                this.caseData.apiCases.splice(i + 1, 0, d);
-                this.againSort()
-            },
-            againSort() {
-                for (let i = 0; i < this.caseData.apiCases.length; i++) {
-                    this.caseData.apiCases[i]['num'] = i
-                }
-            },
+            // upNum(i) {
+            //     if (i === 0) {
+            //         this.$message({
+            //             showClose: true,
+            //             message: '当前序号已最高',
+            //             type: 'warning',
+            //         });
+            //         return
+            //     }
+            //     let d = this.caseData.apiCases[i];
+            //     this.caseData.apiCases.splice(i, 1);
+            //     this.caseData.apiCases.splice(i - 1, 0, d);
+            //     this.againSort()
+            // },
+            // downNum(i) {
+            //     if (i === (this.caseData.apiCases.length - 1)) {
+            //         this.$message({
+            //             showClose: true,
+            //             message: '当前序号已最低',
+            //             type: 'warning',
+            //         });
+            //         return
+            //     }
+            //     let d = this.caseData.apiCases[i];
+            //     this.caseData.apiCases.splice(i, 1);
+            //     this.caseData.apiCases.splice(i + 1, 0, d);
+            //     this.againSort()
+            // },
+            // againSort() {
+            //     for (let i = 0; i < this.caseData.apiCases.length; i++) {
+            //         this.caseData.apiCases[i]['num'] = i
+            //     }
+            // },
             delApiCase(i) {
                 //判断caseList中是否存在id，存在则在数据库删除信息，否则在前端删除临时数据
                 if ('id' in this.caseData.apiCases[i]) {
@@ -576,9 +541,9 @@
                     this.caseData.apiCases.splice(i, 1);
                 }
             },
-            handleApiMsgDataSelection(val) {
-                this.apiMsgVessel = val;
-            },
+            // handleApiMsgDataSelection(val) {
+            //     this.apiMsgVessel = val;
+            // },
             handleCurrentCase(val) {
                 this.apiMsgPage.currentPage = val;
                 this.findApiMsg()
@@ -587,9 +552,9 @@
                 this.apiMsgPage.sizePage = val;
                 this.findApiMsg()
             },
-            cancelSelection() {
-                this.$refs.multipleTable.clearSelection();
-            },
+            // cancelSelection() {
+            //     this.$refs.multipleTable.clearSelection();
+            // },
             findApiMsg() {
                 this.$axios.post(this.$api.findApiApi, {
                     'projectName': this.form.apiMesProjectName,
@@ -616,8 +581,8 @@
                 }
                 this.caseData.apiCases = this.caseData.apiCases.concat(this.apiMsgVessel);
                 this.caseData.apiCases = JSON.parse(JSON.stringify(this.caseData.apiCases));
-                this.$refs.multipleTable.clearSelection();
-                this.againSort()
+                // this.$refs.multipleTable.clearSelection();
+                // this.againSort()
             },
             addConfigData() {
                 this.$axios.post(this.$api.configDataApi, {

@@ -10,7 +10,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "echarts": "^4.1.0",
-    "element-ui": "^2.4.5",
+    "element-ui": "^2.4.11",
     "v-charts": "^1.17.9",
     "vue": "^2.5.17",
     "vue-clipboard2": "^0.1.1",
