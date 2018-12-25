@@ -381,8 +381,8 @@
                 this.$axios.post(this.$api.delApiApi, {'apiMsgId': apiMsgId}).then((response) => {
                         this.messageShow(this, response);
                         this.form.apiName = null;
-                        if ((this.currentPage - 1) * this.sizePage + 1 === this.total) {
-                            this.currentPage = this.currentPage - 1
+                        if ((this.apiMsgPage.currentPage - 1) * this.apiMsgPage.sizePage + 1 === this.apiMsgPage.total) {
+                            this.apiMsgPage.currentPage = this.apiMsgPage.currentPage - 1
                         }
                         this.findApiMsg();
                     }
