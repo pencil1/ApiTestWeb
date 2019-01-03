@@ -83,12 +83,18 @@
                 </el-form-item>
                 <el-form-item label="密码" :label-width="userData.formLabelWidth"
                               prop="desc">
-                    <el-input v-model="userData.password" type="password">
+                    <el-input v-model="userData.password" type="password" style="max-width: 450px" :disabled="!userData.statusPassword">
                     </el-input>
+
+                    <el-switch
+                            v-model="userData.statusPassword"
+                            active-color="#13ce66"
+                            inactive-color="#ff4949">
+                    </el-switch>
                 </el-form-item>
                 <el-form-item label="角色" :label-width="userData.formLabelWidth"
                               prop="desc">
-                    <el-select v-model="form.role" value-key="role_id" placeholder="请选择配置">
+                    <el-select v-model="form.role" value-key="role_id" placeholder="请选择角色">
                         <el-option
                                 v-for="item in roleData"
                                 :key="item.role_id"
@@ -124,6 +130,7 @@
                 },
                 userData: {
                     id: null,
+                    statusPassword: false,
                     modelFormVisible: false,
                     name: '',
                     account: '',
@@ -135,12 +142,21 @@
         },
         methods: {
             register() {
+                if (!this.form.role) {
+                    this.$message({
+                        showClose: true,
+                        message: '请选择角色',
+                        type: 'warning',
+                    });
+                    return
+                }
                 this.$axios.post(this.$api.registerApi, {
                     'id': this.userData.id,
                     'name': this.userData.name,
                     'role_id': this.form.role.role_id,
                     'account': this.userData.account,
                     'password': this.userData.password,
+                    'statusPassword':this.userData.statusPassword,
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
@@ -188,6 +204,7 @@
                 this.userData.name = '';
                 this.userData.account = '';
                 this.userData.password = '';
+                this.userData.statusPassword = true;
                 this.userData.status = '';
                 this.userData.id = null;
                 this.userData.modelFormVisible = true;
@@ -200,6 +217,7 @@
                         this.userData.id = id;
                         let index = this.roleData.map(item => item.role_id).indexOf(response.data['data']['role_id']);
                         this.form.role = this.roleData[index];
+                    this.userData.statusPassword = false;
                         this.userData.modelFormVisible = true;
                     }
                 )

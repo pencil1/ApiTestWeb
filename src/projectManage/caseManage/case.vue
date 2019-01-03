@@ -19,7 +19,7 @@
                 <el-button type="primary" icon="el-icon-search" @click.native="findSet()">搜索</el-button>
                 <el-button type="primary" @click.native="$refs.caseEditFunc.initCaseData()">添加接口用例</el-button>
                 <el-button type="primary" @click.native="runScene(caseList,true)">批量运行</el-button>
-                <el-button type="primary" icon="el-icon-search" @click.native="findOldScenes()">搜索旧数据</el-button>
+                <!--<el-button type="primary" icon="el-icon-search" @click.native="findOldScenes()">搜索旧数据</el-button>-->
                 <el-switch
                         v-model="switchStatus"
                         active-color="#13ce66"
@@ -263,20 +263,7 @@
                     }
                 )
             },
-            findOldScenes() {
-                this.$axios.post('/api/case/findOld', {
-                    'projectName': this.form.projectName,
-                    'caseName': this.form.caseName,
-                    'page': this.currentPage,
-                    'sizePage': this.sizePage,
-                }).then((response) => {
-                        if (this.messageShow(this, response)) {
-                            this.caseAll = response.data['data'];
-                            this.total = response.data['total'];
-                        }
-                    }
-                )
-            },
+
             initCaseViewData() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
                         this.proModelData = response.data['data'];

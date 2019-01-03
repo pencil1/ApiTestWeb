@@ -23,6 +23,7 @@ const delConfigApi = '/api/config/del';
 const loginApi = '/api/login';
 const logoutApi = '/api/logout';
 const registerApi = '/api/register';
+const changePasswordApi = '/api/changePassword';
 
 const findApiApi = '/api/apiMsg/find';
 const delApiApi = '/api/apiMsg/del';
@@ -126,6 +127,7 @@ export default {
     loginApi,
     logoutApi,
     registerApi,
+    changePasswordApi,
 
     findApiApi,
     delApiApi,

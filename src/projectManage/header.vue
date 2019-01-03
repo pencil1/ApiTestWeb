@@ -4,7 +4,7 @@
             <el-container>
                 <el-header style="height: 40px;">
                     <div style="float: left;">
-                        <el-breadcrumb separator-class="el-icon-arrow-right" >
+                        <el-breadcrumb separator-class="el-icon-arrow-right">
                             <el-breadcrumb-item
                                     v-for="(item, index) in title"
                                     :key="index"
@@ -14,11 +14,12 @@
 
                         </el-breadcrumb>
                     </div>
-                    <el-dropdown style="float:right;line-height:20px;top:12px;color: rgb(255, 255, 255);" @command="logOut" >
+                    <el-dropdown style="float:right;line-height:20px;top:12px;color: rgb(255, 255, 255);"
+                                 @command="logOut">
                         <span class="el-dropdown-link">{{userName}}<i
                                 class="el-icon-arrow-down el-icon--right"></i></span>
                         <el-dropdown-menu slot="dropdown" style="line-height:10px">
-                            <el-dropdown-item command="b">个人设置</el-dropdown-item>
+                            <el-dropdown-item command="b">修改密码</el-dropdown-item>
                             <el-dropdown-item command="a">退出系统</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -30,30 +31,29 @@
             </el-container>
         </el-container>
         <el-dialog
-                title="账号设置"
-                :visible.sync="userData.modelFormVisible"
+                title="修改密码"
+                :visible.sync="passwordData.formVisible"
                 width="30%"
+                customClass="password-style"
         >
             <el-form>
 
-                <el-form-item label="姓名" :label-width="userData.formLabelWidth">
-                    <el-input v-model="userData.name">
+                <el-form-item label="旧密码" :label-width="passwordData.formLabelWidth">
+                    <el-input v-model="passwordData.oldPassword" type="password">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="账号" :label-width="userData.formLabelWidth"
-                              prop="num">
-                    <el-input v-model.number="userData.account">
+                <el-form-item label="新密码" :label-width="passwordData.formLabelWidth">
+                    <el-input v-model="passwordData.newPassword" type="password">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="密码" :label-width="userData.formLabelWidth"
-                              prop="desc">
-                    <el-input v-model="userData.password" type="password">
+                <el-form-item label="确认密码" :label-width="passwordData.formLabelWidth">
+                    <el-input v-model="passwordData.surePassword" type="password">
                     </el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                    <el-button @click="userData.modelFormVisible = false" size="small">取 消</el-button>
-                    <el-button type="primary" @click.native="register()" size="small">确 定</el-button>
+                    <el-button @click="passwordData.formVisible = false" size="small">取 消</el-button>
+                    <el-button type="primary" @click.native="changePassword()" size="small">确 定</el-button>
                 </span>
         </el-dialog>
     </div>
@@ -69,14 +69,12 @@
             return {
                 title: ['项目管理', '项目'],
                 userName: '',
-                userData: {
-                    id: null,
-                    modelFormVisible: false,
-                    name: '',
-                    account: '',
-                    formLabelWidth: '60px',
-                    password: '',
-                    status: '',
+                passwordData: {
+                    oldPassword: '',
+                    newPassword: '',
+                    surePassword: '',
+                    formVisible: false,
+                    formLabelWidth: '80px',
                 },
             }
         },
@@ -84,6 +82,21 @@
             getUserName() {
                 // this.$store.state.userName = this.userName;
                 this.userName = this.$store.state.userName;
+            },
+            changePassword() {
+                // this.$store.state.userName = this.userName;
+                this.$axios.post(this.$api.changePasswordApi,
+                    {
+                        'oldPassword': this.passwordData.oldPassword,
+                        'newPassword': this.passwordData.newPassword,
+                        'surePassword': this.passwordData.surePassword,
+
+                    }).then((response) => {
+                        if (this.messageShow(this, response)) {
+                            this.passwordData.formVisible = false;
+                        }
+                    }
+                );
             },
             logOut(command) {
                 if (command === "a") {
@@ -103,8 +116,11 @@
                         }
                     );
                 }
-                else if(command === 'b'){
-
+                else if (command === 'b') {
+                    this.passwordData.oldPassword = '';
+                    this.passwordData.newPassword = '';
+                    this.passwordData.surePassword = '';
+                    this.passwordData.formVisible = true;
                 }
             },
 
@@ -171,15 +187,23 @@
     .el-header {
         background-color: #717275;
         color: #ffffff;
-        text-align: center;
+
         line-height: 60px;
     }
+
+    .password-style {
+        line-height: 10px;
+        border-radius: 5px;
+    }
+
     .el-breadcrumb__inner {
         color: rgb(255, 255, 255);
     }
-    .el-breadcrumb__item:last-child .el-breadcrumb__inner, .el-breadcrumb__item:last-child .el-breadcrumb__inner a, .el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover, .el-breadcrumb__item:last-child .el-breadcrumb__inner:hover{
+
+    .el-breadcrumb__item:last-child .el-breadcrumb__inner, .el-breadcrumb__item:last-child .el-breadcrumb__inner a, .el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover, .el-breadcrumb__item:last-child .el-breadcrumb__inner:hover {
         color: rgb(255, 255, 255);
     }
+
     /*.el-dropdown {*/
     /*vertical-align: top;*/
     /*}*/

@@ -12,9 +12,10 @@ import pie from 'v-charts/lib/pie.common'
 import histogram from 'v-charts/lib/histogram.common'
 import ring from 'v-charts/lib/ring.common'
 // import VueCodeMirror from 'vue-codemirror-lite'
-
+// import './assets/styles/entirety.css'
 import base from './base'
 import api from './api'
+
 
 
 Vue.prototype.$api = api;

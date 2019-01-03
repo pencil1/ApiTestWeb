@@ -221,9 +221,7 @@
         padding: 5px 9px;
     }
 
-    .el-dialog__body {
-        padding: 5px 10px;
-    }
+
     .el-tabs__header{
         margin: 0 ;
     }
@@ -238,8 +236,11 @@
     .el-dialog__header {
         padding: 2px 10px 2px;
         background-color:#f5f7fa;
+        border-radius:5px;
     }
-
+    .el-dialog__body {
+        padding: 5px 10px;
+    }
     .el-dialog__title {
         color: #6a6d71;
         font-size:15px;
@@ -249,6 +250,7 @@
         top:6px;
         right:15px;
     }
+
     .el-input--mini .el-input__inner{
         line-height:20px;
     }

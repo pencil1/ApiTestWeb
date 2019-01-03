@@ -368,7 +368,7 @@
                     projectName: '',
                     apiMesProjectName: '',
                     sceneVariableProjectName: '',
-                    caseName: '',
+                    apiName: '',
                 },
                 caseData: {
                     id: '',
@@ -559,7 +559,7 @@
                 this.$axios.post(this.$api.findApiApi, {
                     'projectName': this.form.apiMesProjectName,
                     'moduleId': this.form.module.moduleId,
-                    'caseName': this.form.caseName,
+                    'apiName': this.form.apiName,
                     'page': this.apiMsgPage.currentPage,
                     'sizePage': this.apiMsgPage.sizePage,
                 }).then((response) => {
