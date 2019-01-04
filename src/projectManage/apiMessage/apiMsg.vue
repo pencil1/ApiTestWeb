@@ -315,10 +315,6 @@
                 this.findApiMsg();
 
             },
-            findDataBtn() {
-                this.findApiMsg();
-            },
-
             findApiMsg() {
                 if (this.form.module === null) {
                     this.$message({

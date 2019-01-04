@@ -8,28 +8,28 @@
                     <template slot="title">
                         <div :style="item.attachment ? 'color:rgb(255, 74, 74)': 'color:#45b90c'">{{item.name}}</div>
                     </template>
-                    <!--<el-button type="primary" v-clipboard:copy="JSON.stringify(item.meta_data.response_body)"-->
+                    <!--<el-button type="primary" v-clipboard:copy="JSON.stringify(item.meta_datas.response_body)"-->
                     <!--size="small"-->
                     <!--style="position:absolute;right: 3%;">复制-->
                     <!--</el-button>-->
                     <div style="color: #409eff">url：</div>
-                    <div>{{item.meta_data.request.url}}</div>
-                    <div style="color: #409eff">请求params：</div>
-                    <div>{{item.meta_data.request.params}}</div>
+                    <div>{{item.meta_datas.data[0].request.url}}</div>
+                    <div style="color: #409eff">请求信息：</div>
+                    <div>{{item.meta_datas.data[0].request.body}}</div>
                     <!--<div style="color: red">请求body：</div>-->
-                    <!--<div>{{item.meta_data.request.body}}</div>-->
-                    <div style="color: #409eff">请求参数：</div>
-                    <div v-if="item.meta_data.request.data !== '{}'">{{item.meta_data.request.data}}</div>
-                    <div v-if="item.meta_data.request.json">{{item.meta_data.request.json}}</div>
+                    <!--<div>{{item.meta_datas.request.body}}</div>-->
+                    <!--<div style="color: #409eff">请求参数：</div>-->
+                    <!--<div v-if="item.meta_datas.request.data !== '{}'">{{item.meta_datas.request.data}}</div>-->
+                    <!--<div v-if="item.meta_datas.request.json">{{item.meta_datas.request.json}}</div>-->
                     <div style="color: #409eff">请求头：</div>
-                    <div>{{item.meta_data.request.headers}}</div>
-                    <div style="color: #409eff">信息提取：</div>
-                    <pre style="overflow: auto">{{resultData.out}}</pre>
+                    <div>{{item.meta_datas.data[0].request.headers}}</div>
+                    <!--<div style="color: #409eff">信息提取：</div>-->
+                    <!--<pre style="overflow: auto">{{resultData.out}}</pre>-->
                     <div style="color: #409eff">返回结果：</div>
                     <div>
-                        <pre style="overflow: auto" >{{resultDeal(item.meta_data.response.content)}}</pre>
-                        <!--<pre>{{item.meta_data.response.json}}</pre>-->
-                        <!--<pre style="overflow: auto" v-if="!item.meta_data.response.json">{{item.meta_data.response.content}}</pre>-->
+                        <pre style="overflow: auto" >{{resultDeal(item.meta_datas.data[0].response.json)}}</pre>
+                        <!--<pre>{{item.meta_datas.response.json}}</pre>-->
+                        <!--<pre style="overflow: auto" v-if="!item.meta_datas.response.json">{{item.meta_datas.response.content}}</pre>-->
                     </div>
                     <div style="color: red">错误信息：</div>
                     <div>
@@ -53,10 +53,10 @@
                         {
                             name: null,
                             attachment: null,
-                            meta_data: {
-                                request: {body: null, url: null, headers: null, data: null, params: null, json: null},
-                                response: {content: null, json: null}
-                            },
+                            meta_datas: {data: [{
+                                request: {body: null, url: null, headers: null},
+                                response: {json: null}
+                            }]}
                         },
                     ],
                 },
