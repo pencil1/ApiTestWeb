@@ -487,6 +487,8 @@
             },
             changeModuleChoice() {
                 this.form.module = this.proModelData[this.form.apiMesProjectName][0];
+                this.radio = false;
+                this.findApiMsg();
             },
             changeConfigChoice() {
                 if (this.configData[this.form.sceneVariableProjectName][0]) {

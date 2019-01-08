@@ -2,7 +2,7 @@
     <div class="apiEdit">
         <el-form :inline="true" style="padding: 10px 20px -10px 10px;">
             <el-form-item label="基础信息" labelWidth="80px" style="margin-bottom: 5px">
-                <el-select v-model="form.projectName" placeholder="请选择项目" size="small">
+                <el-select v-model="form.projectName" placeholder="请选择项目" size="small"  @change="changeProChoice">
                     <el-option
                             v-for="(item, key) in proModelData"
                             :key="key"
@@ -387,6 +387,10 @@
                 require('brace/mode/json')
                 require('brace/theme/chrome')
                 require('brace/snippets/json')
+            },
+            changeProChoice() {
+                this.form.module = '';
+                this.form.choiceUrl = ''
             },
             querySearch(queryString, cb) {
                 // 调用 callback 返回建议列表的数据
