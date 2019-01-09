@@ -51,15 +51,27 @@
                         <el-row>
                             <el-col style="border:1px solid;border-color: #ffffff #ffffff rgb(234, 234, 234) #ffffff;padding:2px">
                                 <el-button-group style="float:right;">
-                                    <el-button size="mini" type="primary" @click.native="initModuleData()">添加
-                                    </el-button>
-                                    <el-button size="mini" type="primary" @click.native="editModule()">编辑
-                                    </el-button>
-                                    <el-button size="mini" type="success"
-                                               @click.native="stickModule()">置顶
-                                    </el-button>
-                                    <el-button size="mini" type="danger" @click.native="sureView(delModule)">删除
-                                    </el-button>
+                                    <el-dropdown>
+                                      <span class="el-dropdown-link">
+                                        操作<i class="el-icon-arrow-down el-icon--right"></i>
+                                      </span>
+                                        <div style="padding-bottom: 10px"></div>
+                                        <el-dropdown-menu slot="dropdown">
+                                            <el-dropdown-item>添加</el-dropdown-item>
+                                            <el-dropdown-item>编辑</el-dropdown-item>
+                                            <el-dropdown-item>置顶</el-dropdown-item>
+                                            <el-dropdown-item>删除</el-dropdown-item>
+                                        </el-dropdown-menu>
+                                    </el-dropdown>
+                                    <!--<el-button size="mini" type="primary" @click.native="initModuleData()">添加-->
+                                    <!--</el-button>-->
+                                    <!--<el-button size="mini" type="primary" @click.native="editModule()">编辑-->
+                                    <!--</el-button>-->
+                                    <!--<el-button size="mini" type="success"-->
+                                    <!--@click.native="stickModule()">置顶-->
+                                    <!--</el-button>-->
+                                    <!--<el-button size="mini" type="danger" @click.native="sureView(delModule)">删除-->
+                                    <!--</el-button>-->
                                 </el-button-group>
                             </el-col>
                         </el-row>

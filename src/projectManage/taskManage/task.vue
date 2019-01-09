@@ -10,7 +10,6 @@
                             :value="item.name">
                     </el-option>
                 </el-select>
-
             </el-form-item>
             <el-form-item label="任务" labelWidth="50px">
 
@@ -109,8 +108,8 @@
                             <el-select v-model="form.projectName" placeholder="选择项目">
                                 <el-option
                                         v-for="(item, key) in proModelData"
-                                        :key="key"
-                                        :value="key">
+                                        :key="item.name"
+                                        :value="item.name">
                                 </el-option>
                             </el-select>
 
