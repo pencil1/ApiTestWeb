@@ -30,116 +30,130 @@
             </el-form-item>
 
         </el-form>
-
-        <el-row>
-            <el-col :span="3"
-                    style="border:1px solid;border-color: #ffffff rgb(234, 234, 234) #ffffff #ffffff;">
+        <el-tabs value="first" style="padding-left: 10px;padding-right:5px;">
+            <el-tab-pane label="用例信息" name="first">
                 <el-row>
-                    <el-col style="border:1px solid;border-color: #ffffff #ffffff rgb(234, 234, 234) #ffffff;padding:2px">
-                        <el-button-group style="float:right;">
-                            <el-button size="mini" type="primary" @click.native="$refs.setEditFunc.initSet()">添加
-                            </el-button>
-                            <el-button size="mini" type="primary" @click.native="$refs.setEditFunc.editSet()">编辑
-                            </el-button>
-                            <el-button size="mini" type="success"
-                                       @click.native="$refs.setEditFunc.stickSet(setTempData.setId)">置顶
-                            </el-button>
-                            <el-button size="mini" type="danger" @click.native="sureView(delSet)">删除</el-button>
-                        </el-button-group>
+                    <el-col :span="3"
+                            style="border:1px solid;border-color: #ffffff rgb(234, 234, 234) #ffffff #ffffff;">
+                        <el-row>
+                            <el-col style="border:1px solid;border-color: #ffffff #ffffff rgb(234, 234, 234) #ffffff;padding:2px">
+
+                                <el-dropdown @command="dropdownSetEvent" style="float:right;">
+                                      <span class="el-dropdown-link" style="color: #4ae2d5">
+                                        操作<i class="el-icon-arrow-down el-icon--right"></i>
+                                      </span>
+                                    <!--<el-button size="mini" type="info">-->
+                                    <!--操作<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
+                                    <!--</el-button>-->
+                                    <el-dropdown-menu slot="dropdown">
+                                        <el-dropdown-item command="add">添加</el-dropdown-item>
+                                        <el-dropdown-item command="edit">编辑</el-dropdown-item>
+                                        <el-dropdown-item command="stick">置顶</el-dropdown-item>
+                                        <el-dropdown-item command="del">删除</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                                <!--<el-button-group style="float:right;">-->
+                                <!--<el-button size="mini" type="primary" @click.native="$refs.setEditFunc.initSet()">添加-->
+                                <!--</el-button>-->
+                                <!--<el-button size="mini" type="primary" @click.native="$refs.setEditFunc.editSet()">编辑-->
+                                <!--</el-button>-->
+                                <!--<el-button size="mini" type="success"-->
+                                <!--@click.native="$refs.setEditFunc.stickSet(setTempData.setId)">置顶-->
+                                <!--</el-button>-->
+                                <!--<el-button size="mini" type="danger" @click.native="sureView(delSet)">删除</el-button>-->
+                                <!--</el-button-group>-->
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-scrollbar wrapStyle="height:740px;">
+                                <el-tree
+                                        ref="testTree"
+                                        @node-click="handleNodeClick"
+                                        class="filter-tree"
+                                        highlight-current
+                                        node-key="id"
+                                        :data="setDataList"
+                                        :props="defaultProps"
+
+                                >
+                                </el-tree>
+                            </el-scrollbar>
+                            <el-pagination
+                                    small
+                                    @current-change="handleSetCurrentChange"
+                                    @size-change="handleSetSizeChange"
+                                    :page-size="30"
+                                    layout="prev, pager, next"
+                                    :total="this.setPage.total">
+                            </el-pagination>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="21">
+
+                        <el-table
+                                ref="sceneMultipleTable"
+                                @selection-change="handleCaseSelection"
+                                :data="caseAll"
+                                max-height="748"
+                                stripe>
+                            <el-table-column
+                                    type="selection"
+                                    width="40">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="num"
+                                    label="编号"
+                                    min-width="10">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="name"
+                                    label="名称"
+                                    min-width="50">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="desc"
+                                    label="描述"
+                                    min-width="50">
+                            </el-table-column>
+                            <el-table-column
+                                    label="操作">
+                                <template slot-scope="scope">
+                                    <el-button type="primary" icon="el-icon-edit" size="mini"
+                                               @click.native="$refs.caseEditFunc.editCase(caseAll[scope.$index]['sceneId'])">
+                                        编辑
+                                    </el-button>
+                                    <el-button type="primary" icon="el-icon-tickets" size="mini"
+                                               @click.native="$refs.caseEditFunc.editCase(caseAll[scope.$index]['sceneId'],true)">
+                                        复制
+                                    </el-button>
+                                    <el-button type="primary" icon="el-icon-setting" size="mini"
+                                               @click.native="runScene(caseAll[scope.$index]['sceneId'])">运行
+                                    </el-button>
+                                    <el-button type="danger" icon="el-icon-delete" size="mini"
+                                               @click.native="sureView(delCase,caseAll[scope.$index]['sceneId'])">
+                                        删除
+                                    </el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+
+                        <el-button @click="cancelSelection()" size="mini"
+                                   style="position: absolute;margin-top: 2px;">取消选择
+                        </el-button>
+
+                        <div class="pagination">
+                            <el-pagination
+                                    @current-change="handleCaseCurrentChange"
+                                    @size-change="handleCaseSizeChange"
+                                    :page-size="20"
+                                    layout="total, sizes, prev, pager, next, jumper"
+                                    :total="this.casePage.total">
+                            </el-pagination>
+                        </div>
                     </el-col>
                 </el-row>
-                <el-row>
-                    <el-scrollbar wrapStyle="height:776px;">
-                        <el-tree
-                                ref="testTree"
-                                @node-click="handleNodeClick"
-                                class="filter-tree"
-                                highlight-current
-                                node-key="id"
-                                :data="setDataList"
-                                :props="defaultProps"
-
-                        >
-                        </el-tree>
-                    </el-scrollbar>
-                    <el-pagination
-                            small
-                            @current-change="handleSetCurrentChange"
-                            @size-change="handleSetSizeChange"
-                            :page-size="30"
-                            layout="prev, pager, next"
-                            :total="this.setPage.total">
-                    </el-pagination>
-                </el-row>
-            </el-col>
-            <el-col :span="21">
-                    <el-tabs value="first" style="padding-left: 10px;padding-right:5px;">
-                        <el-tab-pane label="用例列表" name="first">
-                            <el-table
-                                    ref="sceneMultipleTable"
-                                    @selection-change="handleCaseSelection"
-                                    :data="caseAll"
-                                    max-height="748"
-                                    stripe>
-                                <el-table-column
-                                        type="selection"
-                                        width="40">
-                                </el-table-column>
-                                <el-table-column
-                                        prop="num"
-                                        label="编号"
-                                        min-width="10">
-                                </el-table-column>
-                                <el-table-column
-                                        prop="name"
-                                        label="名称"
-                                        min-width="50">
-                                </el-table-column>
-                                <el-table-column
-                                        prop="desc"
-                                        label="描述"
-                                        min-width="50">
-                                </el-table-column>
-                                <el-table-column
-                                        label="操作">
-                                    <template slot-scope="scope">
-                                        <el-button type="primary" icon="el-icon-edit" size="mini"
-                                                   @click.native="$refs.caseEditFunc.editCase(caseAll[scope.$index]['sceneId'])">
-                                            编辑
-                                        </el-button>
-                                        <el-button type="primary" icon="el-icon-tickets" size="mini"
-                                                   @click.native="$refs.caseEditFunc.editCase(caseAll[scope.$index]['sceneId'],true)">
-                                            复制
-                                        </el-button>
-                                        <el-button type="primary" icon="el-icon-setting" size="mini"
-                                                   @click.native="runScene(caseAll[scope.$index]['sceneId'])">运行
-                                        </el-button>
-                                        <el-button type="danger" icon="el-icon-delete" size="mini"
-                                                   @click.native="sureView(delCase,caseAll[scope.$index]['sceneId'])">
-                                            删除
-                                        </el-button>
-                                    </template>
-                                </el-table-column>
-                            </el-table>
-
-                            <el-button @click="cancelSelection()" size="mini"
-                                       style="position: absolute;margin-top: 2px;">取消选择
-                            </el-button>
-
-                            <div class="pagination">
-                                <el-pagination
-                                        @current-change="handleCaseCurrentChange"
-                                        @size-change="handleCaseSizeChange"
-                                        :page-size="20"
-                                        layout="total, sizes, prev, pager, next, jumper"
-                                        :total="this.casePage.total">
-                                </el-pagination>
-                            </div>
-                        </el-tab-pane>
-                    </el-tabs>
-            </el-col>
-
-        </el-row>
+            </el-tab-pane>
+        </el-tabs>
         <setEdit
                 :projectName="form.projectName"
                 :setTempData="setTempData"
@@ -194,7 +208,7 @@
                 tempNum: '',
                 caseList: [],
                 proModelData: '',
-                proAndIdData:'',
+                proAndIdData: '',
                 loading: false,
                 configData: '',
                 caseAll: [],
@@ -232,6 +246,20 @@
                 // 调用 callback 返回建议列表的数据
                 cb(this.comparators);
             },
+            dropdownSetEvent(command) {
+                if (command === 'add') {
+                    this.$refs.setEditFunc.initSet()
+                }
+                else if (command === 'edit') {
+                    this.$refs.setEditFunc.editSet()
+                }
+                else if (command === 'stick') {
+                    this.$refs.setEditFunc.stickSet(this.setTempData.setId)
+                }
+                else if (command === 'del') {
+                    this.sureView(this.delSet)
+                }
+            },
             findSuite() {
                 this.apiSuiteViewStatus = false;
                 this.$axios.post('/apiMessage/apiMessage/suite/find', {
@@ -267,9 +295,9 @@
             initCaseViewData() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
                         this.proModelData = response.data['data'];
-                    this.proAndIdData = response.data['pro_and_id'];
+                        this.proAndIdData = response.data['pro_and_id'];
                         this.configData = response.data['config_name_list'];
-                        if (response.data['user_pro']){
+                        if (response.data['user_pro']) {
                             this.form.projectName = response.data['user_pro']['pro_name'];
                             this.findSet();
                         }

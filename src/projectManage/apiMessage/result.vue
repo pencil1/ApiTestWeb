@@ -21,6 +21,8 @@
                     <div style="color: #409eff">请求参数：</div>
                     <div v-if="item.meta_data.request.data !== '{}'">{{item.meta_data.request.data}}</div>
                     <div v-if="item.meta_data.request.json">{{item.meta_data.request.json}}</div>
+                    <div style="color: #409eff">请求files：</div>
+                    <div>{{item.meta_data.request.files}}</div>
                     <div style="color: #409eff">请求头：</div>
                     <div>{{item.meta_data.request.headers}}</div>
                     <div style="color: #409eff">信息提取：</div>

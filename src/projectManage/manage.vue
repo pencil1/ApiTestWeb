@@ -291,4 +291,9 @@
     .CodeMirror-gutter {
         width: 40px;
     }
+
+    /* 改变下拉菜单的高度*/
+    .el-popper[x-placement^=bottom] {
+        margin-top: 5px;
+    }
 </style>

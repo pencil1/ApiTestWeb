@@ -22,13 +22,13 @@
             </el-form-item>
 
             <el-form-item label="接口名称" v-if="showNumTab !== 'third'">
-                <el-input placeholder="请输入" v-model="form.apiName" clearable>
+                <el-input placeholder="请输入" v-model="form.apiName" clearable style="width: 150px">
                 </el-input>
             </el-form-item>
-            <el-form-item label="套件名称" v-if="showNumTab === 'third'">
-                <el-input placeholder="请输入" v-model="form.suiteName" clearable>
-                </el-input>
-            </el-form-item>
+            <!--<el-form-item label="套件名称" v-if="showNumTab === 'third'">-->
+                <!--<el-input placeholder="请输入" v-model="form.suiteName" clearable>-->
+                <!--</el-input>-->
+            <!--</el-form-item>-->
 
             <el-form-item>
                 <el-button type="primary" icon="el-icon-search" @click.native="findModule()">搜索</el-button>
@@ -50,17 +50,18 @@
                             style="border:1px solid;border-color: #ffffff rgb(234, 234, 234) #ffffff #ffffff;">
                         <el-row>
                             <el-col style="border:1px solid;border-color: #ffffff #ffffff rgb(234, 234, 234) #ffffff;padding:2px">
-                                <el-button-group style="float:right;">
-                                    <el-dropdown>
-                                      <span class="el-dropdown-link">
+                                    <el-dropdown @command="dropdownEvent" style="float:right;">
+                                      <span class="el-dropdown-link" style="color: #4ae2d5">
                                         操作<i class="el-icon-arrow-down el-icon--right"></i>
                                       </span>
-                                        <div style="padding-bottom: 10px"></div>
+                                        <!--<el-button size="mini" type="info">-->
+                                            <!--操作<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
+                                        <!--</el-button>-->
                                         <el-dropdown-menu slot="dropdown">
-                                            <el-dropdown-item>添加</el-dropdown-item>
-                                            <el-dropdown-item>编辑</el-dropdown-item>
-                                            <el-dropdown-item>置顶</el-dropdown-item>
-                                            <el-dropdown-item>删除</el-dropdown-item>
+                                            <el-dropdown-item command="add">添加</el-dropdown-item>
+                                            <el-dropdown-item command="edit">编辑</el-dropdown-item>
+                                            <el-dropdown-item command="stick">置顶</el-dropdown-item>
+                                            <el-dropdown-item command="del">删除</el-dropdown-item>
                                         </el-dropdown-menu>
                                     </el-dropdown>
                                     <!--<el-button size="mini" type="primary" @click.native="initModuleData()">添加-->
@@ -72,7 +73,6 @@
                                     <!--</el-button>-->
                                     <!--<el-button size="mini" type="danger" @click.native="sureView(delModule)">删除-->
                                     <!--</el-button>-->
-                                </el-button-group>
                             </el-col>
                         </el-row>
                         <el-row>
@@ -311,6 +311,20 @@
 
                     }
                 )
+            },
+            dropdownEvent(command){
+                if (command === 'add'){
+                    this.initModuleData()
+                }
+                else if (command === 'edit'){
+                    this.editModule()
+                }
+                else if (command === 'stick'){
+                    this.stickModule()
+                }
+                else if (command === 'del'){
+                    this.sureView(this.delModule)
+                }
             },
             handleCurrentChange(val) {
                 if (this.showNumTab === 'first') {
@@ -552,9 +566,6 @@
     }
 </script>
 <style>
-    .CodeMirror-gutter {
-        width: 40px;
-    }
 
     .cm-s-default .cm-property {
         color: rgb(183, 40, 135);
