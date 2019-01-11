@@ -16,7 +16,7 @@ import ring from 'v-charts/lib/ring.common'
 import base from './util/base'
 import api from './util/api'
 
-
+Vue.config.productionTip = false
 
 Vue.prototype.$api = api;
 Vue.prototype.$axios = axios;
@@ -36,4 +36,4 @@ new Vue({
     store,
     el: '#app',
     render: h => h(App)
-});
+}).$mount('#app');

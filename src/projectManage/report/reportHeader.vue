@@ -6,7 +6,7 @@
                 <el-header style="height: 40px;">
                     <el-row :gutter="20">
                         <el-col :span="20" style="text-align:left">
-                            <div style="font-size: 22px;font-family: KaiTi;color: #ffffff;margin-top: 5px">Test Report: 测试报告
+                            <div style="font-size: 22px;font-family: KaiTi;color: #ffffff;margin-top: -10px">Test Report: 测试报告
                             </div>
                         </el-col>
                     </el-row>

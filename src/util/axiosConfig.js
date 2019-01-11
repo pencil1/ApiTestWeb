@@ -1,5 +1,5 @@
 import axios from 'axios'
-import router from "~/router-config";
+import router from "../router-config";
 // http response 拦截器（所有接收到的请求都要从这儿过一次）
 
 axios.interceptors.response.use(

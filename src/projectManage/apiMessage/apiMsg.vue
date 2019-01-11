@@ -2,15 +2,18 @@
     <div class="caseManage" v-loading="this.loading">
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目、模块" labelWidth="110px">
-                <el-select v-model="form.projectName" placeholder="请选择项目" @change="clearChoice" style="width: 150px">
+                <el-select v-model="form.projectName"
+                           placeholder="请选择项目"
+                           @change="clearChoice"
+                           style="width: 150px;padding-right:5px">
                     <el-option
-                            v-for="(item, key) in proAndIdData"
+                            v-for="(item) in proAndIdData"
                             :key="item.name"
                             :value="item.name">
                     </el-option>
                 </el-select>
-                <el-select v-model="form.config" placeholder="请选择配置" clearable value-key="configId"
-                           style="width: 150px">
+                <el-select v-model="form.config" placeholder="请选择配置" clearable value-key="configId" style="width: 150px"
+                          >
                     <el-option
 
                             v-for="item in configData[this.form.projectName]"
@@ -220,7 +223,6 @@
 <script>
     import result from './result.vue'
     import importApi from './importApi.vue'
-    import suiteEdit from './suiteEdit.vue'
     import apiEdit from './apiEdit.vue'
     import errorView from '../common/errorView.vue'
     import configEdit from '../config/configEdit.vue'
@@ -229,7 +231,6 @@
         components: {
             result: result,
             importApi: importApi,
-            suiteEdit: suiteEdit,
             apiEdit: apiEdit,
             errorView: errorView,
             configEdit: configEdit,

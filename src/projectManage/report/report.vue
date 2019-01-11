@@ -84,7 +84,7 @@
                             @click.native="downReport(tableData[scope.$index]['id'])">下载
                             </el-button>
                             <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="sureView(delReport, tableData[scope.$index]['address'])">删除
+                                       @click.native="sureView(delReport, tableData[scope.$index]['id'])">删除
                             </el-button>
                         </template>
                     </el-table-column>
@@ -176,8 +176,8 @@
                     }
                 )
             },
-            delReport(address) {
-                this.$axios.post(this.$api.delReportApi, {'address': address}).then((response) => {
+            delReport(report_id) {
+                this.$axios.post(this.$api.delReportApi, {'report_id': report_id}).then((response) => {
                         this.messageShow(this, response);
                         if ((this.currentPage - 1) * this.sizePage + 1 === this.total) {
                             this.currentPage = this.currentPage - 1
@@ -281,7 +281,7 @@
 
                     // Blob but not URL support:
                     reader = new FileReader();
-                    reader.onload = function (e) {
+                    reader.onload = function () {
                         saver(this.result);
                     };
                     reader.readAsDataURL(blob);

@@ -93,7 +93,7 @@
                 }
             },
             theRequest: {
-                handler: function (newVal) {
+                handler: function () {
                     if (this.theRequest[this.theRequest.length - 1]['key'] || this.theRequest[this.theRequest.length - 1]['value']) {
                         this.addParam()
                     }
@@ -155,10 +155,7 @@
                 // }
                 this.url = this.url.split("?")[0] + '?' + strParam
             },
-            hideShowParam(){
-                console.log(123)
-                // this.ParamViewStatus = !this.ParamViewStatus
-            },
+
             sendMethod() {
                 //     this.$axios({
                 //         method:'post',
@@ -176,7 +173,7 @@
                 this.$axios.post('http://192.168.6.130:7022/bxr/users/login', {
                     'agent.phone': '15813316716',
                     'agent.password': '78929709',
-                }).then((response) => {
+                }).then(() => {
                         // console.log(response.data())
                     }
                 )
@@ -184,19 +181,9 @@
 
         },
 
-        mounted() {
-
-        },
-
     }
 </script>
 
 <style>
-    .el-select .el-input {
-        width: 100px;
-    }
 
-    .input-with-select .el-input-group__prepend {
-        background-color: #fff;
-    }
 </style>

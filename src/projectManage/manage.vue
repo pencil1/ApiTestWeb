@@ -139,7 +139,7 @@
             }
         },
         watch: {
-            "$route": function (to, from) {
+            "$route": function (to) {
 
                 if (to.path === '/manage/reportShow'){
                     this.collapsed = true
@@ -298,4 +298,5 @@
     .el-popper[x-placement^=bottom] {
         margin-top: 5px;
     }
+
 </style>

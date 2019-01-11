@@ -71,7 +71,6 @@
             },
             print() {
                 // 调用 callback 返回建议列表的数据
-                console.log(this.token)
             },
             findApiMsg() {
                 this.$axios.post('/apiMessage/apiMessage/register', {
@@ -95,9 +94,7 @@
                 )
             },
             login() {
-                console.log(33333333);
                 if (this.token) {
-                    console.log(1111111111111);
                     this.$store.commit(types.LOGIN, this.token);
                     let redirect = decodeURIComponent(this.$route.query.redirect || '/manage');
                     this.$router.push({
@@ -106,7 +103,6 @@
                 }
             },
             findCases2() {
-                console.log(555);
                 this.$axios.post('/apiMessage/apiMessage/login', {
                     'username': this.caseData.username,
                     'password': this.caseData.password,
@@ -119,9 +115,7 @@
                             });
                         }
                         else {
-                            console.log(444);
                             this.token = response.data['token'];
-                            console.log(222222222);
                             this.login();
                         }
                     }
@@ -161,9 +155,6 @@
                     }
                 )
             },
-            handleSelect(item) {
-                console.log(item);
-            }
         },
 
     }

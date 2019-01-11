@@ -259,7 +259,7 @@
                             >
                                 <transition-group name="list-complete">
                                     <div v-for="(_data, index) in ApiMsgData"
-                                         :key="index"
+                                         :key="_data.num"
                                          class="list-complete-item">
                                         <el-row :gutter="24">
                                             <el-col :span="1">
@@ -447,7 +447,6 @@
                 this.caseData.modelFormVisible = true;
                 this.apiMsgVessel = [];
                 this.findApiMsg();
-                console.log(this.caseData.apiCases)
                 // this.cancelSelection();
                 // this.toggleSelection();
             },
@@ -534,7 +533,7 @@
             delApiCase(i) {
                 //判断caseList中是否存在id，存在则在数据库删除信息，否则在前端删除临时数据
                 if ('id' in this.caseData.apiCases[i]) {
-                    this.$axios.post('/api/apiCase/del', {'id': this.caseData.apiCases[i]['id']}).then((response) => {
+                    this.$axios.post('/api/apiCase/del', {'id': this.caseData.apiCases[i]['id']}).then(() => {
                             this.caseData.apiCases.splice(i, 1);
                         }
                     )

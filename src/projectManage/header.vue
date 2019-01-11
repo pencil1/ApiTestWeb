@@ -168,7 +168,7 @@
             },
         },
         watch: {
-            "$route": function (to, from) {
+            "$route": function (to) {
 
                 this.showTitle(to.path);
                 //from 对象中包含当前地址
@@ -204,15 +204,5 @@
         color: rgb(255, 255, 255);
     }
 
-    /*.el-dropdown {*/
-    /*vertical-align: top;*/
-    /*}*/
 
-    /*.el-dropdown + .el-dropdown {*/
-    /*margin-left: 15px;*/
-    /*}*/
-
-    /*.el-icon-arrow-down {*/
-    /*font-size: 12px;*/
-    /*}*/
 </style>

@@ -76,6 +76,7 @@
                                             :class="{'active':index === showColor[0] && index1 === showColor[1],
                                         'wire': index1 === 0}"
                                             v-for="(item1, index1) in item['records']"
+                                            :key="index1"
                                             @click="handleNodeClick(index, index1)">
                                             <div :style="item1.status === 'success' ? 'color:#67c23a': 'color:rgb(255, 74, 74)'">
                                                 <span class="test-name">{{item1.name}}</span>
@@ -263,6 +264,7 @@
                 meta_data: {
                     request: {body: '', data: '', files: '', headers: '', method: '', params: '', url: ''},
                     response: {
+                        response_time_ms:'',
                         content: '',
                         content_type: '',
                         cookies: '',
