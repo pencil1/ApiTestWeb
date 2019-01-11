@@ -6,7 +6,6 @@ const publicPath = '';
 
 module.exports = (options = {}) => ({
     entry: {
-        vendor: './src/vendor',
         index: './src/main.js'
     },
     output: {
@@ -41,12 +40,9 @@ module.exports = (options = {}) => ({
         ]
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-            names: ['vendor', 'manifest']
-        }),
         new HtmlWebpackPlugin({
             template: 'src/index.html',
-            favicon: './favicon.ico'
+            favicon: 'src/assets/favicon.ico'
         }),
         // new webpack.ProvidePlugin({
         //     $: 'download'

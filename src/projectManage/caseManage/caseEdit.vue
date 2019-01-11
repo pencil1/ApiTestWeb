@@ -566,6 +566,7 @@
                     'sizePage': this.apiMsgPage.sizePage,
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
+                            this.radio = false;
                             this.ApiMsgData = response.data['data'];
                             this.apiMsgPage.total = response.data['total'];
                         }

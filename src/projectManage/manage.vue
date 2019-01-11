@@ -282,6 +282,8 @@
         width: 8px;
         height: 8px;
     }
+
+    /*改变ace的默认滚动条样式*/
     .ace_scrollbar::-webkit-scrollbar-thumb {
         background-color: rgba(138, 135, 135, 0.3);
         border-radius: 4px;

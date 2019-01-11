@@ -25,11 +25,3 @@ yarn install
 ## 登陆地址（ip自己替换）
 http://127.0.0.1:8010/#/login
 
-
-## 页面展示
-
-![image](https://github.com/pencil1/ApiTestWeb/blob/master/picture/api_view.png)
-
-![image](https://github.com/pencil1/ApiTestWeb/blob/master/picture/api_edit.png)
-
-![image](https://github.com/pencil1/ApiTestWeb/blob/master/picture/report.png)

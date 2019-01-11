@@ -1,7 +1,6 @@
 {
-  "name": "element-starter",
-  "description": "A Vue.js project",
-  "author": "yi.shyang@ele.me",
+  "name": "ApiTestWeb",
+  "author": "pencil",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --hot --env.dev",
@@ -13,8 +12,6 @@
     "element-ui": "^2.4.11",
     "v-charts": "^1.17.9",
     "vue": "^2.5.17",
-    "vue-clipboard2": "^0.1.1",
-    "vue-resource": "^1.4.0",
     "vue-router": "^3.0.1",
     "vue-scrollbar": "^1.0.4",
     "vue-template-compiler": "^2.5.17",

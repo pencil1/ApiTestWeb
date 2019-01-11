@@ -4,17 +4,17 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './assets/icon/iconfont.css'
 import App from './App.vue'
 import axios from './util/axiosConfig'
-import VueResource from 'vue-resource'
+// import VueResource from 'vue-resource'
 import router from './router-config'
 import store from './store/store'
-import VueClipboard from 'vue-clipboard2'
+// import VueClipboard from 'vue-clipboard2'
 import pie from 'v-charts/lib/pie.common'
 import histogram from 'v-charts/lib/histogram.common'
 import ring from 'v-charts/lib/ring.common'
 // import VueCodeMirror from 'vue-codemirror-lite'
 // import './assets/styles/entirety.css'
-import base from './base'
-import api from './api'
+import base from './util/base'
+import api from './util/api'
 
 
 
@@ -29,8 +29,8 @@ Vue.component(ring.name, ring);
 // Vue.use(VueCodeMirror)
 Vue.use(base);
 Vue.use(ElementUI);
-Vue.use(VueResource);
-Vue.use(VueClipboard);
+// Vue.use(VueResource);
+// Vue.use(VueClipboard);
 new Vue({
     router,
     store,
