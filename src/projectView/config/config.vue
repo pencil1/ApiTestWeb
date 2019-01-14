@@ -5,7 +5,7 @@
             <el-form-item label="项目名称" labelWidth="110px">
                 <el-select v-model="form.projectName" placeholder="请选择项目">
                     <el-option
-                            v-for="(item, key) in proAndIdData"
+                            v-for="(item) in proAndIdData"
                             :key="item.name"
                             :value="item.name">
                     </el-option>

@@ -44,11 +44,8 @@
 </template>
 
 <script>
-    import draggable from 'vuedraggable'
+
     export default {
-        components: {
-            draggable,
-        },
         name: 'test',
         data() {
             return {
@@ -72,7 +69,7 @@
                 this.testCase.viewStatus = true;
                 this.testCase.address = ''
             },
-            getFileAddress(response, file, fileList) {
+            getFileAddress(response, file) {
                 if (response['status'] === 0) {
                     // this.$message({
                     //     showClose: true,
@@ -156,83 +153,9 @@
                     }
                 )
             },
-            sqlData() {
-                try {
-                    JSON.parse(this.showData)
-                }
-                catch (err) {
-                    this.$message({
-                        showClose: true,
-                        message: 'json格式错误',
-                        type: 'warning',
-                    });
-                    console.log(err);
-                    for (let i = 0; i < 30; i++) {
-                        console.log(this.showData.substring(4787 - i, 4787))
-                    }
-                    // console.log(this.showData.substring(4787-3,4787+3))
-                }
-            },
-            sqlData1() {
-                // 调用 callback 返回建议列表的数据
-                this.$axios.post('/api/show1', {}).then((response) => {
-                        if (response.data['status'] === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'warning',
-                            });
-                        }
-                        else {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'success',
-                            });
-                            this.showData = response.data['data']
-                        }
-                    }
-                )
-            },
-            optimizeError() {
-                // 调用 callback 返回建议列表的数据
-                this.$axios.post('/api/optimizeError', {
-                    'errorData': this.showData,
-                }).then((response) => {
-                        if (response.data['status'] === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'warning',
-                            });
-                        }
-                        else {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'success',
-                            });
-                            this.showData = response.data['data'];
-                        }
-                    }
-                )
-            },
-            dealSql() {
-                // 调用 callback 返回建议列表的数据
-                this.$axios.post('/api/delSql', {}).then((response) => {
-                        if (response.data['status'] === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'warning',
-                            });
-                        }
-                        else {
 
-                        }
-                    }
-                )
-            },
+
+
         },
 
     }

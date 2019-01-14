@@ -17,10 +17,10 @@ yarn install
 ```
 
 ## Develop
-    npm run dev
+    yarn serve
 
 ## Build
-    npm run build
+    yarn build
 
 ## 登陆地址（ip自己替换）
 http://127.0.0.1:8010/#/login

@@ -111,10 +111,6 @@
             addConfigVariable() {
                 this.configData.variable.push({key: null, value: null, remark: null});
             },
-            addConfigVariable1() {
-                console.log(this.configData.funcAddress)
-                console.log(this.funcAddress)
-            },
             delConfigVariable(i) {
                 this.configData.variable.splice(i, 1);
             },

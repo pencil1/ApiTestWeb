@@ -1,23 +1,15 @@
 /* eslint-disable */
-const path = require('path');
-
-function resolve(dir) {
-    return path.join(__dirname, dir)
-}
-
 module.exports = {
     lintOnSave: true,
     productionSourceMap: false,
-    chainWebpack: (config) => {
-        config.resolve.alias
-            .set('~', resolve('src'))
-    },
+
     pages: {
         index: {
             // page 的入口
             entry: 'src/main.js',
             // 模板来源
             template: 'src/index.html',
+            favicon:'src/assets/favicon.ico',
             // 在 dist/index.html 的输出
             // filename: 'src/index.html',
             // 当使用 title 选项时，

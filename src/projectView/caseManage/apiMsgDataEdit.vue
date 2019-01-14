@@ -68,7 +68,7 @@
                     </el-button>
                     <el-select v-model="form.choiceType" placeholder="请选择" size="small" disabled>
                         <el-option
-                                v-for="(item,key) in choiceVariableType"
+                                v-for="(item) in choiceVariableType"
                                 :key="item.label"
                                 :label="item.label"
                                 :value="item.label">
@@ -325,9 +325,9 @@
         },
         methods: {
             editorInit() {
-                require('brace/ext/language_tools')
-                require('brace/mode/json')
-                require('brace/theme/chrome')
+                require('brace/ext/language_tools');
+                require('brace/mode/json');
+                require('brace/theme/chrome');
                 require('brace/snippets/json')
             },
             initData(i) {
@@ -380,7 +380,7 @@
             delCaseValidate(i) {
                 this.apiCaseData.validate.splice(i, 1);
             },
-            fileChange(response, file, fileList) {
+            fileChange(response, file) {
                     if (response['status'] === 0) {
                         // this.$message({
                         //     showClose: true,

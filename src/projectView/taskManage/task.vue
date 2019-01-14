@@ -5,7 +5,7 @@
             <el-form-item label="项目" labelWidth="80px">
                 <el-select v-model="form.projectName" placeholder="选择项目">
                     <el-option
-                            v-for="(item, key) in proModelData"
+                            v-for="(item) in proModelData"
                             :key="item.name"
                             :value="item.name">
                     </el-option>
@@ -53,7 +53,7 @@
                             label="操作"
                             min-width="200">
                         <template slot-scope="scope">
-                            <el-button type="primary" v-show="false"></el-button>
+                            <el-button type="primary" v-show="false">{{null}}</el-button>
                             <el-button type="primary" size="mini" v-if="tableData[scope.$index]['status'] === '创建'"
                                        @click.native="editTask(tableData[scope.$index]['id'])">修改
                             </el-button>
@@ -107,7 +107,7 @@
                         <el-form-item label="执行选择" :label-width="taskData.formLabelWidth">
                             <el-select v-model="form.projectName" placeholder="选择项目">
                                 <el-option
-                                        v-for="(item, key) in proModelData"
+                                        v-for="(item) in proModelData"
                                         :key="item.name"
                                         :value="item.name">
                                 </el-option>

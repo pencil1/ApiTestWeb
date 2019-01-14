@@ -186,16 +186,6 @@
                     }
                 )
             },
-
-            addModelVariable() {
-                this.modelData.variable.push({key: '', value: ''});
-            },
-            delModelVariable(i) {
-                this.modelData.variable.splice(i, 1);
-            },
-            addModelHeader() {
-                this.modelData.header.push({key: '', value: ''});
-            },
             // runScene() {
             //     this.loading = true;
             //     this.$axios.post('/apiMessage/apiMessage/report/run', {

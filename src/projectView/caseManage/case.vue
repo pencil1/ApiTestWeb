@@ -4,7 +4,7 @@
             <el-form-item label="项目名称" labelWidth="110px">
                 <el-select v-model="form.projectName" placeholder="请选择项目" @change="findSet">
                     <el-option
-                            v-for="(item, key) in proAndIdData"
+                            v-for="(item) in proAndIdData"
                             :key="item.name"
                             :value="item.name">
                     </el-option>
@@ -259,22 +259,6 @@
                 else if (command === 'del') {
                     this.sureView(this.delSet)
                 }
-            },
-            findSuite() {
-                this.apiSuiteViewStatus = false;
-                this.$axios.post('/apiMessage/apiMessage/suite/find', {
-                    'suiteName': this.form.caseName,
-                    'modelName': this.form.modelName,
-                    'projectName': this.form.apiMesProjectName,
-                    'page': this.casePage.currentPage,
-                    'sizePage': this.casePage.sizePage,
-                }).then((response) => {
-                        if (this.messageShow(this, response)) {
-                            this.suiteData = response.data['data'];
-                            this.casePage.total = response.data['total'];
-                        }
-                    }
-                )
             },
             findCase() {
                 this.$axios.post(this.$api.findCaseApi, {

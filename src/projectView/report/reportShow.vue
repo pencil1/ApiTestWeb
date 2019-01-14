@@ -3,7 +3,7 @@
         <el-row>
             <el-col :span="24">
                 <div class="grid-content" style="background-color: #f5f5f5 !important;">
-                    <el-button type="primary" round style="padding: 4px 10px ;" v-show="false"></el-button>
+                    <el-button type="primary" round style="padding: 4px 10px ;" v-show="false">{{null}}</el-button>
                     <el-button type="primary" size="mini" round style="margin-top: 5px;padding: 4px 10px ;"
                                @click.native="hideShowPic(false)"
                                v-show="this.picStatus">隐藏图表
@@ -97,7 +97,7 @@
 
 
                 <el-scrollbar :wrapStyle={height:picHeight}>
-                    <div style="float:right;padding-right:15px;position:absolute;z-index:100;right: 0px;top:-2px">
+                    <div style="float:right;padding-right:15px;position:absolute;z-index:100;right: 1px;top:-2px">
                         <el-tooltip content="查看主要信息" placement="top-start" @click.native="showInfo()">
                             <el-button size="mini" type="info" icon="el-icon-info" circle></el-button>
                         </el-tooltip>

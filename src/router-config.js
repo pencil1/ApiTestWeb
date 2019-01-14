@@ -3,25 +3,23 @@ import VueRouter from 'vue-router'
 
 import store from './store/store'
 import * as types from './store/types'
-import Header from './projectManage/header.vue'
-import caseManage from './projectManage/apiMessage/apiMsg.vue'
+import Header from './projectView/header.vue'
+import caseManage from './projectView/apiMessage/apiMsg.vue'
 
-import manage from './projectManage/manage.vue'
-import test from './projectManage/test/index.vue'
-import modelManage from './projectManage/module/module.vue'
+import manage from './projectView/manage.vue'
+import test from './projectView/test/index.vue'
+import modelManage from './projectView/module/module.vue'
 
-import projectManage from './projectManage/project/project.vue'
-import reportManage from './projectManage/report/report.vue'
-import reportShow from './projectManage/report/reportShow.vue'
-import reportHeader from './projectManage/report/reportHeader.vue'
-import buildInFunc from './projectManage/buildInFunc/buildInFunc.vue'
-import sceneManage from './projectManage/caseManage/case.vue'
-import testTool from './projectManage/testTool/testTool.vue'
-import taskManage from './projectManage/taskManage/task.vue'
-
-import sqlCheck from './projectManage/sqlCheck/sqlCheck.vue'
-import user from './projectManage/userManage/user.vue'
-import sceneConfig from './projectManage/config/config.vue'
+import projectManage from './projectView/project/project.vue'
+import reportManage from './projectView/report/report.vue'
+import reportShow from './projectView/report/reportShow.vue'
+import reportHeader from './projectView/report/reportHeader.vue'
+import buildInFunc from './projectView/buildInFunc/buildInFunc.vue'
+import sceneManage from './projectView/caseManage/case.vue'
+import testTool from './projectView/testTool/testTool.vue'
+import taskManage from './projectView/taskManage/task.vue'
+import user from './projectView/userManage/user.vue'
+import sceneConfig from './projectView/config/config.vue'
 import login from './login/login.vue'
 
 Vue.use(VueRouter);
@@ -171,17 +169,6 @@ const routes = [
                 components: {
                     Header: Header,
                     Manage: taskManage,
-                }
-            },
-
-            {
-                path: 'sqlCheck',
-                meta: {
-                    requireAuth: true,
-                },
-                components: {
-                    Header: Header,
-                    Manage: sqlCheck,
                 }
             },
         ],

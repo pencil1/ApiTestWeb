@@ -171,7 +171,7 @@
                 this.$axios.post(this.$api.saveFuncApi, {
                     'funcData': this.funcData,
                     'funcName': this.comparator
-                }).then((response) => {
+                }).then(() => {
                         this.$axios.post(this.$api.checkFuncApi, {
                             'funcFileName': this.comparator,
                             'funcName': this.funcName,
@@ -186,9 +186,9 @@
 
             },
             editorInit() {
-                require('brace/ext/language_tools')
-                require('brace/mode/python')
-                require('brace/theme/monokai')
+                require('brace/ext/language_tools');
+                require('brace/mode/python');
+                require('brace/theme/monokai');
                 require('brace/snippets/python')
             },
             saveFunc() {

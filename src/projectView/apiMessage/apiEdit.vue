@@ -383,9 +383,9 @@
         },
         methods: {
             editorInit() {
-                require('brace/ext/language_tools')
-                require('brace/mode/json')
-                require('brace/theme/chrome')
+                require('brace/ext/language_tools');
+                require('brace/mode/json');
+                require('brace/theme/chrome');
                 require('brace/snippets/json')
             },
             changeProChoice() {
@@ -416,7 +416,7 @@
                 }
             },
 
-            fileChange(response, file, fileList) {
+            fileChange(response, file) {
                 if (response['status'] === 0) {
                     // this.$message({
                     //     showClose: true,
@@ -748,7 +748,7 @@
                 deep: true
             }
             ,
-            monitorUrl(newValue, oldValue) {
+            monitorUrl() {
                 if (!this.apiMsgData.url) {
                     this.apiMsgData.param = [{key: '', value: ''}];
                     return
@@ -783,7 +783,7 @@
                 }
             }
             ,
-            monitorMethod(newValue, oldValue) {
+            monitorMethod(newValue) {
                 if (newValue === 'GET') {
                     this.bodyShow = 'first'
                 }

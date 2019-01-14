@@ -23,7 +23,8 @@
                             </div>
                         </el-tab-pane>
                         <el-tab-pane label="基础信息">
-                            <div v-for="(value, key) in item.meta_data.request">
+                            <div v-for="(value, key) in item.meta_data.request"
+                            :key="key">
                                 <div style="color: #409eff"
                                      v-if="JSON.stringify(value) !== '{}' && key !== 'start_timestamp' && value">
                                     {{ key }}：
@@ -89,6 +90,7 @@
                     data = JSON.stringify(data, null, 4);
                 }
                 catch (err) {
+                    this.console.log(111111)
                 }
                 return data
             },
