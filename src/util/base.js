@@ -1,5 +1,5 @@
 
-exports.install = function (Vue, options) {
+exports.install = function (Vue) {
     Vue.prototype.sureView = function (func, arg) {
         // this.$alert('确认要删除吗?', '确认框', {
         //                 confirmButtonText: '确定',

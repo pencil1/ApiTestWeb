@@ -153,14 +153,6 @@
                 );
 
             },
-            loGout() {
-                console.log(this.$store.state.token);
-                this.$store.commit(types.LOGOUT);
-                this.$router.push({path: 'login'});
-            },
-            handleSelect(item) {
-                console.log(item);
-            }
         },
 
     }
