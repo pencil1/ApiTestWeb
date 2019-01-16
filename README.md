@@ -16,7 +16,7 @@ npm install -g cnpm
 
 ## 安装依赖
 ```
-cnpm install
+yarn install
 ```
 
 ## Develop
