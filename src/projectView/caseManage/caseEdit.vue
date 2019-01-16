@@ -199,7 +199,7 @@
                             <el-form :inline="true" style="padding-top: 10px;" size="small">
                                 <el-form-item label=" " labelWidth="10px">
                                     <el-select v-model="form.apiMesProjectName"
-                                               style="width: 150px"
+                                               style="width: 150px;padding-right:5px"
                                                placeholder="请选择项目"
                                                @change="changeModuleChoice">
                                         <el-option
@@ -211,7 +211,7 @@
 
                                     <el-select v-model="form.module"
                                                value-key="moduleId"
-                                               style="width: 150px"
+                                               style="width: 150px;padding-right:5px"
                                                placeholder="请选择模块">
                                         <el-option
                                                 v-for="item in proModelData[this.form.apiMesProjectName]"

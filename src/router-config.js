@@ -203,6 +203,7 @@ if (window.localStorage.getItem('userName')) {
 
 
 const router = new VueRouter({
+    // mode: 'history', //去掉路径中的#
     routes
 });
 

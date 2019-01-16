@@ -4,19 +4,17 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './assets/icon/iconfont.css'
 import App from './App.vue'
 import axios from './util/axiosConfig'
-// import VueResource from 'vue-resource'
 import router from './router-config'
 import store from './store/store'
 // import VueClipboard from 'vue-clipboard2'
 import pie from 'v-charts/lib/pie.common'
 import histogram from 'v-charts/lib/histogram.common'
 import ring from 'v-charts/lib/ring.common'
-// import VueCodeMirror from 'vue-codemirror-lite'
 // import './assets/styles/entirety.css'
 import base from './util/base'
 import api from './util/api'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 Vue.prototype.$api = api;
 Vue.prototype.$axios = axios;
