@@ -90,7 +90,6 @@
                     data = JSON.stringify(data, null, 4);
                 }
                 catch (err) {
-                    this.console.log(111111)
                 }
                 return data
             },
