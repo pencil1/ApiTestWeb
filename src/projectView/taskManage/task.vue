@@ -105,7 +105,7 @@
                         <!--</el-select>-->
                         <!--</el-form-item>-->
                         <el-form-item label="执行选择" :label-width="taskData.formLabelWidth">
-                            <el-select v-model="form.projectName" placeholder="选择项目">
+                            <el-select v-model="form.projectName" placeholder="选择项目" style="width: 150px;padding-right:5px">
                                 <el-option
                                         v-for="(item) in proModelData"
                                         :key="item.name"
@@ -114,7 +114,8 @@
                             </el-select>
 
                             <el-select v-model="form.set" multiple placeholder="选择用例集" value-key="id"
-                                       @change="changeSceneChoice">
+                                       @change="changeSceneChoice"
+                                       style="width: 150px;padding-right:5px">
                                 <el-option
                                         v-for="item in allSetList[this.form.projectName]"
                                         :key="item.id"
@@ -124,7 +125,8 @@
                             </el-select>
 
                             <el-select v-model="form.case" multiple placeholder="选择用例" value-key="id"
-                                       :disabled="caseStatus">
+                                       :disabled="caseStatus"
+                                       style="width: 150px">
                                 <el-option
                                         v-for="item in allSceneList[this.form.set_id]"
                                         :key="item.id"

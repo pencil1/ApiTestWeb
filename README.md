@@ -3,10 +3,13 @@
 
 后端传送门：https://github.com/pencil1/ApiTestManage
 
+线上demo地址：http://47.107.147.188/#/login （账号：ceshi 密码：123456）
+
 ## Environment
 
 1. 首先安装  node  版本8以上即可; 确保 node -V
 2. 安装 yarn、cnpm 工具包
+3. 命令都是在项目根目录下执行
 ```
 npm install -g yarn
 
@@ -19,7 +22,7 @@ npm install -g cnpm
 yarn install
 ```
 
-## Develop
+## Develop 
     yarn serve
 
 ## Build

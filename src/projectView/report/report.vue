@@ -5,15 +5,15 @@
             <el-form-item label="项目" labelWidth="110px">
                 <el-select v-model="form.projectName" placeholder="请选择项目">
                     <el-option
-                            v-for="(item, key) in proModelData"
-                            :key="key"
-                            :value="key">
+                            v-for="item in proData"
+                            :key="item.id"
+                            :value="item.name">
                     </el-option>
                 </el-select>
 
                 <!--<el-select v-module="form.gathers" multiple placeholder="请选择模块" style="width: 400px;">-->
                 <!--<el-option-->
-                <!--v-for="item in proModelData[this.form.projectName]"-->
+                <!--v-for="item in proData[this.form.projectName]"-->
                 <!--:key="item.id"-->
                 <!--:value="item.value">-->
                 <!--</el-option>-->
@@ -112,7 +112,7 @@
         data() {
             return {
                 loading: false,
-                proModelData: '',
+                proData: '',
                 proSceneData: '',
                 tableData: [],
                 total: 1,
@@ -149,13 +149,13 @@
                 this.sizePage = val;
                 this.findReport()
             },
-            httpSend() {
+            initData() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
                     if (response.data['user_pro']){
                         this.form.projectName = response.data['user_pro']['pro_name'];
                         this.findReport()
                     }
-                        this.proModelData = response.data['data'];
+                        this.proData = response.data['pro_and_id'];
 
 
                     }
@@ -281,7 +281,7 @@
 
         },
         mounted() {
-            this.httpSend();
+            this.initData();
             // this.findReport();
 
 

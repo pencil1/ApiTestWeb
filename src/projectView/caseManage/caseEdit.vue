@@ -11,11 +11,12 @@
                 <el-tab-pane label="用例信息" name="first" style="margin-top: 10px">
                     <el-form size="small" :inline="true">
                         <el-form-item label="用例名称" :label-width="caseData.formLabelWidth">
-                            <el-input v-model="caseData.name">
+                            <el-input v-model="caseData.name" style="width: 150px">
                             </el-input>
                         </el-form-item>
                         <el-form-item label="项目选择" :label-width="caseData.formLabelWidth">
-                            <el-select v-model="form.projectName" placeholder="请选择项目" @change="changeSetChoice">
+                            <el-select v-model="form.projectName" placeholder="请选择项目" @change="changeSetChoice"
+                                       style="width: 150px">
                                 <el-option
                                         v-for="(item, key) in proModelData"
                                         :key="key"
@@ -24,18 +25,19 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="用例编号" :label-width="caseData.formLabelWidth" v-if="caseData.id">
-                            <el-input v-model.number="caseData.num" :minlength="215">
+                            <el-input v-model.number="caseData.num" :minlength="215" style="width: 130px">
                             </el-input>
                         </el-form-item>
                     </el-form>
                     <el-form :inline="true" size="small">
                         <el-form-item label="用例描述" :label-width="caseData.formLabelWidth">
-                            <el-input v-model="caseData.desc">
+                            <el-input v-model="caseData.desc" style="width: 150px">
                             </el-input>
                         </el-form-item>
 
                         <el-form-item label="集合选择" :label-width="caseData.formLabelWidth">
-                            <el-select v-model="form.set" placeholder="请选择用例集" value-key="id">
+                            <el-select v-model="form.set" placeholder="请选择用例集" value-key="id"
+                                       style="width: 150px">
                                 <el-option
                                         v-for="item in allSetList[form.projectName]"
                                         :key="item.id"
@@ -53,7 +55,8 @@
                     <el-form :inline="true" class="demo-form-inline " size="small">
                         <el-form-item label=" " labelWidth="10px">
                             <el-select v-model="form.sceneVariableProjectName" placeholder="请选择项目"
-                                       @change="changeConfigChoice">
+                                       @change="changeConfigChoice"
+                                       style="width: 150px;padding-right:5px">
                                 <el-option
                                         v-for="(item, key) in proModelData"
                                         :key="key"
@@ -61,7 +64,8 @@
                                 </el-option>
                             </el-select>
 
-                            <el-select v-model="form.config" value-key="configId" placeholder="请选择配置">
+                            <el-select v-model="form.config" value-key="configId" placeholder="请选择配置"
+                                       style="width: 150px;padding-right:5px">
                                 <el-option
                                         v-for="item in configData[form.sceneVariableProjectName]"
                                         :key="item.configId"
@@ -69,7 +73,8 @@
                                         :value="item">
                                 </el-option>
                             </el-select>
-                            <el-select v-model="caseData.funcAddress" multiple placeholder="请选择导入函数文件" size="small">
+                            <el-select v-model="caseData.funcAddress" multiple placeholder="请选择导入函数文件" size="small"
+                                       >
                                 <el-option
                                         v-for="item in this.funcAddress"
                                         :key="item['value']"
