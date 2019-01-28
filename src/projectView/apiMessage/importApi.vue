@@ -5,8 +5,8 @@
             <el-form>
                 <el-form-item label="请选择导入格式">
                     <el-radio-group v-model="importApiData.importFormat">
-                        <el-radio label="HAR">{{null}}</el-radio>
-                        <el-radio label="postman(JSON)">{{null}}</el-radio>
+                        <el-radio label="HAR"></el-radio>
+                        <el-radio label="postman(JSON)"></el-radio>
                         <!--<el-radio label="swagger"></el-radio>-->
                     </el-radio-group>
                 </el-form-item>

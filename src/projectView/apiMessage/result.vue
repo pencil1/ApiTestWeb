@@ -90,6 +90,7 @@
                     data = JSON.stringify(data, null, 4);
                 }
                 catch (err) {
+                    null;
                 }
                 return data
             },
