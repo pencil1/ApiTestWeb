@@ -67,9 +67,12 @@
                             label="状态"
                             width="80">
                         <template slot-scope="scope">
-                            <div :style="scope.row.read_status === '已读' ? 'color:#2bef2b': 'color:rgb(255, 74, 74)'">
+                            <!--<div :style="scope.row.read_status === '已读' ? 'color:#2bef2b': 'color:rgb(255, 74, 74)'">-->
+                                <!--{{scope.row.read_status}}-->
+                            <!--</div>-->
+                            <el-tag size="small" :type="scope.row.read_status === '已读' ? 'success' : 'danger'">
                                 {{scope.row.read_status}}
-                            </div>
+                            </el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column

@@ -18,6 +18,7 @@
 
         <el-tabs value="first" style="padding-left: 10px">
             <el-tab-pane label="项目列表" name="first" class="table_padding">
+
                 <el-table :data="tableData" stripe max-height="745">
                     <el-table-column
                             prop="id"
@@ -32,7 +33,13 @@
                     </el-table-column>
                     <el-table-column label="当前环境">
                         <template slot-scope="scope">
-                            {{environmentShow(tableData[scope.$index]['choice'])}}
+                            <el-tag size="small"
+                                    :type="tableData[scope.$index]['choice'] === 'first' ?
+                                    'success' : tableData[scope.$index]['choice'] === 'second' ?
+                                     'primary' :  tableData[scope.$index]['choice'] === 'third' ? 'warning' : 'danger'">
+                                {{environmentShow(tableData[scope.$index]['choice'])}}
+                            </el-tag>
+
                         </template>
                     </el-table-column>
                     <!--<el-table-column-->
@@ -80,7 +87,7 @@
                             </el-input>
                         </el-form-item>
                         <el-form-item label="负责人" :label-width="projectData.formLabelWidth">
-                            <el-select v-model="form.user" value-key="user_id"  id="user">
+                            <el-select v-model="form.user" value-key="user_id" id="user" size="small">
                                 <el-option
                                         v-for="item in userData"
                                         :key="item.user_id"
@@ -166,7 +173,7 @@
                 </el-tab-pane>
 
                 <el-tab-pane label="公用变量" style="margin-top: 10px">
-                    <span style="margin-left: 10px">变量信息</span>
+                    <span style="margin-left: 10px">变量信息：</span>
                     <el-button type="primary" size="mini" @click="addProjectVariable()">
                         添加
                     </el-button>
@@ -200,7 +207,7 @@
                     <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);"/>
 
                     <div style="margin-top: 10px">
-                        <span style="margin-left: 10px">头部信息</span>
+                        <span style="margin-left: 10px">头部信息：</span>
                         <el-button type="primary" size="mini" @click="addProjectHeader()">添加</el-button>
                     </div>
                     <el-table :data="projectData.header" stripe :show-header="false">
@@ -233,7 +240,8 @@
             <div slot="footer" class="dialog-footer">
                 <el-button @click="projectData.modelFormVisible = false" size="small">取 消</el-button>
                 <el-button type="primary" id="sure_btn"
-                           @click.native="addProjectBtn()" size="small">确 定</el-button>
+                           @click.native="addProjectBtn()" size="small">确 定
+                </el-button>
             </div>
         </el-dialog>
 
@@ -362,36 +370,30 @@
                             message: '当前所选环境的url数量和测试环境不一致,会影响到接口测试',
                             type: 'warning',
                         });
-                    }
-                    else {
+                    } else {
                         this.addProject()
                     }
-                }
-                else if (this.environmentChoice === 'third') {
+                } else if (this.environmentChoice === 'third') {
                     if (this.dealHostList(this.environment.environmentProduction).length !== test_length) {
                         this.$message({
                             showClose: true,
                             message: '当前所选环境的url数量和测试环境不一致,会影响到接口测试',
                             type: 'warning',
                         });
-                    }
-                    else {
+                    } else {
                         this.addProject()
                     }
-                }
-                else if (this.environmentChoice === 'fourth') {
+                } else if (this.environmentChoice === 'fourth') {
                     if (this.dealHostList(this.environment.environmentStandby).length !== test_length) {
                         this.$message({
                             showClose: true,
                             message: '当前所选环境的url数量和测试环境不一致,会影响到接口测试',
                             type: 'warning',
                         });
-                    }
-                    else {
+                    } else {
                         this.addProject()
                     }
-                }
-                else {
+                } else {
                     this.addProject()
                 }
             },
@@ -406,7 +408,7 @@
                     'hostFour': this.dealHostList(this.environment.environmentStandby),
                     'id': this.projectData.id,
                     'header': JSON.stringify(this.projectData.header),
-                    'userId':this.form.user.user_id,
+                    'userId': this.form.user.user_id,
                     'variable': JSON.stringify(this.projectData.variable),
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
@@ -469,14 +471,11 @@
             environmentShow(choice) {
                 if (choice === 'first') {
                     return '测试环境'
-                }
-                else if (choice === 'second') {
+                } else if (choice === 'second') {
                     return '开发环境'
-                }
-                else if (choice === 'third') {
+                } else if (choice === 'third') {
                     return '线上环境'
-                }
-                else if (choice === 'fourth') {
+                } else if (choice === 'fourth') {
                     return '备用环境'
                 }
             },
@@ -488,14 +487,11 @@
                 }).then(() => {
                     if (type === 'test') {
                         this.environment.environmentTest.splice(i, 1);
-                    }
-                    else if (type === 'develop') {
+                    } else if (type === 'develop') {
                         this.environment.environmentDevelop.splice(i, 1);
-                    }
-                    else if (type === 'production') {
+                    } else if (type === 'production') {
                         this.environment.environmentProduction.splice(i, 1);
-                    }
-                    else if (type === 'standby') {
+                    } else if (type === 'standby') {
                         this.environment.environmentStandby.splice(i, 1);
                     }
                 }).catch(() => {
@@ -506,14 +502,11 @@
             addTableList(type) {
                 if (type === 'test') {
                     this.environment.environmentTest.push({value: ''});
-                }
-                else if (type === 'develop') {
+                } else if (type === 'develop') {
                     this.environment.environmentDevelop.push({value: ''});
-                }
-                else if (type === 'production') {
+                } else if (type === 'production') {
                     this.environment.environmentProduction.push({value: ''});
-                }
-                else if (type === 'standby') {
+                } else if (type === 'standby') {
                     this.environment.environmentStandby.push({value: ''});
                 }
             }

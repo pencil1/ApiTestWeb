@@ -1,5 +1,5 @@
 <template>
-    <div class="reportShow" style="line-height: 36px">
+    <div class="reportShow" style="line-height: 36px;font-family:LiSu">
         <el-row>
             <el-col :span="24">
                 <div class="grid-content" style="background-color: #f5f5f5 !important;">
@@ -8,7 +8,8 @@
                                @click.native="hideShowPic(false)"
                                v-show="this.picStatus">隐藏图表
                     </el-button>
-                    <el-button type="primary" round style="padding: 4px 10px ;" @click.native="hideShowPic(true)"
+                    <el-button type="primary" size="mini" round style="padding: 4px 10px ;"
+                               @click.native="hideShowPic(true)"
                                v-show="!this.picStatus">展示图表
                     </el-button>
                     <!--<el-button-group>-->
@@ -36,19 +37,25 @@
                 <div style="height: 200px;float:left;">
                     <ve-pie :data="caseChartData" :settings="caseChartSettings" height="200px" width="350px"></ve-pie>
                 </div>
-                <ol style="margin-top:5px;font-family:Serif" class="remote-line">
-                    <li>tests result</li>
-                    <li>总数:{{this.reportData.stat.testsRun}}</li>
-                    <li>成功:{{this.reportData.stat.successes}}</li>
-                    <li>失败:{{this.reportData.stat.failures}}</li>
-                    <li>错误:{{this.reportData.stat.errors}}</li>
+
+                <ol style="margin-top:5px;font-size:14px;line-height:25px" class="remote-line">
+                    <li style="font-weight:700;font-size:16px">apis result</li>
+                    <li style="font-weight:600;color: rgb(146, 123, 139)">总数:{{this.reportData.stat.testsRun}}</li>
+                    <li style="color: rgb(25,212,174);font-weight:600">成功:{{this.reportData.stat.successes}}</li>
+                    <li style="color: rgb(250,110,134);font-weight:600">失败:{{this.reportData.stat.failures}}</li>
+                    <li style="color: #E87C25;font-weight:600">错误:{{this.reportData.stat.errors}}</li>
                 </ol>
             </el-col>
             <el-col :span="14" style="border-width: 1px;">
                 <div style="height: 200px;float:left;">
-                    <ve-ring :data="suiteChartData" :settings="suiteChartSettings" height="200px" width="350px"
-                    ></ve-ring>
+                    <ve-ring :data="suiteChartData" :settings="suiteChartSettings" height="200px" width="350px"></ve-ring>
                 </div>
+                <ol style="margin-top:5px;font-size:14px;line-height:25px" class="remote-line">
+                    <li style="font-weight:700;font-size:16px">cases result</li>
+                    <li style="font-weight:600;color: rgb(146, 123, 139)">总数:{{this.reportData.stat.all_scene}}</li>
+                    <li style="color: rgb(25,212,174);font-weight:600">成功:{{this.reportData.stat.successes_scene1}}</li>
+                    <li style="color: rgb(250,110,134);font-weight:600">失败:{{this.reportData.stat.failures_scene1}}</li>
+                </ol>
             </el-col>
         </el-row>
         <el-row>
@@ -230,7 +237,7 @@
 
             };
             this.suiteChartSettings = {
-                radius: 80,
+                radius: [50, 80],
                 avoidLabelOverlap: false,
                 offsetY: 110,
                 itemStyle: {
@@ -264,7 +271,7 @@
                 meta_data: {
                     request: {body: '', data: '', files: '', headers: '', method: '', params: '', url: ''},
                     response: {
-                        response_time_ms:'',
+                        response_time_ms: '',
                         content: '',
                         content_type: '',
                         cookies: '',
@@ -279,9 +286,9 @@
                 caseChartData: {
                     columns: ['caseName', 'num'],
                     rows: [
-                        {'caseName': '成功case', num: 0},
-                        {"caseName": '失败case', num: 0},
-                        {'caseName': '错误case', num: 0},
+                        {'caseName': '成功api', num: 0},
+                        {"caseName": '失败api', num: 0},
+                        {'caseName': '错误api', num: 0},
 
 
                     ]
@@ -290,15 +297,24 @@
 
                     columns: ['name', 'num',],
                     rows: [
-                        {'name': '成功业务', 'num': 0},
-                        {'name': '失败业务', 'num': 0},
+                        {'name': '成功case', 'num': 0},
+                        {'name': '失败case', 'num': 0},
                     ]
                 },
 
                 reportData: {
                     'details': [{name: ''}],
                     'platform': {'duration': '', 'python_version': ''},
-                    'stat': {'skipped': '', 'testsRun': '', 'successes': '', 'failures': '', 'errors': ''},
+                    'stat': {
+                        'skipped': '',
+                        'testsRun': '',
+                        'successes': '',
+                        'failures': '',
+                        'errors': '',
+                        'failures_scene1': '',
+                        'successes_scene1': '',
+                        'all_scene': ''
+                    },
                     'time': {'start_at': '', 'duration': 1}
                     ,
                 },
@@ -316,11 +332,9 @@
                 // this.showData(command);
                 if (command === 'error') {
                     this.showScene = [false, true]
-                }
-                else if (command === 'success') {
+                } else if (command === 'success') {
                     this.showScene = [true, false]
-                }
-                else {
+                } else {
                     this.showScene = [true, true]
                 }
             },
@@ -370,8 +384,7 @@
                 if (s) {
                     this.picStatus = true;
                     this.picHeight = '635px';
-                }
-                else {
+                } else {
                     this.picStatus = false;
                     this.picHeight = '835px';
                 }

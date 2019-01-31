@@ -1,67 +1,57 @@
 <template>
-    <div class="buildInFunc" style="padding: 10px 10px 10px 10px">
+    <div class="buildInFunc"  >
 
-        <el-row>
-            <el-col :span="7">
-                <span>函数文件</span>
+        <el-form :inline="true"  class="demo-form-inline search-style" size="small">
+            <el-form-item label="函数文件"  labelWidth="80px">
                 <el-autocomplete
+                        style="margin-right: 2px"
                         class="inline-input"
                         v-model="comparator"
                         :fetch-suggestions="querySearch"
                         placeholder="输入或选择文件"
                         size="small">
-
-                </el-autocomplete>
+                </el-autocomplete >
                 <el-button-group>
                     <el-button type="success" @click.native="findFunc()" size="small">读取</el-button>
                     <el-button type="primary" @click.native="createFunc()" size="small">创建</el-button>
                     <!--<el-button type="danger" @click.native="sureView(removeFunc)" size="small">删除</el-button>-->
                 </el-button-group>
-            </el-col>
+            </el-form-item>
 
-            <el-col :span="7">
-                <!--<el-form :inline="true">-->
-                <!--<el-form-item label="函数" labelWidth="110px">-->
-                <span>函数名</span>
-                <el-input v-model="funcName" placeholder="输入格式：${func(abc,123)}" size="small" style="max-width:300px;">
+            <el-form-item label="函数名" labelWidth="80px" >
+                <el-input v-model="funcName" placeholder="输入格式：${func(abc,123)}" size="small">
                 </el-input>
                 <!--</el-form-item>-->
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click.native="checkFunc()" size="small">调试</el-button>
+            </el-form-item>
+            <el-form-item>
+            <el-button-group>
+                <!--<el-tooltip content="检查语法" placement="top-start">-->
+                <!--<el-button type="primary" icon="el-icon-view" @click.native="checkFunc()" size="small"></el-button>-->
+                <!--</el-tooltip>-->
+                <el-tooltip content="重置文档" placement="top-start">
+                    <el-button type="info"
+                               icon="el-icon-refresh"
+                               @click.native="findFunc()"
+                               size="small">
 
-                <el-button type="primary" @click.native="checkFunc()" size="small">函数调试</el-button>
-                <!--</el-form>-->
+                    </el-button>
+                </el-tooltip>
+                <el-tooltip content="保存文档" placement="top-start">
+                    <el-button type="success" icon="el-icon-document"
+                               @click.native="saveFunc()"
+                               size="small">
 
-            </el-col>
-            <el-col :span="3" style="padding-left:50px">
-                <el-button-group>
-                    <!--<el-tooltip content="检查语法" placement="top-start">-->
-                    <!--<el-button type="primary" icon="el-icon-view" @click.native="checkFunc()" size="small"></el-button>-->
-                    <!--</el-tooltip>-->
-                    <el-tooltip content="重置文档" placement="top-start">
-                        <el-button type="info"
-                                   icon="el-icon-refresh"
-                                   @click.native="findFunc()"
-                                   size="small">
-
-                        </el-button>
-                    </el-tooltip>
-                    <el-tooltip content="保存文档" placement="top-start">
-                        <el-button type="success" icon="el-icon-edit"
-                                   @click.native="saveFunc()"
-                                   size="small">
-
-                        </el-button>
-                    </el-tooltip>
-                </el-button-group>
-            </el-col>
-        </el-row>
-        <!--<div style="float: left;">-->
-        <!---->
-        <!--</div>-->
-
-
+                    </el-button>
+                </el-tooltip>
+            </el-button-group>
+            </el-form-item>
+        </el-form>
         <el-row>
             <el-col :span="16"
-                    style="margin-top: 10px;border:3px solid rgb(189, 189, 189)">
+                    style="border:3px solid rgb(189, 189, 189)">
                 <el-container>
                     <editor
                             style="font-size: 15px"
@@ -84,8 +74,8 @@
                 <!--height="810px">-->
                 <!--</codemirror>-->
             </el-col>
-            <el-col :span="8" style="margin-top: 10px;padding-left:10px;">
-                <div>
+            <el-col :span="8" style="padding-left:10px;background-color: rgb(234, 234, 234);height:815px ">
+                <div style="font-weight: 700;color: gray;font-size:14px;margin-top: 2px;">
                     测试结果：
                 </div>
                 <pre style="white-space: pre-wrap;word-wrap: break-word;padding-left:10px;">{{this.result}}
@@ -219,17 +209,7 @@
 
 <style>
 
-    .cm-s-default .cm-keyword {
-        color: #ce22e6
-    }
 
-    .cm-s-default .cm-comment {
-        color: #b5b5b5
-    }
-
-    .cm-s-default .cm-builtin {
-        color: #409eff
-    }
 
 
 </style>

@@ -38,6 +38,7 @@
                 <el-button type="primary" @click.native="initData()">录入接口信息</el-button>
                 <el-button type="primary" v-if="showNumTab === 'first'" @click.native="apiTest(apiMsgList)">测试
                 </el-button>
+
                 <el-button type="primary" icon="el-icon-view" @click.native="$refs.resultFunc.lastResult()">{{null}}</el-button>
                 <el-button type="primary" @click.native="$refs.importApiFunc.initData()">导入信息</el-button>
                 <el-button type="primary"

@@ -217,7 +217,8 @@
                                     <el-select v-model="form.module"
                                                value-key="moduleId"
                                                style="width: 150px;padding-right:5px"
-                                               placeholder="请选择模块">
+                                               placeholder="请选择模块"
+                                               @change="findApiMsg">
                                         <el-option
                                                 v-for="item in proModelData[this.form.apiMesProjectName]"
                                                 :key="item.moduleId"

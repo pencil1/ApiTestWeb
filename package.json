@@ -12,6 +12,8 @@
     "axios": "^0.18.0",
     "echarts": "^4.1.0",
     "element-ui": "^2.4.5",
+    "node-sass": "^4.11.0",
+    "sass-loader": "^7.1.0",
     "v-charts": "^1.17.9",
     "vue": "^2.5.22",
     "vue-clipboard2": "^0.2.1",

@@ -2,7 +2,11 @@
     <div class="apiEdit">
         <el-form :inline="true" style="padding: 10px 20px -10px 10px;">
             <el-form-item label="基础信息" labelWidth="80px" style="margin-bottom: 5px">
-                <el-select v-model="form.projectName" placeholder="请选择项目" size="small"  @change="changeProChoice">
+                <el-select v-model="form.projectName"
+                           placeholder="请选择项目"
+                           size="small"
+                           @change="changeProChoice"
+                           style="width: 150px;padding-right:5px">
                     <el-option
                             v-for="(item, key) in proModelData"
                             :key="key"
@@ -10,7 +14,11 @@
                     </el-option>
                 </el-select>
 
-                <el-select v-model="form.module" placeholder="请选择模块" value-key="moduleId" size="small">
+                <el-select v-model="form.module"
+                           placeholder="请选择模块"
+                           value-key="moduleId"
+                           size="small"
+                           style="width: 150px;padding-right:5px">
                     <el-option
                             v-for="item in proModelData[this.form.projectName]"
                             :key="item.moduleId"
@@ -18,7 +26,9 @@
                             :value="item">
                     </el-option>
                 </el-select>
-                <el-select v-model="form.choiceUrl" clearable placeholder="请选择url" size="small">
+                <el-select v-model="form.choiceUrl"
+                           clearable placeholder="请选择url"
+                           size="small">
                     <el-option
                             v-for="item in proUrlData[this.form.projectName]"
                             :key="item"
@@ -27,11 +37,16 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <!--</el-form>-->
-            <!--<el-form :inline="true" style="padding: 10px 20px -10px 10px;">-->
-            <el-form-item label="接口编号" label-width="80px" prop="num" v-if="apiMsgData.id"
+
+            <el-form-item label="接口编号"
+                          label-width="80px"
+                          prop="num"
+                          v-if="apiMsgData.id"
                           style="margin-bottom: 5px">
-                <el-input v-model.number="apiMsgData.num" placeholder="接口编号" size="small"
+
+                <el-input v-model.number="apiMsgData.num"
+                          placeholder="接口编号"
+                          size="small"
                           style="width: 70px;text-align:center;">
                 </el-input>
             </el-form-item>
@@ -53,30 +68,44 @@
         <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
         <el-form style="margin: 0 0 0 10px">
             <el-form-item>
-                <el-input placeholder="Enter request URL" v-model="apiMsgData.url" class="input-with-select"
-                          style="width: 80%;">
-                    <el-select v-model="apiMsgData.method" size="medium" @change="methodChange"
-                               style="width: 100px" slot="prepend" placeholder="选择请求方式">
+                <el-input placeholder="Enter request URL"
+                          v-model="apiMsgData.url"
+                          class="input-with-select"
+                          style="width: 80%;margin-right: 5px">
+                    <el-select v-model="apiMsgData.method"
+                               size="medium"
+                               @change="methodChange"
+                               style="width: 100px"
+                               slot="prepend"
+                               placeholder="选择请求方式">
                         <el-option v-for="item in methods"
                                    :key="item"
                                    :value="item"
                                    :label="item">
                         </el-option>
                     </el-select>
-                    <el-button slot="append" type="primary" @click="ParamViewStatus = !ParamViewStatus">
+                    <el-button
+                            slot="append"
+                            type="primary"
+                            @click="ParamViewStatus = !ParamViewStatus">
                         Params
                     </el-button>
                 </el-input>
-                <el-button type="primary" @click.native="saveAndRun()" size="medium"
-                           :loading="this.saveRunStatus">Send
-                </el-button>
+                <el-button type="primary"
+                           @click.native="saveAndRun()"
+                           size="medium"
+                           :loading="this.saveRunStatus"
+                           >Send</el-button>
                 <el-button type="primary" @click.native="addApiMsg()" size="medium">Save</el-button>
             </el-form-item>
         </el-form>
 
-        <el-table :data="apiMsgData.param" :row-style="{'background-color': 'rgb(250, 250, 250)'}"
-                  style="width:98.2%;margin-top:-20px;left: 10px;" size="mini"
-                  :show-header="false" v-show="this.ParamViewStatus">
+        <el-table :data="apiMsgData.param"
+                  :row-style="{'background-color': 'rgb(250, 250, 250)'}"
+                  style="width:98.2%;margin-top:-20px;left: 10px;"
+                  size="mini"
+                  :show-header="false"
+                  v-show="this.ParamViewStatus">
             <el-table-column property="key" label="Key" header-align="center" min-width="80">
                 <template slot-scope="scope">
                     <el-input v-model="scope.row.key" size="mini" placeholder="key">
@@ -91,7 +120,9 @@
             </el-table-column>
             <el-table-column property="value" label="操作" header-align="center" width="60">
                 <template slot-scope="scope">
-                    <el-button type="danger" icon="el-icon-delete" size="mini"
+                    <el-button type="danger"
+                               icon="el-icon-delete"
+                               size="mini"
                                @click.native="delTableList('param',scope.$index)">
                     </el-button>
                 </template>
@@ -164,7 +195,10 @@
 
                     </div>
                 </div>
-                <el-table :data="apiMsgData.variable" size="mini" stripe :show-header="false" height="582"
+                <el-table :data="apiMsgData.variable"
+                          size="mini"
+                          stripe
+                          :show-header="false" height="582"
                           style="background-color: rgb(250, 250, 250)"
                           v-if="form.choiceType === 'data' || form.choiceType === 'text'"
                           :row-style="{'background-color': 'rgb(250, 250, 250)'}">

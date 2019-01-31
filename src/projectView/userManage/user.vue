@@ -31,9 +31,9 @@
                             prop="status"
                             label="状态">
                         <template slot-scope="scope">
-                            <div :style="scope.row.status === 1 ? 'color:rgb(44, 202, 44)': 'color:rgb(255, 74, 74)'">
+                            <el-tag size="small" :type="scope.row.status === 1 ? 'success' : 'danger'">
                                 {{statusChineseShow(scope.row.status)}}
-                            </div>
+                            </el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -43,8 +43,13 @@
                             <el-button type="primary" icon="el-icon-edit" size="mini"
                                        @click.native="editUser(tableData[scope.$index]['user_id'])">编辑
                             </el-button>
-                            <el-button type="primary" size="mini"
-                                       @click.native="changeUserStatus(tableData[scope.$index]['user_id'])">置换状态
+                            <el-button type="danger" size="mini"
+                                       v-show="scope.row.status === 1"
+                                       @click.native="changeUserStatus(tableData[scope.$index]['user_id'])">冻结
+                            </el-button>
+                            <el-button type="success" size="mini"
+                                       v-show="scope.row.status === 0"
+                                       @click.native="changeUserStatus(tableData[scope.$index]['user_id'])">恢复
                             </el-button>
                             <el-button type="danger" icon="el-icon-delete" size="mini"
                                        @click.native="sureView(delUser,tableData[scope.$index]['user_id'])">删除

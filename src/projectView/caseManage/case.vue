@@ -18,15 +18,7 @@
             <el-form-item>
                 <el-button type="primary" icon="el-icon-search" @click.native="findSet()">搜索</el-button>
                 <el-button type="primary" @click.native="$refs.caseEditFunc.initCaseData()">添加接口用例</el-button>
-                <el-button type="primary" @click.native="runScene(caseList,true)">批量运行</el-button>
-                <!--<el-button type="primary" icon="el-icon-search" @click.native="findOldScenes()">搜索旧数据</el-button>-->
-                <el-switch
-                        v-model="switchStatus"
-                        active-color="#13ce66"
-                        inactive-color="#ff4949"
-                        active-text="取消生成报告"
-                >
-                </el-switch>
+                <el-button type="primary" @click.native="runScene(caseList,true,true)">批量运行</el-button>
             </el-form-item>
 
         </el-form>
@@ -42,9 +34,6 @@
                                       <span class="el-dropdown-link" style="color: #4ae2d5">
                                         操作<i class="el-icon-arrow-down el-icon--right"></i>
                                       </span>
-                                    <!--<el-button size="mini" type="info">-->
-                                    <!--操作<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
-                                    <!--</el-button>-->
                                     <el-dropdown-menu slot="dropdown">
                                         <el-dropdown-item command="add">添加</el-dropdown-item>
                                         <el-dropdown-item command="edit">编辑</el-dropdown-item>
@@ -52,16 +41,6 @@
                                         <el-dropdown-item command="del">删除</el-dropdown-item>
                                     </el-dropdown-menu>
                                 </el-dropdown>
-                                <!--<el-button-group style="float:right;">-->
-                                <!--<el-button size="mini" type="primary" @click.native="$refs.setEditFunc.initSet()">添加-->
-                                <!--</el-button>-->
-                                <!--<el-button size="mini" type="primary" @click.native="$refs.setEditFunc.editSet()">编辑-->
-                                <!--</el-button>-->
-                                <!--<el-button size="mini" type="success"-->
-                                <!--@click.native="$refs.setEditFunc.stickSet(setTempData.setId)">置顶-->
-                                <!--</el-button>-->
-                                <!--<el-button size="mini" type="danger" @click.native="sureView(delSet)">删除</el-button>-->
-                                <!--</el-button-group>-->
                             </el-col>
                         </el-row>
                         <el-row>
@@ -197,7 +176,6 @@
         name: 'modeManage',
         data() {
             return {
-                switchStatus: true,
                 defaultProps: {
                     children: 'children',
                     label: 'label'
@@ -338,7 +316,7 @@
                     }
                 )
             },
-            runScene(sceneIds, status = false) {
+            runScene(sceneIds, status = false, reportStatus = false) {
                 let _sceneIds = [];
                 if (status) {
                     for (let i = 0; i < sceneIds.length; i++) {
@@ -350,7 +328,7 @@
                 }
                 this.loading = true;
                 this.$axios.post(this.$api.runCaseApi, {
-                    'reportStatus': this.switchStatus,
+                    'reportStatus': reportStatus,
                     'sceneIds': _sceneIds,
                     'projectName': this.form.projectName
                 }).then((response) => {
@@ -372,20 +350,22 @@
                                 type: 'success',
                             });
                         }
-                        if (this.switchStatus) {
+                        if (reportStatus) {
+                            let {href} = this.$router.resolve({
+                                path: 'reportShow',
+                                query: {reportId: response.data['data']['report_id']}
+                            });
+                            window.open(href, '_blank');
+
+
+                        }
+                        else {
                             let tempData = {'details': [{'records': [], 'in_out': {'out': ''}}]};
 
                             for (let i = 0; i < response['data']['data']['data']['details'].length; i++) {
                                 tempData['details'][0]['records'] = tempData['details'][0]['records'].concat(response['data']['data']['data']['details'][i]['records'])
                             }
                             this.$refs.resultFunc.showData(tempData);
-                        }
-                        else {
-                            let {href} = this.$router.resolve({
-                                path: 'reportShow',
-                                query: {reportId: response.data['data']['report_id']}
-                            });
-                            window.open(href, '_blank');
                         }
 
                     }
