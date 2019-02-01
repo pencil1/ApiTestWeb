@@ -1,5 +1,6 @@
 <template>
     <div class="caseManage" v-loading="this.loading">
+
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目、模块" labelWidth="110px">
                 <el-select v-model="form.projectName"
@@ -36,7 +37,7 @@
             <el-form-item>
                 <el-button type="primary" icon="el-icon-search" @click.native="findModule()">搜索</el-button>
                 <el-button type="primary" @click.native="initData()">录入接口信息</el-button>
-                <el-button type="primary" v-if="showNumTab === 'first'" @click.native="apiTest(apiMsgList)">测试
+                <el-button type="primary" @click.native="apiTest(apiMsgList)">测试
                 </el-button>
 
                 <el-button type="primary" icon="el-icon-view" @click.native="$refs.resultFunc.lastResult()">{{null}}</el-button>

@@ -19,6 +19,7 @@
         v-model="showData">
         </el-input>
         </div>
+
         <el-dialog title="用例转化" :visible.sync="testCase.viewStatus" width="30%">
             <el-form :inline="true" class="demo-form-inline">
                 <el-form-item label="文件地址">

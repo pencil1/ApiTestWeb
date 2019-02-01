@@ -9832,6 +9832,13 @@ v-charts@^1.17.9:
     numerify "1.2.9"
     utils-lite "0.1.10"
 
+v-contextmenu@^2.8.0:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/v-contextmenu/-/v-contextmenu-2.8.0.tgz#ee930c974d7a7282451583889ab70c3db03098ad"
+  integrity sha512-Cj5iYDI4R4cwjLKF0vSJChVrQNWUjgV780Fc0gPwZNUxa3ZsRh94whhSOUdGVEURQaapNQ/4RXTqrKB310eGuw==
+  dependencies:
+    vue "^2.5.16"
+
 validate-npm-package-license@^3.0.1:
   version "3.0.4"
   resolved "http://registry.npm.taobao.org/validate-npm-package-license/download/validate-npm-package-license-3.0.4.tgz#fc91f6b9c7ba15c857f4cb2c5defeec39d4f410a"
@@ -9984,7 +9991,7 @@ vue2-ace-editor@0.0.13:
   dependencies:
     brace "^0.11.0"
 
-vue@^2.5.22:
+vue@^2.5.16, vue@^2.5.22:
   version "2.5.22"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.22.tgz#3bf88041af08b8539c37b268b70ca79245e9cc30"
   integrity sha512-pxY3ZHlXNJMFQbkjEgGVMaMMkSV1ONpz+4qB55kZuJzyJOhn6MSy/YZdzhdnumegNzVTL/Dn3Pp4UrVBYt1j/g==

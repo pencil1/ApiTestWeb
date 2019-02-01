@@ -16,7 +16,7 @@
                 </el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click.native="findSet()">搜索</el-button>
+                <el-button  type="primary" icon="el-icon-search" @click.native="findSet()">搜索</el-button>
                 <el-button type="primary" @click.native="$refs.caseEditFunc.initCaseData()">添加接口用例</el-button>
                 <el-button type="primary" @click.native="runScene(caseList,true,true)">批量运行</el-button>
             </el-form-item>
@@ -45,18 +45,19 @@
                         </el-row>
                         <el-row>
                             <el-scrollbar wrapStyle="height:740px;">
-                                <el-tree
-                                        ref="testTree"
-                                        @node-click="handleNodeClick"
-                                        class="filter-tree"
-                                        highlight-current
-                                        node-key="id"
-                                        :data="setDataList"
-                                        :props="defaultProps"
+                                    <el-tree
 
-                                >
-                                </el-tree>
+                                            ref="testTree"
+                                            @node-click="handleNodeClick"
+                                            class="filter-tree"
+                                            highlight-current
+                                            node-key="id"
+                                            :data="setDataList"
+                                            :props="defaultProps"
+                                    >
+                                    </el-tree>
                             </el-scrollbar>
+
                             <el-pagination
                                     small
                                     @current-change="handleSetCurrentChange"
@@ -155,7 +156,6 @@
 
         <result ref="resultFunc">
         </result>
-
     </div>
 </template>
 
@@ -214,6 +214,7 @@
 
 
         methods: {
+
             handleNodeClick(data) {
                 this.setTempData.setId = data['id'];
                 this.setTempData.name = data['label'];
@@ -227,14 +228,11 @@
             dropdownSetEvent(command) {
                 if (command === 'add') {
                     this.$refs.setEditFunc.initSet()
-                }
-                else if (command === 'edit') {
+                } else if (command === 'edit') {
                     this.$refs.setEditFunc.editSet()
-                }
-                else if (command === 'stick') {
+                } else if (command === 'stick') {
                     this.$refs.setEditFunc.stickSet(this.setTempData.setId)
-                }
-                else if (command === 'del') {
+                } else if (command === 'del') {
                     this.sureView(this.delSet)
                 }
             },
@@ -322,8 +320,7 @@
                     for (let i = 0; i < sceneIds.length; i++) {
                         _sceneIds.push(sceneIds[i].sceneId);
                     }
-                }
-                else {
+                } else {
                     _sceneIds.push(sceneIds)
                 }
                 this.loading = true;
@@ -342,8 +339,7 @@
                             if (response.data['error']) {
                                 this.$refs.errorViewFunc.showData(response.data['error']);
                             }
-                        }
-                        else {
+                        } else {
                             this.$message({
                                 showClose: true,
                                 message: response.data['msg'],
@@ -358,8 +354,7 @@
                             window.open(href, '_blank');
 
 
-                        }
-                        else {
+                        } else {
                             let tempData = {'details': [{'records': [], 'in_out': {'out': ''}}]};
 
                             for (let i = 0; i < response['data']['data']['data']['details'].length; i++) {

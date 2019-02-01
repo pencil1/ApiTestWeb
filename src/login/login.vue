@@ -10,11 +10,7 @@
                     class="page-login--content"
                     flex="dir:top main:justify cross:center box:justify">
                 <div class="page-login--content-header">
-                    <p class="page-login--content-header-motto">
-                        时间是一切财富中最宝贵的财富。 <span>—— 德奥弗拉斯多</span>
-                    </p>
                 </div>
-
                 <div
                         class="page-login--content-main"
                         flex="dir:top main:center cross:center">
@@ -57,10 +53,9 @@
                 <div class="page-login--content-footer">
 
                     <p class="page-login--content-footer-copyright">
-                        <a href="https://github.com/pencil1/ApiTestWeb">ApiTestWeb 作品</a> |
-                        <a href="https://github.com/pencil1/ApiTestManage">ApiTestManage 作品</a>
+                        <a href="https://github.com/pencil1/ApiTestWeb" target="view_window">ApiTestWeb 作品</a> |
+                        <a href="https://github.com/pencil1/ApiTestManage" target="view_window">ApiTestManage 作品</a>
                     </p>
-
 
                 </div>
             </div>
@@ -131,6 +126,8 @@
 </script>
 
 <style lang="scss">
+
+
     .page-login {
         @extend %unable-select;
         $backgroundColor: #F0F2F5;

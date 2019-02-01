@@ -1,39 +1,13 @@
 <template>
     <div class="test">
-        <el-form :model="caseData">
-
-            <el-form-item label="名字" :label-width="caseData.formLabelWidth"
-            >
-                <el-input v-model="caseData.name" auto-complete="off">
-                </el-input>
-            </el-form-item>
-            <el-form-item label="账号" :label-width="caseData.formLabelWidth"
-                          prop="num"
-            >
-                <el-input v-model.number="caseData.username" auto-complete="off">
-                </el-input>
-            </el-form-item>
-            <el-form-item label="密码" :label-width="caseData.formLabelWidth"
-                          prop="desc">
-                <el-input v-model="caseData.password" auto-complete="off">
-                </el-input>
-            </el-form-item>
-        </el-form>
-        <el-button type="primary"
-                   @click.native="findCases()" size="small">注册
-        </el-button>
-        <el-button type="primary"
-                   @click.native="findCases1()" size="small">确 定1
-        </el-button>
-        <el-button type="primary"
-                   @click.native="findCases2()" size="small">登录
-        </el-button>
-        <el-button type="primary"
-                   @click.native="findCases3()" size="small">登出
-        </el-button>
-        <el-button type="primary"
-                   @click.native="print()" size="small">测试
-        </el-button>
+        <div class="contextmenu-pad" v-contextmenu:contextmenu>
+            右键点击此区域
+        </div>
+        <v-contextmenu ref="contextmenu">
+            <v-contextmenu-item @click="handleClick">菜单1</v-contextmenu-item>
+            <v-contextmenu-item @click="handleClick">菜单2</v-contextmenu-item>
+            <v-contextmenu-item @click="handleClick">菜单3</v-contextmenu-item>
+        </v-contextmenu>
     </div>
 </template>
 
@@ -65,6 +39,12 @@
             this.$store.commit(types.TITLE, 'Login');
         },
         methods: {
+            handleClick (vm, event) {
+                this.$message({
+                    message: `你点击了${vm.$slots.default[0].text}`,
+                    type: 'info'
+                })
+            },
             querySearch(queryString, cb) {
                 // 调用 callback 返回建议列表的数据
                 cb(this.restaurants1);

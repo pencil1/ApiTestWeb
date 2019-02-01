@@ -8,6 +8,8 @@ import router from './router-config'
 import store from './store/store'
 // import VueClipboard from 'vue-clipboard2'
 import pie from 'v-charts/lib/pie.common'
+import contentmenu from 'v-contextmenu'
+import 'v-contextmenu/dist/index.css'
 import histogram from 'v-charts/lib/histogram.common'
 import ring from 'v-charts/lib/ring.common'
 // import './assets/styles/entirety.css'
@@ -27,6 +29,7 @@ Vue.component(ring.name, ring);
 // Vue.use(VueCodeMirror)
 Vue.use(base);
 Vue.use(ElementUI);
+Vue.use(contentmenu)
 // Vue.use(VueResource);
 // Vue.use(VueClipboard);
 new Vue({

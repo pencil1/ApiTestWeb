@@ -14,6 +14,7 @@
                 <el-button type="primary" @click.native="initProjectData()">添加项目
                 </el-button>
             </el-form-item>
+
         </el-form>
 
         <el-tabs value="first" style="padding-left: 10px">
@@ -105,7 +106,7 @@
                             <el-table :data="environment.environmentTest" size="mini" stripe :show-header="false">
                                 <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.value" size="mini" placeholder="value">
+                                        <el-input v-model="scope.row.value" size="mini" placeholder="http://127.0.0.1:8010">
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -122,7 +123,7 @@
                             <el-table :data="environment.environmentDevelop" size="mini" stripe :show-header="false">
                                 <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.value" size="mini" placeholder="value">
+                                        <el-input v-model="scope.row.value" size="mini" placeholder="http://127.0.0.1:8010">
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -139,7 +140,7 @@
                             <el-table :data="environment.environmentProduction" size="mini" stripe :show-header="false">
                                 <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.value" size="mini" placeholder="value">
+                                        <el-input v-model="scope.row.value" size="mini" placeholder="http://127.0.0.1:8010">
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -156,7 +157,7 @@
                             <el-table :data="environment.environmentStandby" size="mini" stripe :show-header="false">
                                 <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.value" size="mini" placeholder="value">
+                                        <el-input v-model="scope.row.value" size="mini" placeholder="http://127.0.0.1:8010">
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -290,7 +291,12 @@
             }
         },
         methods: {
-
+            handleClick (vm, event) {
+                this.$message({
+                    message: `你点击了${vm.$slots.default[0].text}`,
+                    type: 'info'
+                })
+            },
 
             proHandleCurrentChange(val) {
                 this.currentPage = val;
