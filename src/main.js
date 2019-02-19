@@ -29,7 +29,7 @@ Vue.component(ring.name, ring);
 // Vue.use(VueCodeMirror)
 Vue.use(base);
 Vue.use(ElementUI);
-Vue.use(contentmenu)
+Vue.use(contentmenu);
 // Vue.use(VueResource);
 // Vue.use(VueClipboard);
 new Vue({

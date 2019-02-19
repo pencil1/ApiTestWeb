@@ -181,6 +181,7 @@
                     <div style="border:1px solid rgb(234, 234, 234) ">
                         <el-container>
                             <editor
+                                    v-contextmenu:contextmenu
                                     style="font-size: 15px"
                                     v-model="apiMsgData.jsonVariable"
                                     @init="editorInit"
@@ -339,6 +340,10 @@
             </el-tab-pane>
         </el-tabs>
 
+        <v-contextmenu ref="contextmenu">
+            <v-contextmenu-item @click="handleClick">clear</v-contextmenu-item>
+        </v-contextmenu>
+
         <result ref="resultFunc">
         </result>
 
@@ -421,6 +426,9 @@
                 require('brace/mode/json');
                 require('brace/theme/chrome');
                 require('brace/snippets/json')
+            },
+            handleClick() {
+                this.apiMsgData.jsonVariable = ''
             },
             changeProChoice() {
                 this.form.module = '';

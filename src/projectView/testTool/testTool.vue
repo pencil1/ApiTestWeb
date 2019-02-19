@@ -3,7 +3,7 @@
         <div style="margin: 10px;padding-left: 10px">
             <el-button type="primary" @click.native="initCase(1)" size="small">测试用例转化</el-button>
             <el-button type="primary" @click.native="initCase(2)" size="small">测试用例转化2</el-button>
-            <el-button type="primary" @click.native="buildIdentity()" size="small">生成身份证</el-button>
+            <el-button type="primary" @click.native="buildIdentity()" size="small">生成身份证12</el-button>
             <!--<el-button type="primary" size="small" @click.native="dealSql()">执行语句</el-button>-->
             <!--<el-button type="primary" size="small" @click.native="optimizeError()">错误信息优化显示</el-button>-->
             <!--<el-button type="primary" size="small" @click.native="sqlData1()">123</el-button>-->

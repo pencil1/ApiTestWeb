@@ -13,7 +13,12 @@
                             :value="item.name">
                     </el-option>
                 </el-select>
-                <el-select v-model="form.config" placeholder="请选择配置" clearable value-key="configId" style="width: 150px"
+                <el-select
+                        v-model="form.config"
+                        placeholder="请选择配置"
+                        clearable
+                        value-key="configId"
+                        style="width: 150px"
                           >
                     <el-option
 

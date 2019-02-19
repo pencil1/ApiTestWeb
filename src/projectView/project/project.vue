@@ -16,7 +16,6 @@
             </el-form-item>
 
         </el-form>
-
         <el-tabs value="first" style="padding-left: 10px">
             <el-tab-pane label="项目列表" name="first" class="table_padding">
 
@@ -291,13 +290,6 @@
             }
         },
         methods: {
-            handleClick (vm, event) {
-                this.$message({
-                    message: `你点击了${vm.$slots.default[0].text}`,
-                    type: 'info'
-                })
-            },
-
             proHandleCurrentChange(val) {
                 this.currentPage = val;
                 this.findProject()

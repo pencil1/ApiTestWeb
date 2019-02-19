@@ -7,7 +7,6 @@ import Header from './projectView/header.vue'
 import caseManage from './projectView/apiMessage/apiMsg.vue'
 
 import manage from './projectView/manage.vue'
-import test from './projectView/test/index.vue'
 import modelManage from './projectView/module/module.vue'
 
 import projectManage from './projectView/project/project.vue'
@@ -130,15 +129,6 @@ const routes = [
                 components: {
                     Header: Header,
                     Manage: sceneManage,
-                }
-            },
-            {
-                path: 'test',
-                meta: {
-                    requireAuth: true,
-                },
-                components: {
-                    Manage: test,
                 }
             },
             {

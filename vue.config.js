@@ -30,7 +30,6 @@ module.exports = {
                 changeOrigin: true,
             }
         },
-
     },
     css: {
         loaderOptions: {

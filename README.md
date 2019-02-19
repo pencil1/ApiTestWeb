@@ -8,12 +8,11 @@
 ## Environment
 
 1. 首先安装  node  版本8以上即可; 确保 node -V
-2. 安装 yarn、cnpm 工具包
+2. 安装 yarn 工具包
 3. 命令都是在项目根目录下执行
 ```
 npm install -g yarn
 
-npm install -g cnpm
 
 ```
 
