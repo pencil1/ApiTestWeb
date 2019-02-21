@@ -110,7 +110,7 @@
                                                @click.native="runScene(caseAll[scope.$index]['sceneId'])">运行
                                     </el-button>
                                     <el-button type="danger" icon="el-icon-delete" size="mini"
-                                               @click.native="sureView(delCase,caseAll[scope.$index]['sceneId'])">
+                                               @click.native="sureView(delCase,caseAll[scope.$index]['sceneId'],caseAll[scope.$index]['name'])">
                                         删除
                                     </el-button>
                                 </template>
@@ -233,7 +233,7 @@
                 } else if (command === 'stick') {
                     this.$refs.setEditFunc.stickSet(this.setTempData.setId)
                 } else if (command === 'del') {
-                    this.sureView(this.delSet)
+                    this.sureView(this.delSet,null,this.setTempData.name )
                 }
             },
             findCase() {

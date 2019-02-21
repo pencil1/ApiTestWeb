@@ -114,8 +114,9 @@
             },
             createFunc() {
                 this.$axios.post(this.$api.createFuncApi, {'funcName': this.comparator}).then((response) => {
-                        this.messageShow(this, response);
-                        this.getFuncAddress()
+                        if(this.messageShow(this, response)){
+                            this.getFuncAddress()
+                        }
                     }
                 )
             },

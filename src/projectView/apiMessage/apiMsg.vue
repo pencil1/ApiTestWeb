@@ -19,7 +19,7 @@
                         clearable
                         value-key="configId"
                         style="width: 150px"
-                          >
+                >
                     <el-option
 
                             v-for="item in configData[this.form.projectName]"
@@ -35,8 +35,8 @@
                 </el-input>
             </el-form-item>
             <!--<el-form-item label="套件名称" v-if="showNumTab === 'third'">-->
-                <!--<el-input placeholder="请输入" v-model="form.suiteName" clearable>-->
-                <!--</el-input>-->
+            <!--<el-input placeholder="请输入" v-model="form.suiteName" clearable>-->
+            <!--</el-input>-->
             <!--</el-form-item>-->
 
             <el-form-item>
@@ -45,7 +45,8 @@
                 <el-button type="primary" @click.native="apiTest(apiMsgList)">测试
                 </el-button>
 
-                <el-button type="primary" icon="el-icon-view" @click.native="$refs.resultFunc.lastResult()">{{null}}</el-button>
+                <el-button type="primary" icon="el-icon-view" @click.native="$refs.resultFunc.lastResult()">{{null}}
+                </el-button>
                 <el-button type="primary" @click.native="$refs.importApiFunc.initData()">导入信息</el-button>
                 <el-button type="primary"
                            v-if="form.config !== null && form.config !== '' "
@@ -60,29 +61,29 @@
                             style="border:1px solid;border-color: #ffffff rgb(234, 234, 234) #ffffff #ffffff;">
                         <el-row>
                             <el-col style="border:1px solid;border-color: #ffffff #ffffff rgb(234, 234, 234) #ffffff;padding:2px">
-                                    <el-dropdown @command="dropdownEvent" style="float:right;">
+                                <el-dropdown @command="dropdownEvent" style="float:right;">
                                       <span class="el-dropdown-link" style="color: #4ae2d5">
                                         操作<i class="el-icon-arrow-down el-icon--right"></i>
                                       </span>
-                                        <!--<el-button size="mini" type="info">-->
-                                            <!--操作<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
-                                        <!--</el-button>-->
-                                        <el-dropdown-menu slot="dropdown">
-                                            <el-dropdown-item command="add">添加</el-dropdown-item>
-                                            <el-dropdown-item command="edit">编辑</el-dropdown-item>
-                                            <el-dropdown-item command="stick">置顶</el-dropdown-item>
-                                            <el-dropdown-item command="del">删除</el-dropdown-item>
-                                        </el-dropdown-menu>
-                                    </el-dropdown>
-                                    <!--<el-button size="mini" type="primary" @click.native="initModuleData()">添加-->
+                                    <!--<el-button size="mini" type="info">-->
+                                    <!--操作<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
                                     <!--</el-button>-->
-                                    <!--<el-button size="mini" type="primary" @click.native="editModule()">编辑-->
-                                    <!--</el-button>-->
-                                    <!--<el-button size="mini" type="success"-->
-                                    <!--@click.native="stickModule()">置顶-->
-                                    <!--</el-button>-->
-                                    <!--<el-button size="mini" type="danger" @click.native="sureView(delModule)">删除-->
-                                    <!--</el-button>-->
+                                    <el-dropdown-menu slot="dropdown">
+                                        <el-dropdown-item command="add">添加</el-dropdown-item>
+                                        <el-dropdown-item command="edit">编辑</el-dropdown-item>
+                                        <el-dropdown-item command="stick">置顶</el-dropdown-item>
+                                        <el-dropdown-item command="del">删除</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                                <!--<el-button size="mini" type="primary" @click.native="initModuleData()">添加-->
+                                <!--</el-button>-->
+                                <!--<el-button size="mini" type="primary" @click.native="editModule()">编辑-->
+                                <!--</el-button>-->
+                                <!--<el-button size="mini" type="success"-->
+                                <!--@click.native="stickModule()">置顶-->
+                                <!--</el-button>-->
+                                <!--<el-button size="mini" type="danger" @click.native="sureView(delModule)">删除-->
+                                <!--</el-button>-->
                             </el-col>
                         </el-row>
                         <el-row>
@@ -152,7 +153,7 @@
                                         复制
                                     </el-button>
                                     <el-button type="danger" icon="el-icon-delete" size="mini"
-                                               @click.native="sureDelCase(ApiMsgTableData[scope.$index]['apiMsgId'])">
+                                               @click.native="sureView(delApi,ApiMsgTableData[scope.$index]['apiMsgId'],ApiMsgTableData[scope.$index]['name'])">
                                         删除
                                     </el-button>
                                 </template>
@@ -320,18 +321,15 @@
                     }
                 )
             },
-            dropdownEvent(command){
-                if (command === 'add'){
+            dropdownEvent(command) {
+                if (command === 'add') {
                     this.initModuleData()
-                }
-                else if (command === 'edit'){
+                } else if (command === 'edit') {
                     this.editModule()
-                }
-                else if (command === 'stick'){
+                } else if (command === 'stick') {
                     this.stickModule()
-                }
-                else if (command === 'del'){
-                    this.sureView(this.delModule)
+                } else if (command === 'del') {
+                    this.sureView(this.delModule, null, this.form.module.name)
                 }
             },
             handleCurrentChange(val) {
@@ -393,18 +391,8 @@
                     this.$refs.apiFunc.editCopyApiMsg(apiMsgId, status);
                 }, 0)
             },
-            sureDelCase(apiMsgId) {
-                this.$confirm('删除该接口信息,会同步删除用例中引用到该接口的执行接口,确定要删除吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.delCases(apiMsgId)
-                }).catch(() => {
-                });
 
-            },
-            delCases(apiMsgId) {
+            delApi(apiMsgId) {
                 this.$axios.post(this.$api.delApiApi, {'apiMsgId': apiMsgId}).then((response) => {
                         this.messageShow(this, response);
                         this.form.apiName = null;
@@ -432,8 +420,7 @@
                             if (response.data['error']) {
                                 this.$refs.errorViewFunc.showData(response.data['error']);
                             }
-                        }
-                        else {
+                        } else {
                             this.$message({
                                 showClose: true,
                                 message: response.data['msg'],
@@ -549,8 +536,7 @@
                                     this.$refs.testTree.setCurrentKey(this.form.module.moduleId);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
                                 });
                                 this.findApiMsg();
-                            }
-                            else {
+                            } else {
                                 this.ApiMsgTableData = []
                             }
 

@@ -228,7 +228,7 @@
                                     </el-select>
                                 </el-form-item>
                                 <el-form-item label="">
-                                    <el-input placeholder="请输入用例" v-model="form.caseName" style="width: 150px">
+                                    <el-input placeholder="请输入用例" v-model="form.apiName" style="width: 150px">
                                     </el-input>
                                 </el-form-item>
                                 <el-form-item>

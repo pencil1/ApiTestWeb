@@ -48,6 +48,15 @@
                             prop="status"
                             label="状态"
                             min-width="100">
+                        <template slot-scope="scope">
+                            <!--<div :style="scope.row.read_status === '已读' ? 'color:#2bef2b': 'color:rgb(255, 74, 74)'">-->
+                            <!--{{scope.row.read_status}}-->
+                            <!--</div>-->
+                            <el-tag size="small" :type="scope.row.status === '创建' ?
+                             'info' :  scope.row.status === '启动' ? 'success' : 'warning'">
+                                {{scope.row.status}}
+                            </el-tag>
+                        </template>
                     </el-table-column>
                     <el-table-column
                             label="操作"
@@ -75,7 +84,7 @@
                                        @click.native="runNow(tableData[scope.$index]['id'])">单次运行
                             </el-button>
                             <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="sureView(delTask,tableData[scope.$index]['id'])">删除
+                                       @click.native="sureView(delTask,tableData[scope.$index]['id'],tableData[scope.$index]['task_name'])">删除
                             </el-button>
                         </template>
                     </el-table-column>

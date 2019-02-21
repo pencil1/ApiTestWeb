@@ -60,7 +60,7 @@
                                        @click.native="editProject(tableData[scope.$index]['id'])">编辑
                             </el-button>
                             <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="sureView(delProject,tableData[scope.$index]['id'])">删除
+                                       @click.native="sureView(delProject,tableData[scope.$index]['id'],tableData[scope.$index]['name'])">删除
                             </el-button>
                         </template>
                     </el-table-column>

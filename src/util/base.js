@@ -1,13 +1,13 @@
-
 exports.install = function (Vue) {
-    Vue.prototype.sureView = function (func, arg) {
+    Vue.prototype.sureView = function (func, arg, msg) {
         // this.$alert('确认要删除吗?', '确认框', {
         //                 confirmButtonText: '确定',
         //                 callback: action => {
         //                     func(arg);
         //                 }
         //             });
-        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+        this.$confirm('此操作将永久删除' + '<strong style="color: red;">' + msg + '</strong>' + ',是否继续?', '提示', {
+            dangerouslyUseHTMLString: true,
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
@@ -27,9 +27,8 @@ exports.install = function (Vue) {
             //     return 'error'
             // }
             return false
-        }
-        else {
-            if(response.data['msg']){
+        } else {
+            if (response.data['msg']) {
                 _this.$message({
                     showClose: true,
                     message: response.data['msg'],

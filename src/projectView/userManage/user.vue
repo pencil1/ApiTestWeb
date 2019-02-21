@@ -43,7 +43,7 @@
                             <el-button type="primary" icon="el-icon-edit" size="mini"
                                        @click.native="editUser(tableData[scope.$index]['user_id'])">编辑
                             </el-button>
-                            <el-button type="danger" size="mini"
+                            <el-button type="info" size="mini"
                                        v-show="scope.row.status === 1"
                                        @click.native="changeUserStatus(tableData[scope.$index]['user_id'])">冻结
                             </el-button>
@@ -52,7 +52,7 @@
                                        @click.native="changeUserStatus(tableData[scope.$index]['user_id'])">恢复
                             </el-button>
                             <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="sureView(delUser,tableData[scope.$index]['user_id'])">删除
+                                       @click.native="sureView(delUser,tableData[scope.$index]['user_id'],tableData[scope.$index]['userName']+'用户')">删除
                             </el-button>
                         </template>
                     </el-table-column>

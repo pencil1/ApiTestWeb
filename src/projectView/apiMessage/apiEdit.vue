@@ -762,6 +762,7 @@
                         this.addTableList('param')
                     }
                     let strParam = '';
+
                     for (let i in this.apiMsgData.param) {
                         if (parseInt(i) + 2 === this.apiMsgData.param.length && this.apiMsgData.param[i].key) {
                             if (this.apiMsgData.param[i].value) {
@@ -811,18 +812,22 @@
                     for (let i = 0; i < strParam.length; i++) {
                         if (strParam[i].indexOf('=') !== -1) {
                             let _array = strParam[i].split("=");
+
                             let d = _array[0];
                             _array.splice(0, 1);
+
                             this.apiMsgData.param.push({
                                 key: d,
-                                value: unescape(_array.join("="))
+                                value: _array.join("=")
                             });
+                            // console.log(unescape(_array.join("=")))
                         }
                         else {
                             this.apiMsgData.param.push({key: strParam[i], value: ''});
                         }
                     }
                 }
+
             }
             ,
             monitorMethod(newValue) {

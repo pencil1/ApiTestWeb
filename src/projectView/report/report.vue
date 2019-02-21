@@ -87,7 +87,7 @@
                             @click.native="downReport(tableData[scope.$index]['id'])">下载
                             </el-button>
                             <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="sureView(delReport, tableData[scope.$index]['id'])">删除
+                                       @click.native="sureView(delReport, tableData[scope.$index]['id'],'该报告')">删除
                             </el-button>
                         </template>
                     </el-table-column>
