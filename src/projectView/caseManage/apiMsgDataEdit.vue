@@ -22,7 +22,7 @@
                     </el-form>
                 </el-tab-pane>
                 <el-tab-pane label="url参数" style="margin-top: 10px">
-                    <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
+                    <el-button type="primary" icon="el-icon-circle-plus-outline" size="mini"
                                @click="addCaseParam()">添加
                     </el-button>
                     <el-switch
@@ -36,19 +36,26 @@
                     <el-table :data="apiCaseData.param" size="mini" stripe>
                         <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.key" size="medium">
+                                <el-input v-model="scope.row.key" size="mini">
                                 </el-input>
                             </template>
                         </el-table-column>
                         <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.value" size="medium">
+                                <el-input v-model="scope.row.value" size="mini"
+                                          :id="'url_input' + scope.$index "
+                                          type="textarea"
+                                          rows=1
+                                          @focus="showLine('url_input', scope.$index)"
+                                          @input="changeLine()"
+                                          @blur="resetLine(scope.$index)">
                                 </el-input>
                             </template>
                         </el-table-column>
                         <el-table-column label="备注" header-align="center" minWidth="80">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.remark" size="medium">
+                                <el-input v-model="scope.row.remark" size="mini"
+                                         >
                                 </el-input>
                             </template>
                         </el-table-column>
@@ -62,11 +69,11 @@
                     </el-table>
                 </el-tab-pane>
                 <el-tab-pane label="接口参数" style="margin-top: 10px">
-                    <el-button type="primary" size="small"
+                    <el-button type="primary" size="mini"
                                :disabled="form.choiceTypeStatus"
                                @click="addCaseVariable()">添加
                     </el-button>
-                    <el-select v-model="form.choiceType" placeholder="请选择" size="small" disabled>
+                    <el-select v-model="form.choiceType" placeholder="请选择" size="mini" disabled>
                         <el-option
                                 v-for="(item) in choiceVariableType"
                                 :key="item.label"
@@ -112,7 +119,7 @@
                               v-if="form.choiceType === 'data'">
                         <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.key" size="medium">
+                                <el-input v-model="scope.row.key" size="mini">
                                 </el-input>
                             </template>
                         </el-table-column>
@@ -120,7 +127,7 @@
                             <template slot-scope="scope">
                                 <!--<el-input v-module="scope.row.param_type" size="medium">-->
                                 <!--</el-input>-->
-                                <el-select v-model="scope.row.param_type" size="medium">
+                                <el-select v-model="scope.row.param_type" size="mini">
                                     <el-option v-for="item in paramTypes" :key="item" :value="item">
                                     </el-option>
                                 </el-select>
@@ -131,7 +138,7 @@
                                 <div v-if="scope.row.param_type === 'file'">
                                     <el-row>
                                         <el-col :span="17">
-                                            <el-input v-model="scope.row.value" size="medium" :disabled="true">
+                                            <el-input v-model="scope.row.value" size="mini" :disabled="true">
                                             </el-input>
                                         </el-col>
                                         <el-col :span="1">
@@ -154,7 +161,13 @@
 
                                 </div>
                                 <div v-else>
-                                    <el-input v-model="scope.row.value" size="medium">
+                                    <el-input v-model="scope.row.value" size="mini"
+                                              :id="'data2_input' + scope.$index "
+                                              type="textarea"
+                                              rows=1
+                                              @focus="showLine('data2_input', scope.$index)"
+                                              @input="changeLine()"
+                                              @blur="resetLine(scope.$index)">
                                     </el-input>
                                 </div>
                             </template>
@@ -162,7 +175,7 @@
                         </el-table-column>
                         <el-table-column label="备注" header-align="center" minWidth="80">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.remark" size="medium">
+                                <el-input v-model="scope.row.remark" size="mini">
                                 </el-input>
                             </template>
                         </el-table-column>
@@ -176,7 +189,7 @@
                     </el-table>
                 </el-tab-pane>
                 <el-tab-pane label="信息提取" style="margin-top: 10px">
-                    <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
+                    <el-button type="primary" icon="el-icon-circle-plus-outline" size="mini"
                                @click="addCaseExtract()">添加
                     </el-button>
                     <el-switch
@@ -190,19 +203,19 @@
                     <el-table :data="apiCaseData.extract" size="mini" stripe>
                         <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.key" size="medium">
+                                <el-input v-model="scope.row.key" size="mini">
                                 </el-input>
                             </template>
                         </el-table-column>
                         <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.value" size="medium">
+                                <el-input v-model="scope.row.value" size="mini">
                                 </el-input>
                             </template>
                         </el-table-column>
                         <el-table-column label="备注" header-align="center" minWidth="80">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.remark" size="medium">
+                                <el-input v-model="scope.row.remark" size="mini">
                                 </el-input>
                             </template>
                         </el-table-column>
@@ -216,7 +229,7 @@
                     </el-table>
                 </el-tab-pane>
                 <el-tab-pane label="接口判断" style="margin-top: 10px">
-                    <el-button type="primary" icon="el-icon-circle-plus-outline" size="small"
+                    <el-button type="primary" icon="el-icon-circle-plus-outline" size="mini"
                                @click="addCaseValidate()">添加
                     </el-button>
                     <el-switch
@@ -231,7 +244,7 @@
                     <el-table :data="apiCaseData.validate" size="mini" stripe>
                         <el-table-column property="key" label="Key" header-align="center" minWidth="100">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.key" size="medium">
+                                <el-input v-model="scope.row.key" size="mini">
                                 </el-input>
                             </template>
                         </el-table-column>
@@ -247,7 +260,7 @@
                         </el-table-column>
                         <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.value" size="medium">
+                                <el-input v-model="scope.row.value" size="mini">
                                 </el-input>
                             </template>
                         </el-table-column>
@@ -305,6 +318,7 @@
                 paramVisible: false,
                 temp_num: '',
                 tempNum: '',
+                cell:Object(),
                 form: {
                     choiceTypeStatus: false,
                     choiceType: 'data',
@@ -330,7 +344,36 @@
                 require('brace/theme/chrome');
                 require('brace/snippets/json')
             },
+            resetLine() {
+                // this.cell.removeAttribute("style");
+                // this.cell.removeAttribute("zIndex");
+                // this.cell.removeAttribute("marginTop");
+                // this.cell.removeAttribute("position");
+                this.cell.style.height = '18px';
+            },
+            showLine(prefix,n) {
+                this.cell = document.getElementById(prefix + n);
+                this.cell.style.height = this.cell.scrollHeight + 'px';
+                // this.cell.style.position = 'fixed';
+                // this.cell.style.zIndex = '1000';
+                // this.cell.style.width = 'calc(70% - 225px)';
+                // this.cell.style.marginTop = '-26px';
+
+
+            },
+            changeLine() {
+                if (this.cell.style.height !== this.cell.scrollHeight + 'px') {
+                    let i = parseInt(this.cell.style.height.substring(0, this.cell.style.height.length - 2));
+                    if (i - this.cell.scrollHeight === 2) {
+                        this.cell.style.height = (i - 18) + 'px'
+                    }
+                    this.cell.style.height = this.cell.scrollHeight + 'px';
+                }
+
+
+            },
             initData(i) {
+                console.log(this.apiCases[i])
                 this.apiCaseData.param = this.apiCases[i]['param'];
                 this.apiCaseData.variable = this.apiCases[i]['variable'];
                 this.apiCaseData.json_variable = this.apiCases[i]['json_variable'];

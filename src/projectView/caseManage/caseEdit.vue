@@ -116,11 +116,17 @@
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column property="value" label="操作" header-align="center" width="80">
+                        <el-table-column property="value" label="操作" header-align="center" width="140">
                             <template slot-scope="scope">
-                                <el-button type="danger" icon="el-icon-delete" size="mini"
-                                           @click.native="delConfigVariable(scope.$index)">删除
+                                <el-button-group>
+                                <el-button type="info" icon="my-icon-jiantou-xiangshang" @click.native="upNum(scope.$index)" size="mini">{{null}}
                                 </el-button>
+                                    <el-button type="info" icon="my-icon-jiantou-xiangxia" @click.native="downNum(scope.$index)" size="mini">{{null}}
+                                    </el-button>
+                                <el-button type="danger"  size="mini"
+                                           @click.native="delConfigVariable(scope.$index)"> 删除
+                                </el-button>
+                                </el-button-group>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -131,23 +137,21 @@
                         <el-col :span="stepSpan">
                             <el-row :gutter="24"
                                     style="margin-top:10px;color: rgb(171, 139, 149);font-weight: 500;font-size: 14px;
-                                    width: 100%;
-                                            border-style:solid;
-                                           border-color: #ffffff #ffffff rgb(234, 234, 234) #ffffff;
-                                           border-width: 1px;">
-                                <el-col :span="3" style="padding-left: 20px;padding-top: 3px">
+                                           width: 100%;border-style:solid;border-width: 1px;
+                                           border-color: #ffffff #ffffff rgb(234, 234, 234) #ffffff;">
+                                <el-col :span="3" style="padding-left: 20px">
                                     状态
                                 </el-col>
-                                <el-col :span="5" style="padding-top: 3px">
+                                <el-col :span="5" >
                                     步骤名称
                                 </el-col>
-                                <el-col :span="4" style="padding-top: 3px">
+                                <el-col :span="4" >
                                     接口名称
                                 </el-col>
-                                <el-col :span="4" style="padding-top: 3px">
+                                <el-col :span="4">
                                     次数
                                 </el-col>
-                                <el-col :span="6" style="padding-left: 50px;padding-top: 3px">
+                                <el-col :span="6" style="padding-left: 50px;">
                                     操作
                                 </el-col>
                                 <el-col :span="2">
@@ -503,39 +507,39 @@
                     this.form.config = null
                 }
             },
-            // upNum(i) {
-            //     if (i === 0) {
-            //         this.$message({
-            //             showClose: true,
-            //             message: '当前序号已最高',
-            //             type: 'warning',
-            //         });
-            //         return
-            //     }
-            //     let d = this.caseData.apiCases[i];
-            //     this.caseData.apiCases.splice(i, 1);
-            //     this.caseData.apiCases.splice(i - 1, 0, d);
-            //     this.againSort()
-            // },
-            // downNum(i) {
-            //     if (i === (this.caseData.apiCases.length - 1)) {
-            //         this.$message({
-            //             showClose: true,
-            //             message: '当前序号已最低',
-            //             type: 'warning',
-            //         });
-            //         return
-            //     }
-            //     let d = this.caseData.apiCases[i];
-            //     this.caseData.apiCases.splice(i, 1);
-            //     this.caseData.apiCases.splice(i + 1, 0, d);
-            //     this.againSort()
-            // },
-            // againSort() {
-            //     for (let i = 0; i < this.caseData.apiCases.length; i++) {
-            //         this.caseData.apiCases[i]['num'] = i
-            //     }
-            // },
+            upNum(i) {
+                if (i === 0) {
+                    this.$message({
+                        showClose: true,
+                        message: '当前序号已最高',
+                        type: 'warning',
+                    });
+                    return
+                }
+                let d = this.caseData.variable[i];
+                this.caseData.variable.splice(i, 1);
+                this.caseData.variable.splice(i - 1, 0, d);
+                this.againSort()
+            },
+            downNum(i) {
+                if (i === (this.caseData.variable.length - 1)) {
+                    this.$message({
+                        showClose: true,
+                        message: '当前序号已最低',
+                        type: 'warning',
+                    });
+                    return
+                }
+                let d = this.caseData.variable[i];
+                this.caseData.variable.splice(i, 1);
+                this.caseData.variable.splice(i + 1, 0, d);
+                this.againSort()
+            },
+            againSort() {
+                for (let i = 0; i < this.caseData.variable.length; i++) {
+                    this.caseData.variable[i]['num'] = i
+                }
+            },
             delApiCase(i) {
                 //判断caseList中是否存在id，存在则在数据库删除信息，否则在前端删除临时数据
                 if ('id' in this.caseData.apiCases[i]) {

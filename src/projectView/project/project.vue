@@ -180,19 +180,19 @@
                     <el-table :data="projectData.variable" stripe :show-header="false">
                         <el-table-column label="Key" header-align="center" minWidth="50">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.key" size="small" placeholder="key">
+                                <el-input v-model="scope.row.key" size="mini" placeholder="key">
                                 </el-input>
                             </template>
                         </el-table-column>
                         <el-table-column label="Value" header-align="center" minWidth="80">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.value" size="small" placeholder="value">
+                                <el-input v-model="scope.row.value" size="mini" placeholder="value">
                                 </el-input>
                             </template>
                         </el-table-column>
                         <el-table-column label="备注" header-align="center" width="150">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.remark" size="small" placeholder="备注">
+                                <el-input v-model="scope.row.remark" size="mini" placeholder="备注">
                                 </el-input>
                             </template>
                         </el-table-column>
@@ -213,13 +213,13 @@
                     <el-table :data="projectData.header" stripe :show-header="false">
                         <el-table-column label="Key" header-align="center" minWidth="50">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.key" size="small" placeholder="key">
+                                <el-input v-model="scope.row.key" size="mini" placeholder="key">
                                 </el-input>
                             </template>
                         </el-table-column>
                         <el-table-column label="Value" header-align="center" minWidth="80">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.value" size="small" placeholder="value">
+                                <el-input v-model="scope.row.value" size="mini" placeholder="value">
                                 </el-input>
                             </template>
                         </el-table-column>

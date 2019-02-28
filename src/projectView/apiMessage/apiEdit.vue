@@ -1,5 +1,6 @@
 <template>
     <div class="apiEdit">
+
         <el-form :inline="true" style="padding: 10px 20px -10px 10px;">
             <el-form-item label="基础信息" labelWidth="80px" style="margin-bottom: 5px">
                 <el-select v-model="form.projectName"
@@ -95,7 +96,8 @@
                            @click.native="saveAndRun()"
                            size="medium"
                            :loading="this.saveRunStatus"
-                           >Send</el-button>
+                >Send
+                </el-button>
                 <el-button type="primary" @click.native="addApiMsg()" size="medium">Save</el-button>
             </el-form-item>
         </el-form>
@@ -114,8 +116,24 @@
             </el-table-column>
             <el-table-column property="value" label="Value" header-align="center" min-width="200">
                 <template slot-scope="scope">
-                    <el-input v-model="scope.row.value" size="mini" placeholder="value">
+                    <el-input v-model="scope.row.value"
+                              size="mini" placeholder="value"
+                              :id="'param_input' + scope.$index "
+                              type="textarea"
+                              rows=1
+                              @focus="showLine('param_input', scope.$index)"
+                              @input="changeLine()"
+                              @blur="resetLine(scope.$index)"
+
+                    >
                     </el-input>
+                    <!--<el-input v-model="scope.row.value" :id="'param_input' + scope.$index "-->
+                    <!--size="mini" placeholder="value"-->
+                    <!--type="textarea"-->
+                    <!--autosize-->
+                    <!--@focus="showLine(scope.$index)"-->
+                    <!--@blur="resetLine(scope.$index)">-->
+                    <!--</el-input>-->
                 </template>
             </el-table-column>
             <el-table-column property="value" label="操作" header-align="center" width="60">
@@ -244,7 +262,14 @@
                                 </el-row>
                             </div>
                             <div v-else>
-                                <el-input v-model="scope.row.value" size="mini">
+                                <el-input v-model="scope.row.value"
+                                          :id="'data_input' + scope.$index "
+                                          type="textarea"
+                                          rows=1
+                                          @focus="showLine('data_input', scope.$index)"
+                                          @input="changeLine()"
+                                          @blur="resetLine()"
+                                          size="mini">
                                 </el-input>
                             </div>
                         </template>
@@ -349,6 +374,7 @@
 
         <errorView ref="errorViewFunc">
         </errorView>
+
     </div>
 </template>
 
@@ -375,6 +401,7 @@
                 },
                 bodyShow: 'second',
                 paramTypes: ['string', 'file'],
+                cell: Object(),
                 saveRunStatus: false,
                 ParamViewStatus: false,
                 //上传文件时，记录数组下当前数据的下标，用于把返回文件路径地址赋值
@@ -448,8 +475,7 @@
                 try {
                     this.apiMsgData.jsonVariable = JSON.parse(this.apiMsgData.jsonVariable);
                     this.apiMsgData.jsonVariable = JSON.stringify(this.apiMsgData.jsonVariable, null, 4);
-                }
-                catch (err) {
+                } catch (err) {
                     this.$message({
                         showClose: true,
                         message: 'json格式错误',
@@ -473,20 +499,19 @@
                         let form = new FormData();
                         form.append("file", file.raw);
                         form.append("skip", '1');
-                        this.$axios.post('/api/upload',form ).then((response) => {
+                        this.$axios.post('/api/upload', form).then((response) => {
                                 this.$message({
                                     showClose: true,
                                     message: response.data['msg'],
                                     type: 'success',
                                 });
-                            this.apiMsgData.variable[this.temp_num]['value'] = response.data['data'];
+                                this.apiMsgData.variable[this.temp_num]['value'] = response.data['data'];
                             }
                         );
                     }).catch(() => {
 
                     });
-                }
-                else {
+                } else {
                     if (response['msg']) {
                         this.$message({
                             showClose: true,
@@ -525,8 +550,7 @@
                 if (this.apiMsgData.jsonVariable) {
                     try {
                         JSON.parse(this.apiMsgData.jsonVariable)
-                    }
-                    catch (err) {
+                    } catch (err) {
                         this.$message({
                             showClose: true,
                             message: 'json格式错误',
@@ -536,11 +560,11 @@
                     }
                 }
                 if (!this.form.projectName) {
-                        this.$message({
-                            showClose: true,
-                            message: '请选择项目',
-                            type: 'warning',
-                        });
+                    this.$message({
+                        showClose: true,
+                        message: '请选择项目',
+                        type: 'warning',
+                    });
                     return
                 }
                 return this.$axios.post(this.$api.addApiApi, {
@@ -581,8 +605,7 @@
                             //     // this.$emit('findApiMsg');
                             //     return true
                             // }
-                        }
-                        else {
+                        } else {
                             if (this.messageShow(this, response)) {
                                 this.apiMsgData.id = response.data['api_msg_id'];
                                 this.apiMsgData.num = response.data['num'];
@@ -600,8 +623,7 @@
                         if (status === 'edit') {
                             this.apiMsgData.num = response.data['data']['num'];
                             this.apiMsgData.id = apiMsgId;
-                        }
-                        else {
+                        } else {
                             this.apiMsgData.num = '';
                             this.apiMsgData.id = '';
                         }
@@ -616,8 +638,7 @@
                         this.apiMsgData.variable = response.data['data']['variable'];
                         if (!response.data['data']['json_variable']) {
                             this.apiMsgData.jsonVariable = ''
-                        }
-                        else {
+                        } else {
                             this.apiMsgData.jsonVariable = response.data['data']['json_variable'];
                         }
 
@@ -646,8 +667,7 @@
                             message: res.data['msg'],
                             type: 'warning',
                         });
-                    }
-                    else {
+                    } else {
                         this.apiMsgData.id = res.data['api_msg_id'];
                         this.apiMsgData.num = res.data['num'];
                         this.$emit('apiTest', [{'apiMsgId': res.data['api_msg_id'], 'num': '1'}], false);
@@ -670,8 +690,7 @@
                             if (response.data['error']) {
                                 this.$refs.errorViewFunc.showData(response.data['error']);
                             }
-                        }
-                        else {
+                        } else {
                             this.$message({
                                 showClose: true,
                                 message: response.data['msg'],
@@ -684,37 +703,57 @@
                     }
                 )
             },
+            resetLine() {
+                // this.cell.removeAttribute("style");
+                // this.cell.removeAttribute("zIndex");
+                // this.cell.removeAttribute("marginTop");
+                // this.cell.removeAttribute("position");
+                this.cell.style.height = '18px';
+            },
+            showLine(prefix,n) {
+                this.cell = document.getElementById(prefix + n);
+                this.cell.style.height = this.cell.scrollHeight + 'px';
+                // this.cell.style.position = 'fixed';
+                // this.cell.style.zIndex = '1000';
+                // this.cell.style.width = 'calc(70% - 225px)';
+                // this.cell.style.marginTop = '-26px';
+
+
+            },
+            changeLine() {
+                if (this.cell.style.height !== this.cell.scrollHeight + 'px') {
+                    let i = parseInt(this.cell.style.height.substring(0, this.cell.style.height.length - 2));
+                    if (i - this.cell.scrollHeight === 2) {
+                        this.cell.style.height = (i - 18) + 'px'
+                    }
+                    this.cell.style.height = this.cell.scrollHeight + 'px';
+                }
+
+
+            },
             delTableList(type, i) {
                 if (type === 'variable') {
                     this.apiMsgData.variable.splice(i, 1);
-                }
-                else if (type === 'header') {
+                } else if (type === 'header') {
                     this.apiMsgData.header.splice(i, 1);
-                }
-                else if (type === 'validate') {
+                } else if (type === 'validate') {
                     this.apiMsgData.validate.splice(i, 1);
-                }
-                else if (type === 'extract') {
+                } else if (type === 'extract') {
                     this.apiMsgData.extract.splice(i, 1);
-                }
-                else if (type === 'param') {
+                } else if (type === 'param') {
                     this.apiMsgData.param.splice(i, 1);
                 }
             },
             addTableList(type) {
                 if (type === 'variable') {
                     this.apiMsgData.variable.push({key: null, value: null, param_type: 'string', remark: null});
-                }
-                else if (type === 'header') {
+                } else if (type === 'header') {
                     this.apiMsgData.header.push({key: null, value: null});
-                }
-                else if (type === 'validate') {
+                } else if (type === 'validate') {
                     this.apiMsgData.validate.push({key: null, value: null});
-                }
-                else if (type === 'extract') {
+                } else if (type === 'extract') {
                     this.apiMsgData.extract.push({key: null, value: null, remark: null});
-                }
-                else if (type === 'param') {
+                } else if (type === 'param') {
                     this.apiMsgData.param.push({key: null, value: null});
                 }
             },
@@ -757,8 +796,7 @@
                 handler: function () {
                     if (this.apiMsgData.param.length === 0) {
                         this.addTableList('param')
-                    }
-                    else if (this.apiMsgData.param[this.apiMsgData.param.length - 1]['key'] || this.apiMsgData.param[this.apiMsgData.param.length - 1]['value']) {
+                    } else if (this.apiMsgData.param[this.apiMsgData.param.length - 1]['key'] || this.apiMsgData.param[this.apiMsgData.param.length - 1]['value']) {
                         this.addTableList('param')
                     }
                     let strParam = '';
@@ -767,12 +805,10 @@
                         if (parseInt(i) + 2 === this.apiMsgData.param.length && this.apiMsgData.param[i].key) {
                             if (this.apiMsgData.param[i].value) {
                                 strParam += this.apiMsgData.param[i].key + '=' + this.apiMsgData.param[i].value;
-                            }
-                            else {
+                            } else {
                                 strParam += this.apiMsgData.param[i].key;
                             }
-                        }
-                        else if (this.apiMsgData.param[i].key) {
+                        } else if (this.apiMsgData.param[i].key) {
                             strParam += this.apiMsgData.param[i].key + '=' + this.apiMsgData.param[i].value + '&';
                         }
                     }
@@ -781,8 +817,7 @@
                     }
                     if (strParam) {
                         this.apiMsgData.url = this.apiMsgData.url.split("?")[0] + '?' + strParam
-                    }
-                    else {
+                    } else {
                         this.apiMsgData.url = this.apiMsgData.url.split("?")[0]
                     }
 
@@ -821,8 +856,7 @@
                                 value: _array.join("=")
                             });
                             // console.log(unescape(_array.join("=")))
-                        }
-                        else {
+                        } else {
                             this.apiMsgData.param.push({key: strParam[i], value: ''});
                         }
                     }
@@ -897,5 +931,7 @@
     }
 </script>
 <style>
-
+    .el-textarea__inner {
+        overflow-y: hidden;
+    }
 </style>
