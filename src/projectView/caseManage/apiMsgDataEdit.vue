@@ -46,6 +46,7 @@
                                           :id="'url_input' + scope.$index "
                                           type="textarea"
                                           rows=1
+                                          resize="none"
                                           @focus="showLine('url_input', scope.$index)"
                                           @input="changeLine()"
                                           @blur="resetLine(scope.$index)">
@@ -165,6 +166,7 @@
                                               :id="'data2_input' + scope.$index "
                                               type="textarea"
                                               rows=1
+                                              resize="none"
                                               @focus="showLine('data2_input', scope.$index)"
                                               @input="changeLine()"
                                               @blur="resetLine(scope.$index)">
@@ -373,7 +375,6 @@
 
             },
             initData(i) {
-                console.log(this.apiCases[i])
                 this.apiCaseData.param = this.apiCases[i]['param'];
                 this.apiCaseData.variable = this.apiCases[i]['variable'];
                 this.apiCaseData.json_variable = this.apiCases[i]['json_variable'];

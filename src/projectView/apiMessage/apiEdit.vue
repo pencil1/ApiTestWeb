@@ -124,7 +124,7 @@
                               @focus="showLine('param_input', scope.$index)"
                               @input="changeLine()"
                               @blur="resetLine(scope.$index)"
-
+                              resize="none"
                     >
                     </el-input>
                     <!--<el-input v-model="scope.row.value" :id="'param_input' + scope.$index "-->
@@ -269,7 +269,8 @@
                                           @focus="showLine('data_input', scope.$index)"
                                           @input="changeLine()"
                                           @blur="resetLine()"
-                                          size="mini">
+                                          size="mini"
+                                          resize="none">
                                 </el-input>
                             </div>
                         </template>
@@ -710,7 +711,7 @@
                 // this.cell.removeAttribute("position");
                 this.cell.style.height = '18px';
             },
-            showLine(prefix,n) {
+            showLine(prefix, n) {
                 this.cell = document.getElementById(prefix + n);
                 this.cell.style.height = this.cell.scrollHeight + 'px';
                 // this.cell.style.position = 'fixed';
@@ -931,7 +932,5 @@
     }
 </script>
 <style>
-    .el-textarea__inner {
-        overflow-y: hidden;
-    }
+
 </style>

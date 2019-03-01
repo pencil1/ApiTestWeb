@@ -298,5 +298,7 @@
     .el-popper[x-placement^=bottom] {
         margin-top: 5px;
     }
-
+    .el-textarea__inner {
+        overflow-y: hidden;
+    }
 </style>
