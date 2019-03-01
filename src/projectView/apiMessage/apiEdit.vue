@@ -838,11 +838,13 @@
                 }
 
                 let url = this.apiMsgData.url.split("?");
-                if (!url[1]) {
+                url.splice(0, 1);
+                url = url.join("?");
+                if (!url) {
                     this.apiMsgData.param = [{key: '', value: ''}];
                     return
                 }
-                let strParam = url[1].split("&");
+                let strParam = url.split("&");
                 if (strParam[0]) {
                     this.apiMsgData.param = Array();
                     for (let i = 0; i < strParam.length; i++) {
