@@ -8,7 +8,7 @@
                 </el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click.native="findProject()">
+                <el-button type="primary" icon="el-icon-search" @click.native="proHandleCurrentChange(1)">
                     搜索
                 </el-button>
                 <el-button type="primary" @click.native="initProjectData()">添加项目
@@ -298,6 +298,7 @@
                 this.sizePage = val;
                 this.findProject()
             },
+
             findProject() {
                 this.$axios.post(this.$api.findProApi, {
                     'projectName': this.form.projectName,

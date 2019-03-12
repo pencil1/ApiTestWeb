@@ -18,7 +18,7 @@
                 </el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click.native="findTask()">搜索</el-button>
+                <el-button type="primary" icon="el-icon-search" @click.native="handleCurrentChange(1)">搜索</el-button>
                 <el-button type="primary" @click.native="initTaskData()">添加任务
                 </el-button>
             </el-form-item>

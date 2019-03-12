@@ -210,7 +210,7 @@
                                     <el-select v-model="form.apiMesProjectName"
                                                style="width: 150px;padding-right:5px"
                                                placeholder="请选择项目"
-                                               @change="changeModuleChoice">
+                                               @change="changeModuleChoice('p')">
                                         <el-option
                                                 v-for="(item, key) in proModelData"
                                                 :key="key"
@@ -222,7 +222,7 @@
                                                value-key="moduleId"
                                                style="width: 150px;padding-right:5px"
                                                placeholder="请选择模块"
-                                               @change="findApiMsg">
+                                               @change="changeModuleChoice('m')">
                                         <el-option
                                                 v-for="item in proModelData[this.form.apiMesProjectName]"
                                                 :key="item.moduleId"
@@ -494,10 +494,15 @@
                     this.form.set = null
                 }
             },
-            changeModuleChoice() {
-                this.form.module = this.proModelData[this.form.apiMesProjectName][0];
+            changeModuleChoice(pM) {
+                if (pM === 'p'){
+                    this.form.module = this.proModelData[this.form.apiMesProjectName][0];
+                }
                 this.radio = false;
+                this.apiMsgPage.currentPage = 1;
+                this.apiMsgPage.sizePage = 15;
                 this.findApiMsg();
+
             },
             changeConfigChoice() {
                 if (this.configData[this.form.sceneVariableProjectName][0]) {

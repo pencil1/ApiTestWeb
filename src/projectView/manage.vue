@@ -3,7 +3,7 @@
     <div id="manage">
         <el-container>
 
-            <el-aside width="auto" style="min-height: 937px">
+            <el-aside width="auto" style="min-height: 936px">
                 <!--<div style="margin: 0 0 40px;line-height: 30px;">-->
                     <!--测试平台-->
                 <!--</div>-->

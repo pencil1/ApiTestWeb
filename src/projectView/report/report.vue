@@ -27,7 +27,7 @@
                 <!--</el-select>-->
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click.native="findReport()" size="small">搜索</el-button>
+                <el-button type="primary" @click.native="handleCurrentChange(1)" size="small">搜索</el-button>
                 <!--<el-button type="primary" @click.native="reset()" size="small">重置</el-button>-->
                 <!--<el-button type="primary" size="small" @click.native="runProject()">跑项目</el-button>-->
                 <!--<el-button type="primary" size="small"@click.native="runModel()" >跑模块</el-button>-->

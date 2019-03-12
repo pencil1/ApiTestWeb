@@ -5,7 +5,7 @@
             <el-form-item label="项目、模块" labelWidth="110px">
                 <el-select v-model="form.projectName"
                            placeholder="请选择项目"
-                           @change="clearChoice"
+                           @change="initProjectChoice"
                            style="width: 150px;padding-right:5px">
                     <el-option
                             v-for="(item) in proAndIdData"
@@ -30,17 +30,17 @@
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="接口名称" v-if="showNumTab !== 'third'">
+            <el-form-item label="接口名称" v-if="numTab !== 'third'">
                 <el-input placeholder="请输入" v-model="form.apiName" clearable style="width: 150px">
                 </el-input>
             </el-form-item>
-            <!--<el-form-item label="套件名称" v-if="showNumTab === 'third'">-->
+            <!--<el-form-item label="套件名称" v-if="numTab === 'third'">-->
             <!--<el-input placeholder="请输入" v-model="form.suiteName" clearable>-->
             <!--</el-input>-->
             <!--</el-form-item>-->
 
             <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click.native="findModule()">搜索</el-button>
+                <el-button type="primary" icon="el-icon-search" @click.native="handleCurrentChange(1)">搜索</el-button>
                 <el-button type="primary" @click.native="initData()">录入接口信息</el-button>
                 <el-button type="primary" @click.native="apiTest(apiMsgList)">测试
                 </el-button>
@@ -54,14 +54,14 @@
                 </el-button>
             </el-form-item>
         </el-form>
-        <el-tabs v-model="showNumTab" class="table_padding" @tab-click="lookResult">
+        <el-tabs v-model="numTab" class="table_padding" @tab-click="tabChange">
             <el-tab-pane label="接口信息" name="first">
                 <el-row>
                     <el-col :span="3"
                             style="border:1px solid;border-color: #ffffff rgb(234, 234, 234) #ffffff #ffffff;">
                         <el-row>
                             <el-col style="border:1px solid;border-color: #ffffff #ffffff rgb(234, 234, 234) #ffffff;padding:2px">
-                                <el-dropdown @command="dropdownEvent" style="float:right;">
+                                <el-dropdown @command="moduleCommand" style="float:right;">
                                       <span class="el-dropdown-link" style="color: #4ae2d5">
                                         操作<i class="el-icon-arrow-down el-icon--right"></i>
                                       </span>
@@ -90,7 +90,7 @@
                             <el-scrollbar wrapStyle="height:740px;">
                                 <el-tree
                                         ref="testTree"
-                                        @node-click="handleNodeClick"
+                                        @node-click="treeClick"
                                         class="filter-tree"
                                         highlight-current
                                         node-key="moduleId"
@@ -145,11 +145,11 @@
                                     width="320">
                                 <template slot-scope="scope">
                                     <el-button type="primary" icon="el-icon-edit" size="mini"
-                                               @click.native="editCopyCase(ApiMsgTableData[scope.$index]['apiMsgId'],'edit')">
+                                               @click.native="editCopyApi(ApiMsgTableData[scope.$index]['apiMsgId'],'edit')">
                                         编辑
                                     </el-button>
                                     <el-button type="primary" icon="el-icon-tickets" size="mini"
-                                               @click.native="editCopyCase(ApiMsgTableData[scope.$index]['apiMsgId'],'copy')">
+                                               @click.native="editCopyApi(ApiMsgTableData[scope.$index]['apiMsgId'],'copy')">
                                         复制
                                     </el-button>
                                     <el-button type="danger" icon="el-icon-delete" size="mini"
@@ -248,16 +248,14 @@
         data() {
             return {
                 apiEditViewStatus: false,//接口配置组件显示控制
-                showNumTab: 'first',
-                loading: false,
+                numTab: 'first',
+                loading: false,  //  页面加载状态开关
                 proModelData: '',
                 proAndIdData: '',
                 configData: '',
                 proUrlData: null,
                 ApiMsgTableData: Array(),//接口表单数据
-                suiteTableData: Array(),//套件表单数据
                 apiMsgList: Array(),
-                suiteList: Array(),
                 funcAddress: null,
                 moduleDataList: [],
                 defaultProps: {
@@ -301,6 +299,7 @@
 
         methods: {
             initBaseData() {
+                //  初始化页面所需要的数据
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
                         this.proModelData = response.data['data'];
                         this.proAndIdData = response.data['pro_and_id'];
@@ -321,7 +320,8 @@
                     }
                 )
             },
-            dropdownEvent(command) {
+            moduleCommand(command) {
+                //  模块处理函数，根据命令执行不同操作
                 if (command === 'add') {
                     this.initModuleData()
                 } else if (command === 'edit') {
@@ -333,10 +333,8 @@
                 }
             },
             handleCurrentChange(val) {
-                if (this.showNumTab === 'first') {
-                    this.apiMsgPage.currentPage = val;
-                    this.findApiMsg();
-                }
+                this.apiMsgPage.currentPage = val;
+                this.findApiMsg();
             },
             handleSizeChange(val) {
                 this.apiMsgPage.sizePage = val;
@@ -345,6 +343,7 @@
             },
 
             findApiMsg() {
+                //  查询接口信息
                 if (this.form.module === null) {
                     this.$message({
                         showClose: true,
@@ -368,6 +367,7 @@
                 )
             },
             initData() {
+                //  初始化数据并进入接口编辑tab
                 if (!this.form.module) {
                     this.$message({
                         showClose: true,
@@ -377,22 +377,23 @@
                     return
                 }
                 this.apiEditViewStatus = true;
-                this.showNumTab = 'second';
+                this.numTab = 'second';
                 setTimeout(() => {
                     this.$refs.apiFunc.initApiMsgData();
                 }, 0)
-                // this.$refs.suiteFunc.initData();
             },
 
-            editCopyCase(apiMsgId, status) {
+            editCopyApi(apiMsgId, status) {
+                //  编辑或者复制接口信息
                 this.apiEditViewStatus = true;
-                this.showNumTab = 'second';
+                this.numTab = 'second';
                 setTimeout(() => {
                     this.$refs.apiFunc.editCopyApiMsg(apiMsgId, status);
                 }, 0)
             },
 
             delApi(apiMsgId) {
+                //  删除接口信息
                 this.$axios.post(this.$api.delApiApi, {'apiMsgId': apiMsgId}).then((response) => {
                         this.messageShow(this, response);
                         this.form.apiName = null;
@@ -403,11 +404,10 @@
                     }
                 )
             },
-            apiTest(apiMsgData = null, suiteData = null) {
+            apiTest(apiMsgData = null) {
                 this.loading = true;
                 this.$axios.post(this.$api.runApiApi, {
                     'apiMsgData': apiMsgData,
-                    'suiteData': suiteData,
                     'projectName': this.form.projectName,
                     'configId': this.form.config.configId,
                 }).then((response) => {
@@ -441,18 +441,47 @@
                 this.$refs.apiMultipleTable.clearSelection();
                 this.$refs.suiteMultipleTable.clearSelection();
             },
-            clearChoice() {
+
+            initProjectChoice() {
+                //  当项目选择项改变时，初始化模块和配置的数据
                 this.form.config = {name: null, configId: null,};
                 this.form.module = {name: null, moduleId: null,};
-                this.findModule()
+                this.initFindModule()
             },
-            lookResult(tab) {
+
+            findModule() {
+                this.$axios.post(this.$api.findModuleApi, {
+                    'projectName': this.form.projectName,
+                    'page': this.modulePage.currentPage,
+                    'sizePage': this.modulePage.sizePage,
+                }).then((response) => {
+                        if (this.messageShow(this, response)) {
+                            this.moduleDataList = response.data['data'];
+                            this.proModelData[this.form.projectName] = response.data['all_module'];
+                            this.modulePage.total = response.data['total'];
+                            this.form.module = this.moduleDataList[0];
+                            if (this.form.module) {
+                                this.$nextTick(function () {
+                                    this.$refs.testTree.setCurrentKey(this.form.module.moduleId);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
+                                });
+                                this.findApiMsg();
+                            } else {
+                                this.ApiMsgTableData = []
+                            }
+
+                        }
+                    }
+                )
+            },
+            tabChange(tab) {
+                //  当tab切换到接口信息时，刷新列表
                 if (tab.label === '接口信息') {
                     this.findApiMsg()
                 }
             },
-            handleNodeClick(data) {
-                let index = this.moduleDataList.map(item => item.moduleId).indexOf(data['moduleId']);
+            treeClick(data) {
+                //  点击节点时，初始化数据并获取对应的接口信息
+                let index = this.moduleDataList.map(item => item.moduleId).indexOf(data['moduleId']);  //  获取当前节点的下标
                 this.form.module = this.moduleDataList[index];
                 this.apiMsgPage.currentPage = 1;
                 this.findApiMsg();
@@ -520,30 +549,7 @@
                     }
                 )
             },
-            findModule() {
-                this.$axios.post(this.$api.findModuleApi, {
-                    'projectName': this.form.projectName,
-                    'page': this.modulePage.currentPage,
-                    'sizePage': this.modulePage.sizePage,
-                }).then((response) => {
-                        if (this.messageShow(this, response)) {
-                            this.moduleDataList = response.data['data'];
-                            this.proModelData[this.form.projectName] = response.data['all_module'];
-                            this.modulePage.total = response.data['total'];
-                            this.form.module = this.moduleDataList[0];
-                            if (this.form.module) {
-                                this.$nextTick(function () {
-                                    this.$refs.testTree.setCurrentKey(this.form.module.moduleId);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
-                                });
-                                this.findApiMsg();
-                            } else {
-                                this.ApiMsgTableData = []
-                            }
 
-                        }
-                    }
-                )
-            },
 
         },
 

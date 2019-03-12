@@ -16,7 +16,7 @@
                 </el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click.native="findConfig()">
+                <el-button type="primary" icon="el-icon-search" @click.native="configHandleCurrentChange(1)">
                     搜索
                 </el-button>
                 <el-button type="primary" @click.native="$refs.configEditFunc.initConfigData()">添加配置

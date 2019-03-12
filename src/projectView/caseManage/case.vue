@@ -16,7 +16,7 @@
                 </el-input>
             </el-form-item>
             <el-form-item>
-                <el-button  type="primary" icon="el-icon-search" @click.native="findSet()">搜索</el-button>
+                <el-button  type="primary" icon="el-icon-search" @click.native="handleCaseCurrentChange(1)">搜索</el-button>
                 <el-button type="primary" @click.native="$refs.caseEditFunc.initCaseData()">添加接口用例</el-button>
                 <el-button type="primary" @click.native="runScene(caseList,true,true)">批量运行</el-button>
             </el-form-item>
@@ -316,6 +316,14 @@
             },
             runScene(sceneIds, status = false, reportStatus = false) {
                 let _sceneIds = [];
+                if(sceneIds.length === 0){
+                    this.$message({
+                        showClose: true,
+                        message: '请选择测试用例',
+                        type: 'warning',
+                    });
+                    return
+                }
                 if (status) {
                     for (let i = 0; i < sceneIds.length; i++) {
                         _sceneIds.push(sceneIds[i].sceneId);

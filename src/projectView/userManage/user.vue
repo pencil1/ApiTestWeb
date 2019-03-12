@@ -8,7 +8,7 @@
                 </el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click.native="findUser()">搜索</el-button>
+                <el-button type="primary" icon="el-icon-search" @click.native="handleCurrentChange(1)">搜索</el-button>
                 <el-button type="primary" @click.native="initUserData()">添加用户</el-button>
             </el-form-item>
         </el-form>
@@ -60,8 +60,8 @@
 
                 <div class="pagination">
                     <el-pagination
-                            @current-change="proHandleCurrentChange"
-                            @size-change="proHandleSizeChange"
+                            @current-change="handleCurrentChange"
+                            @size-change="handleSizeChange"
                             :page-size="20"
                             layout="total, sizes, prev, pager, next, jumper"
                             :total="this.total">
@@ -183,11 +183,11 @@
                 )
             },
 
-            proHandleCurrentChange(val) {
+            handleCurrentChange(val) {
                 this.currentPage = val;
                 this.findUser()
             },
-            proHandleSizeChange(val) {
+            handleSizeChange(val) {
                 this.sizePage = val;
                 this.findUser()
             },
