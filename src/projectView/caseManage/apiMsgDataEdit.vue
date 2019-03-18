@@ -22,9 +22,10 @@
                     </el-form>
                 </el-tab-pane>
                 <el-tab-pane label="url参数" style="margin-top: 10px">
-                    <el-button type="primary" icon="el-icon-circle-plus-outline" size="mini"
+                    <el-button type="primary" size="mini"
                                @click="addCaseParam()">添加
                     </el-button>
+
                     <el-switch
                             v-model="apiCaseData.statusCase.param[0]"
                             inactive-text="启动功能">
@@ -56,7 +57,7 @@
                         <el-table-column label="备注" header-align="center" minWidth="80">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.remark" size="mini"
-                                         >
+                                >
                                 </el-input>
                             </template>
                         </el-table-column>
@@ -74,14 +75,19 @@
                                :disabled="form.choiceTypeStatus"
                                @click="addCaseVariable()">添加
                     </el-button>
-                    <el-select v-model="form.choiceType" placeholder="请选择" size="mini" disabled>
-                        <el-option
-                                v-for="(item) in choiceVariableType"
-                                :key="item.label"
-                                :label="item.label"
-                                :value="item.label">
-                        </el-option>
-                    </el-select>
+
+                    <el-input type="text" v-model="form.choiceType"
+                              :placeholder="form.choiceType"
+                              disabled size="mini"
+                              style="width: 70px;margin-left: 5px;margin-right: 5px"></el-input>
+                    <!--<el-select v-model="form.choiceType" placeholder="请选择" size="mini" disabled>-->
+                        <!--<el-option-->
+                                <!--v-for="(item) in choiceVariableType"-->
+                                <!--:key="item.label"-->
+                                <!--:label="item.label"-->
+                                <!--:value="item.label">-->
+                        <!--</el-option>-->
+                    <!--</el-select>-->
                     <el-switch
                             v-model="apiCaseData.statusCase.variable[0]"
                             inactive-text="启动功能">
@@ -191,7 +197,7 @@
                     </el-table>
                 </el-tab-pane>
                 <el-tab-pane label="信息提取" style="margin-top: 10px">
-                    <el-button type="primary" icon="el-icon-circle-plus-outline" size="mini"
+                    <el-button type="primary" size="mini"
                                @click="addCaseExtract()">添加
                     </el-button>
                     <el-switch
@@ -231,7 +237,7 @@
                     </el-table>
                 </el-tab-pane>
                 <el-tab-pane label="接口判断" style="margin-top: 10px">
-                    <el-button type="primary" icon="el-icon-circle-plus-outline" size="mini"
+                    <el-button type="primary" size="mini"
                                @click="addCaseValidate()">添加
                     </el-button>
                     <el-switch
@@ -297,13 +303,6 @@
         props: ['apiCases'],
         data() {
             return {
-                options: {
-                    mode: 'application/ld+json',
-                    tabSize: 4,
-                    lineNumbers: true,
-                    lineWrapping: true,
-                    scrollbarStyle: 'simple',
-                },
                 choiceVariableType: [{
                     value: '选项1',
                     label: 'data'
@@ -318,9 +317,9 @@
                     {'value': 'length_less_than_or_equals'}],
                 paramTypes: ['string', 'file'],
                 paramVisible: false,
-                temp_num: '',
-                tempNum: '',
-                cell:Object(),
+                temp_num: '', // 为了记录上传文件时，当前数据的下标
+                tempNum: '', // 为了记录接口步骤数据列表的下标
+                cell: Object(),
                 form: {
                     choiceTypeStatus: false,
                     choiceType: 'data',
@@ -347,23 +346,16 @@
                 require('brace/snippets/json')
             },
             resetLine() {
-                // this.cell.removeAttribute("style");
-                // this.cell.removeAttribute("zIndex");
-                // this.cell.removeAttribute("marginTop");
-                // this.cell.removeAttribute("position");
+                //  重置单元格高度
                 this.cell.style.height = '18px';
             },
-            showLine(prefix,n) {
+            showLine(prefix, n) {
+                //  获取单元格的滚动条高度，并使单元格为该高度
                 this.cell = document.getElementById(prefix + n);
                 this.cell.style.height = this.cell.scrollHeight + 'px';
-                // this.cell.style.position = 'fixed';
-                // this.cell.style.zIndex = '1000';
-                // this.cell.style.width = 'calc(70% - 225px)';
-                // this.cell.style.marginTop = '-26px';
-
-
             },
             changeLine() {
+                //  当单元格高度和滚动条高度不一致时，改变单元格高度
                 if (this.cell.style.height !== this.cell.scrollHeight + 'px') {
                     let i = parseInt(this.cell.style.height.substring(0, this.cell.style.height.length - 2));
                     if (i - this.cell.scrollHeight === 2) {
@@ -371,10 +363,9 @@
                     }
                     this.cell.style.height = this.cell.scrollHeight + 'px';
                 }
-
-
             },
             initData(i) {
+                //  初始化步骤数据
                 this.apiCaseData.param = this.apiCases[i]['param'];
                 this.apiCaseData.variable = this.apiCases[i]['variable'];
                 this.apiCaseData.json_variable = this.apiCases[i]['json_variable'];
@@ -388,13 +379,11 @@
                 this.apiCaseData.downFunc = this.apiCases[i]['down_func'];
                 this.tempNum = i;
                 this.paramVisible = true;
-                if (this.form.choiceType.toString() === 'json') {
+                if (this.form.choiceType === 'json') {
                     this.form.choiceTypeStatus = true
-                }
-                else {
+                } else {
                     this.form.choiceTypeStatus = false
                 }
-
             },
             querySearch(queryString, cb) {
                 // 调用 callback 返回建议列表的数据
@@ -425,55 +414,51 @@
                 this.apiCaseData.validate.splice(i, 1);
             },
             fileChange(response, file) {
-                    if (response['status'] === 0) {
-                        // this.$message({
-                        //     showClose: true,
-                        //     message: response['msg'],
-                        //     type: 'warning',
-                        // });
-                        this.$confirm('服务器已存在相同名字文件，是否覆盖?', '提示', {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
-                            type: 'warning'
-                        }).then(() => {
-                            let form = new FormData();
-                            form.append("file", file.raw);
-                            form.append("skip", '1');
-                            this.$axios.post('/api/upload',form ).then((response) => {
-                                    this.$message({
-                                        showClose: true,
-                                        message: response.data['msg'],
-                                        type: 'success',
-                                    });
-                                    this.apiCaseData.variable[this.temp_num]['value'] = response.data['data'];
-                                }
-                            );
-                        }).catch(() => {
+                //  上传文件
+                if (response['status'] === 0) {
+                    this.$confirm('服务器已存在相同名字文件，是否覆盖?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        let form = new FormData();
+                        form.append("file", file.raw);
+                        form.append("skip", '1');
+                        this.$axios.post('/api/upload', form).then((response) => {
+                                this.$message({
+                                    showClose: true,
+                                    message: response.data['msg'],
+                                    type: 'success',
+                                });
+                                this.apiCaseData.variable[this.temp_num]['value'] = response.data['data'];
+                            }
+                        );
+                    }).catch(() => {
 
+                    });
+                } else {
+                    if (response['msg']) {
+                        this.$message({
+                            showClose: true,
+                            message: response['msg'],
+                            type: 'success',
                         });
                     }
-                    else {
-                        if (response['msg']) {
-                            this.$message({
-                                showClose: true,
-                                message: response['msg'],
-                                type: 'success',
-                            });
-                        }
-                        this.apiCaseData.variable[this.temp_num]['value'] = response['data'];
-                    }
+                    this.apiCaseData.variable[this.temp_num]['value'] = response['data'];
+                }
 
-                },
+            },
             tempNumTwo(i) {
+                //  上传文件时，记录当前数据再数组中的下标
                 this.temp_num = i;
             },
             sureConfigBtn() {
+                //  点击确定时，同步数据到步骤list
                 if (this.form.choiceType.toString() === 'json') {
                     if (this.apiCaseData.json_variable) {
                         try {
                             JSON.parse(this.apiCaseData.json_variable)
-                        }
-                        catch (err) {
+                        } catch (err) {
                             this.$message({
                                 showClose: true,
                                 message: 'json格式错误',
@@ -486,19 +471,12 @@
                 if (this.apiCaseData.downFunc) {
                     this.apiCases[this.tempNum]['down_func'] = this.apiCaseData.downFunc;
                 }
-                else {
-                    this.apiCases[this.tempNum]['down_func'] = '';
-                }
                 if (this.apiCaseData.upFunc) {
                     this.apiCases[this.tempNum]['up_func'] = this.apiCaseData.upFunc;
                 }
-                else {
-                    this.apiCases[this.tempNum]['up_func'] = '';
-                }
                 if (this.apiCaseData.name) {
                     this.apiCases[this.tempNum]['case_name'] = this.apiCaseData.name;
-                }
-                else {
+                } else {
                     this.$message({
                         showClose: true,
                         message: '请输入用例名称',
@@ -508,7 +486,6 @@
                 }
                 this.apiCases[this.tempNum]['json_variable'] = this.apiCaseData.json_variable;
                 this.paramVisible = false;
-
             },
         },
         mounted() {

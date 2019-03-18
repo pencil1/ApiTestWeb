@@ -174,7 +174,6 @@
                         )
                     }
                 )
-
             },
             editorInit() {
                 require('brace/ext/language_tools');

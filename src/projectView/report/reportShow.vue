@@ -322,7 +322,6 @@
         },
 
         methods: {
-
             handleNodeClick(i1, i2) {
                 this.showColor = [i1, i2];
                 this.meta_data = this.reportData['details'][i1]['records'][i2]['meta_data'];

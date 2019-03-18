@@ -35,7 +35,6 @@ exports.install = function (Vue) {
                     type: 'success',
                 });
             }
-
             return true
         }
     };

@@ -2,7 +2,7 @@
     <div class="sceneManage" v-loading="this.loading">
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目名称" labelWidth="110px">
-                <el-select v-model="form.projectName" placeholder="请选择项目" @change="findSet">
+                <el-select v-model="form.projectName" placeholder="请选择项目" @change="initProjectChoice">
                     <el-option
                             v-for="(item) in proAndIdData"
                             :key="item.name"
@@ -16,7 +16,8 @@
                 </el-input>
             </el-form-item>
             <el-form-item>
-                <el-button  type="primary" icon="el-icon-search" @click.native="handleCaseCurrentChange(1)">搜索</el-button>
+                <el-button type="primary" icon="el-icon-search" @click.native="handleCaseCurrentChange(1)">搜索
+                </el-button>
                 <el-button type="primary" @click.native="$refs.caseEditFunc.initCaseData()">添加接口用例</el-button>
                 <el-button type="primary" @click.native="runScene(caseList,true,true)">批量运行</el-button>
             </el-form-item>
@@ -45,26 +46,26 @@
                         </el-row>
                         <el-row>
                             <el-scrollbar wrapStyle="height:740px;">
-                                    <el-tree
+                                <el-tree
 
-                                            ref="testTree"
-                                            @node-click="handleNodeClick"
-                                            class="filter-tree"
-                                            highlight-current
-                                            node-key="id"
-                                            :data="setDataList"
-                                            :props="defaultProps"
-                                    >
-                                    </el-tree>
+                                        ref="testTree"
+                                        @node-click="handleNodeClick"
+                                        class="filter-tree"
+                                        highlight-current
+                                        node-key="id"
+                                        :data="setDataList"
+                                        :props="defaultProps"
+                                >
+                                </el-tree>
                             </el-scrollbar>
 
                             <el-pagination
                                     small
                                     @current-change="handleSetCurrentChange"
-                                    @size-change="handleSetSizeChange"
+                                    :current-page="setPage.currentPage"
                                     :page-size="30"
                                     layout="prev, pager, next"
-                                    :total="this.setPage.total">
+                                    :total="setPage.total">
                             </el-pagination>
                         </el-row>
                     </el-col>
@@ -125,7 +126,8 @@
                             <el-pagination
                                     @current-change="handleCaseCurrentChange"
                                     @size-change="handleCaseSizeChange"
-                                    :page-size="20"
+                                    :current-page="casePage.currentPage"
+                                    :page-size="casePage.sizePage"
                                     layout="total, sizes, prev, pager, next, jumper"
                                     :total="this.casePage.total">
                             </el-pagination>
@@ -181,15 +183,14 @@
                     label: 'label'
                 },
                 allSetList: '',
-                setDataList: [],
+                setDataList: [],   //  用例集合的临时数据
                 funcAddress: '',
-                tempNum: '',
-                caseList: [],
+                caseList: [],  //  临时存储被勾选的用例数据
                 proModelData: '',
                 proAndIdData: '',
                 loading: false,
                 configData: '',
-                caseAll: [],
+                caseAll: [],  //  页面table的表格数据
                 casePage: {
                     total: 1,
                     currentPage: 1,
@@ -208,10 +209,8 @@
                     projectName: '',
                     caseName: '',
                 },
-
             }
         },
-
 
         methods: {
 
@@ -233,7 +232,7 @@
                 } else if (command === 'stick') {
                     this.$refs.setEditFunc.stickSet(this.setTempData.setId)
                 } else if (command === 'del') {
-                    this.sureView(this.delSet,null,this.setTempData.name )
+                    this.sureView(this.delSet, null, this.setTempData.name)
                 }
             },
             findCase() {
@@ -251,8 +250,8 @@
                     }
                 )
             },
-
-            initCaseViewData() {
+            initData() {
+                //  初始化页面数据
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
                         this.proModelData = response.data['data'];
                         this.proAndIdData = response.data['pro_and_id'];
@@ -268,6 +267,12 @@
                         this.funcAddress = response['data']['data'];
                     }
                 );
+            },
+            initProjectChoice() {
+                //  当项目选择项改变时，初始化模块和配置的数据
+                this.setPage.currentPage = 1;
+                this.casePage.currentPage = 1;
+                this.findSet()
             },
             findSet() {
                 this.$axios.post(this.$api.findCaseSetApi, {
@@ -286,7 +291,6 @@
                                 this.findCase();
                             });
                         }
-
                     }
                 );
             },
@@ -302,10 +306,6 @@
                 this.setPage.currentPage = val;
                 this.findSet()
             },
-            handleSetSizeChange(val) {
-                this.setPage.sizePage = val;
-                this.findSet()
-            },
             delCase(caseId) {
                 this.$axios.post(this.$api.delCaseApi, {'caseId': caseId}).then((response) => {
                         this.messageShow(this, response);
@@ -315,8 +315,10 @@
                 )
             },
             runScene(sceneIds, status = false, reportStatus = false) {
+                //  status，为true时，批量运行用例，为false运行单用例
+                //  reportStatus，为true时生成报告，为false时返回临时数据
                 let _sceneIds = [];
-                if(sceneIds.length === 0){
+                if (sceneIds.length === 0) {
                     this.$message({
                         showClose: true,
                         message: '请选择测试用例',
@@ -325,6 +327,7 @@
                     return
                 }
                 if (status) {
+                    //  为true时，提取选中用例的id
                     for (let i = 0; i < sceneIds.length; i++) {
                         _sceneIds.push(sceneIds[i].sceneId);
                     }
@@ -353,35 +356,34 @@
                                 message: response.data['msg'],
                                 type: 'success',
                             });
-                        }
-                        if (reportStatus) {
-                            let {href} = this.$router.resolve({
-                                path: 'reportShow',
-                                query: {reportId: response.data['data']['report_id']}
-                            });
-                            window.open(href, '_blank');
+                            if (reportStatus) {
+                                let {href} = this.$router.resolve({
+                                    path: 'reportShow',
+                                    query: {reportId: response.data['data']['report_id']}
+                                });
+                                window.open(href, '_blank');
+                            } else {
+                                let tempData = {'details': [{'records': [], 'in_out': {'out': ''}}]};
 
-
-                        } else {
-                            let tempData = {'details': [{'records': [], 'in_out': {'out': ''}}]};
-
-                            for (let i = 0; i < response['data']['data']['data']['details'].length; i++) {
-                                tempData['details'][0]['records'] = tempData['details'][0]['records'].concat(response['data']['data']['data']['details'][i]['records'])
+                                for (let i = 0; i < response['data']['data']['data']['details'].length; i++) {
+                                    tempData['details'][0]['records'] = tempData['details'][0]['records'].concat(response['data']['data']['data']['details'][i]['records'])
+                                }
+                                this.$refs.resultFunc.showData(tempData);
                             }
-                            this.$refs.resultFunc.showData(tempData);
                         }
-
                     }
                 );
             },
 
             handleCaseSelection(val) {
+                //  勾选用例时，被勾选的用例会存到caseList
                 this.caseList = val;
             },
             cancelSelection() {
                 this.$refs.sceneMultipleTable.clearSelection();
             },
             delSet() {
+                //  删除用例集
                 this.$axios.post(this.$api.delCaseSetApi, {
                     'id': this.setTempData.setId,
                 }).then((response) => {
@@ -393,7 +395,7 @@
             },
         },
         mounted() {
-            this.initCaseViewData();
+            this.initData();
 
         },
     }

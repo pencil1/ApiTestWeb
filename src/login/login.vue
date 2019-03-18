@@ -27,12 +27,12 @@
                         <el-card shadow="never">
                             <el-form ref="loginForm" label-position="top" size="default">
                                 <el-form-item>
-                                    <el-input type="text" v-model="caseData.account" placeholder="用户名">
+                                    <el-input type="text" v-model="account" placeholder="用户名">
                                         <i slot="prepend" class="my-icon-yonghu"></i>
                                     </el-input>
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-input type="password" v-model="caseData.password" placeholder="密码">
+                                    <el-input type="password" v-model="password" placeholder="密码">
                                         <i slot="prepend" class="my-icon-jianpan"></i>
                                     </el-input>
                                 </el-form-item>
@@ -41,9 +41,8 @@
                                 </el-button>
                             </el-form>
                         </el-card>
-                        <p
-                                class="page-login--options"
-                                flex="main:justify cross:center">
+                        <p class="page-login--options"
+                           flex="main:justify cross:center">
                             <el-tooltip class="item" effect="dark" content="请联系管理员重置密码" placement="bottom">
                                 <span> 忘记密码</span>
                             </el-tooltip>
@@ -69,23 +68,9 @@
     export default {
         data() {
             return {
-                centerDialogVisible: false,
                 token: '',
-                caseData: {
-                    id: '',
-                    modelFormVisible: false,
-                    project: '',
-                    method: '',
-                    name: '',
-                    account: '',
-                    formLabelWidth: '120px',
-                    password: '',
-                    header: [],
-                    variable: [],
-                    extract: [],
-                    validate: [],
-                }
-
+                account: '',
+                password: '',
             }
         },
 
@@ -93,8 +78,8 @@
 
             login() {
                 this.$axios.post(this.$api.loginApi, {
-                    'account': this.caseData.account,
-                    'password': this.caseData.password,
+                    'account': this.account,
+                    'password': this.password,
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({

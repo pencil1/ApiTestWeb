@@ -73,8 +73,7 @@
                                         :value="item">
                                 </el-option>
                             </el-select>
-                            <el-select v-model="caseData.funcAddress" multiple placeholder="请选择导入函数文件" size="small"
-                                       >
+                            <el-select v-model="caseData.funcAddress" multiple placeholder="请选择导入函数文件" size="small">
                                 <el-option
                                         v-for="item in this.funcAddress"
                                         :key="item['value']"
@@ -119,13 +118,15 @@
                         <el-table-column property="value" label="操作" header-align="center" width="140">
                             <template slot-scope="scope">
                                 <el-button-group>
-                                <el-button type="info" icon="my-icon-jiantou-xiangshang" @click.native="upNum(scope.$index)" size="mini">{{null}}
-                                </el-button>
-                                    <el-button type="info" icon="my-icon-jiantou-xiangxia" @click.native="downNum(scope.$index)" size="mini">{{null}}
+                                    <el-button type="info" icon="my-icon-jiantou-xiangshang"
+                                               @click.native="upNum(scope.$index)" size="mini">{{null}}
                                     </el-button>
-                                <el-button type="danger"  size="mini"
-                                           @click.native="delConfigVariable(scope.$index)"> 删除
-                                </el-button>
+                                    <el-button type="info" icon="my-icon-jiantou-xiangxia"
+                                               @click.native="downNum(scope.$index)" size="mini">{{null}}
+                                    </el-button>
+                                    <el-button type="danger" size="mini"
+                                               @click.native="delConfigVariable(scope.$index)"> 删除
+                                    </el-button>
                                 </el-button-group>
                             </template>
                         </el-table-column>
@@ -142,10 +143,10 @@
                                 <el-col :span="3" style="padding-left: 20px">
                                     状态
                                 </el-col>
-                                <el-col :span="5" >
+                                <el-col :span="5">
                                     步骤名称
                                 </el-col>
-                                <el-col :span="4" >
+                                <el-col :span="4">
                                     接口名称
                                 </el-col>
                                 <el-col :span="4">
@@ -210,7 +211,7 @@
                                     <el-select v-model="form.apiMesProjectName"
                                                style="width: 150px;padding-right:5px"
                                                placeholder="请选择项目"
-                                               @change="changeModuleChoice('p')">
+                                               @change="changeModuleChoice()">
                                         <el-option
                                                 v-for="(item, key) in proModelData"
                                                 :key="key"
@@ -221,8 +222,7 @@
                                     <el-select v-model="form.module"
                                                value-key="moduleId"
                                                style="width: 150px;padding-right:5px"
-                                               placeholder="请选择模块"
-                                               @change="changeModuleChoice('m')">
+                                               placeholder="请选择模块">
                                         <el-option
                                                 v-for="item in proModelData[this.form.apiMesProjectName]"
                                                 :key="item.moduleId"
@@ -236,7 +236,7 @@
                                     </el-input>
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-button type="primary" @click.native="findApiMsg()" size="mini">
+                                    <el-button type="primary" @click.native="handleCurrentCase(1)" size="mini">
                                         搜索接口
                                     </el-button>
                                     <el-button type="primary" size="mini" @click.native="addApiData()">添加
@@ -248,14 +248,13 @@
                                     style="margin-top:10px;color: rgb(171, 139, 149);font-weight: 500;font-size: 14px;
                                             padding-left: 5px;padding-top: 3px;">
                                 <el-col :span="1">
-                                    .
+                                    &nbsp
                                 </el-col>
                                 <el-col :span="2">
                                     编号
                                 </el-col>
                                 <el-col :span="4">
                                     用例名称
-
                                 </el-col>
                                 <el-col :span="4">
                                     用例描述
@@ -265,7 +264,7 @@
                                 </el-col>
                             </el-row>
                             <draggable v-model="ApiMsgData"
-                                       :options="{group:{ name:'apiData',  pull:'clone', put:false }}"
+                                       :options="this.draggableOptions"
                             >
                                 <transition-group name="list-complete">
                                     <div v-for="(_data, index) in ApiMsgData"
@@ -301,24 +300,22 @@
                                 </transition-group>
                             </draggable>
                             <!--<el-button @click="cancelSelection()" size="mini"-->
-                                       <!--style="position: absolute;margin-top: 2px;">取消选择-->
+                            <!--style="position: absolute;margin-top: 2px;">取消选择-->
                             <!--</el-button>-->
                             <div class="block" style="float:right; position: relative;">
                                 <el-pagination
                                         @current-change="handleCurrentCase"
                                         @size-change="handleSizeCase"
-                                        :page-size="15"
+                                        :current-page="apiMsgPage.currentPage"
+                                        :page-size="apiMsgPage.sizePage"
                                         :page-sizes="[15, 30, 45, 60]"
                                         layout="total, sizes, prev, pager, next, jumper"
-                                        :total="this.apiMsgPage.total">
+                                        :total="apiMsgPage.total">
                                 </el-pagination>
                             </div>
                         </el-col>
                     </el-row>
-
                 </el-tab-pane>
-
-
             </el-tabs>
 
             <div slot="footer" class="dialog-footer">
@@ -352,10 +349,13 @@
                 apiMsgVessel: [], //接口用例容器，勾选的内容都存在此变量
                 ApiMsgData: [], // 接口信息里面的表格数据
                 mainWidth: '50%',
-                list2: [],
                 radio: '',
                 showApiDataStatus: true,
                 stepSpan: 24,
+                draggableOptions: {
+                    group: {name: 'apiData', pull: 'clone', put: false},
+                    sort: false,
+                },
                 apiMsgPage: {
                     total: 1,
                     currentPage: 1,
@@ -374,7 +374,6 @@
                         name: null,
                         moduleId: null,
                     },
-                    setName: '',
                     projectName: '',
                     apiMesProjectName: '',
                     sceneVariableProjectName: '',
@@ -405,8 +404,7 @@
                     this.mainWidth = '50%';
                     this.stepSpan = 24
 
-                }
-                else {
+                } else {
                     this.mainWidth = '80%';
                     this.stepSpan = 12
                 }
@@ -414,11 +412,9 @@
             changeShow(tab) {
                 if (tab.label === '用例信息') {
                     this.mainWidth = '50%'
-                }
-                else if(this.showApiDataStatus) {
+                } else if (this.showApiDataStatus) {
                     this.mainWidth = '50%'
-                }
-                else {
+                } else {
                     this.mainWidth = '80%'
                 }
             },
@@ -445,7 +441,6 @@
                         return
                     }
                 }
-
                 this.caseData.apiCases = [];
                 this.caseData.variable = [{key: '', value: '', remark: ''}];
                 this.caseData.name = '';
@@ -457,8 +452,6 @@
                 this.caseData.modelFormVisible = true;
                 this.apiMsgVessel = [];
                 this.findApiMsg();
-                // this.cancelSelection();
-                // this.toggleSelection();
             },
             editCase(caseId, copyEditStatus = false) {
                 this.synchronousData();
@@ -472,12 +465,10 @@
                         this.caseData.funcAddress = response.data['data']['func_address'];
                         this.caseData.apiCases = response.data['data']['cases'];
                         this.caseData.variable = response.data['data']['variable'];
-                        this.form.setName = this.tempSetName;
                         if (copyEditStatus) {
                             this.caseData.id = '';
                             this.caseData.num = '';
-                        }
-                        else {
+                        } else {
                             this.caseData.id = caseId;
                             this.caseData.num = response.data['data']['num'];
                         }
@@ -487,32 +478,36 @@
                 )
             },
             changeSetChoice() {
-                if (this.allSetList[this.form.projectName][0]) {
-                    this.form.set = this.allSetList[this.form.projectName][0];
-                }
-                else {
+                let tempData = this.allSetList[this.form.projectName][0];
+                if (tempData) {
+                    this.form.set = tempData;
+                } else {
                     this.form.set = null
                 }
             },
-            changeModuleChoice(pM) {
-                if (pM === 'p'){
-                    this.form.module = this.proModelData[this.form.apiMesProjectName][0];
+            changeModuleChoice() {
+                let tempData = this.proModelData[this.form.apiMesProjectName][0];
+                if (tempData) {
+                    this.form.module = tempData;
+                    this.apiMsgPage.currentPage = 1;
+                    this.apiMsgPage.sizePage = 15;
+                    this.findApiMsg();
+                } else {
+                    this.form.module = {name: null, moduleId: null,};
+                    this.ApiMsgData = [];
+                    this.apiMsgPage.total = 0;
                 }
-                this.radio = false;
-                this.apiMsgPage.currentPage = 1;
-                this.apiMsgPage.sizePage = 15;
-                this.findApiMsg();
-
             },
             changeConfigChoice() {
-                if (this.configData[this.form.sceneVariableProjectName][0]) {
-                    this.form.config = this.configData[this.form.sceneVariableProjectName][0];
-                }
-                else {
+                let tempData = this.configData[this.form.sceneVariableProjectName][0];
+                if (tempData) {
+                    this.form.config = tempData;
+                } else {
                     this.form.config = null
                 }
             },
             upNum(i) {
+                //  上移用例公用参数位置
                 if (i === 0) {
                     this.$message({
                         showClose: true,
@@ -524,9 +519,9 @@
                 let d = this.caseData.variable[i];
                 this.caseData.variable.splice(i, 1);
                 this.caseData.variable.splice(i - 1, 0, d);
-                this.againSort()
             },
             downNum(i) {
+                //  下移用例公用参数位置
                 if (i === (this.caseData.variable.length - 1)) {
                     this.$message({
                         showClose: true,
@@ -538,28 +533,27 @@
                 let d = this.caseData.variable[i];
                 this.caseData.variable.splice(i, 1);
                 this.caseData.variable.splice(i + 1, 0, d);
-                this.againSort()
-            },
-            againSort() {
-                for (let i = 0; i < this.caseData.variable.length; i++) {
-                    this.caseData.variable[i]['num'] = i
-                }
             },
             delApiCase(i) {
                 //判断caseList中是否存在id，存在则在数据库删除信息，否则在前端删除临时数据
                 if ('id' in this.caseData.apiCases[i]) {
-                    this.$axios.post('/api/apiCase/del', {'id': this.caseData.apiCases[i]['id']}).then(() => {
-                            this.caseData.apiCases.splice(i, 1);
-                        }
-                    )
-                }
-                else {
+                    this.$confirm('是否删除用例中已保存的步骤：' + '<strong style="color: red;">' + this.caseData.apiCases[i]['case_name'] + '</strong>' + '?', '提示', {
+                        dangerouslyUseHTMLString: true,
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.$axios.post('/api/apiCase/del', {'id': this.caseData.apiCases[i]['id']}).then(() => {
+                                this.caseData.apiCases.splice(i, 1);
+                            }
+                        );
+                    }).catch(() => {
+                    });
+                } else {
                     this.caseData.apiCases.splice(i, 1);
                 }
             },
-            // handleApiMsgDataSelection(val) {
-            //     this.apiMsgVessel = val;
-            // },
+
             handleCurrentCase(val) {
                 this.apiMsgPage.currentPage = val;
                 this.findApiMsg()
@@ -568,10 +562,9 @@
                 this.apiMsgPage.sizePage = val;
                 this.findApiMsg()
             },
-            // cancelSelection() {
-            //     this.$refs.multipleTable.clearSelection();
-            // },
+
             findApiMsg() {
+                this.radio = false;
                 this.$axios.post(this.$api.findApiApi, {
                     'projectName': this.form.apiMesProjectName,
                     'moduleId': this.form.module.moduleId,
@@ -602,12 +595,12 @@
                 // this.againSort()
             },
             addConfigData() {
+                //  复制配置信息到用例配置里面
                 this.$axios.post(this.$api.configDataApi, {
                     'configId': this.form.config.configId
                 }).then((response) => {
                         this.caseData.variable = this.caseData.variable.concat(response.data['data']['variables']);
                         this.caseData.variable = JSON.parse(JSON.stringify(this.caseData.variable));
-
                         this.caseData.funcAddress = response.data['data']['func_address'];
                     }
                 )
@@ -619,7 +612,7 @@
                 this.caseData.variable.splice(i, 1);
             },
             addCase(closeView = true) {
-
+                //  添加用例
                 if (this.caseData.apiCases.length === 0) {
                     this.$message({
                         showClose: true,
@@ -657,15 +650,13 @@
                     'project': this.form.projectName,
                     'ids': this.caseData.id,
                     'apiCases': this.caseData.apiCases,
-
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
                             if (!closeView) {
                                 if (response.data['case_id']) {
                                     this.editCase(response.data['case_id'])
                                 }
-                            }
-                            else {
+                            } else {
                                 this.caseData.modelFormVisible = false;
                             }
                             this.$parent.findCase();
@@ -673,8 +664,6 @@
                     }
                 )
             },
-
-
         },
         mounted() {
         },

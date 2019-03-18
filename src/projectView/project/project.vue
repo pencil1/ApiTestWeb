@@ -60,7 +60,8 @@
                                        @click.native="editProject(tableData[scope.$index]['id'])">编辑
                             </el-button>
                             <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="sureView(delProject,tableData[scope.$index]['id'],tableData[scope.$index]['name'])">删除
+                                       @click.native="sureView(delProject,tableData[scope.$index]['id'],tableData[scope.$index]['name'])">
+                                删除
                             </el-button>
                         </template>
                     </el-table-column>
@@ -70,7 +71,8 @@
                     <el-pagination
                             @current-change="proHandleCurrentChange"
                             @size-change="proHandleSizeChange"
-                            :page-size="20"
+                            :current-page="currentPage"
+                            :page-size="sizePage"
                             layout="total, sizes, prev, pager, next, jumper"
                             :total="this.total">
                     </el-pagination>
@@ -105,7 +107,8 @@
                             <el-table :data="environment.environmentTest" size="mini" stripe :show-header="false">
                                 <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.value" size="mini" placeholder="http://127.0.0.1:8010">
+                                        <el-input v-model="scope.row.value" size="mini"
+                                                  placeholder="http://127.0.0.1:8010">
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -122,7 +125,8 @@
                             <el-table :data="environment.environmentDevelop" size="mini" stripe :show-header="false">
                                 <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.value" size="mini" placeholder="http://127.0.0.1:8010">
+                                        <el-input v-model="scope.row.value" size="mini"
+                                                  placeholder="http://127.0.0.1:8010">
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -139,7 +143,8 @@
                             <el-table :data="environment.environmentProduction" size="mini" stripe :show-header="false">
                                 <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.value" size="mini" placeholder="http://127.0.0.1:8010">
+                                        <el-input v-model="scope.row.value" size="mini"
+                                                  placeholder="http://127.0.0.1:8010">
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -156,7 +161,8 @@
                             <el-table :data="environment.environmentStandby" size="mini" stripe :show-header="false">
                                 <el-table-column property="value" label="Value" header-align="center" minWidth="200">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.value" size="mini" placeholder="http://127.0.0.1:8010">
+                                        <el-input v-model="scope.row.value" size="mini"
+                                                  placeholder="http://127.0.0.1:8010">
                                         </el-input>
                                     </template>
                                 </el-table-column>
@@ -319,9 +325,6 @@
                 this.environment.environmentDevelop = Array();
                 this.environment.environmentProduction = Array();
                 this.environment.environmentStandby = Array();
-                // this.projectData.host = null;
-                // this.projectData.hostTwo = null;
-                // this.projectData.hostThree = null;
                 this.form.user = {};
                 this.projectData.principal = null;
                 this.projectData.header = Array();
@@ -330,16 +333,17 @@
                 this.projectData.modelFormVisible = true;
             },
             dealHostList(data) {
+                // 把[{value:xxx1},{value:xxx2}] 转为 [xxx1,xxx2]
                 let host = Array();
                 for (let i = 0; i < data.length; i++) {
                     if (data[i].value) {
                         host.push(data[i].value);
                     }
-
                 }
                 return host
             },
             dealHostDict(data) {
+                // 把[xxx1,xxx2] 转为 [{value:xxx1},{value:xxx2}]
                 let host = Array();
                 if (!data) {
                     return host
@@ -349,49 +353,25 @@
                 }
                 return host
             },
-            // environmentJudge() {
-            //     this.$confirm('当前所选环境的url数量和测试环境不一致,可能会影响到接口测试~~', '提示', {
-            //         confirmButtonText: '确定',
-            //         cancelButtonText: '取消',
-            //         type: 'warning'
-            //     }).then(() => {
-            //         this.addProject()
-            //     }).catch(() => {
-            //     });
-            //
-            // },
             addProjectBtn() {
-                let test_length = this.dealHostList(this.environment.environmentTest).length;
+                let test_length = this.environment.environmentTest.length;
+                let currentEnvironment;
                 if (this.environmentChoice === 'second') {
-                    if (this.dealHostList(this.environment.environmentDevelop).length !== test_length) {
-                        this.$message({
-                            showClose: true,
-                            message: '当前所选环境的url数量和测试环境不一致,会影响到接口测试',
-                            type: 'warning',
-                        });
-                    } else {
-                        this.addProject()
-                    }
+                    currentEnvironment = this.environment.environmentDevelop.length;
                 } else if (this.environmentChoice === 'third') {
-                    if (this.dealHostList(this.environment.environmentProduction).length !== test_length) {
-                        this.$message({
-                            showClose: true,
-                            message: '当前所选环境的url数量和测试环境不一致,会影响到接口测试',
-                            type: 'warning',
-                        });
-                    } else {
-                        this.addProject()
-                    }
+                    currentEnvironment = this.environment.environmentProduction.length;
                 } else if (this.environmentChoice === 'fourth') {
-                    if (this.dealHostList(this.environment.environmentStandby).length !== test_length) {
-                        this.$message({
-                            showClose: true,
-                            message: '当前所选环境的url数量和测试环境不一致,会影响到接口测试',
-                            type: 'warning',
-                        });
-                    } else {
-                        this.addProject()
-                    }
+                    currentEnvironment = this.environment.environmentStandby.length;
+                } else {
+                    currentEnvironment = test_length
+                }
+
+                if (currentEnvironment !== test_length) {
+                    this.$message({
+                        showClose: true,
+                        message: '当前所选环境的url数量和测试环境不一致,会影响到接口测试',
+                        type: 'warning',
+                    });
                 } else {
                     this.addProject()
                 }
@@ -416,8 +396,7 @@
                         }
                     }
                 )
-            }
-            ,
+            },
             editProject(id) {
                 this.$axios.post(this.$api.editProApi, {'id': id}).then((response) => {
                         let index = this.userData.map(item => item.user_id).indexOf(response.data['data']['user_id']);
@@ -429,15 +408,13 @@
                         this.environment.environmentDevelop = this.dealHostDict(response.data['data']['host_two']);
                         this.environment.environmentProduction = this.dealHostDict(response.data['data']['host_three']);
                         this.environment.environmentStandby = this.dealHostDict(response.data['data']['host_four']);
-
                         this.projectData.header = response.data['data']['headers'];
                         this.projectData.variable = response.data['data']['variables'];
                         this.projectData.id = id;
                         this.projectData.modelFormVisible = true;
                     }
                 )
-            }
-            ,
+            },
             delProject(id) {
                 this.$axios.post(this.$api.delProApi, {'id': id}).then((response) => {
                         this.messageShow(this, response);
@@ -449,24 +426,19 @@
                         this.findProject();
                     }
                 )
-            }
-            ,
+            },
             addProjectVariable() {
                 this.projectData.variable.push({key: null, value: null, remark: null});
-            }
-            ,
+            },
             delProjectVariable(i) {
                 this.projectData.variable.splice(i, 1);
-            }
-            ,
+            },
             addProjectHeader() {
                 this.projectData.header.push({key: null, value: null});
-            }
-            ,
+            },
             delProjectHeader(i) {
                 this.projectData.header.splice(i, 1);
-            }
-            ,
+            },
             environmentShow(choice) {
                 if (choice === 'first') {
                     return '测试环境'
@@ -478,8 +450,8 @@
                     return '备用环境'
                 }
             },
-            delTableList(type, i) {
-                this.$confirm('删除url为影响到整体排序,接口引用是依据url的序号来得,请认真考虑一下?', '提示', {
+            delTableRow(type, i) {
+                this.$confirm('删除url会影响到整体排序,接口那边的引用是依据url的顺序来的,请认真考虑一下?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
@@ -495,10 +467,8 @@
                     }
                 }).catch(() => {
                 });
-
-            }
-            ,
-            addTableList(type) {
+            },
+            addTableRow(type) {
                 if (type === 'test') {
                     this.environment.environmentTest.push({value: ''});
                 } else if (type === 'develop') {
@@ -508,88 +478,71 @@
                 } else if (type === 'standby') {
                     this.environment.environmentStandby.push({value: ''});
                 }
-            }
-            ,
-        }
-        ,
+            },
+        },
         computed: {
             monitorEnvironmentTest() {
                 return this.environment.environmentTest;
-            }
-            ,
+            },
             monitorEnvironmentDevelop() {
                 return this.environment.environmentDevelop;
-            }
-            ,
+            },
             monitorEnvironmentProduction() {
                 return this.environment.environmentProduction;
-            }
-            ,
+            },
             monitorEnvironmentStandby() {
                 return this.environment.environmentStandby;
-            }
-            ,
-        }
-        ,
+            },
+        },
         watch: {
             monitorEnvironmentTest: {
                 handler: function () {
                     if (this.environment.environmentTest.length === 0) {
-                        this.addTableList('test')
+                        this.addTableRow('test')
                     }
                     if (this.environment.environmentTest[this.environment.environmentTest.length - 1]['value']) {
-                        this.addTableList('test')
+                        this.addTableRow('test')
                     }
-                }
-                ,
+                },
                 deep: true
-            }
-            ,
+            },
             monitorEnvironmentDevelop: {
                 handler: function () {
                     if (this.environment.environmentDevelop.length === 0) {
-                        this.addTableList('develop')
+                        this.addTableRow('develop')
                     }
                     if (this.environment.environmentDevelop[this.environment.environmentDevelop.length - 1]['value']) {
-                        this.addTableList('develop')
+                        this.addTableRow('develop')
                     }
-                }
-                ,
+                },
                 deep: true
-            }
-            ,
+            },
             monitorEnvironmentProduction: {
                 handler: function () {
                     if (this.environment.environmentProduction.length === 0) {
-                        this.addTableList('production')
+                        this.addTableRow('production')
                     }
                     if (this.environment.environmentProduction[this.environment.environmentProduction.length - 1]['value']) {
-                        this.addTableList('production')
+                        this.addTableRow('production')
                     }
-                }
-                ,
+                },
                 deep: true
-            }
-            ,
+            },
             monitorEnvironmentStandby: {
                 handler: function () {
                     if (this.environment.environmentStandby.length === 0) {
-                        this.addTableList('standby')
+                        this.addTableRow('standby')
                     }
                     if (this.environment.environmentStandby[this.environment.environmentStandby.length - 1]['value']) {
-                        this.addTableList('standby')
+                        this.addTableRow('standby')
                     }
-                }
-                ,
+                },
                 deep: true
-            }
-            ,
-        }
-        ,
+            },
+        },
         mounted() {
             this.findProject();
-        }
-        ,
+        },
     }
 </script>
 <style>

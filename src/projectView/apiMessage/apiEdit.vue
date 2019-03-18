@@ -75,7 +75,6 @@
                           style="width: 80%;margin-right: 5px">
                     <el-select v-model="apiMsgData.method"
                                size="medium"
-                               @change="methodChange"
                                style="width: 100px"
                                slot="prepend"
                                placeholder="选择请求方式">
@@ -141,7 +140,7 @@
                     <el-button type="danger"
                                icon="el-icon-delete"
                                size="mini"
-                               @click.native="delTableList('param',scope.$index)">
+                               @click.native="delTableRow('param',scope.$index)">
                     </el-button>
                 </template>
             </el-table-column>
@@ -173,7 +172,7 @@
                     <el-table-column property="value" label="操作" header-align="center" width="80">
                         <template slot-scope="scope">
                             <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="delTableList('header',scope.$index)">
+                                       @click.native="delTableRow('header',scope.$index)">
                             </el-button>
                         </template>
                     </el-table-column>
@@ -284,7 +283,7 @@
                     <el-table-column property="value" label="操作" header-align="center" width="80">
                         <template slot-scope="scope">
                             <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="delTableList('variable',scope.$index)">
+                                       @click.native="delTableRow('variable',scope.$index)">
                             </el-button>
                         </template>
                     </el-table-column>
@@ -315,7 +314,7 @@
                     <el-table-column property="value" label="操作" header-align="center" width="80">
                         <template slot-scope="scope">
                             <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="delTableList('extract',scope.$index)">
+                                       @click.native="delTableRow('extract',scope.$index)">
                             </el-button>
                         </template>
                     </el-table-column>
@@ -358,7 +357,7 @@
                     <el-table-column property="value" label="操作" header-align="center" width="80">
                         <template slot-scope="scope">
                             <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="delTableList('validate',scope.$index)">
+                                       @click.native="delTableRow('validate',scope.$index)">
                             </el-button>
                         </template>
                     </el-table-column>
@@ -393,13 +392,6 @@
         props: ['proModelData', 'projectName', 'module', 'proUrlData', 'configData'],
         data() {
             return {
-                options: {
-                    mode: 'application/ld+json',
-                    tabSize: 4,
-                    lineNumbers: true,
-                    lineWrapping: true,
-                    scrollbarStyle: 'simple',
-                },
                 bodyShow: 'second',
                 paramTypes: ['string', 'file'],
                 cell: Object(),
@@ -459,17 +451,13 @@
                 this.apiMsgData.jsonVariable = ''
             },
             changeProChoice() {
+                //  改变项目选项时，清空模块和基础url的选择
                 this.form.module = '';
                 this.form.choiceUrl = ''
             },
             querySearch(queryString, cb) {
                 // 调用 callback 返回建议列表的数据
                 cb(this.comparators);
-            },
-            methodChange(i) {
-                if (i === 'GET') {
-                    this.form.choiceType = "data";
-                }
             },
             formatData() {
                 // 格式化json字符串
@@ -592,20 +580,7 @@
                 }).then((response) => {
                         if (messageClose) {
                             return response
-                            // if (response.data['status'] === 0) {
-                            //     this.$message({
-                            //         showClose: true,
-                            //         message: response.data['msg'],
-                            //         type: 'warning',
-                            //     });
-                            //     return false
-                            // }
-                            // else {
-                            //     this.apiMsgData.id = response.data['api_msg_id'];
-                            //     this.apiMsgData.num = response.data['num'];
-                            //     // this.$emit('findApiMsg');
-                            //     return true
-                            // }
+
                         } else {
                             if (this.messageShow(this, response)) {
                                 this.apiMsgData.id = response.data['api_msg_id'];
@@ -661,7 +636,9 @@
                 );
             },
             saveAndRun() {
+                //  保存并执行接口
                 this.addApiMsg(true).then(res => {
+                    //  先判断保存是否成功，再决定是否执行接口
                     if (res.data['status'] === 0) {
                         this.$message({
                             showClose: true,
@@ -675,64 +652,30 @@
                     }
                 });
             },
-            apiTest(apiMsgData) {
-                this.saveRunStatus = true;
-                this.$axios.post(this.$api.runApiApi, {
-                    'apiMsgData': apiMsgData,
-                    'projectName': this.form.projectName,
-                    'configId': this.configData.configId,
-                }).then((response) => {
-                        if (response.data['status'] === 0) {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'warning',
-                            });
-                            if (response.data['error']) {
-                                this.$refs.errorViewFunc.showData(response.data['error']);
-                            }
-                        } else {
-                            this.$message({
-                                showClose: true,
-                                message: response.data['msg'],
-                                type: 'success',
-                            });
-                            this.$refs.resultFunc.showData(response['data']['data']);
-                        }
-                        this.saveRunStatus = false;
-
-                    }
-                )
-            },
             resetLine() {
-                // this.cell.removeAttribute("style");
-                // this.cell.removeAttribute("zIndex");
-                // this.cell.removeAttribute("marginTop");
-                // this.cell.removeAttribute("position");
+                //  重置单元格高度
                 this.cell.style.height = '18px';
             },
             showLine(prefix, n) {
+                //  获取单元格的滚动条高度，并使单元格为该高度
                 this.cell = document.getElementById(prefix + n);
                 this.cell.style.height = this.cell.scrollHeight + 'px';
-                // this.cell.style.position = 'fixed';
-                // this.cell.style.zIndex = '1000';
-                // this.cell.style.width = 'calc(70% - 225px)';
-                // this.cell.style.marginTop = '-26px';
-
-
             },
             changeLine() {
+                //  当单元格高度和滚动条高度不一致时，改变单元格高度
                 if (this.cell.style.height !== this.cell.scrollHeight + 'px') {
                     let i = parseInt(this.cell.style.height.substring(0, this.cell.style.height.length - 2));
                     if (i - this.cell.scrollHeight === 2) {
+                        //  为true时，为减少高度操作
                         this.cell.style.height = (i - 18) + 'px'
                     }
-                    this.cell.style.height = this.cell.scrollHeight + 'px';
+                    else {
+                        this.cell.style.height = this.cell.scrollHeight + 'px';
+                    }
+
                 }
-
-
             },
-            delTableList(type, i) {
+            delTableRow(type, i) {
                 if (type === 'variable') {
                     this.apiMsgData.variable.splice(i, 1);
                 } else if (type === 'header') {
@@ -745,7 +688,7 @@
                     this.apiMsgData.param.splice(i, 1);
                 }
             },
-            addTableList(type) {
+            addTableRow(type) {
                 if (type === 'variable') {
                     this.apiMsgData.variable.push({key: null, value: null, param_type: 'string', remark: null});
                 } else if (type === 'header') {
@@ -796,9 +739,9 @@
             monitorParam: {
                 handler: function () {
                     if (this.apiMsgData.param.length === 0) {
-                        this.addTableList('param')
+                        this.addTableRow('param')
                     } else if (this.apiMsgData.param[this.apiMsgData.param.length - 1]['key'] || this.apiMsgData.param[this.apiMsgData.param.length - 1]['value']) {
-                        this.addTableList('param')
+                        this.addTableRow('param')
                     }
                     let strParam = '';
 
@@ -876,10 +819,10 @@
             monitorVariable: {
                 handler: function () {
                     if (this.apiMsgData.variable.length === 0) {
-                        this.addTableList('variable')
+                        this.addTableRow('variable')
                     }
                     if (this.apiMsgData.variable[this.apiMsgData.variable.length - 1]['key'] || this.apiMsgData.variable[this.apiMsgData.variable.length - 1]['value']) {
-                        this.addTableList('variable')
+                        this.addTableRow('variable')
                     }
                 }
                 ,
@@ -889,10 +832,10 @@
             monitorExtract: {
                 handler: function () {
                     if (this.apiMsgData.extract.length === 0) {
-                        this.addTableList('extract')
+                        this.addTableRow('extract')
                     }
                     if (this.apiMsgData.extract[this.apiMsgData.extract.length - 1]['key'] || this.apiMsgData.extract[this.apiMsgData.extract.length - 1]['value']) {
-                        this.addTableList('extract')
+                        this.addTableRow('extract')
                     }
                 }
                 ,
@@ -902,10 +845,10 @@
             monitorHeader: {
                 handler: function () {
                     if (this.apiMsgData.header.length === 0) {
-                        this.addTableList('header')
+                        this.addTableRow('header')
                     }
                     if (this.apiMsgData.header[this.apiMsgData.header.length - 1]['key'] || this.apiMsgData.header[this.apiMsgData.header.length - 1]['value']) {
-                        this.addTableList('header')
+                        this.addTableRow('header')
                     }
                 }
                 ,
@@ -915,10 +858,10 @@
             monitorValidate: {
                 handler: function () {
                     if (this.apiMsgData.validate.length === 0) {
-                        this.addTableList('validate')
+                        this.addTableRow('validate')
                     }
                     if (this.apiMsgData.validate[this.apiMsgData.validate.length - 1]['key'] || this.apiMsgData.validate[this.apiMsgData.validate.length - 1]['value']) {
-                        this.addTableList('validate')
+                        this.addTableRow('validate')
                     }
                 }
                 ,

@@ -106,7 +106,7 @@
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
                             this.importApiData.importApiStatus = false;
-                            this.importApiAddress = null;
+                            this.importApiData.importApiAddress = null;
                             this.$parent.findApiMsg();
                         }
                     }

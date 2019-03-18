@@ -5,10 +5,7 @@ import store from './store/store'
 import * as types from './store/types'
 import Header from './projectView/header.vue'
 import caseManage from './projectView/apiMessage/apiMsg.vue'
-
 import manage from './projectView/manage.vue'
-import modelManage from './projectView/module/module.vue'
-
 import projectManage from './projectView/project/project.vue'
 import reportManage from './projectView/report/report.vue'
 import reportShow from './projectView/report/reportShow.vue'
@@ -54,18 +51,7 @@ const routes = [
                     Manage: projectManage,
                 }
             },
-            {
-                path: 'modelManage',
-                // component:caseManage,
 
-                meta: {
-                    requireAuth: true,
-                },
-                components: {
-                    Header: Header,
-                    Manage: modelManage,
-                }
-            },
             {
                 path: 'sceneConfig',
                 // component:caseManage,

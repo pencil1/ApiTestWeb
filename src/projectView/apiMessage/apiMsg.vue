@@ -2,7 +2,7 @@
     <div class="caseManage" v-loading="this.loading">
 
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
-            <el-form-item label="项目、模块" labelWidth="110px">
+            <el-form-item label="项目" labelWidth="80px">
                 <el-select v-model="form.projectName"
                            placeholder="请选择项目"
                            @change="initProjectChoice"
@@ -103,10 +103,10 @@
                             <el-pagination
                                     small
                                     @current-change="handleModuleCurrentChange"
-                                    @size-change="handleModuleSizeChange"
+                                    :current-page="modulePage.currentPage"
                                     :page-size="30"
                                     layout="prev, pager, next"
-                                    :total="this.modulePage.total">
+                                    :total="modulePage.total">
                             </el-pagination>
                         </el-row>
                     </el-col>
@@ -167,9 +167,10 @@
                             <el-pagination
                                     @current-change="handleCurrentChange"
                                     @size-change="handleSizeChange"
-                                    :page-size="20"
+                                    :current-page="apiMsgPage.currentPage"
+                                    :page-size="apiMsgPage.sizePage"
                                     layout="total, sizes, prev, pager, next, jumper"
-                                    :total="this.apiMsgPage.total">
+                                    :total="apiMsgPage.total">
                             </el-pagination>
                         </div>
                     </el-col>
@@ -247,15 +248,15 @@
         name: 'caseManage',
         data() {
             return {
-                apiEditViewStatus: false,//接口配置组件显示控制
+                apiEditViewStatus: false,//  接口配置组件显示控制
                 numTab: 'first',
                 loading: false,  //  页面加载状态开关
                 proModelData: '',
                 proAndIdData: '',
                 configData: '',
                 proUrlData: null,
-                ApiMsgTableData: Array(),//接口表单数据
-                apiMsgList: Array(),
+                ApiMsgTableData: Array(),//  接口表单数据
+                apiMsgList: Array(),//  临时存储接口数据
                 funcAddress: null,
                 moduleDataList: [],
                 defaultProps: {
@@ -405,6 +406,7 @@
                 )
             },
             apiTest(apiMsgData = null) {
+                //  接口调试
                 this.loading = true;
                 this.$axios.post(this.$api.runApiApi, {
                     'apiMsgData': apiMsgData,
@@ -438,18 +440,21 @@
             },
 
             cancelSelection() {
+                //  清除接口选择
                 this.$refs.apiMultipleTable.clearSelection();
-                this.$refs.suiteMultipleTable.clearSelection();
             },
 
             initProjectChoice() {
                 //  当项目选择项改变时，初始化模块和配置的数据
                 this.form.config = {name: null, configId: null,};
                 this.form.module = {name: null, moduleId: null,};
-                this.initFindModule()
+                this.modulePage.currentPage = 1;
+                this.apiMsgPage.currentPage = 1;
+                this.findModule()
             },
 
             findModule() {
+                //  查询接口模块
                 this.$axios.post(this.$api.findModuleApi, {
                     'projectName': this.form.projectName,
                     'page': this.modulePage.currentPage,
@@ -490,17 +495,15 @@
                 this.modulePage.currentPage = val;
                 this.findModule()
             },
-            handleModuleSizeChange(val) {
-                this.modulePage.sizePage = val;
-                this.findModule()
-            },
             initModuleData() {
+                //  打开窗口时，初始化模块窗口数据
                 this.moduleData.name = '';
                 this.moduleData.id = '';
                 this.moduleData.num = '';
                 this.moduleData.viewStatus = true;
             },
             editModule() {
+                //  编辑模块
                 if (!this.form.module) {
                     this.$message({
                         showClose: true,
@@ -515,6 +518,7 @@
                 this.moduleData.viewStatus = true;
             },
             addModule() {
+                //  添加模块
                 this.$axios.post(this.$api.addModuleApi, {
                     'projectName': this.form.projectName,
                     'name': this.moduleData.name,
@@ -529,6 +533,7 @@
                 )
             },
             delModule() {
+                //  删除模块
                 this.$axios.post(this.$api.delModuleApi, {'id': this.form.module.moduleId}).then((response) => {
                         this.messageShow(this, response);
                         this.moduleData.name = '';
@@ -540,6 +545,7 @@
                 )
             },
             stickModule() {
+                //  置顶模块
                 this.$axios.post(this.$api.stickModuleApi, {
                     'id': this.form.module.moduleId,
                     'projectName': this.form.projectName,

@@ -93,7 +93,8 @@
                     <el-pagination
                             @current-change="handleCurrentChange"
                             @size-change="handleSizeChange"
-                            :page-size="20"
+                            :current-page="currentPage"
+                            :page-size="sizePage"
                             layout="total, sizes, prev, pager, next, jumper"
                             :total="this.total">
                     </el-pagination>
@@ -191,13 +192,11 @@
         data() {
             return {
                 proModelData: '',
-                proSceneData: '',
                 runStatus: false,
                 caseStatus: false,
                 allSetList: '',
                 allSceneList: '',
                 tableData: [],
-                taskTypes: ['cron', 'date'],
                 total: 1,
                 currentPage: 1,
                 sizePage: 20,

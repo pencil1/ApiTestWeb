@@ -97,7 +97,8 @@
                     <el-pagination
                             @current-change="handleCurrentChange"
                             @size-change="handleSizeChange"
-                            :page-size="20"
+                            :current-page="currentPage"
+                            :page-size="sizePage"
                             layout="total, sizes, prev, pager, next, jumper"
                             :total="this.total">
                     </el-pagination>
@@ -114,9 +115,7 @@
         name: 'reportManage',
         data() {
             return {
-                loading: false,
                 proData: '',
-                proSceneData: '',
                 tableData: [],
                 total: 1,
                 currentPage: 1,
@@ -125,13 +124,6 @@
                     projectName: '',
                     gathers: [],
                     scenes: [],
-                },
-                projectData: {
-                    id: '',
-                    modelFormVisible: false,
-                    projectName: '',
-                    principal: '',
-                    formLabelWidth: '120px',
                 },
                 reportData: {
                     'data': {'records': []},
@@ -159,12 +151,8 @@
                         this.findReport()
                     }
                         this.proData = response.data['pro_and_id'];
-
-
                     }
                 );
-
-
             },
             findReport() {
                 this.$axios.post(this.$api.findReportApi, {
@@ -189,19 +177,6 @@
                     }
                 )
             },
-            // runScene() {
-            //     this.loading = true;
-            //     this.$axios.post('/apiMessage/apiMessage/report/run', {
-            //         'sceneNames': this.form.scenes,
-            //         'projectName': this.form.projectName
-            //     }).then((response) => {
-            //             this.findReport();
-            //             this.loading = false;
-            //             this.messageShow(this, response);
-            //         }
-            //     );
-            //     setTimeout(this.findReport(), 1500);
-            // },
             check(reportId) {
 
                 // this.$router.push({path: 'reportShow', query: {reportId: reportId}});
