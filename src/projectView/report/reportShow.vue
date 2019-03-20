@@ -26,7 +26,7 @@
                             <el-dropdown-item command="error">失败业务</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
-                    <span style="font-family: Source Sans Pro;float: right;font-size: 13px;color: #3a8ee6;margin-right: 40px">time: {{this.reportData.time.start_at}}</span>
+                    <span style="font-family: Source Sans Pro;float: right;font-size: 13px;color: #3a8ee6;margin-right: 40px">time: {{this.reportData.time.start_datetime}}</span>
                 </div>
             </el-col>
         </el-row>
@@ -40,21 +40,27 @@
 
                 <ol style="margin-top:5px;font-size:14px;line-height:25px" class="remote-line">
                     <li style="font-weight:700;font-size:16px">apis result</li>
-                    <li style="font-weight:600;color: rgb(146, 123, 139)">总数:{{this.reportData.stat.testsRun}}</li>
-                    <li style="color: rgb(25,212,174);font-weight:600">成功:{{this.reportData.stat.successes}}</li>
-                    <li style="color: rgb(250,110,134);font-weight:600">失败:{{this.reportData.stat.failures}}</li>
-                    <li style="color: #E87C25;font-weight:600">错误:{{this.reportData.stat.errors}}</li>
+                    <li style="font-weight:600;color: rgb(146, 123, 139)">总数:{{this.reportData.stat.teststeps.total}}
+                    </li>
+                    <li style="color: rgb(25,212,174);font-weight:600">成功:{{this.reportData.stat.teststeps.successes}}
+                    </li>
+                    <li style="color: rgb(250,110,134);font-weight:600">失败:{{this.reportData.stat.teststeps.failures}}
+                    </li>
+                    <li style="color: #E87C25;font-weight:600">错误:{{this.reportData.stat.teststeps.errors}}</li>
                 </ol>
             </el-col>
             <el-col :span="14" style="border-width: 1px;">
                 <div style="height: 200px;float:left;">
-                    <ve-ring :data="suiteChartData" :settings="suiteChartSettings" height="200px" width="350px"></ve-ring>
+                    <ve-ring :data="suiteChartData" :settings="suiteChartSettings" height="200px"
+                             width="350px"></ve-ring>
                 </div>
                 <ol style="margin-top:5px;font-size:14px;line-height:25px" class="remote-line">
                     <li style="font-weight:700;font-size:16px">cases result</li>
-                    <li style="font-weight:600;color: rgb(146, 123, 139)">总数:{{this.reportData.stat.all_scene}}</li>
-                    <li style="color: rgb(25,212,174);font-weight:600">成功:{{this.reportData.stat.successes_scene1}}</li>
-                    <li style="color: rgb(250,110,134);font-weight:600">失败:{{this.reportData.stat.failures_scene1}}</li>
+                    <li style="font-weight:600;color: rgb(146, 123, 139)">总数:{{this.reportData.stat.testcases.total}}
+                    </li>
+                    <li style="color: rgb(25,212,174);font-weight:600">成功:{{this.reportData.stat.testcases.success}}
+                    </li>
+                    <li style="color: rgb(250,110,134);font-weight:600">失败:{{this.reportData.stat.testcases.fail}}</li>
                 </ol>
             </el-col>
         </el-row>
@@ -81,13 +87,13 @@
                                     <ol id="test" style="padding:5px;font-family:Times New Roman">
                                         <li style="list-style-type:none;border-bottom: 1px solid #eee;margin-left: 10px"
                                             :class="{'active':index === showColor[0] && index1 === showColor[1],
-                                        'wire': index1 === 0}"
+                                            'wire': index1 === 0}"
                                             v-for="(item1, index1) in item['records']"
                                             :key="index1"
                                             @click="handleNodeClick(index, index1)">
                                             <div :style="item1.status === 'success' ? 'color:#67c23a': 'color:rgb(255, 74, 74)'">
                                                 <span class="test-name">{{item1.name}}</span>
-                                                <span class="test-time">{{item1.meta_data.response.response_time_ms}} ms</span>
+                                                <span class="test-time">{{item1.meta_datas.stat.response_time_ms}} ms</span>
                                                 <span class="test-status right pass">{{item1.status}}</span>
                                             </div>
                                         </li>
@@ -132,52 +138,52 @@
                             <tr v-show="statusShow[0]">
                                 <td class="my-table">url</td>
                                 <td class="content" style=" overflow:auto;">
-                                    {{this.meta_data['request']['url']}}
+                                    {{this.meta_datas.data[0].request.url}}
                                 </td>
                             </tr>
                             <tr v-show="statusShow[1]">
                                 <td class="my-table">method</td>
                                 <td class="content">
-                                    {{this.meta_data['request']['method']}}
+                                    {{this.meta_datas.data[0].request.method}}
                                 </td>
                             </tr>
                             <tr v-show="statusShow[2]">
                                 <td class="my-table">status_code</td>
                                 <td class="content">
-                                    {{this.meta_data['response']['status_code']}}
+                                    {{this.meta_datas.data[0].response.status_code}}
                                 </td>
                             </tr>
                             <tr v-show="statusShow[3]">
                                 <td class="my-table">req_headers</td>
                                 <td class="content">
-                                    <pre style="overflow: auto">{{optimizeShow(this.meta_data['request']['headers'])}}</pre>
+                                    <pre style="overflow: auto">{{optimizeShow(this.meta_datas.data[0].request.headers)}}</pre>
                                 </td>
                             </tr>
                             <tr v-show="statusShow[4]">
-                                <td class="my-table">body</td>
+                                <td class="my-table">json</td>
                                 <td class="content">
                                     <!--<pre style="overflow: auto">{{this.meta_data['request']['body']}}</pre>-->
-                                    <pre style="white-space: pre-wrap;word-wrap: break-word;">{{this.meta_data['request']['body']}}</pre>
+                                    <pre style="white-space: pre-wrap;word-wrap: break-word;">{{this.meta_datas.data[0].request.json}}</pre>
                                 </td>
                             </tr>
                             <tr v-show="statusShow[5]">
                                 <td class="my-table">data</td>
                                 <td class="content">
                                     <!--<pre style="overflow: auto">{{this.meta_data['request']['data']}}</pre>-->
-                                    <pre style="overflow: auto">{{optimizeShow(this.meta_data['request']['data'])}}</pre>
+                                    <pre style="overflow: auto">{{optimizeShow(this.meta_datas.data[0].request.data)}}</pre>
 
                                 </td>
                             </tr>
                             <tr v-show="statusShow[6]">
                                 <td class="my-table">params</td>
                                 <td class="content">
-                                    {{this.meta_data['request']['params']}}
+                                    <pre>{{optimizeShow(this.meta_datas.data[0].request.params)}}</pre>
                                 </td>
                             </tr>
                             <tr v-show="statusShow[7]">
                                 <td class="my-table">resp_headers</td>
                                 <td class="content">
-                                    <pre style="overflow: auto">{{optimizeShow(this.meta_data['response']['headers'])}}</pre>
+                                    <pre style="overflow: auto">{{optimizeShow(this.meta_datas.data[0].response.headers)}}</pre>
                                     <!--<pre style="overflow: auto">{{this.meta_data['response']['headers']}}</pre>-->
                                 </td>
                             </tr>
@@ -185,9 +191,9 @@
                             <tr v-show="statusShow[8]">
                                 <td class="my-table">resp_data</td>
                                 <td class="content">
-                                    <pre style="white-space: pre-wrap;word-wrap: break-word;">{{this.meta_data['response']['json']}}</pre>
-                                    <pre v-show="this.meta_data['response']['json'] !== ''"
-                                         style="white-space: pre-wrap;word-wrap: break-word;">{{this.meta_data['response']['content']}}</pre>
+                                    <pre style="white-space: pre-wrap;word-wrap: break-word;">{{this.meta_datas.data[0].response.json}}</pre>
+                                    <!--<pre v-show="this.meta_data['response']['json'] !== ''"-->
+                                         <!--style="white-space: pre-wrap;word-wrap: break-word;">{{this.meta_data['response']['content']}}</pre>-->
                                 </td>
                             </tr>
 
@@ -268,21 +274,10 @@
                 statusShow: [true, true, true, true, true, true, true, true, true],
                 showColor: [],
                 attachment: '',
-                meta_data: {
-                    request: {body: '', data: '', files: '', headers: '', method: '', params: '', url: ''},
-                    response: {
-                        response_time_ms: '',
-                        content: '',
-                        content_type: '',
-                        cookies: '',
-                        elapsed_ms: '',
-                        headers: '',
-                        json: '',
-                        ok: '',
-                        status_code: '',
-                        url: ''
-                    }
-                },
+                meta_datas: {data:[{
+                        request: {body: null, url: null, headers: null, data: null, params: null, json: null},
+                        response: {content: null, json: null,status_code:null}
+                    }]},
                 caseChartData: {
                     columns: ['caseName', 'num'],
                     rows: [
@@ -306,16 +301,18 @@
                     'details': [{name: ''}],
                     'platform': {'duration': '', 'python_version': ''},
                     'stat': {
-                        'skipped': '',
-                        'testsRun': '',
-                        'successes': '',
-                        'failures': '',
-                        'errors': '',
-                        'failures_scene1': '',
-                        'successes_scene1': '',
-                        'all_scene': ''
+                        'teststeps': {
+                            'errors': '',
+                            'expectedFailures': '',
+                            'failures': '',
+                            'skipped': '',
+                            'successes': '',
+                            'total': '',
+                            'unexpectedSuccesses': '',
+                        },
+                        'testcases': {'fail': '', 'success': '', 'total': '',},
                     },
-                    'time': {'start_at': '', 'duration': 1}
+                    'time': {'start_at': '', 'duration': 1,'start_datetime':''}
                     ,
                 },
             }
@@ -324,7 +321,7 @@
         methods: {
             handleNodeClick(i1, i2) {
                 this.showColor = [i1, i2];
-                this.meta_data = this.reportData['details'][i1]['records'][i2]['meta_data'];
+                this.meta_datas = this.reportData['details'][i1]['records'][i2]['meta_datas'];
                 this.attachment = this.reportData['details'][i1]['records'][i2]['attachment']
             },
             handleCommand(command) {
@@ -339,7 +336,7 @@
             },
             optimizeShow(dict) {
                 if (dict) {
-                    let line;
+                    let line='';
                     for (let key in dict) {
                         line = line + key + ':' + dict[key] + '\n'
                     }
@@ -366,13 +363,13 @@
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
                             this.reportData = response['data'];
-                            this.meta_data = response['data']['details'][0]['records'][0]['meta_data'];
-                            this.attachment = response['data']['details'][0]['records'][0]['attachment'];
-                            this.caseChartData['rows'][0]['num'] = this.reportData['stat']['successes_1'];
-                            this.caseChartData['rows'][1]['num'] = this.reportData['stat']['failures_1'];
-                            this.caseChartData['rows'][2]['num'] = this.reportData['stat']['errors_1'];
-                            this.suiteChartData['rows'][0]['num'] = this.reportData['stat']['successes_scene'];
-                            this.suiteChartData['rows'][1]['num'] = this.reportData['stat']['failures_scene'];
+                            this.meta_datas = this.reportData['details'][0]['records'][0]['meta_datas'];
+                            this.attachment = this.reportData['details'][0]['records'][0]['attachment'];
+                            this.caseChartData['rows'][0]['num'] = this.reportData.stat.teststeps.successes;
+                            this.caseChartData['rows'][1]['num'] = this.reportData.stat.teststeps.failures;
+                            this.caseChartData['rows'][2]['num'] = this.reportData.stat.teststeps.errors;
+                            this.suiteChartData['rows'][0]['num'] = this.reportData.stat.testcases.success;
+                            this.suiteChartData['rows'][1]['num'] = this.reportData.stat.testcases.fail;
 
                         }
                     }

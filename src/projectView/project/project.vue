@@ -85,11 +85,13 @@
                 <el-tab-pane label="基础信息" style="margin-top: 10px">
                     <el-form :inline="true">
                         <el-form-item label="项目名称" :label-width="projectData.formLabelWidth">
-                            <el-input v-model="projectData.projectName" size="small" id="project_name">
+                            <el-input v-model="projectData.projectName" size="mini" id="project_name"
+                                      style="width: 150px">
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="负责人" :label-width="projectData.formLabelWidth">
-                            <el-select v-model="form.user" value-key="user_id" id="user" size="small">
+                        <el-form-item label="负责人" label-width="60px">
+                            <el-select v-model="form.user" value-key="user_id" id="user" size="mini"
+                                       style="width: 100px">
                                 <el-option
                                         v-for="item in userData"
                                         :key="item.user_id"
@@ -98,7 +100,16 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-
+                        <el-form-item label="函数文件" :label-width="projectData.formLabelWidth">
+                            <el-select v-model="projectData.funcFile" placeholder="请选择导入函数文件" size="mini">
+                                <el-option
+                                        v-for="item in funcAddress"
+                                        :key="item.value"
+                                        :label="item.value"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
 
                     </el-form>
                     <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -10px"/>
@@ -115,7 +126,7 @@
                                 <el-table-column property="value" label="操作" header-align="center" width="50">
                                     <template slot-scope="scope">
                                         <el-button type="danger" icon="el-icon-delete" size="mini"
-                                                   @click.native="delTableList('test',scope.$index)">
+                                                   @click.native="delTableRow('test',scope.$index)">
                                         </el-button>
                                     </template>
                                 </el-table-column>
@@ -133,7 +144,7 @@
                                 <el-table-column property="value" label="操作" header-align="center" width="50">
                                     <template slot-scope="scope">
                                         <el-button type="danger" icon="el-icon-delete" size="mini"
-                                                   @click.native="delTableList('develop',scope.$index)">
+                                                   @click.native="delTableRow('develop',scope.$index)">
                                         </el-button>
                                     </template>
                                 </el-table-column>
@@ -151,7 +162,7 @@
                                 <el-table-column property="value" label="操作" header-align="center" width="50">
                                     <template slot-scope="scope">
                                         <el-button type="danger" icon="el-icon-delete" size="mini"
-                                                   @click.native="delTableList('production',scope.$index)">
+                                                   @click.native="delTableRow('production',scope.$index)">
                                         </el-button>
                                     </template>
                                 </el-table-column>
@@ -169,7 +180,7 @@
                                 <el-table-column property="value" label="操作" header-align="center" width="50">
                                     <template slot-scope="scope">
                                         <el-button type="danger" icon="el-icon-delete" size="mini"
-                                                   @click.native="delTableList('standby',scope.$index)">
+                                                   @click.native="delTableRow('standby',scope.$index)">
                                         </el-button>
                                     </template>
                                 </el-table-column>
@@ -270,6 +281,7 @@
                 },
                 tableData: Array(),
                 total: 1,
+                funcAddress: '',
                 userData: [],
                 currentPage: 1,
                 sizePage: 20,
@@ -290,6 +302,7 @@
                     projectName: null,
                     principal: null,
                     formLabelWidth: '80px',
+                    funcFile: '',
                     header: Array(),
                     variable: Array(),
                 },
@@ -319,6 +332,12 @@
                     }
                 )
             },
+            findFuncAddress() {
+                this.$axios.post(this.$api.getFuncAddressApi).then((response) => {
+                        this.funcAddress = response['data']['data'];
+                    }
+                )
+            },
             initProjectData() {
                 this.projectData.projectName = null;
                 this.environment.environmentTest = Array();
@@ -327,6 +346,7 @@
                 this.environment.environmentStandby = Array();
                 this.form.user = {};
                 this.projectData.principal = null;
+                this.projectData.funcFile = null;
                 this.projectData.header = Array();
                 this.projectData.variable = Array();
                 this.projectData.id = null;
@@ -380,6 +400,7 @@
                 this.$axios.post(this.$api.addProApi, {
                     'projectName': this.projectData.projectName,
                     'principal': this.projectData.principal,
+                    'funcFile': this.projectData.funcFile,
                     'environmentChoice': this.environmentChoice,
                     'host': this.dealHostList(this.environment.environmentTest),
                     'hostTwo': this.dealHostList(this.environment.environmentDevelop),
@@ -411,6 +432,7 @@
                         this.projectData.header = response.data['data']['headers'];
                         this.projectData.variable = response.data['data']['variables'];
                         this.projectData.id = id;
+                        this.projectData.funcFile = response.data['data']['func_file'];
                         this.projectData.modelFormVisible = true;
                     }
                 )
@@ -542,6 +564,7 @@
         },
         mounted() {
             this.findProject();
+            this.findFuncAddress();
         },
     }
 </script>

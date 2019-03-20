@@ -13,7 +13,7 @@
                         <el-tab-pane label="返回结果">
                             <el-scrollbar wrapStyle="max-height:540px;">
                             <div>
-                                <pre style="overflow: auto;">{{resultDeal(item.meta_data.response.content)}}</pre>
+                                <pre style="overflow: auto;">{{resultDeal(item.meta_datas.data[0].response.json)}}</pre>
                             </div>
                             </el-scrollbar>
                         </el-tab-pane>
@@ -22,13 +22,28 @@
                                 <pre style="overflow: auto">{{item.attachment}}</pre>
                             </div>
                         </el-tab-pane>
-                        <el-tab-pane label="基础信息">
-                            <div v-for="(value, key) in item.meta_data.request"
+                        <el-tab-pane label="返回信息">
+                            <div v-for="(value, key) in item.meta_datas.data[0].response"
                             :key="key">
                                 <div style="color: #409eff"
-                                     v-if="JSON.stringify(value) !== '{}' && key !== 'start_timestamp' && value">
+                                     v-if="JSON.stringify(value) !== '{}' && key !== 'start_timestamp' && value && key !== 'json'">
                                     {{ key }}：
                                     <div style="color: #000000">{{ value }}</div>
+                                </div>
+                            </div>
+                        </el-tab-pane>
+                        <el-tab-pane label="请求信息">
+                            <!--<div style="color: #409eff"-->
+                                 <!--v-if="!item.meta_datas.data[0].request.body">-->
+                                <!--body：-->
+                                <!--<pre style="overflow: auto;color: #000000">{{dealBody(item.meta_datas.data[0].request.body)}}</pre>-->
+                            <!--</div>-->
+                            <div v-for="(value, key) in item.meta_datas.data[0].request"
+                                 :key="key">
+                                <div style="color: #409eff"
+                                     v-if="JSON.stringify(value) !== '{}' && key !== 'timeout'&& key !== 'verify' && value && key !== 'body'">
+                                    {{ key }}：
+                                    <pre style="overflow: auto;color: #000000">{{ value }}</pre>
                                 </div>
                             </div>
                         </el-tab-pane>
@@ -73,10 +88,10 @@
                         {
                             name: null,
                             attachment: null,
-                            meta_data: {
+                            meta_datas: {data:[{
                                 request: {body: null, url: null, headers: null, data: null, params: null, json: null},
                                 response: {content: null, json: null}
-                            },
+                            }]},
                         },
                     ],
                 },
@@ -84,7 +99,6 @@
         },
         methods: {
             resultDeal(data) {
-
                 try {
                     data = JSON.parse(data);
                     data = JSON.stringify(data, null, 4);
@@ -94,13 +108,21 @@
                 }
                 return data
             },
+            dealBody(body){
+                if (!body){
+                    return
+                }
+                if(body.indexOf("&") !== -1 ){
+                    return body.split("&")
+                }
+            },
             lastResult() {
                 this.resultViewStatus = true;
             },
             showData(data) {
                 this.resultViewStatus = true;
                 this.resultData.resultShowData = data['details'][0]['records'];
-                this.resultData.out = data['details'][0]['in_out']['out'];
+                // this.resultData.out = data['details'][0]['in_out']['out'];
             },
         },
 
