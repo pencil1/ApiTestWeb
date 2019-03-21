@@ -194,7 +194,7 @@
                     <el-button type="primary" size="mini" @click="addProjectVariable()">
                         添加
                     </el-button>
-                    <el-table :data="projectData.variable" stripe :show-header="false">
+                    <el-table :data="projectData.variable" stripe :show-header="false" size="mini" >
                         <el-table-column label="Key" header-align="center" minWidth="50">
                             <template slot-scope="scope">
                                 <el-input v-model="scope.row.key" size="mini" placeholder="key">
@@ -223,31 +223,31 @@
                     </el-table>
                     <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);"/>
 
-                    <div style="margin-top: 10px">
-                        <span style="margin-left: 10px">头部信息：</span>
-                        <el-button type="primary" size="mini" @click="addProjectHeader()">添加</el-button>
-                    </div>
-                    <el-table :data="projectData.header" stripe :show-header="false">
-                        <el-table-column label="Key" header-align="center" minWidth="50">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.key" size="mini" placeholder="key">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="Value" header-align="center" minWidth="80">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.value" size="mini" placeholder="value">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="操作" header-align="center" width="80">
-                            <template slot-scope="scope">
-                                <el-button type="danger" icon="el-icon-delete" size="mini"
-                                           @click.native="delProjectHeader(scope.$index)">删除
-                                </el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
+                    <!--<div style="margin-top: 10px">-->
+                        <!--<span style="margin-left: 10px">头部信息：</span>-->
+                        <!--<el-button type="primary" size="mini" @click="addProjectHeader()">添加</el-button>-->
+                    <!--</div>-->
+                    <!--<el-table :data="projectData.header" stripe :show-header="false">-->
+                        <!--<el-table-column label="Key" header-align="center" minWidth="50">-->
+                            <!--<template slot-scope="scope">-->
+                                <!--<el-input v-model="scope.row.key" size="mini" placeholder="key">-->
+                                <!--</el-input>-->
+                            <!--</template>-->
+                        <!--</el-table-column>-->
+                        <!--<el-table-column label="Value" header-align="center" minWidth="80">-->
+                            <!--<template slot-scope="scope">-->
+                                <!--<el-input v-model="scope.row.value" size="mini" placeholder="value">-->
+                                <!--</el-input>-->
+                            <!--</template>-->
+                        <!--</el-table-column>-->
+                        <!--<el-table-column label="操作" header-align="center" width="80">-->
+                            <!--<template slot-scope="scope">-->
+                                <!--<el-button type="danger" icon="el-icon-delete" size="mini"-->
+                                           <!--@click.native="delProjectHeader(scope.$index)">删除-->
+                                <!--</el-button>-->
+                            <!--</template>-->
+                        <!--</el-table-column>-->
+                    <!--</el-table>-->
 
 
                 </el-tab-pane>

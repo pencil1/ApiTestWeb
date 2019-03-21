@@ -17,7 +17,7 @@
                             </div>
                             </el-scrollbar>
                         </el-tab-pane>
-                        <el-tab-pane  label="错误信息">
+                        <el-tab-pane  label="错误信息" v-if="item.attachment">
                             <div>
                                 <pre style="overflow: auto">{{item.attachment}}</pre>
                             </div>

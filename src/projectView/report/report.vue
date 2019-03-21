@@ -184,7 +184,7 @@
                 window.open(href, '_blank');
             },
             downReport(reportId) {
-                this.$axios.post('/api/report/download', {'reportId': reportId,'dataOrReport':true}).then((response) => {
+                this.$axios.post('/api/report/download', {'reportId': reportId}).then((response) => {
                         // console.log(response.data['data']);
                         // download(response.data['data'], "测试报告.html", "text/html")
                         this.download(response.data['data'], "测试报告.html", "text/html")
