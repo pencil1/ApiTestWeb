@@ -101,7 +101,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="函数文件" :label-width="projectData.formLabelWidth">
-                            <el-select v-model="projectData.funcFile" placeholder="请选择导入函数文件" size="mini">
+                            <el-select v-model="projectData.funcFile" placeholder="请选择导入函数文件" size="mini" clearable>
                                 <el-option
                                         v-for="item in funcAddress"
                                         :key="item.value"

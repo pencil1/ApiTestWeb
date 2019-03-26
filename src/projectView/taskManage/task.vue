@@ -84,7 +84,8 @@
                                        @click.native="runNow(tableData[scope.$index]['id'])">单次运行
                             </el-button>
                             <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="sureView(delTask,tableData[scope.$index]['id'],tableData[scope.$index]['task_name'])">删除
+                                       @click.native="sureView(delTask,tableData[scope.$index]['id'],tableData[scope.$index]['task_name'])">
+                                删除
                             </el-button>
                         </template>
                     </el-table-column>
@@ -115,7 +116,9 @@
                         <!--</el-select>-->
                         <!--</el-form-item>-->
                         <el-form-item label="执行选择" :label-width="taskData.formLabelWidth">
-                            <el-select v-model="form.projectName" placeholder="选择项目" style="width: 150px;padding-right:5px">
+                            <el-select v-model="form.projectName" placeholder="选择项目"
+                                       style="width: 150px;padding-right:5px"
+                                       @change="changeProjectChoice">
                                 <el-option
                                         v-for="(item) in proModelData"
                                         :key="item.name"
@@ -226,7 +229,7 @@
                     toEmail: '',
                     SendEmail: '',
                     timeConfig: '',
-                    password:'',
+                    password: '',
                     formLabelWidth: '90px',
                 }
             }
@@ -247,12 +250,16 @@
                 );
 
             },
+            changeProjectChoice() {
+                this.form.set = [];
+                this.form.case = [   ];
+
+            },
             changeSceneChoice() {
                 if (this.form.set.length === 1) {
                     this.caseStatus = false;
                     this.form.set_id = this.form.set[0].id;
-                }
-                else {
+                } else {
                     this.caseStatus = true;
                     this.form.case = [];
                     this.form.set_id = ''
@@ -280,8 +287,7 @@
                                 message: response.data['msg'],
                                 type: 'warning',
                             });
-                        }
-                        else {
+                        } else {
                             this.tableData = response.data['data'];
                             this.total = response.data['total'];
                         }
@@ -324,8 +330,7 @@
                                 message: response.data['msg'],
                                 type: 'warning',
                             });
-                        }
-                        else {
+                        } else {
                             this.taskData.modelFormVisible = false;
                             this.$message({
                                 showClose: true,
@@ -355,8 +360,7 @@
                         if (response.data['data']['set_ids'].length === 1) {
                             // 当用例集只有1个时，赋值set_id，让用例下拉框有数据显示
                             this.form.set_id = response.data['data']['set_ids'][0]['id']
-                        }
-                        else {
+                        } else {
                             this.caseStatus = true;
                         }
                         this.form.case = response.data['data']['case_ids'];

@@ -248,7 +248,7 @@
                                     style="margin-top:10px;color: rgb(171, 139, 149);font-weight: 500;font-size: 14px;
                                             padding-left: 5px;padding-top: 3px;">
                                 <el-col :span="1">
-                                    &nbsp
+                                    &nbsp;
                                 </el-col>
                                 <el-col :span="2">
                                     编号

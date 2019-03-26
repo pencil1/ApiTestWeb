@@ -12,19 +12,19 @@
                     <el-tabs type="card">
                         <el-tab-pane label="返回结果">
                             <el-scrollbar wrapStyle="max-height:540px;">
-                            <div>
-                                <pre style="overflow: auto;">{{resultDeal(item.meta_datas.data[0].response.json)}}</pre>
-                            </div>
+                                <div>
+                                    <pre style="overflow: auto;">{{resultDeal(item.meta_datas.data[0].response.json)}}</pre>
+                                </div>
                             </el-scrollbar>
                         </el-tab-pane>
-                        <el-tab-pane  label="错误信息" v-if="item.attachment">
+                        <el-tab-pane label="错误信息" v-if="item.attachment">
                             <div>
                                 <pre style="overflow: auto">{{item.attachment}}</pre>
                             </div>
                         </el-tab-pane>
                         <el-tab-pane label="返回信息">
                             <div v-for="(value, key) in item.meta_datas.data[0].response"
-                            :key="key">
+                                 :key="key">
                                 <div style="color: #409eff"
                                      v-if="JSON.stringify(value) !== '{}' && key !== 'start_timestamp' && value && key !== 'json'">
                                     {{ key }}：
@@ -34,9 +34,9 @@
                         </el-tab-pane>
                         <el-tab-pane label="请求信息">
                             <!--<div style="color: #409eff"-->
-                                 <!--v-if="!item.meta_datas.data[0].request.body">-->
-                                <!--body：-->
-                                <!--<pre style="overflow: auto;color: #000000">{{dealBody(item.meta_datas.data[0].request.body)}}</pre>-->
+                            <!--v-if="!item.meta_datas.data[0].request.body">-->
+                            <!--body：-->
+                            <!--<pre style="overflow: auto;color: #000000">{{dealBody(item.meta_datas.data[0].request.body)}}</pre>-->
                             <!--</div>-->
                             <div v-for="(value, key) in item.meta_datas.data[0].request"
                                  :key="key">
@@ -88,10 +88,19 @@
                         {
                             name: null,
                             attachment: null,
-                            meta_datas: {data:[{
-                                request: {body: null, url: null, headers: null, data: null, params: null, json: null},
-                                response: {content: null, json: null}
-                            }]},
+                            meta_datas: {
+                                data: [{
+                                    request: {
+                                        body: null,
+                                        url: null,
+                                        headers: null,
+                                        data: null,
+                                        params: null,
+                                        json: null
+                                    },
+                                    response: {content: null, json: null}
+                                }]
+                            },
                         },
                     ],
                 },
@@ -102,20 +111,12 @@
                 try {
                     data = JSON.parse(data);
                     data = JSON.stringify(data, null, 4);
-                }
-                catch (err) {
+                } catch (err) {
                     null;
                 }
                 return data
             },
-            dealBody(body){
-                if (!body){
-                    return
-                }
-                if(body.indexOf("&") !== -1 ){
-                    return body.split("&")
-                }
-            },
+
             lastResult() {
                 this.resultViewStatus = true;
             },
