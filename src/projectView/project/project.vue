@@ -353,7 +353,7 @@
                 this.projectData.modelFormVisible = true;
             },
             dealHostList(data) {
-                // 把[{value:xxx1},{value:xxx2}] 转为 [xxx1,xxx2]
+                // 把[{value:xxx1},{value:xxx2}] 转为 [xxx1,xxx2]111
                 let host = Array();
                 for (let i = 0; i < data.length; i++) {
                     if (data[i].value) {
