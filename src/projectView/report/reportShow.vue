@@ -197,6 +197,15 @@
                                 </td>
                             </tr>
 
+                            <tr v-show="statusShow[8]">
+                                <td class="my-table">resp_text</td>
+                                <td class="content">
+                                    <pre style="white-space: pre-wrap;word-wrap: break-word;">{{this.meta_datas.data[0].response.text}}</pre>
+                                    <!--<pre v-show="this.meta_data['response']['json'] !== ''"-->
+                                    <!--style="white-space: pre-wrap;word-wrap: break-word;">{{this.meta_data['response']['content']}}</pre>-->
+                                </td>
+                            </tr>
+
                             <tr v-show="attachment !== ''">
                                 <td class="my-table">attachment</td>
                                 <td class="content">
