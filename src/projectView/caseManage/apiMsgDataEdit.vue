@@ -471,8 +471,14 @@
                 if (this.apiCaseData.downFunc) {
                     this.apiCases[this.tempNum]['down_func'] = this.apiCaseData.downFunc;
                 }
+                else{
+                    this.apiCases[this.tempNum]['down_func'] = ''
+                }
                 if (this.apiCaseData.upFunc) {
                     this.apiCases[this.tempNum]['up_func'] = this.apiCaseData.upFunc;
+                }
+                else{
+                    this.apiCases[this.tempNum]['up_func'] = ''
                 }
                 if (this.apiCaseData.name) {
                     this.apiCases[this.tempNum]['case_name'] = this.apiCaseData.name;
