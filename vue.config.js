@@ -19,13 +19,13 @@ module.exports = {
     },
     devServer: {
         host: '127.0.0.1',
-        // host: '192.168.6.19',
+        // host: '192.168.0.106',
         // host: '47.107.147.188',
         port: 8010,
         proxy: {
             '/api/': {
                 target: 'http://127.0.0.1:8080',
-                // target: '192.168.6.19:8080',
+                // target: '192.168.0.106:8080',
                 // target: 'http://172.18.2.200:8080',
                 changeOrigin: true,
             }

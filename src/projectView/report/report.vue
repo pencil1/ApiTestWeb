@@ -63,6 +63,11 @@
                             minWidth="100">
                     </el-table-column>
                     <el-table-column
+                            prop="performer"
+                            label="执行者"
+                            minWidth="100">
+                    </el-table-column>
+                    <el-table-column
                             prop="read_status"
                             label="状态"
                             width="80">
