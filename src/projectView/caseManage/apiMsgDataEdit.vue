@@ -1,294 +1,371 @@
 <template>
     <div class="apiMsgDataEdit">
-        <el-dialog title="配置"
-                   :visible.sync="paramVisible"
-                   width="50%">
+        <!--        <el-dialog title="配置"-->
+        <!--                   :visible.sync="paramVisible"-->
+        <!--                   width="50%">-->
+        <span v-show="!paramVisible" style="color: red;margin-top: 20px">请点击左侧配置按钮加载信息</span>
+        <el-tabs v-show="paramVisible" type="card" style="margin-top: 10px">
+            <el-tab-pane label="接口信息" style="margin-top: 10px">
+                <el-form>
+                    <el-form-item label="用例名称" prop="name" label-width="120px">
+                        <el-input v-model="apiCaseData.name">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item label="set_up_hooks" label-width="120px">
+                        <el-input v-model="apiCaseData.upFunc">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item label="set_down_hooks" label-width="120px">
+                        <el-input v-model="apiCaseData.downFunc">
+                        </el-input>
+                    </el-form-item>
+                </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="Headers" style="margin-top: 10px">
+                <el-card shadow="hover"
+                         :body-style=styleCard
+                >
+                    <el-button type="primary" size="mini"
+                               @click="addCaseHeader()">添加
+                    </el-button>
 
-            <el-tabs>
-                <el-tab-pane label="接口信息" style="margin-top: 10px">
-                    <el-form>
-                        <el-form-item label="用例名称" prop="name" label-width="120px">
-                            <el-input v-model="apiCaseData.name">
+                    <el-switch
+                            style="margin-left: 10px"
+                            v-model="apiCaseData.statusCase.header[0]"
+                            inactive-text="启动功能">
+                    </el-switch>
+                    <el-switch
+                            style="margin-left: 10px"
+                            v-model="apiCaseData.statusCase.header[1]"
+                            inactive-text="启动新参数">
+                    </el-switch>
+                </el-card>
+                <el-table :data="apiCaseData.header" size="mini" stripe>
+                    <el-table-column property="key" label="Key" header-align="center" minWidth="100">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.key" size="mini">
                             </el-input>
-                        </el-form-item>
-                        <el-form-item label="up函数" label-width="120px">
-                            <el-input v-model="apiCaseData.upFunc">
+                        </template>
+                    </el-table-column>
+                    <el-table-column property="value" label="Value" header-align="center" minWidth="200">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.value" size="mini"
+                                      :id="'url_input' + scope.$index "
+                                      type="textarea"
+                                      rows=1
+                                      resize="none"
+                                      @focus="showLine('url_input', scope.$index)"
+                                      @input="changeLine()"
+                                      @blur="resetLine(scope.$index)">
                             </el-input>
-                        </el-form-item>
-                        <el-form-item label="down函数" label-width="120px">
-                            <el-input v-model="apiCaseData.downFunc">
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="备注" header-align="center" minWidth="80">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.remark" size="mini"
+                            >
                             </el-input>
-                        </el-form-item>
-                    </el-form>
-                </el-tab-pane>
-                <el-tab-pane label="url参数" style="margin-top: 10px">
+                        </template>
+                    </el-table-column>
+                    <el-table-column property="value" label="操作" header-align="center" width="80">
+                        <template slot-scope="scope">
+                            <el-button type="danger" icon="el-icon-delete" size="mini"
+                                       @click.native="delCaseHeader(scope.$index)">删除
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="Params" style="margin-top: 10px">
+                <el-card shadow="hover"
+                         :body-style=styleCard
+                >
                     <el-button type="primary" size="mini"
                                @click="addCaseParam()">添加
                     </el-button>
 
                     <el-switch
+                            style="margin-left: 10px"
                             v-model="apiCaseData.statusCase.param[0]"
                             inactive-text="启动功能">
                     </el-switch>
                     <el-switch
+                            style="margin-left: 10px"
                             v-model="apiCaseData.statusCase.param[1]"
                             inactive-text="启动新参数">
                     </el-switch>
-                    <el-table :data="apiCaseData.param" size="mini" stripe>
-                        <el-table-column property="key" label="Key" header-align="center" minWidth="100">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.key" size="mini">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column property="value" label="Value" header-align="center" minWidth="200">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.value" size="mini"
-                                          :id="'url_input' + scope.$index "
-                                          type="textarea"
-                                          rows=1
-                                          resize="none"
-                                          @focus="showLine('url_input', scope.$index)"
-                                          @input="changeLine()"
-                                          @blur="resetLine(scope.$index)">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="备注" header-align="center" minWidth="80">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.remark" size="mini"
-                                >
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column property="value" label="操作" header-align="center" width="80">
-                            <template slot-scope="scope">
-                                <el-button type="danger" icon="el-icon-delete" size="mini"
-                                           @click.native="delCaseParam(scope.$index)">删除
-                                </el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-tab-pane>
-                <el-tab-pane label="接口参数" style="margin-top: 10px">
+                </el-card>
+                <el-table :data="apiCaseData.param" size="mini" stripe>
+                    <el-table-column property="key" label="Key" header-align="center" minWidth="100">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.key" size="mini">
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column property="value" label="Value" header-align="center" minWidth="200">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.value" size="mini"
+                                      :id="'url_input' + scope.$index "
+                                      type="textarea"
+                                      rows=1
+                                      resize="none"
+                                      @focus="showLine('url_input', scope.$index)"
+                                      @input="changeLine()"
+                                      @blur="resetLine(scope.$index)">
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="备注" header-align="center" minWidth="80">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.remark" size="mini"
+                            >
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column property="value" label="操作" header-align="center" width="80">
+                        <template slot-scope="scope">
+                            <el-button type="danger" icon="el-icon-delete" size="mini"
+                                       @click.native="delCaseParam(scope.$index)">删除
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="Body" style="margin-top: 10px">
+                <el-card shadow="hover"
+                         :body-style=styleCard
+                >
                     <el-button type="primary" size="mini"
                                :disabled="form.choiceTypeStatus"
                                @click="addCaseVariable()">添加
                     </el-button>
-
-                    <el-input type="text" v-model="form.choiceType"
-                              :placeholder="form.choiceType"
-                              disabled size="mini"
-                              style="width: 70px;margin-left: 5px;margin-right: 5px"></el-input>
+                    <!--                <span>{{form.choiceType}}</span>-->
+                    <!--                <el-input type="text" v-model="form.choiceType"-->
+                    <!--                          :placeholder="form.choiceType"-->
+                    <!--                          disabled size="mini"-->
+                    <!--                          style="width: 70px;margin-left: 5px;margin-right: 5px"></el-input>-->
                     <!--<el-select v-model="form.choiceType" placeholder="请选择" size="mini" disabled>-->
-                        <!--<el-option-->
-                                <!--v-for="(item) in choiceVariableType"-->
-                                <!--:key="item.label"-->
-                                <!--:label="item.label"-->
-                                <!--:value="item.label">-->
-                        <!--</el-option>-->
+                    <!--<el-option-->
+                    <!--v-for="(item) in choiceVariableType"-->
+                    <!--:key="item.label"-->
+                    <!--:label="item.label"-->
+                    <!--:value="item.label">-->
+                    <!--</el-option>-->
                     <!--</el-select>-->
                     <el-switch
+                            style="margin-left: 10px"
                             v-model="apiCaseData.statusCase.variable[0]"
                             inactive-text="启动功能">
                     </el-switch>
                     <el-switch
+                            style="margin-left: 10px"
                             v-model="apiCaseData.statusCase.variable[1]"
                             inactive-text="启动新参数">
                     </el-switch>
-                    <div v-if="form.choiceType.toString() === 'json'">
-                        <div style="margin: 0 0 15px;">
-                        </div>
-                        <div style="border-style:solid;border-width: 1px;border-color: rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234)">
-                            <el-container>
-                                <editor
-                                        style="font-size: 15px"
-                                        v-model="apiCaseData.json_variable"
-                                        @init="editorInit"
-                                        lang="json"
-                                        theme="chrome"
-                                        width="100%"
-                                        height="500px"
-                                        :options="{
-                             }"
-                                >
-                                </editor>
-                            </el-container>
-                        </div>
-                        <!--<el-input-->
-                        <!--type="textarea"-->
-                        <!--:rows="27"-->
-                        <!--placeholder="请输入内容"-->
-                        <!--v-module="apiCaseData.variable">-->
-                        <!--</el-input>-->
+                </el-card>
+                <div v-if="form.choiceType.toString() === 'json'">
+                    <div style="margin: 0 0 15px;">
                     </div>
-                    <el-table :data="apiCaseData.variable" size="mini" stripe
-                              v-if="form.choiceType === 'data'">
-                        <el-table-column property="key" label="Key" header-align="center" minWidth="100">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.key" size="mini">
+                    <div style="border-style:solid;border-width: 1px;border-color: rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234) rgb(234, 234, 234)">
+                        <el-container>
+                            <editor
+                                    style="font-size: 15px"
+                                    v-model="apiCaseData.json_variable"
+                                    @init="editorInit"
+                                    lang="json"
+                                    theme="chrome"
+                                    width="100%"
+                                    height="500px"
+                                    :options="{
+                             }"
+                            >
+                            </editor>
+                        </el-container>
+                    </div>
+                    <!--<el-input-->
+                    <!--type="textarea"-->
+                    <!--:rows="27"-->
+                    <!--placeholder="请输入内容"-->
+                    <!--v-module="apiCaseData.variable">-->
+                    <!--</el-input>-->
+                </div>
+                <el-table :data="apiCaseData.variable" size="mini" stripe
+                          v-if="form.choiceType === 'data'">
+                    <el-table-column property="key" label="Key" header-align="center" minWidth="100">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.key" size="mini">
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column property="type" label="type" header-align="center" width="100">
+                        <template slot-scope="scope">
+                            <!--<el-input v-module="scope.row.param_type" size="medium">-->
+                            <!--</el-input>-->
+                            <el-select v-model="scope.row.param_type" size="mini">
+                                <el-option v-for="item in paramTypes" :key="item" :value="item">
+                                </el-option>
+                            </el-select>
+                        </template>
+                    </el-table-column>
+                    <el-table-column property="value" label="Value" header-align="center" minWidth="200">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.param_type === 'file'">
+                                <el-row>
+                                    <el-col :span="17">
+                                        <el-input v-model="scope.row.value" size="mini" :disabled="true">
+                                        </el-input>
+                                    </el-col>
+                                    <el-col :span="1">
+                                        <p></p>
+                                    </el-col>
+                                    <el-col :span="3">
+                                        <el-upload
+                                                class="upload-demo"
+                                                action="/api/upload"
+                                                :show-file-list='false'
+                                                :on-success="fileChange"
+                                        >
+                                            <el-button size="mini" type="primary"
+                                                       @click="tempNumTwo(scope.$index)">点击上传
+                                            </el-button>
+                                        </el-upload>
+                                    </el-col>
+                                </el-row>
+
+
+                            </div>
+                            <div v-else>
+                                <el-input v-model="scope.row.value" size="mini"
+                                          :id="'data2_input' + scope.$index "
+                                          type="textarea"
+                                          rows=1
+                                          resize="none"
+                                          @focus="showLine('data2_input', scope.$index)"
+                                          @input="changeLine()"
+                                          @blur="resetLine(scope.$index)">
                                 </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column property="type" label="type" header-align="center" width="100">
-                            <template slot-scope="scope">
-                                <!--<el-input v-module="scope.row.param_type" size="medium">-->
-                                <!--</el-input>-->
-                                <el-select v-model="scope.row.param_type" size="mini">
-                                    <el-option v-for="item in paramTypes" :key="item" :value="item">
-                                    </el-option>
-                                </el-select>
-                            </template>
-                        </el-table-column>
-                        <el-table-column property="value" label="Value" header-align="center" minWidth="200">
-                            <template slot-scope="scope">
-                                <div v-if="scope.row.param_type === 'file'">
-                                    <el-row>
-                                        <el-col :span="17">
-                                            <el-input v-model="scope.row.value" size="mini" :disabled="true">
-                                            </el-input>
-                                        </el-col>
-                                        <el-col :span="1">
-                                            <p></p>
-                                        </el-col>
-                                        <el-col :span="3">
-                                            <el-upload
-                                                    class="upload-demo"
-                                                    action="/api/upload"
-                                                    :show-file-list='false'
-                                                    :on-success="fileChange"
-                                            >
-                                                <el-button size="small" type="primary"
-                                                           @click="tempNumTwo(scope.$index)">点击上传
-                                                </el-button>
-                                            </el-upload>
-                                        </el-col>
-                                    </el-row>
+                            </div>
+                        </template>
 
-
-                                </div>
-                                <div v-else>
-                                    <el-input v-model="scope.row.value" size="mini"
-                                              :id="'data2_input' + scope.$index "
-                                              type="textarea"
-                                              rows=1
-                                              resize="none"
-                                              @focus="showLine('data2_input', scope.$index)"
-                                              @input="changeLine()"
-                                              @blur="resetLine(scope.$index)">
-                                    </el-input>
-                                </div>
-                            </template>
-
-                        </el-table-column>
-                        <el-table-column label="备注" header-align="center" minWidth="80">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.remark" size="mini">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column property="value" label="操作" header-align="center" width="80">
-                            <template slot-scope="scope">
-                                <el-button type="danger" icon="el-icon-delete" size="mini"
-                                           @click.native="delCaseVariable(scope.$index)">删除
-                                </el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-tab-pane>
-                <el-tab-pane label="信息提取" style="margin-top: 10px">
+                    </el-table-column>
+                    <el-table-column label="备注" header-align="center" minWidth="80">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.remark" size="mini">
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column property="value" label="操作" header-align="center" width="80">
+                        <template slot-scope="scope">
+                            <el-button type="danger" icon="el-icon-delete" size="mini"
+                                       @click.native="delCaseVariable(scope.$index)">删除
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="Extract" style="margin-top: 10px">
+                <el-card shadow="hover"
+                         :body-style=styleCard>
                     <el-button type="primary" size="mini"
                                @click="addCaseExtract()">添加
                     </el-button>
                     <el-switch
+                            style="margin-left: 10px"
                             v-model="apiCaseData.statusCase.extract[0]"
                             inactive-text="启动功能">
                     </el-switch>
                     <el-switch
+                            style="margin-left: 10px"
                             v-model="apiCaseData.statusCase.extract[1]"
                             inactive-text="启动新参数">
                     </el-switch>
-                    <el-table :data="apiCaseData.extract" size="mini" stripe>
-                        <el-table-column property="key" label="Key" header-align="center" minWidth="100">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.key" size="mini">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column property="value" label="Value" header-align="center" minWidth="200">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.value" size="mini">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="备注" header-align="center" minWidth="80">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.remark" size="mini">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column property="value" label="操作" header-align="center" width="80">
-                            <template slot-scope="scope">
-                                <el-button type="danger" icon="el-icon-delete" size="mini"
-                                           @click.native="delCaseExtract(scope.$index)">删除
-                                </el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-tab-pane>
-                <el-tab-pane label="接口判断" style="margin-top: 10px">
+                </el-card>
+                <el-table :data="apiCaseData.extract" size="mini" stripe>
+                    <el-table-column property="key" label="Key" header-align="center" minWidth="100">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.key" size="mini">
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column property="value" label="Value" header-align="center" minWidth="200">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.value" size="mini">
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="备注" header-align="center" minWidth="80">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.remark" size="mini">
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column property="value" label="操作" header-align="center" width="80">
+                        <template slot-scope="scope">
+                            <el-button type="danger" icon="el-icon-delete" size="mini"
+                                       @click.native="delCaseExtract(scope.$index)">删除
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="Assert" style="margin-top: 10px">
+                <el-card shadow="hover"
+                         :body-style=styleCard>
                     <el-button type="primary" size="mini"
                                @click="addCaseValidate()">添加
                     </el-button>
                     <el-switch
+                            style="margin-left: 10px"
                             v-model="apiCaseData.statusCase.validate[0]"
                             inactive-text="启动功能">
                     </el-switch>
                     <el-switch
-
+                            style="margin-left: 10px"
                             v-model="apiCaseData.statusCase.validate[1]"
                             inactive-text="启动新参数">
                     </el-switch>
-                    <el-table :data="apiCaseData.validate" size="mini" stripe>
-                        <el-table-column property="key" label="Key" header-align="center" minWidth="100">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.key" size="mini">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="Comparator" header-align="center" minWidth="80">
-                            <template slot-scope="scope">
-                                <el-autocomplete
-                                        class="inline-input"
-                                        v-model="scope.row.comparator"
-                                        :fetch-suggestions="querySearch"
-                                        placeholder="请输入内容">
-                                </el-autocomplete>
-                            </template>
-                        </el-table-column>
-                        <el-table-column property="value" label="Value" header-align="center" minWidth="200">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.value" size="mini">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column property="value" label="操作" header-align="center" width="80">
-                            <template slot-scope="scope">
-                                <el-button type="danger" icon="el-icon-delete" size="mini"
-                                           @click.native="delCaseValidate(scope.$index)">删除
-                                </el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-tab-pane>
-            </el-tabs>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="paramVisible = false" size="small">取 消</el-button>
-                <el-button type="primary"
-                           @click="sureConfigBtn()" size="small">确 定
-                </el-button>
-            </div>
-        </el-dialog>
+                </el-card>
+                <el-table :data="apiCaseData.validate" size="mini" stripe>
+                    <el-table-column property="key" label="Key" header-align="center" minWidth="100">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.key" size="mini">
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="Comparator" header-align="center" minWidth="80">
+                        <template slot-scope="scope">
+                            <el-autocomplete
+                                    class="inline-input"
+                                    v-model="scope.row.comparator"
+                                    :fetch-suggestions="querySearch"
+                                    placeholder="请输入内容"
+                                    size="mini">
+                            </el-autocomplete>
+                        </template>
+                    </el-table-column>
+                    <el-table-column property="value" label="Value" header-align="center" minWidth="200">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.value" size="mini">
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column property="value" label="操作" header-align="center" width="80">
+                        <template slot-scope="scope">
+                            <el-button type="danger" icon="el-icon-delete" size="mini"
+                                       @click.native="delCaseValidate(scope.$index)">删除
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-tab-pane>
+        </el-tabs>
+        <div slot="footer" class="dialog-footer" style="margin-top: 5px" v-show="paramVisible">
+            <el-button @click="initData(tempNum, true)" size="mini">还 原</el-button>
+            <el-button type="primary"
+                       @click="sureConfigBtn()" size="mini">保 存
+            </el-button>
+        </div>
+        <!--        </el-dialog>-->
 
     </div>
 </template>
@@ -303,6 +380,9 @@
         props: ['apiCases'],
         data() {
             return {
+                styleCard: {
+                    'padding': '5px'
+                },
                 choiceVariableType: [{
                     value: '选项1',
                     label: 'data'
@@ -324,17 +404,19 @@
                     choiceTypeStatus: false,
                     choiceType: 'data',
                 },
+                tempApiCaseData: '',
                 apiCaseData: {
                     name: '',
                     time: '',
                     upFunc: '',
                     downFunc: '',
-                    statusCase: {variable: [], extract: [], validate: [], param: []},
+                    statusCase: {variable: [], extract: [], validate: [], param: [], header: []},
                     variable: [{key: '', value: '', param_type: '', remark: ''}],
                     json_variable: '',
                     extract: [{key: '', value: ''}],
                     validate: [{key: '', value: '', comparator: ''}],
                     param: [{key: '', value: '', remark: ''}],
+                    header: [{key: '', value: '', remark: ''}],
                 },
             }
         },
@@ -364,13 +446,18 @@
                     this.cell.style.height = this.cell.scrollHeight + 'px';
                 }
             },
-            initData(i) {
+            initData(i, restore = false) {
                 //  初始化步骤数据
+
+                if (this.paramVisible === true && restore === false) {
+                    this.sureConfigBtn();
+                }
                 this.apiCaseData.param = this.apiCases[i]['param'];
                 this.apiCaseData.variable = this.apiCases[i]['variable'];
                 this.apiCaseData.json_variable = this.apiCases[i]['json_variable'];
                 this.apiCaseData.extract = this.apiCases[i]['extract'];
                 this.apiCaseData.validate = this.apiCases[i]['validate'];
+                this.apiCaseData.header = this.apiCases[i]['header'];
                 this.apiCaseData.statusCase = this.apiCases[i]['statusCase'];
                 this.form.choiceType = this.apiCases[i]['variableType'];
                 this.apiCaseData.name = this.apiCases[i]['case_name'];
@@ -406,6 +493,12 @@
             },
             delCaseParam(i) {
                 this.apiCaseData.param.splice(i, 1);
+            },
+            addCaseHeader() {
+                this.apiCaseData.header.push({key: '', value: '', remark: ''});
+            },
+            delCaseHeader(i) {
+                this.apiCaseData.header.splice(i, 1);
             },
             addCaseValidate() {
                 this.apiCaseData.validate.push({key: '', value: ''});
@@ -470,14 +563,12 @@
                 }
                 if (this.apiCaseData.downFunc) {
                     this.apiCases[this.tempNum]['down_func'] = this.apiCaseData.downFunc;
-                }
-                else{
+                } else {
                     this.apiCases[this.tempNum]['down_func'] = ''
                 }
                 if (this.apiCaseData.upFunc) {
                     this.apiCases[this.tempNum]['up_func'] = this.apiCaseData.upFunc;
-                }
-                else{
+                } else {
                     this.apiCases[this.tempNum]['up_func'] = ''
                 }
                 if (this.apiCaseData.name) {
@@ -491,7 +582,7 @@
                     return
                 }
                 this.apiCases[this.tempNum]['json_variable'] = this.apiCaseData.json_variable;
-                this.paramVisible = false;
+                // this.paramVisible = false;
             },
         },
         mounted() {
