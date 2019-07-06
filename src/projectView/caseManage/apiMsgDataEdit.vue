@@ -1,10 +1,14 @@
 <template>
-    <div class="apiMsgDataEdit">
+    <div class="apiMsgDataEdit"
+         v-loading="!paramVisible"
+         element-loading-text="左侧列表数据发生变化，请点击配置按钮重新配置"
+         element-loading-spinner="my-icon-2"
+         >
         <!--        <el-dialog title="配置"-->
         <!--                   :visible.sync="paramVisible"-->
         <!--                   width="50%">-->
-        <span v-show="!paramVisible" style="color: red;margin-top: 20px">请点击左侧配置按钮加载信息</span>
-        <el-tabs v-show="paramVisible" type="card" style="margin-top: 10px">
+<!--        <span v-show="!paramVisible" style="color: red;margin-top: 20px">请点击左侧配置按钮加载信息</span>-->
+        <el-tabs  type="card" style="margin-top: 10px">
             <el-tab-pane label="接口信息" style="margin-top: 10px">
                 <el-form>
                     <el-form-item label="用例名称" prop="name" label-width="120px">
@@ -359,13 +363,15 @@
                 </el-table>
             </el-tab-pane>
         </el-tabs>
-        <div slot="footer" class="dialog-footer" style="margin-top: 5px" v-show="paramVisible">
-            <el-button @click="initData(tempNum, true)" size="mini">还 原</el-button>
+        <div slot="footer" class="dialog-footer" style="margin-top: 5px">
+            <el-button @click="initData(tempNum)" size="mini">还 原</el-button>
             <el-button type="primary"
                        @click="sureConfigBtn()" size="mini">保 存
             </el-button>
+            <el-tooltip style="margin-left: 10px" content="信息修改后，记得点击保存哦">
+                <div class="my-icon-cuowu"></div>
+            </el-tooltip>
         </div>
-        <!--        </el-dialog>-->
 
     </div>
 </template>
@@ -446,12 +452,8 @@
                     this.cell.style.height = this.cell.scrollHeight + 'px';
                 }
             },
-            initData(i, restore = false) {
+            initData(i) {
                 //  初始化步骤数据
-
-                if (this.paramVisible === true && restore === false) {
-                    this.sureConfigBtn();
-                }
                 this.apiCaseData.param = this.apiCases[i]['param'];
                 this.apiCaseData.variable = this.apiCases[i]['variable'];
                 this.apiCaseData.json_variable = this.apiCases[i]['json_variable'];
