@@ -54,25 +54,26 @@
                     <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
                     <el-form :inline="true" class="demo-form-inline " size="small">
                         <el-form-item label=" " labelWidth="10px">
-                            <el-select v-model="form.sceneVariableProjectName" placeholder="请选择项目"
-                                       @change="changeConfigChoice"
-                                       style="width: 150px;padding-right:5px">
-                                <el-option
-                                        v-for="(item, key) in proModelData"
-                                        :key="key"
-                                        :value="key">
-                                </el-option>
-                            </el-select>
+<!--                            <el-select v-model="form.sceneVariableProjectName" placeholder="请选择项目"-->
+<!--                                       @change="changeConfigChoice"-->
+<!--                                       style="width: 150px;padding-right:5px">-->
+<!--                                <el-option-->
+<!--                                        v-for="(item, key) in proModelData"-->
+<!--                                        :key="key"-->
+<!--                                        :value="key">-->
+<!--                                </el-option>-->
+<!--                            </el-select>-->
 
-                            <el-select v-model="form.config" value-key="configId" placeholder="请选择配置"
+                            <el-select v-model="caseData.environment" clearable  value-key="configId" placeholder="默认项目环境"
                                        style="width: 150px;padding-right:5px">
                                 <el-option
-                                        v-for="item in configData[form.sceneVariableProjectName]"
-                                        :key="item.configId"
-                                        :label="item.name"
+                                        v-for="item in environmentList"
+                                        :key="item"
+
                                         :value="item">
                                 </el-option>
                             </el-select>
+
                             <el-select v-model="caseData.funcAddress" multiple placeholder="请选择导入函数文件" size="small">
                                 <el-option
                                         v-for="item in this.funcAddress"
@@ -83,7 +84,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" size="small" @click.native="addConfigData()">添加配置
+                            <el-button type="primary" size="small" @click="configShow=true">加载配置
                             </el-button>
                             <el-button type="primary" size="small"
                                        @click="addConfigVariable()">添加变量
@@ -340,7 +341,36 @@
             </div>
         </el-dialog>
 
+        <el-dialog title="加载配置" :visible.sync="configShow" width="30%">
+            <el-form :inline="true" class="demo-form-inline " size="small">
+                        <el-form-item label=" " labelWidth="10px">
+                            <el-select v-model="form.sceneVariableProjectName" placeholder="请选择项目"
+                                       @change="changeConfigChoice"
+                                       style="width: 150px;padding-right:5px">
+                                <el-option
+                                        v-for="(item, key) in proModelData"
+                                        :key="key"
+                                        :value="key">
+                                </el-option>
+                            </el-select>
 
+                            <el-select v-model="form.config" value-key="configId" placeholder="请选择配置"
+                                       style="width: 150px;padding-right:5px">
+                                <el-option
+                                        v-for="item in configData[form.sceneVariableProjectName]"
+                                        :key="item.configId"
+                                        :label="item.name"
+                                        :value="item">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+
+                    </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button size="small" @click="configShow = false">取 消</el-button>
+                <el-button type="primary" size="small" @click.native="addConfigData()">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -401,9 +431,12 @@
                     desc: '',
                     times: '',
                     name: '',
+                    environment:'',
                     formLabelWidth: '70px',
                     apiCases: [],// 执行步骤里面的所有接口信息
                 },
+                configShow: false,
+                environmentList:['测试环境','开发环境','线上环境','备用环境'],
             }
         },
         methods: {
@@ -467,6 +500,7 @@
                 this.caseData.times = '';
                 this.caseData.desc = '';
                 this.caseData.id = '';
+                this.caseData.environment = '';
                 this.caseData.funcAddress = Array();
                 this.caseData.num = '';
                 this.caseData.modelFormVisible = true;
@@ -493,6 +527,7 @@
                             this.caseData.num = response.data['data']['num'];
                         }
                         this.caseData.modelFormVisible = true;
+                        this.caseData.environment = this.environmentList[response.data['data']['environment']];
                         this.findApiMsg();
                     }
                 )
@@ -622,6 +657,7 @@
                         this.caseData.variable = this.caseData.variable.concat(response.data['data']['variables']);
                         this.caseData.variable = JSON.parse(JSON.stringify(this.caseData.variable));
                         this.caseData.funcAddress = response.data['data']['func_address'];
+                        this.configShow = false;
                     }
                 )
             },
@@ -659,12 +695,14 @@
                         return
                     }
                 }
+                // console.log(this.environmentList.indexOf(this.caseData.environment));
                 this.$axios.post(this.$api.addCaseApi, {
                     'num': this.caseData.num,
                     'name': this.caseData.name,
                     'times': this.caseData.times,
                     'caseSetId': this.form.set.id,
                     'desc': this.caseData.desc,
+                    'environment': this.environmentList.indexOf(this.caseData.environment),
                     'funcAddress': this.caseData.funcAddress,
                     'variable': JSON.stringify(this.caseData.variable),
                     'project': this.form.projectName,
@@ -693,14 +731,14 @@
         watch: {
             monitorApiCases: {
                 handler: function () {
-                    if(this.$refs.apiMessageEditFunc){
+                    if (this.$refs.apiMessageEditFunc) {
                         this.$refs.apiMessageEditFunc.paramVisible = false
                     }
 
 
                 }
             }
-            },
+        },
         mounted() {
         },
     }
