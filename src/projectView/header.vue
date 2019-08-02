@@ -2,19 +2,19 @@
     <div class="caseHeader">
         <el-container>
             <el-container>
-                <el-header style="height: 40px;">
-                    <div style="float: left;">
-                        <el-breadcrumb separator-class="el-icon-arrow-right">
-                            <el-breadcrumb-item
-                                    v-for="(item, index) in title"
-                                    :key="index"
-                            >
-                                {{title[index]}}
-                            </el-breadcrumb-item>
+                <el-header style="height: 30px;">
+<!--                    <div style="float: left;">-->
+<!--                        <el-breadcrumb separator-class="el-icon-arrow-right">-->
+<!--                            <el-breadcrumb-item-->
+<!--                                    v-for="(item, index) in title"-->
+<!--                                    :key="index"-->
+<!--                            >-->
+<!--                                {{title[index]}}-->
+<!--                            </el-breadcrumb-item>-->
 
-                        </el-breadcrumb>
-                    </div>
-                    <el-dropdown style="float:right;line-height:20px;top:12px;color: rgb(255, 255, 255);"
+<!--                        </el-breadcrumb>-->
+<!--                    </div>-->
+                    <el-dropdown style="float:right;line-height:20px;top:6px;color: rgb(255, 255, 255);"
                                  @command="logOut">
                         <span class="el-dropdown-link">{{userName}}<i
                                 class="el-icon-arrow-down el-icon--right"></i></span>
@@ -185,8 +185,8 @@
 
 <style>
     .el-header {
-        background-color: #717275;
-        color: #ffffff;
+        background-color: #434650;
+        color: #434650;
 
         line-height: 60px;
     }

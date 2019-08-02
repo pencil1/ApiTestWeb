@@ -2,10 +2,9 @@
 
     <div id="manage">
         <el-container>
-
             <el-aside width="auto" style="min-height: 936px">
                 <!--<div style="margin: 0 0 40px;line-height: 30px;">-->
-                    <!--测试平台-->
+                <!--测试平台-->
                 <!--</div>-->
                 <div class="menu-toggle" @click.prevent="collapse">
                     <i class="my-icon-xiangzuo-copy" v-show="!collapsed"></i>
@@ -19,19 +18,19 @@
                             active-text-color="#ffd04b"
                             :router="true"
                             :collapse="collapsed"
-                            class="el-menu-vertical-demo" >
+                            class="el-menu-vertical-demo">
 
                         <!--<el-submenu index="1">-->
-                            <!--<template slot="title">-->
-                                <!--<i class="el-icon-menu"></i>-->
-                                <!--<span>项目管理</span>-->
-                            <!--</template>-->
+                        <!--<template slot="title">-->
+                        <!--<i class="el-icon-menu"></i>-->
+                        <!--<span>项目管理</span>-->
+                        <!--</template>-->
 
-                            <!--<el-menu-item-group>-->
-                                <!--<el-menu-item index="/manage/projectManage">项目</el-menu-item>-->
-                                <!--&lt;!&ndash;<el-menu-item index="/manage/test">测试</el-menu-item>&ndash;&gt;-->
+                        <!--<el-menu-item-group>-->
+                        <!--<el-menu-item index="/manage/projectManage">项目</el-menu-item>-->
+                        <!--&lt;!&ndash;<el-menu-item index="/manage/test">测试</el-menu-item>&ndash;&gt;-->
 
-                            <!--</el-menu-item-group>-->
+                        <!--</el-menu-item-group>-->
                         <!--</el-submenu>-->
                         <el-submenu index="2">
                             <template slot="title">
@@ -53,7 +52,7 @@
                                 <span>报告管理</span>
                             </template>
                             <el-menu-item-group>
-                                    <el-menu-item index="/manage/reportManage">测试报告</el-menu-item>
+                                <el-menu-item index="/manage/reportManage">测试报告</el-menu-item>
                             </el-menu-item-group>
                             <el-menu-item-group>
                                 <el-menu-item index="/manage/taskManage">定时任务</el-menu-item>
@@ -75,7 +74,7 @@
                                 <i class="el-icon-setting"></i>
                                 <span>系统管理</span>
                             </template>
-                            <el-menu-item-group >
+                            <el-menu-item-group>
                                 <el-menu-item index="/manage/userManage">用户管理</el-menu-item>
 
 
@@ -85,11 +84,13 @@
                     </el-menu>
                 </el-scrollbar>
             </el-aside>
+
             <el-container>
-                <el-header style="height: 40px;">
+
+
+                <el-header style="height: 30px;">
                     <router-view class="view one" name="Header"></router-view>
                 </el-header>
-
                 <!--<el-header style="height: 40px;">-->
                 <!--<el-breadcrumb separator-class="el-icon-arrow-right">-->
                 <!--<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>-->
@@ -98,9 +99,13 @@
                 <!--<el-breadcrumb-item>活动详情</el-breadcrumb-item>-->
                 <!--</el-breadcrumb>-->
                 <!--</el-header>-->
-
+                    <v-tags v-show="tagsShow"></v-tags>
                 <el-main>
-                    <router-view class="view two" name="Manage" style="font-family: Arial"></router-view>
+
+                    <keep-alive :include="tagsList">
+                        <router-view class="view two" name="Manage" style="font-family: Arial"
+                                     v-if="isRouterAlive"></router-view>
+                    </keep-alive>
                 </el-main>
 
                 <!--<el-footer style="height: 30px;">-->
@@ -112,15 +117,23 @@
 </template>
 
 <script>
+    import vTags from './Tags.vue';
+    import bus from './bus';
+
     export default {
         name: 'manage',
-
+        components: {
+            vTags
+        },
         data() {
             return {
-                navigationName:'/manage/projectManage',
-                collapsed:false,
-                role:'',
-                userName:'',
+                isRouterAlive: true,
+                tagsList: [],
+                tagsShow:true,
+                navigationName: '/manage/projectManage',
+                collapsed: false,
+                role: '',
+                userName: '',
 
             }
         },
@@ -128,21 +141,24 @@
             collapse: function () {
                 this.collapsed = !this.collapsed;
             },
-            closeNavigation(){
+            closeNavigation() {
                 this.role = this.$store.state.roles;
                 this.userName = this.$store.state.userName;
 
                 this.navigationName = this.$route.path;
-                if(this.$route.path === '/manage/reportShow'){
+                if (this.$route.path === '/manage/reportShow') {
                     this.collapsed = true;
+                    this.tagsShow = false;
+                    console.log(this.tagsShow)
                 }
             }
         },
         watch: {
             "$route": function (to) {
-
-                if (to.path === '/manage/reportShow'){
-                    this.collapsed = true
+                this.navigationName = to.path;
+                if (to.path === '/manage/reportShow') {
+                    // this.collapsed = true;
+                    // this.tagsShow = false;
                 }
                 //from 对象中包含当前地址
                 //to 对象中包含目标地址
@@ -152,6 +168,31 @@
         mounted() {
             this.closeNavigation()
         },
+        created() {
+            bus.$on('refreshE', msg => {
+                let index = this.tagsList.indexOf(msg.name);
+                // console.log(index);
+                this.tagsList.splice(index, 1);
+                // console.log(this.tagsList);
+                this.isRouterAlive = false;
+                this.$nextTick(function () {
+                    this.isRouterAlive = true;
+                    this.tagsList.push(msg.name);
+                });
+
+            });
+
+            // 只有在标签页列表里的页面才使用keep-alive，即关闭标签之后就不保存到内存中了。
+            bus.$on('tags', msg => {
+                let arr = [];
+                for (let i = 0, len = msg.length; i < len; i++) {
+                    msg[i].name && arr.push(msg[i].name);
+                }
+                // console.log(this.tagsList)
+                this.tagsList = arr;
+
+            })
+        }
     }
 </script>
 
@@ -160,19 +201,23 @@
         width: 220px;
 
     }
+
     .menu-toggle {
         background: #434650;
         text-align: center;
         color: white;
-        height: 26px;
+        height: 30px;
         line-height: 30px;
     }
+
     .specialList {
         max-height: 948px;
     }
+
     .el-menu {
         border-right: solid 0px #e6e6e6;
     }
+
     .el-footer {
         background-color: #8db7ef;
         color: #333;
@@ -199,32 +244,36 @@
     .el-container:nth-child(7) .el-aside {
         line-height: 320px;
     }
-    .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
-        margin-bottom:  10px;
+
+    .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+        margin-bottom: 10px;
     }
-    .search-style{
-        background-color:  #f5f5f5;
+
+    .search-style {
+        background-color: #f5f5f5;
         padding-top: 10px;
     }
+
     .el-main {
         color: #333;
         text-align: left;
         line-height: 20px;
-        padding:0 0 20px 0;
+        padding: 0 0 20px 0;
 
     }
 
     /*.el-tabs--top .el-tabs__item.is-top:nth-child(2){*/
-        /*padding-left:5px;*/
+    /*padding-left:5px;*/
     /*}*/
     .el-button--mini {
         padding: 5px 9px;
     }
 
 
-    .el-tabs__header{
-        margin: 0 ;
+    .el-tabs__header {
+        margin: 0;
     }
+
     .row-bg {
         padding: 5px 0;
     }
@@ -235,37 +284,40 @@
 
     .el-dialog__header {
         padding: 2px 10px 2px;
-        background-color:#f5f7fa;
-        border-radius:5px;
+        background-color: #f5f7fa;
+        border-radius: 5px;
     }
+
     .el-dialog__body {
         padding: 5px 10px;
     }
+
     .el-dialog__title {
         color: #6a6d71;
-        font-size:15px;
+        font-size: 15px;
 
     }
-    .el-dialog__headerbtn{
-        top:6px;
-        right:15px;
+
+    .el-dialog__headerbtn {
+        top: 6px;
+        right: 15px;
     }
 
-    .el-input--mini .el-input__inner{
-        line-height:20px;
+    .el-input--mini .el-input__inner {
+        line-height: 20px;
     }
 
     /*分页的基本样式*/
-    .pagination{
+    .pagination {
         float: right;
         position: relative;
         margin-right: 40px
     }
 
     /**/
-    .table_padding{
+    .table_padding {
         padding-left: 10px;
-        padding-right:5px;
+        padding-right: 5px;
     }
 
     /*改变el-table的默认滚动条样式*/
@@ -273,10 +325,11 @@
         width: 6px;
         height: 10px;
     }
+
     .el-table__body-wrapper::-webkit-scrollbar-thumb {
-          background-color: rgba(69, 100, 160, 0.3);
-          border-radius: 4px;
-      }
+        background-color: rgba(69, 100, 160, 0.3);
+        border-radius: 4px;
+    }
 
     .ace_scrollbar::-webkit-scrollbar {
         width: 8px;
@@ -298,6 +351,7 @@
     .el-popper[x-placement^=bottom] {
         margin-top: 5px;
     }
+
     .el-textarea__inner {
         overflow-y: hidden;
     }

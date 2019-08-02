@@ -38,18 +38,22 @@ const routes = [
                     Manage: projectManage,
                 },
                 meta: {
-                    title: '首页入口'
+                    title: '首页入口',
                 }
             }, {
                 path: 'projectManage',
                 // component:caseManage,
                 meta: {
+                    title: '项目管理',
                     requireAuth: true,
+                     keepAlive: true
                 },
                 components: {
                     Header: Header,
                     Manage: projectManage,
-                }
+                },
+
+
             },
 
             {
@@ -57,6 +61,7 @@ const routes = [
                 // component:caseManage,
 
                 meta: {
+                    title: '业务配置',
                     requireAuth: true,
                 },
                 components: {
@@ -67,6 +72,7 @@ const routes = [
             {
                 path: 'caseManage',
                 meta: {
+                    title: '接口信息',
                     requireAuth: true,
                 },
                 // component:caseManage,
@@ -79,6 +85,7 @@ const routes = [
             {
                 path: 'reportManage',
                 meta: {
+                    title: '测试报告',
                     requireAuth: true,
                 },
                 // component:caseManage,
@@ -100,6 +107,7 @@ const routes = [
             {
                 path: 'buildInFunc',
                 meta: {
+                    title: '内置函数',
                     requireAuth: true,
                 },
                 components: {
@@ -110,6 +118,7 @@ const routes = [
             {
                 path: 'sceneManage',
                 meta: {
+                    title: '接口用例',
                     requireAuth: true,
                 },
                 components: {
@@ -130,6 +139,7 @@ const routes = [
             {
                 path: 'userManage',
                 meta: {
+                    title: '用户管理',
                     requireAuth: true,
                 },
                 components: {
@@ -140,6 +150,7 @@ const routes = [
             {
                 path: 'taskManage',
                 meta: {
+                    title: '定时任务',
                     requireAuth: true,
                 },
                 components: {
