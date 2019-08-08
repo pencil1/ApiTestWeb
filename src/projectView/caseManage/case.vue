@@ -23,7 +23,7 @@
             </el-form-item>
 
         </el-form>
-        <el-tabs v-model="tabValue" style="padding-left: 10px;padding-right:5px;">
+        <el-tabs v-model="tabValue" style="padding-left: 10px;padding-right:5px;"  @tab-click="tabChange">
             <el-tab-pane label="用例信息" name="first">
                 <el-row>
                     <el-col :span="3"
@@ -415,6 +415,12 @@
                         }
                     }
                 )
+            },
+            tabChange(tab) {
+                //  当tab切换到接口信息时，刷新列表
+                if (tab.label === '用例信息') {
+                    this.findCase()
+                }
             },
         },
         mounted() {
