@@ -368,7 +368,7 @@
             <el-button type="primary"
                        @click="sureConfigBtn()" size="mini">保 存
             </el-button>
-            <el-tooltip style="margin-left: 10px" content="信息修改后，记得点击保存哦">
+            <el-tooltip style="margin-left: 10px" content="ps:信息修改后，记得点击保存哦(右下角的保存按钮不保存当前步骤信息)">
                 <div class="my-icon-cuowu"></div>
             </el-tooltip>
         </div>
@@ -584,6 +584,11 @@
                     return
                 }
                 this.apiCases[this.tempNum]['json_variable'] = this.apiCaseData.json_variable;
+                this.$message({
+                        showClose: true,
+                        message: '步骤配置保存成功',
+                        type: 'success',
+                    });
                 // this.paramVisible = false;
             },
         },

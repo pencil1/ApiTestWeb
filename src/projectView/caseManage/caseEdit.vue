@@ -1,371 +1,378 @@
 <template>
     <div class="sceneEdit">
 
-        <el-dialog title="用例"
-                   :visible.sync="caseData.modelFormVisible"
-                   :close-on-click-modal="false"
-                   :width="mainWidth"
-                   top="5vh">
+        <!--        <el-dialog title="用例"-->
+        <!--                   :visible.sync="caseData.modelFormVisible"-->
+        <!--                   :close-on-click-modal="false"-->
+        <!--                   :width="mainWidth"-->
+        <!--                   top="5vh">-->
 
-            <el-tabs value="first" @tab-click="changeShow">
-                <el-tab-pane label="用例信息" name="first" style="margin-top: 10px">
-                    <el-form size="small" :inline="true">
-                        <el-form-item label="用例名称" :label-width="caseData.formLabelWidth">
-                            <el-input v-model="caseData.name" style="width: 150px">
+        <el-tabs value="first" @tab-click="changeShow" type="border-card">
+
+            <el-tab-pane label="用例信息" name="first" style="margin-top: 10px">
+                <el-form size="small" :inline="true">
+                    <el-form-item label="用例名称" :label-width="caseData.formLabelWidth">
+                        <el-input v-model="caseData.name" style="width: 150px">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item label="项目选择" :label-width="caseData.formLabelWidth">
+                        <el-select v-model="form.projectName" placeholder="请选择项目" @change="changeSetChoice"
+                                   style="width: 150px">
+                            <el-option
+                                    v-for="(item, key) in proModelData"
+                                    :key="key"
+                                    :value="key">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="用例编号" :label-width="caseData.formLabelWidth" v-if="caseData.id">
+                        <el-input v-model.number="caseData.num" :minlength="215" style="width: 130px">
+                        </el-input>
+                    </el-form-item>
+                </el-form>
+                <el-form :inline="true" size="small">
+                    <el-form-item label="用例描述" :label-width="caseData.formLabelWidth">
+                        <el-input v-model="caseData.desc" style="width: 150px">
+                        </el-input>
+                    </el-form-item>
+
+                    <el-form-item label="集合选择" :label-width="caseData.formLabelWidth">
+                        <el-select v-model="form.set" placeholder="请选择用例集" value-key="id"
+                                   style="width: 150px">
+                            <el-option
+                                    v-for="item in allSetList[form.projectName]"
+                                    :key="item.id"
+                                    :label="item.label"
+                                    :value="item">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="执行次数" label-width="70px">
+                        <el-input-number v-model="caseData.times" :min="1" :max="1000">
+                        </el-input-number>
+                    </el-form-item>
+                </el-form>
+                <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
+                <el-form :inline="true" class="demo-form-inline " size="small">
+                    <el-form-item label=" " labelWidth="10px">
+                        <!--                            <el-select v-model="form.sceneVariableProjectName" placeholder="请选择项目"-->
+                        <!--                                       @change="changeConfigChoice"-->
+                        <!--                                       style="width: 150px;padding-right:5px">-->
+                        <!--                                <el-option-->
+                        <!--                                        v-for="(item, key) in proModelData"-->
+                        <!--                                        :key="key"-->
+                        <!--                                        :value="key">-->
+                        <!--                                </el-option>-->
+                        <!--                            </el-select>-->
+
+                        <el-select v-model="caseData.environment" clearable value-key="configId" placeholder="默认项目环境"
+                                   style="width: 150px;padding-right:5px">
+                            <el-option
+                                    v-for="item in environmentList"
+                                    :key="item"
+
+                                    :value="item">
+                            </el-option>
+                        </el-select>
+
+                        <el-select v-model="caseData.funcAddress" multiple placeholder="请选择导入函数文件" size="small">
+                            <el-option
+                                    v-for="item in this.funcAddress"
+                                    :key="item['value']"
+                                    :label="item['value']"
+                                    :value="item['value']">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" size="small" @click="configShow=true">加载配置
+                        </el-button>
+                        <el-button type="primary" size="small"
+                                   @click="addConfigVariable()">添加变量
+                        </el-button>
+                    </el-form-item>
+                </el-form>
+                <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
+                <el-table :data="caseData.variable"
+                          style="width:100%"
+                          :show-header="false"
+                          size="mini"
+                          max-height="538"
+                          stripe>
+                    <el-table-column property="key" label="Key" header-align="center" minWidth="100">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.key" size="small" placeholder="key">
                             </el-input>
-                        </el-form-item>
-                        <el-form-item label="项目选择" :label-width="caseData.formLabelWidth">
-                            <el-select v-model="form.projectName" placeholder="请选择项目" @change="changeSetChoice"
-                                       style="width: 150px">
-                                <el-option
-                                        v-for="(item, key) in proModelData"
-                                        :key="key"
-                                        :value="key">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="用例编号" :label-width="caseData.formLabelWidth" v-if="caseData.id">
-                            <el-input v-model.number="caseData.num" :minlength="215" style="width: 130px">
+                        </template>
+                    </el-table-column>
+                    <el-table-column property="value" label="Value" header-align="center" minWidth="150">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.value" size="small" placeholder="Value">
                             </el-input>
-                        </el-form-item>
-                    </el-form>
-                    <el-form :inline="true" size="small">
-                        <el-form-item label="用例描述" :label-width="caseData.formLabelWidth">
-                            <el-input v-model="caseData.desc" style="width: 150px">
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="备注" header-align="center" minWidth="70">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.remark" size="small" placeholder="备注">
                             </el-input>
-                        </el-form-item>
+                        </template>
+                    </el-table-column>
+                    <el-table-column property="value" label="操作" header-align="center" width="140">
+                        <template slot-scope="scope">
+                            <el-button-group>
+                                <el-button type="info" icon="my-icon-jiantou-xiangshang"
+                                           @click.native="upNum(scope.$index)" size="mini">{{null}}
+                                </el-button>
+                                <el-button type="info" icon="my-icon-jiantou-xiangxia"
+                                           @click.native="downNum(scope.$index)" size="mini">{{null}}
+                                </el-button>
+                                <el-button type="danger" size="mini"
+                                           @click.native="delConfigVariable(scope.$index)"> 删除
+                                </el-button>
+                            </el-button-group>
+                        </template>
+                    </el-table-column>
+                </el-table>
 
-                        <el-form-item label="集合选择" :label-width="caseData.formLabelWidth">
-                            <el-select v-model="form.set" placeholder="请选择用例集" value-key="id"
-                                       style="width: 150px">
-                                <el-option
-                                        v-for="item in allSetList[form.projectName]"
-                                        :key="item.id"
-                                        :label="item.label"
-                                        :value="item">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="执行次数" label-width="70px">
-                            <el-input-number v-model="caseData.times" :min="1" :max="1000">
-                            </el-input-number>
-                        </el-form-item>
-                    </el-form>
-                    <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
-                    <el-form :inline="true" class="demo-form-inline " size="small">
-                        <el-form-item label=" " labelWidth="10px">
-<!--                            <el-select v-model="form.sceneVariableProjectName" placeholder="请选择项目"-->
-<!--                                       @change="changeConfigChoice"-->
-<!--                                       style="width: 150px;padding-right:5px">-->
-<!--                                <el-option-->
-<!--                                        v-for="(item, key) in proModelData"-->
-<!--                                        :key="key"-->
-<!--                                        :value="key">-->
-<!--                                </el-option>-->
-<!--                            </el-select>-->
+                <div style="margin-top: 10px;float: right;">
+                    <el-button type="success" @click.native="addCase(false)" size="small">保 存</el-button>
+                </div>
 
-                            <el-select v-model="caseData.environment" clearable  value-key="configId" placeholder="默认项目环境"
-                                       style="width: 150px;padding-right:5px">
-                                <el-option
-                                        v-for="item in environmentList"
-                                        :key="item"
+            </el-tab-pane>
 
-                                        :value="item">
-                                </el-option>
-                            </el-select>
-
-                            <el-select v-model="caseData.funcAddress" multiple placeholder="请选择导入函数文件" size="small">
-                                <el-option
-                                        v-for="item in this.funcAddress"
-                                        :key="item['value']"
-                                        :label="item['value']"
-                                        :value="item['value']">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button type="primary" size="small" @click="configShow=true">加载配置
-                            </el-button>
-                            <el-button type="primary" size="small"
-                                       @click="addConfigVariable()">添加变量
-                            </el-button>
-                        </el-form-item>
-                    </el-form>
-                    <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
-                    <el-table :data="caseData.variable"
-                              style="width:100%"
-                              :show-header="false"
-                              size="mini"
-                              max-height="538"
-                              stripe>
-                        <el-table-column property="key" label="Key" header-align="center" minWidth="100">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.key" size="small" placeholder="key">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column property="value" label="Value" header-align="center" minWidth="150">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.value" size="small" placeholder="Value">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="备注" header-align="center" minWidth="70">
-                            <template slot-scope="scope">
-                                <el-input v-model="scope.row.remark" size="small" placeholder="备注">
-                                </el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column property="value" label="操作" header-align="center" width="140">
-                            <template slot-scope="scope">
-                                <el-button-group>
-                                    <el-button type="info" icon="my-icon-jiantou-xiangshang"
-                                               @click.native="upNum(scope.$index)" size="mini">{{null}}
-                                    </el-button>
-                                    <el-button type="info" icon="my-icon-jiantou-xiangxia"
-                                               @click.native="downNum(scope.$index)" size="mini">{{null}}
-                                    </el-button>
-                                    <el-button type="danger" size="mini"
-                                               @click.native="delConfigVariable(scope.$index)"> 删除
-                                    </el-button>
-                                </el-button-group>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-tab-pane>
-
-                <el-tab-pane label="执行步骤" name="second">
-                    <el-row :gutter="24">
-                        <el-col :span="stepSpan">
-                            <el-row :gutter="24"
-                                    style="margin-top:10px;color: rgb(171, 139, 149);font-weight: 500;font-size: 14px;
+            <el-tab-pane label="执行步骤" name="second" style="font-size: 14px">
+                <el-row :gutter="24">
+                    <el-col :span="stepSpan">
+                        <el-row :gutter="24"
+                                style="margin-top:10px;color: rgb(171, 139, 149);font-weight: 500;font-size: 14px;
                                            width: 100%;border-style:solid;border-width: 1px;
                                            border-color: #ffffff #ffffff rgb(234, 234, 234) #ffffff;">
-                                <el-col :span="3" style="padding-left: 20px">
-                                    状态
-                                </el-col>
-                                <el-col :span="5">
-                                    步骤名称
-                                </el-col>
-                                <el-col :span="4">
-                                    接口名称
-                                </el-col>
-                                <el-col :span="4">
-                                    次数
-                                </el-col>
-                                <el-col :span="6" style="padding-left: 50px;">
-                                    操作
-                                </el-col>
-                                <el-col :span="2">
-                                    <div @click.prevent="showApiData" style="color: #55a9ff">
-                                        <i class="my-icon-xiangzuo-copy" v-show="!showApiDataStatus"></i>
-                                        <i class="my-icon-xiangyou" v-show="showApiDataStatus"></i>
-                                    </div>
-                                </el-col>
-                            </el-row>
-                            <draggable v-model="caseData.apiCases" :options="{group:'apiData',animation:300}"
-                                       style="width: 99%;min-height: 10px;">
-                                <div v-for="(_data, index) in caseData.apiCases"
-                                     :key="index"
-                                     class="list-complete-item">
-                                    <el-row :gutter="21">
-                                        <el-col :span="2" style="padding-top: 3px">
-                                            <el-switch v-model="caseData.apiCases[index]['status']">
-                                            </el-switch>
-                                        </el-col>
-                                        <el-col :span="5"
-                                                style="padding-top: 3px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;text-align:center">
-                                            <!--                                            <el-input v-model="caseData.apiCases[index]['case_name']"-->
-                                            <!--                                                      size="mini">-->
-                                            <!--                                            </el-input>-->
-                                            {{ _data.case_name }}
-                                        </el-col>
-                                        <el-col :span="4"
-                                                style="padding-top: 3px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;text-align:center">
-                                            {{ _data.name }}
-                                        </el-col>
-                                        <el-col :span="4">
-                                            <el-input-number size="mini" :precision="0"
-                                                             v-model="caseData.apiCases[index]['time']"
-                                                             :min="1" :max="1000">
-                                            </el-input-number>
-                                        </el-col>
-                                        <el-col :span="1">
-                                        </el-col>
-                                        <el-col :span="8" style="padding-left: 50px;padding-top: 3px">
-                                            <el-button type="danger" size="mini"
-                                                       @click.native="delApiCase(index)">删除
-                                            </el-button>
-                                            <el-button type="primary" size="mini"
-                                                       @click.native="apiMessageEditFuncInit(index)">
-                                                配置
-                                            </el-button>
-                                        </el-col>
-                                    </el-row>
-
+                            <el-col :span="3" style="padding-left: 20px">
+                                状态
+                            </el-col>
+                            <el-col :span="5">
+                                步骤名称
+                            </el-col>
+                            <el-col :span="4">
+                                接口名称
+                            </el-col>
+                            <el-col :span="4">
+                                次数
+                            </el-col>
+                            <el-col :span="6" style="padding-left: 50px;">
+                                操作
+                            </el-col>
+                            <el-col :span="2">
+                                <div @click.prevent="showApiData" style="color: #55a9ff">
+                                    <i class="my-icon-xiangzuo-copy" v-show="!showApiDataStatus"></i>
+                                    <i class="my-icon-xiangyou" v-show="showApiDataStatus"></i>
                                 </div>
-                            </draggable>
-                        </el-col>
+                            </el-col>
+                        </el-row>
+                        <draggable v-model="caseData.apiCases" :options="{group:'apiData',animation:300}"
+                                   style="width: 99%;min-height: 10px;">
+                            <div v-for="(_data, index) in caseData.apiCases"
+                                 :key="index"
+                                 class="list-complete-item">
+                                <el-row :gutter="21">
+                                    <el-col :span="2" style="padding-top: 3px">
+                                        <el-switch v-model="caseData.apiCases[index]['status']">
+                                        </el-switch>
+                                    </el-col>
+                                    <el-col :span="5"
+                                            style="padding-top: 3px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;text-align:center">
+                                        <!--                                            <el-input v-model="caseData.apiCases[index]['case_name']"-->
+                                        <!--                                                      size="mini">-->
+                                        <!--                                            </el-input>-->
+                                        {{ _data.case_name }}
+                                    </el-col>
+                                    <el-col :span="4"
+                                            style="padding-top: 3px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;text-align:center">
+                                        {{ _data.name }}
+                                    </el-col>
+                                    <el-col :span="4">
+                                        <el-input-number size="mini" :precision="0"
+                                                         v-model="caseData.apiCases[index]['time']"
+                                                         :min="1" :max="1000">
+                                        </el-input-number>
+                                    </el-col>
+                                    <el-col :span="1">
+                                    </el-col>
+                                    <el-col :span="8" style="padding-left: 50px;padding-top: 3px">
+                                        <el-button type="danger" size="mini"
+                                                   @click.native="delApiCase(index)">删除
+                                        </el-button>
+                                        <el-button type="primary" size="mini"
+                                                   @click.native="apiMessageEditFuncInit(index)">
+                                            配置
+                                        </el-button>
+                                    </el-col>
+                                </el-row>
+
+                            </div>
+                        </draggable>
+                    </el-col>
 
 
-                        <el-col :span="12" v-show="!showApiDataStatus">
-                            <el-tabs v-model="tabName">
-                                <el-tab-pane label="添加步骤" name="first">
-                                    <el-form :inline="true" style="padding-top: 10px;" size="small">
-                                        <el-form-item label=" " labelWidth="10px">
-                                            <el-select v-model="form.apiMesProjectName"
-                                                       style="width: 150px;padding-right:5px"
-                                                       placeholder="请选择项目"
-                                                       @change="changeModuleChoice()">
-                                                <el-option
-                                                        v-for="(item, key) in proModelData"
-                                                        :key="key"
-                                                        :value="key">
-                                                </el-option>
-                                            </el-select>
+                    <el-col :span="12" v-show="!showApiDataStatus">
+                        <el-tabs v-model="tabName">
+                            <el-tab-pane label="添加步骤" name="first">
+                                <el-form :inline="true" style="padding-top: 10px;" size="small">
+                                    <el-form-item label=" " labelWidth="10px">
+                                        <el-select v-model="form.apiMesProjectName"
+                                                   style="width: 150px;padding-right:5px"
+                                                   placeholder="请选择项目"
+                                                   @change="changeModuleChoice()">
+                                            <el-option
+                                                    v-for="(item, key) in proModelData"
+                                                    :key="key"
+                                                    :value="key">
+                                            </el-option>
+                                        </el-select>
 
-                                            <el-select v-model="form.module"
-                                                       value-key="moduleId"
-                                                       style="width: 150px;padding-right:5px"
-                                                       placeholder="请选择模块">
-                                                <el-option
-                                                        v-for="item in proModelData[this.form.apiMesProjectName]"
-                                                        :key="item.moduleId"
-                                                        :label="item.name"
-                                                        :value="item">
-                                                </el-option>
-                                            </el-select>
-                                        </el-form-item>
-                                        <el-form-item label="">
-                                            <el-input placeholder="请输入用例" v-model="form.apiName" style="width: 150px">
-                                            </el-input>
-                                        </el-form-item>
-                                        <el-form-item>
-                                            <el-button type="primary" @click.native="handleCurrentCase(1)" size="mini">
-                                                搜索接口
-                                            </el-button>
-                                            <el-button type="primary" size="mini" @click.native="addApiData()">添加
-                                            </el-button>
-                                        </el-form-item>
-                                    </el-form>
-                                    <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
-                                    <el-row :gutter="18"
-                                            style="margin-top:10px;color: rgb(171, 139, 149);font-weight: 500;font-size: 14px;
+                                        <el-select v-model="form.module"
+                                                   value-key="moduleId"
+                                                   style="width: 150px;padding-right:5px"
+                                                   placeholder="请选择模块">
+                                            <el-option
+                                                    v-for="item in proModelData[this.form.apiMesProjectName]"
+                                                    :key="item.moduleId"
+                                                    :label="item.name"
+                                                    :value="item">
+                                            </el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                    <el-form-item label="">
+                                        <el-input placeholder="请输入用例" v-model="form.apiName" style="width: 150px">
+                                        </el-input>
+                                    </el-form-item>
+                                    <el-form-item>
+                                        <el-button type="primary" @click.native="handleCurrentCase(1)" size="mini">
+                                            搜索接口
+                                        </el-button>
+                                        <el-button type="primary" size="mini" @click.native="addApiData()">添加
+                                        </el-button>
+                                    </el-form-item>
+                                </el-form>
+                                <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
+                                <el-row :gutter="18"
+                                        style="margin-top:10px;color: rgb(171, 139, 149);font-weight: 500;font-size: 14px;
                                             padding-left: 5px;padding-top: 3px;">
-                                        <el-col :span="1">
-                                            &nbsp;
-                                        </el-col>
-                                        <el-col :span="2">
-                                            编号
-                                        </el-col>
-                                        <el-col :span="4">
-                                            用例名称
-                                        </el-col>
-                                        <el-col :span="4">
-                                            用例描述
-                                        </el-col>
-                                        <el-col :span="8">
-                                            接口地址
-                                        </el-col>
-                                    </el-row>
-                                    <draggable v-model="ApiMsgData"
-                                               :options="this.draggableOptions"
-                                    >
-                                        <transition-group name="list-complete">
-                                            <div v-for="(_data, index) in ApiMsgData"
-                                                 :key="_data.num"
-                                                 class="list-complete-item">
-                                                <el-row :gutter="24">
-                                                    <el-col :span="1">
-                                                        <el-radio v-model="radio" @change="addEvent(index)"
-                                                                  :label="index">
-                                                            {{null}}
-                                                        </el-radio>
-                                                        <!--<el-checkbox @change="addEvent" true-label="1" false-label="0">-->
-                                                        <!---->
-                                                        <!--</el-checkbox>-->
-                                                    </el-col>
-                                                    <el-col :span="2">
-                                                        {{ _data.num }}
-                                                    </el-col>
-                                                    <el-col :span="4"
-                                                            style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
-                                                        {{ _data.name }}
-                                                    </el-col>
-                                                    <el-col :span="4"
-                                                            style="padding-top: 1px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"
-                                                    >
-                                                        {{ _data.desc }}
-                                                    </el-col>
-                                                    <el-col :span="8">
-                                                        {{ _data.url }}
-                                                    </el-col>
-                                                </el-row>
+                                    <el-col :span="1">
+                                        &nbsp;
+                                    </el-col>
+                                    <el-col :span="2">
+                                        编号
+                                    </el-col>
+                                    <el-col :span="4">
+                                        用例名称
+                                    </el-col>
+                                    <el-col :span="4">
+                                        用例描述
+                                    </el-col>
+                                    <el-col :span="8">
+                                        接口地址
+                                    </el-col>
+                                </el-row>
+                                <draggable v-model="ApiMsgData"
+                                           :options="this.draggableOptions"
+                                >
+                                    <transition-group name="list-complete">
+                                        <div v-for="(_data, index) in ApiMsgData"
+                                             :key="_data.num"
+                                             class="list-complete-item">
+                                            <el-row :gutter="24">
+                                                <el-col :span="1">
+                                                    <el-radio v-model="radio" @change="addEvent(index)"
+                                                              :label="index">
+                                                        {{null}}
+                                                    </el-radio>
+                                                    <!--<el-checkbox @change="addEvent" true-label="1" false-label="0">-->
+                                                    <!---->
+                                                    <!--</el-checkbox>-->
+                                                </el-col>
+                                                <el-col :span="2">
+                                                    {{ _data.num }}
+                                                </el-col>
+                                                <el-col :span="4"
+                                                        style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                                    {{ _data.name }}
+                                                </el-col>
+                                                <el-col :span="4"
+                                                        style="padding-top: 1px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"
+                                                >
+                                                    {{ _data.desc }}
+                                                </el-col>
+                                                <el-col :span="8">
+                                                    {{ _data.url }}
+                                                </el-col>
+                                            </el-row>
 
-                                            </div>
-                                        </transition-group>
-                                    </draggable>
-                                    <!--<el-button @click="cancelSelection()" size="mini"-->
-                                    <!--style="position: absolute;margin-top: 2px;">取消选择-->
-                                    <!--</el-button>-->
-                                    <div class="block" style="float:right; position: relative;">
-                                        <el-pagination
-                                                @current-change="handleCurrentCase"
-                                                @size-change="handleSizeCase"
-                                                :current-page="apiMsgPage.currentPage"
-                                                :page-size="apiMsgPage.sizePage"
-                                                :page-sizes="[15, 30, 45, 60]"
-                                                layout="total, sizes, prev, pager, next, jumper"
-                                                :total="apiMsgPage.total">
-                                        </el-pagination>
-                                    </div>
-                                </el-tab-pane>
-                                <el-tab-pane label="步骤配置" name="second">
-                                    <apiMsgDataEdit
-                                            :apiCases="caseData.apiCases"
-                                            ref="apiMessageEditFunc">
+                                        </div>
+                                    </transition-group>
+                                </draggable>
+                                <!--<el-button @click="cancelSelection()" size="mini"-->
+                                <!--style="position: absolute;margin-top: 2px;">取消选择-->
+                                <!--</el-button>-->
+                                <div class="block" style="float:right; position: relative;">
+                                    <el-pagination
+                                            @current-change="handleCurrentCase"
+                                            @size-change="handleSizeCase"
+                                            :current-page="apiMsgPage.currentPage"
+                                            :page-size="apiMsgPage.sizePage"
+                                            :page-sizes="[15, 30, 45, 60]"
+                                            layout="total, sizes, prev, pager, next, jumper"
+                                            :total="apiMsgPage.total">
+                                    </el-pagination>
+                                </div>
+                            </el-tab-pane>
+                            <el-tab-pane label="步骤配置" name="second">
+                                <apiMsgDataEdit
+                                        :apiCases="caseData.apiCases"
+                                        ref="apiMessageEditFunc">
 
-                                    </apiMsgDataEdit>
-                                </el-tab-pane>
-                            </el-tabs>
+                                </apiMsgDataEdit>
+                            </el-tab-pane>
+                        </el-tabs>
 
-                        </el-col>
-                    </el-row>
-                </el-tab-pane>
-            </el-tabs>
+                    </el-col>
+                </el-row>
+                <div style="margin-top: 10px;float: right;">
+                    <el-button type="success" @click.native="addCase(false)" size="small">保 存</el-button>
+                </div>
+            </el-tab-pane>
 
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="caseData.modelFormVisible = false" size="small">取 消</el-button>
-                <el-button type="success" @click.native="addCase(false)" size="small">保 存</el-button>
-                <el-button type="primary" @click.native="addCase()" size="small">确 定</el-button>
-            </div>
-        </el-dialog>
+
+        </el-tabs>
+
+
+        <!--        </el-dialog>-->
 
         <el-dialog title="加载配置" :visible.sync="configShow" width="30%">
             <el-form :inline="true" class="demo-form-inline " size="small">
-                        <el-form-item label=" " labelWidth="10px">
-                            <el-select v-model="form.sceneVariableProjectName" placeholder="请选择项目"
-                                       @change="changeConfigChoice"
-                                       style="width: 150px;padding-right:5px">
-                                <el-option
-                                        v-for="(item, key) in proModelData"
-                                        :key="key"
-                                        :value="key">
-                                </el-option>
-                            </el-select>
+                <el-form-item label=" " labelWidth="10px">
+                    <el-select v-model="form.sceneVariableProjectName" placeholder="请选择项目"
+                               @change="changeConfigChoice"
+                               style="width: 150px;padding-right:5px">
+                        <el-option
+                                v-for="(item, key) in proModelData"
+                                :key="key"
+                                :value="key">
+                        </el-option>
+                    </el-select>
 
-                            <el-select v-model="form.config" value-key="configId" placeholder="请选择配置"
-                                       style="width: 150px;padding-right:5px">
-                                <el-option
-                                        v-for="item in configData[form.sceneVariableProjectName]"
-                                        :key="item.configId"
-                                        :label="item.name"
-                                        :value="item">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
+                    <el-select v-model="form.config" value-key="configId" placeholder="请选择配置"
+                               style="width: 150px;padding-right:5px">
+                        <el-option
+                                v-for="item in configData[form.sceneVariableProjectName]"
+                                :key="item.configId"
+                                :label="item.name"
+                                :value="item">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
 
-                    </el-form>
+            </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button size="small" @click="configShow = false">取 消</el-button>
                 <el-button type="primary" size="small" @click.native="addConfigData()">确 定</el-button>
@@ -431,12 +438,12 @@
                     desc: '',
                     times: '',
                     name: '',
-                    environment:'',
+                    environment: '',
                     formLabelWidth: '70px',
                     apiCases: [],// 执行步骤里面的所有接口信息
                 },
                 configShow: false,
-                environmentList:['测试环境','开发环境','线上环境','备用环境'],
+                environmentList: ['测试环境', '开发环境', '线上环境', '备用环境'],
             }
         },
         methods: {
@@ -717,7 +724,7 @@
                             } else {
                                 this.caseData.modelFormVisible = false;
                             }
-                            this.$parent.findCase();
+                            // this.$parent.findCase();
                         }
                     }
                 )

@@ -23,7 +23,7 @@
             </el-form-item>
 
         </el-form>
-        <el-tabs value="first" style="padding-left: 10px;padding-right:5px;">
+        <el-tabs v-model="tabValue" style="padding-left: 10px;padding-right:5px;">
             <el-tab-pane label="用例信息" name="first">
                 <el-row>
                     <el-col :span="3"
@@ -100,7 +100,7 @@
                                     label="操作">
                                 <template slot-scope="scope">
                                     <el-button type="primary" icon="el-icon-edit" size="mini"
-                                               @click.native="$refs.caseEditFunc.editCase(caseAll[scope.$index]['sceneId'])">
+                                               @click.native="editCase(caseAll[scope.$index]['sceneId'])">
                                         编辑
                                     </el-button>
                                     <el-button type="primary" icon="el-icon-tickets" size="mini"
@@ -135,6 +135,19 @@
                     </el-col>
                 </el-row>
             </el-tab-pane>
+            <el-tab-pane label="用例编辑" name="second" v-if="tabEditShow">
+                <div style="margin-top: 5px"></div>
+                    <caseEdit
+                            :allSetList="allSetList"
+                            :proModelData="proModelData"
+                            :projectName="form.projectName"
+                            :setTempData="setTempData"
+                            :configData="configData"
+                            :funcAddress="funcAddress"
+                            ref="caseEditFunc">
+
+                    </caseEdit>
+            </el-tab-pane>
         </el-tabs>
         <setEdit
                 :projectName="form.projectName"
@@ -142,16 +155,16 @@
                 ref="setEditFunc">
 
         </setEdit>
-        <caseEdit
-                :allSetList="allSetList"
-                :proModelData="proModelData"
-                :projectName="form.projectName"
-                :setTempData="setTempData"
-                :configData="configData"
-                :funcAddress="funcAddress"
-                ref="caseEditFunc">
+<!--        <caseEdit-->
+<!--                :allSetList="allSetList"-->
+<!--                :proModelData="proModelData"-->
+<!--                :projectName="form.projectName"-->
+<!--                :setTempData="setTempData"-->
+<!--                :configData="configData"-->
+<!--                :funcAddress="funcAddress"-->
+<!--                ref="caseEditFunc">-->
 
-        </caseEdit>
+<!--        </caseEdit>-->
 
         <errorView ref="errorViewFunc">
         </errorView>
@@ -182,6 +195,8 @@
                     children: 'children',
                     label: 'label'
                 },
+                tabValue:'first',
+                tabEditShow:false,
                 allSetList: '',
                 setDataList: [],   //  用例集合的临时数据
                 funcAddress: '',
@@ -381,6 +396,14 @@
             },
             cancelSelection() {
                 this.$refs.sceneMultipleTable.clearSelection();
+            },
+            editCase(id){
+                this.tabEditShow=true;
+                this.tabValue='second';
+                setTimeout(() => {
+                    this.$refs.caseEditFunc.editCase(id);
+                }, 0);
+
             },
             delSet() {
                 //  删除用例集
