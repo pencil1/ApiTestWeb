@@ -129,6 +129,7 @@ const routes = [
             {
                 path: 'testTool',
                 meta: {
+                    title: '工具页面',
                     requireAuth: true,
                 },
                 components: {

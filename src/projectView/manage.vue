@@ -149,7 +149,6 @@
                 if (this.$route.path === '/manage/reportShow') {
                     this.collapsed = true;
                     this.tagsShow = false;
-                    console.log(this.tagsShow)
                 }
             }
         },

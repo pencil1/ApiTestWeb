@@ -18,7 +18,7 @@
             <el-form-item>
                 <el-button type="primary" icon="el-icon-search" @click.native="handleCaseCurrentChange(1)">搜索
                 </el-button>
-                <el-button type="primary" @click.native="$refs.caseEditFunc.initCaseData()">添加接口用例</el-button>
+                <el-button type="primary" @click.native="addCase()">添加接口用例</el-button>
                 <el-button type="primary" @click.native="runScene(caseList,true,true)">批量运行</el-button>
             </el-form-item>
 
@@ -396,6 +396,14 @@
             },
             cancelSelection() {
                 this.$refs.sceneMultipleTable.clearSelection();
+            },
+            addCase(){
+                this.tabEditShow=true;
+                this.tabValue='second';
+                setTimeout(() => {
+                    this.$refs.caseEditFunc.initCaseData();
+                }, 0);
+
             },
             editCase(id){
                 this.tabEditShow=true;
