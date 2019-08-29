@@ -390,6 +390,7 @@
                 );
             },
 
+
             handleCaseSelection(val) {
                 //  勾选用例时，被勾选的用例会存到caseList
                 this.caseList = val;
