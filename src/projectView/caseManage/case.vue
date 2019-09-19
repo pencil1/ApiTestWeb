@@ -104,7 +104,7 @@
                                         编辑
                                     </el-button>
                                     <el-button type="primary" icon="el-icon-tickets" size="mini"
-                                               @click.native="$refs.caseEditFunc.editCase(caseAll[scope.$index]['sceneId'],true)">
+                                               @click.native="copyCase(caseAll[scope.$index]['sceneId'])">
                                         复制
                                     </el-button>
                                     <el-button type="primary" icon="el-icon-setting" size="mini"
@@ -411,6 +411,14 @@
                 this.tabValue='second';
                 setTimeout(() => {
                     this.$refs.caseEditFunc.editCase(id);
+                }, 0);
+
+            },
+            copyCase(id){
+                this.tabEditShow=true;
+                this.tabValue='second';
+                setTimeout(() => {
+                    this.$refs.caseEditFunc.editCase(id,true);
                 }, 0);
 
             },
