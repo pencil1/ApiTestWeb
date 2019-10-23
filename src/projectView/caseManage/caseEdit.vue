@@ -461,12 +461,14 @@
                 this.showApiDataStatus = !this.showApiDataStatus;
                 if (this.showApiDataStatus) {
                     this.mainWidth = '50%';
-                    this.stepSpan = 24
+                    this.stepSpan = 24;
+
 
                 } else {
                     this.mainWidth = '80%';
                     this.stepSpan = 12;
                     this.tabName = "first";
+                    this.findApiMsg();
                 }
             },
             changeShow(tab) {
@@ -486,6 +488,7 @@
                 this.form.projectName = this.projectName;
                 this.form.apiMesProjectName = this.projectName;
                 this.form.sceneVariableProjectName = this.projectName;
+
 
             },
 
@@ -535,7 +538,6 @@
                         }
                         this.caseData.modelFormVisible = true;
                         this.caseData.environment = this.environmentList[response.data['data']['environment']];
-                        this.findApiMsg();
                     }
                 )
             },
