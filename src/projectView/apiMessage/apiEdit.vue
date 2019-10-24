@@ -7,7 +7,7 @@
                            placeholder="请选择项目"
                            size="small"
                            @change="changeProChoice"
-                           style="width: 150px;padding-right:5px">
+                           style="width: 200px;padding-right:10px">
                     <el-option
                             v-for="(item, key) in proModelData"
                             :key="key"
@@ -19,7 +19,7 @@
                            placeholder="请选择模块"
                            value-key="moduleId"
                            size="small"
-                           style="width: 150px;padding-right:5px">
+                           style="width: 200px;padding-right:10px">
                     <el-option
                             v-for="item in proModelData[this.form.projectName]"
                             :key="item.moduleId"
@@ -34,7 +34,8 @@
                             v-for="item in proUrlData[this.form.projectName]"
                             :key="item"
                             :label="item"
-                            :value="item">
+                            :value="item"
+                          >
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -55,7 +56,10 @@
                 <el-input v-model="apiMsgData.name" placeholder="接口名称" size="small">
                 </el-input>
             </el-form-item>
-            <el-form-item prop="name" style="margin-bottom: 5px">
+
+        </el-form>
+        <el-form :inline="true">
+            <el-form-item label="高级功能" prop="name"  labelWidth="80px" style="margin-bottom: 5px">
 
                 <el-input v-model="apiMsgData.upFunc" placeholder="set_up_hooks" size="small">
                 </el-input>
@@ -65,7 +69,12 @@
                 <el-input v-model="apiMsgData.downFunc" placeholder="set_down_hooks" size="small">
                 </el-input>
             </el-form-item>
-        </el-form>
+            <el-form-item prop="name" style="margin-bottom: 5px">
+                <el-input v-model="apiMsgData.downFunc" placeholder="跳过判断" size="small">
+                </el-input>
+            </el-form-item>
+
+            </el-form>
         <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
         <el-form style="margin: 0 0 0 10px">
             <el-form-item>
