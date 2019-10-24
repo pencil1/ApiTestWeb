@@ -70,7 +70,7 @@
                 </el-input>
             </el-form-item>
             <el-form-item prop="name" style="margin-bottom: 5px">
-                <el-input v-model="apiMsgData.downFunc" placeholder="跳过判断" size="small">
+                <el-input v-model="apiMsgData.skip" placeholder="跳过判断" size="small">
                 </el-input>
             </el-form-item>
 
@@ -437,6 +437,7 @@
                     funcAddress: null,
                     upFunc: null,
                     downFunc: null,
+                    skip:null,
                     formLabelWidth: '80px',
                     url: '',
                     param: [{key: null, value: null}],
@@ -578,6 +579,7 @@
                     'upFunc': this.apiMsgData.upFunc,
                     'downFunc': this.apiMsgData.downFunc,
                     'url': this.apiMsgData.url,
+                    'skip': this.apiMsgData.skip,
                     'apiMsgId': this.apiMsgData.id,
                     'param': JSON.stringify(this.apiMsgData.param),
                     'header': JSON.stringify(this.apiMsgData.header),
@@ -632,6 +634,7 @@
                         this.apiMsgData.upFunc = response.data['data']['up_func'];
                         this.apiMsgData.downFunc = response.data['data']['down_func'];
                         this.apiMsgData.url = response.data['data']['url'];
+                        this.apiMsgData.skip = response.data['data']['skip'];
                         this.apiMsgData.header = response.data['data']['header'];
                         this.form.choiceType = response.data['data']['variableType'];
                         this.apiMsgData.param = response.data['data']['param'];

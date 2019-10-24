@@ -23,6 +23,11 @@
                         <el-input v-model="apiCaseData.downFunc">
                         </el-input>
                     </el-form-item>
+
+                    <el-form-item label="跳过判断" label-width="120px">
+                        <el-input v-model="apiCaseData.skip">
+                        </el-input>
+                    </el-form-item>
                 </el-form>
             </el-tab-pane>
             <el-tab-pane label="Headers" style="margin-top: 10px">
@@ -416,6 +421,7 @@
                     time: '',
                     upFunc: '',
                     downFunc: '',
+                    skip:'',
                     statusCase: {variable: [], extract: [], validate: [], param: [], header: []},
                     variable: [{key: '', value: '', param_type: '', remark: ''}],
                     json_variable: '',
@@ -466,6 +472,7 @@
                 this.apiCaseData.time = this.apiCases[i]['time'];
                 this.apiCaseData.upFunc = this.apiCases[i]['up_func'];
                 this.apiCaseData.downFunc = this.apiCases[i]['down_func'];
+                this.apiCaseData.skip = this.apiCases[i]['skip'];
                 this.tempNum = i;
                 this.paramVisible = true;
                 if (this.form.choiceType === 'json') {
@@ -572,6 +579,11 @@
                     this.apiCases[this.tempNum]['up_func'] = this.apiCaseData.upFunc;
                 } else {
                     this.apiCases[this.tempNum]['up_func'] = ''
+                }
+                if (this.apiCaseData.skip) {
+                    this.apiCases[this.tempNum]['skip'] = this.apiCaseData.skip;
+                } else {
+                    this.apiCases[this.tempNum]['skip'] = ''
                 }
                 if (this.apiCaseData.name) {
                     this.apiCases[this.tempNum]['case_name'] = this.apiCaseData.name;
