@@ -46,7 +46,9 @@
                     </li>
                     <li style="color: rgb(250,110,134);font-weight:600">失败:{{this.reportData.stat.teststeps.failures}}
                     </li>
+                    <li style="color: #E87C25;font-weight:600">跳过:{{this.reportData.stat.teststeps.skipped}}</li>
                     <li style="color: #E87C25;font-weight:600">错误:{{this.reportData.stat.teststeps.errors}}</li>
+
                 </ol>
             </el-col>
             <el-col :span="14" style="border-width: 1px;">

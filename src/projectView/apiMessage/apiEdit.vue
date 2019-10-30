@@ -70,7 +70,7 @@
                 </el-input>
             </el-form-item>
             <el-form-item prop="name" style="margin-bottom: 5px">
-                <el-input v-model="apiMsgData.skip" placeholder="跳过判断" size="small">
+                <el-input v-model="apiMsgData.skip" placeholder="跳过判断，True跳过该请求" size="small">
                 </el-input>
             </el-form-item>
 
@@ -214,7 +214,7 @@
                                     lang="json"
                                     theme="chrome"
                                     width="100%"
-                                    height="575px"
+                                    height="515px"
                                     :options="{}"
                             >
                             </editor>

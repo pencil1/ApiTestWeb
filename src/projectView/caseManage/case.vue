@@ -45,7 +45,7 @@
                             </el-col>
                         </el-row>
                         <el-row>
-                            <el-scrollbar wrapStyle="height:740px;">
+                            <el-scrollbar wrapStyle="height:720px;">
                                 <el-tree
 
                                         ref="testTree"
@@ -75,11 +75,11 @@
                                 ref="sceneMultipleTable"
                                 @selection-change="handleCaseSelection"
                                 :data="caseAll"
-                                max-height="748"
+                                max-height="725"
                                 stripe>
                             <el-table-column
                                     type="selection"
-                                    width="40">
+                                    width="45">
                             </el-table-column>
                             <el-table-column
                                     prop="num"

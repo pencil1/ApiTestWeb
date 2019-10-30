@@ -32,6 +32,7 @@
                                 </div>
                             </div>
                         </el-tab-pane>
+
                         <el-tab-pane label="请求信息">
                             <!--<div style="color: #409eff"-->
                             <!--v-if="!item.meta_datas.data[0].request.body">-->
@@ -44,6 +45,16 @@
                                      v-if="JSON.stringify(value) !== '{}' && key !== 'timeout'&& key !== 'verify' && value && key !== 'body'">
                                     {{ key }}：
                                     <pre style="overflow: auto;color: #000000">{{ value }}</pre>
+                                </div>
+                            </div>
+                        </el-tab-pane>
+                        <el-tab-pane label="提取信息" v-if="JSON.stringify(item.meta_datas.data[0].extract_msgs) !== '{}'">
+                            <div v-for="(value, key) in item.meta_datas.data[0].extract_msgs"
+                                 :key="key">
+                                <div style="color: #409eff"
+                                     v-if="JSON.stringify(value) !== '{}' && key !== 'start_timestamp' && value && key !== 'json'">
+                                    {{ key }}：
+                                    <div style="color: #000000">{{ value }}</div>
                                 </div>
                             </div>
                         </el-tab-pane>
@@ -90,6 +101,7 @@
                             attachment: null,
                             meta_datas: {
                                 data: [{
+                                    extract_msgs:{},
                                     request: {
                                         body: null,
                                         url: null,

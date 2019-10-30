@@ -27,7 +27,7 @@
         <el-tabs value="first" class="table_padding">
             <el-tab-pane label="任务列表" name="first" style="margin: 0 0 -10px;">
                 <el-table :data="tableData"
-                          max-height="748"
+                          max-height="725"
                           stripe>
                     <!--<el-table-column-->
                     <!--prop="num"-->

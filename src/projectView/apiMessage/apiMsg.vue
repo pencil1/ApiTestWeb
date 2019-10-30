@@ -87,7 +87,7 @@
                             </el-col>
                         </el-row>
                         <el-row>
-                            <el-scrollbar wrapStyle="height:740px;">
+                            <el-scrollbar wrapStyle="height:720px;">
                                 <el-tree
                                         ref="testTree"
                                         @node-click="treeClick"
@@ -118,11 +118,11 @@
                                 @selection-change="handleApiMsgSelection"
                                 :data="ApiMsgTableData"
                                 stripe
-                                max-height="745">
+                                max-height="725">
                             <el-table-column
 
                                     type="selection"
-                                    width="40">
+                                    width="45">
                             </el-table-column>
                             <el-table-column
                                     prop="num"
@@ -178,7 +178,7 @@
 
             </el-tab-pane>
             <el-tab-pane label="接口配置" name="second" v-if="apiEditViewStatus"
-                         style="background-color: rgb(250, 250, 250);min-height: 780px">
+                         style="background-color: rgb(250, 250, 250);min-height: 760px">
                 <apiEdit
                         :projectName="form.projectName"
                         :module="form.module"

@@ -41,7 +41,7 @@
 
                 <!--<el-scrollbar wrap-class="scrollbarList">-->
                 <el-table :data="tableData"
-                          max-height="748"
+                          max-height="725"
                           stripe>
 
                     <el-table-column

@@ -19,7 +19,7 @@
         <el-tabs value="first" style="padding-left: 10px">
             <el-tab-pane label="项目列表" name="first" class="table_padding">
 
-                <el-table :data="tableData" stripe max-height="745">
+                <el-table :data="tableData" stripe max-height="725">
                     <el-table-column
                             prop="id"
                             label="id"
