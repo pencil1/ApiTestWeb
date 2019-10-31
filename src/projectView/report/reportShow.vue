@@ -46,8 +46,9 @@
                     </li>
                     <li style="color: rgb(250,110,134);font-weight:600">失败:{{this.reportData.stat.teststeps.failures}}
                     </li>
-                    <li style="color: #E87C25;font-weight:600">跳过:{{this.reportData.stat.teststeps.skipped}}</li>
+
                     <li style="color: #E87C25;font-weight:600">错误:{{this.reportData.stat.teststeps.errors}}</li>
+                     <li style="color: #60C0DD;font-weight:600">跳过:{{this.reportData.stat.teststeps.skipped}}</li>
 
                 </ol>
             </el-col>
@@ -237,7 +238,7 @@
                     normal: {
                         color: function (params) {
                             let colorList = [
-                                'rgb(25,212,174)', 'rgb(250,110,134)', '#FE8463', '#E87C25', '#27727B',
+                                'rgb(25,212,174)', 'rgb(250,110,134)', '#FE8463', '#60C0DD','#E87C25', '#27727B',
                                 '#FE8463', '#9BCA63', '#FAD860', '#F3A43B', '#60C0DD',
                                 '#D7504B', '#C6E579', '#F4E001', '#F0805A', '#26C0C0'
                             ];
@@ -295,6 +296,7 @@
                         {'caseName': '成功api', num: 0},
                         {"caseName": '失败api', num: 0},
                         {'caseName': '错误api', num: 0},
+                        {'caseName': '跳过api', num: 0},
 
 
                     ]
@@ -379,6 +381,7 @@
                             this.caseChartData['rows'][0]['num'] = this.reportData.stat.teststeps.successes;
                             this.caseChartData['rows'][1]['num'] = this.reportData.stat.teststeps.failures;
                             this.caseChartData['rows'][2]['num'] = this.reportData.stat.teststeps.errors;
+                            this.caseChartData['rows'][3]['num'] = this.reportData.stat.teststeps.skipped;
                             this.suiteChartData['rows'][0]['num'] = this.reportData.stat.testcases.success;
                             this.suiteChartData['rows'][1]['num'] = this.reportData.stat.testcases.fail;
 
