@@ -10,7 +10,10 @@
                             :value="item.name">
                     </el-option>
                 </el-select>
-
+                <el-form-item labelWidth="110px">
+                    <el-input placeholder="请输入用例名称" v-model="form.caseName">
+                    </el-input>
+                </el-form-item>
                 <!--<el-select v-module="form.gathers" multiple placeholder="请选择模块" style="width: 400px;">-->
                 <!--<el-option-->
                 <!--v-for="item in proData[this.form.projectName]"-->
@@ -19,11 +22,11 @@
                 <!--</el-option>-->
                 <!--</el-select>-->
                 <!--<el-select v-module="form.scenes" multiple placeholder="请选择业务集" style="width: 400px;">-->
-                    <!--<el-option-->
-                            <!--v-for="item in proSceneData[this.form.projectName]"-->
-                            <!--:key="item.id"-->
-                            <!--:value="item.value">-->
-                    <!--</el-option>-->
+                <!--<el-option-->
+                <!--v-for="item in proSceneData[this.form.projectName]"-->
+                <!--:key="item.id"-->
+                <!--:value="item.value">-->
+                <!--</el-option>-->
                 <!--</el-select>-->
             </el-form-item>
             <el-form-item>
@@ -73,7 +76,7 @@
                             width="80">
                         <template slot-scope="scope">
                             <!--<div :style="scope.row.read_status === '已读' ? 'color:#2bef2b': 'color:rgb(255, 74, 74)'">-->
-                                <!--{{scope.row.read_status}}-->
+                            <!--{{scope.row.read_status}}-->
                             <!--</div>-->
                             <el-tag size="small" :type="scope.row.read_status === '已读' ? 'success' : 'danger'">
                                 {{scope.row.read_status}}
@@ -89,7 +92,7 @@
                                        @click.native="check(tableData[scope.$index]['id'])">查看
                             </el-button>
                             <el-button type="primary" icon="el-icon-download" size="mini"
-                            @click.native="downReport(tableData[scope.$index]['id'])">下载
+                                       @click.native="downReport(tableData[scope.$index]['id'])">下载
                             </el-button>
                             <el-button type="danger" icon="el-icon-delete" size="mini"
                                        @click.native="sureView(delReport, tableData[scope.$index]['id'],'该报告')">删除
@@ -127,6 +130,7 @@
                 sizePage: 20,
                 form: {
                     projectName: '',
+                    caseName:'',
                     gathers: [],
                     scenes: [],
                 },
@@ -151,10 +155,10 @@
             },
             initData() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
-                    if (response.data['user_pro']){
-                        this.form.projectName = response.data['user_pro']['pro_name'];
-                        this.findReport()
-                    }
+                        if (response.data['user_pro']) {
+                            this.form.projectName = response.data['user_pro']['pro_name'];
+                            this.findReport()
+                        }
                         this.proData = response.data['pro_and_id'];
                     }
                 );
@@ -163,6 +167,7 @@
                 this.$axios.post(this.$api.findReportApi, {
                     'page': this.currentPage,
                     'projectName': this.form.projectName,
+                    'caseName': this.form.caseName,
                     'sizePage': this.sizePage,
                 }).then((response) => {
                         if (this.messageShow(this, response)) {

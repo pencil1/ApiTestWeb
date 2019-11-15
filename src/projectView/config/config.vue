@@ -3,11 +3,12 @@
 
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目名称" labelWidth="110px">
-                <el-select v-model="form.projectName" placeholder="请选择项目">
+                <el-select v-model="form.projectId" placeholder="请选择项目">
                     <el-option
                             v-for="(item) in proAndIdData"
-                            :key="item.name"
-                            :value="item.name">
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -67,8 +68,8 @@
         </el-tabs>
 
         <configEdit
-                :proModelData="proModelData"
-                :projectName="form.projectName"
+                :proAndIdData="proAndIdData"
+                :projectId="form.projectId"
                 :funcAddress="funcAddress"
                 ref="configEditFunc">
         </configEdit>
@@ -86,7 +87,6 @@
         name: 'config',
         data() {
             return {
-                proModelData: null,
                 funcAddress: null,
                 proAndIdData:'',
                 tableData: Array(),
@@ -94,7 +94,7 @@
                 currentPage: 1,
                 sizePage: 20,
                 form: {
-                    projectName: null,
+                    projectId: null,
                     configName: null,
                 },
             }
@@ -105,10 +105,9 @@
             httpSend() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
                     if (response.data['user_pro']){
-                        this.form.projectName = response.data['user_pro']['pro_name'];
+                        this.form.projectId = response.data['user_pro']['pro_id'];
                         this.findConfig();
                     }
-                        this.proModelData = response.data['data'];
                     this.proAndIdData = response.data['pro_and_id'];
 
 
@@ -130,7 +129,7 @@
             },
             findConfig() {
                 this.$axios.post(this.$api.findConfigApi, {
-                    'projectName': this.form.projectName,
+                    'projectId': this.form.projectId,
                     'configName': this.form.configName,
                     'page': this.currentPage,
                     'sizePage': this.sizePage,

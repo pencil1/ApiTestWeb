@@ -302,6 +302,7 @@
                     hostThree: null,
                     hostFour: null,
                     id: null,
+                    userId:null,
                     modelFormVisible: false,
                     projectName: null,
                     principal: null,

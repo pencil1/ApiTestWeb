@@ -6,24 +6,25 @@
 
 
                 <el-tab-pane label="基础信息" name="second" style="margin-top: 10px">
-                        <el-form :inline="true"  size="small" >
-                            <el-form-item label="项目名称">
-                                <el-select v-model="configData.projectName" placeholder="请选择项目" size="small">
-                                    <el-option
-                                            v-for="(item, key) in proModelData"
-                                            :key="key"
-                                            :value="key">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item label="配置名称">
-                                <el-input v-model="configData.name" size="small">
-                                </el-input>
-                            </el-form-item>
-                        </el-form>
-                    <el-form :inline="true"  size="small" class="demo-form-inline" >
+                    <el-form :inline="true" size="small">
+                        <el-form-item label="项目名称">
+                            <el-select v-model="configData.projectId" placeholder="请选择项目" size="small">
+                                <el-option
+                                        v-for="(item) in proAndIdData"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="配置名称">
+                            <el-input v-model="configData.name" size="small">
+                            </el-input>
+                        </el-form-item>
+                    </el-form>
+                    <el-form :inline="true" size="small" class="demo-form-inline">
                         <el-form-item label="函数文件">
-                            <el-select v-model="configData.funcAddress" multiple  placeholder="请选择导入函数文件" size="small">
+                            <el-select v-model="configData.funcAddress" multiple placeholder="请选择导入函数文件" size="small">
                                 <el-option
                                         v-for="item in this.funcAddress"
                                         :key="item.value"
@@ -83,7 +84,7 @@
 <script>
     export default {
         name: 'configEdit',
-        props: ['proModelData', 'funcAddress', 'projectName'],
+        props: ['proAndIdData', 'funcAddress', 'projectId'],
         data() {
             return {
                 configData: {
@@ -91,7 +92,7 @@
                     id: null,
                     num: null,
                     modelFormVisible: false,
-                    projectName: null,
+                    projectId: null,
                     name: null,
                     formLabelWidth: '80px',
                 }
@@ -100,7 +101,7 @@
         methods: {
             initConfigData() {
                 this.configData.name = null;
-                this.configData.projectName = this.projectName;
+                this.configData.projectId = this.projectId;
                 this.configData.funcAddress = Array();
                 this.configData.id = null;
                 this.configData.num = null;
@@ -116,7 +117,7 @@
             },
             addSceneConfig() {
                 this.$axios.post(this.$api.addConfigApi, {
-                    'projectName': this.configData.projectName,
+                    'projectId': this.configData.projectId,
                     'sceneConfigName': this.configData.name,
                     'funcAddress': this.configData.funcAddress,
                     'num': this.configData.num,
@@ -151,7 +152,7 @@
                         this.configData.num = response.data['data']['num'];
                         this.configData.variable = response.data['data']['variables'];
                         this.configData.funcAddress = response.data['data']['func_address'];
-                        this.configData.projectName = this.projectName;
+                        this.configData.projectId = this.projectId;
                         this.configData.id = id;
                         this.configData.modelFormVisible = true;
                     }
