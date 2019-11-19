@@ -2,11 +2,12 @@
     <div class="sceneManage" v-loading="this.loading">
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目名称" labelWidth="110px">
-                <el-select v-model="form.projectName" placeholder="请选择项目" @change="initProjectChoice">
+                <el-select v-model="form.projectId" placeholder="请选择项目" @change="initProjectChoice">
                     <el-option
                             v-for="(item) in proAndIdData"
-                            :key="item.name"
-                            :value="item.name">
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
                     </el-option>
                 </el-select>
 
@@ -23,7 +24,7 @@
             </el-form-item>
 
         </el-form>
-        <el-tabs v-model="tabValue" style="padding-left: 10px;padding-right:5px;"  @tab-click="tabChange">
+        <el-tabs v-model="tabValue" style="padding-left: 10px;padding-right:5px;" @tab-click="tabChange">
             <el-tab-pane label="用例信息" name="first">
                 <el-row>
                     <el-col :span="3"
@@ -137,34 +138,26 @@
             </el-tab-pane>
             <el-tab-pane label="用例编辑" name="second" v-if="tabEditShow">
                 <div style="margin-top: 5px"></div>
-                    <caseEdit
-                            :allSetList="allSetList"
-                            :proModelData="proModelData"
-                            :projectName="form.projectName"
-                            :setTempData="setTempData"
-                            :configData="configData"
-                            :funcAddress="funcAddress"
-                            ref="caseEditFunc">
+                <caseEdit
+                        :allSetList="allSetList"
+                        :currentSetId = "setTempData.setId"
+                        :proModelData="proModelData"
+                        :projectId="form.projectId"
+                        :setTempData="setTempData"
+                        :configData="configData"
+                        :funcAddress="funcAddress"
+                        :proAndIdData="proAndIdData"
+                        ref="caseEditFunc">
 
-                    </caseEdit>
+                </caseEdit>
             </el-tab-pane>
         </el-tabs>
         <setEdit
-                :projectName="form.projectName"
+                :projectId="form.projectId"
                 :setTempData="setTempData"
                 ref="setEditFunc">
 
         </setEdit>
-<!--        <caseEdit-->
-<!--                :allSetList="allSetList"-->
-<!--                :proModelData="proModelData"-->
-<!--                :projectName="form.projectName"-->
-<!--                :setTempData="setTempData"-->
-<!--                :configData="configData"-->
-<!--                :funcAddress="funcAddress"-->
-<!--                ref="caseEditFunc">-->
-
-<!--        </caseEdit>-->
 
         <errorView ref="errorViewFunc">
         </errorView>
@@ -195,8 +188,8 @@
                     children: 'children',
                     label: 'label'
                 },
-                tabValue:'first',
-                tabEditShow:false,
+                tabValue: 'first',
+                tabEditShow: false,
                 allSetList: '',
                 setDataList: [],   //  用例集合的临时数据
                 funcAddress: '',
@@ -221,7 +214,7 @@
                     setId: null,
                 },
                 form: {
-                    projectName: '',
+                    projectId: null,
                     caseName: '',
                 },
             }
@@ -253,7 +246,7 @@
             findCase() {
                 this.$axios.post(this.$api.findCaseApi, {
                     'setId': this.setTempData.setId,
-                    'projectName': this.form.projectName,
+                    'projectId': this.form.projectId,
                     'caseName': this.form.caseName,
                     'page': this.casePage.currentPage,
                     'sizePage': this.casePage.sizePage,
@@ -271,9 +264,10 @@
                         this.proModelData = response.data['data'];
                         this.proAndIdData = response.data['pro_and_id'];
                         this.configData = response.data['config_name_list'];
-                        if (response.data['user_pro']) {
-                            this.form.projectName = response.data['user_pro']['pro_name'];
-                            this.findSet();
+
+                        if (response.data['user_pros']) {
+                            this.form.projectId = this.proAndIdData[0].id;
+                            this.findSet()
                         }
                         this.allSetList = response.data['set_list'];
                     }
@@ -291,12 +285,12 @@
             },
             findSet() {
                 this.$axios.post(this.$api.findCaseSetApi, {
-                    'projectName': this.form.projectName,
+                    'projectId': this.form.projectId,
                     'page': this.setPage.currentPage,
                     'sizePage': this.setPage.sizePage,
                 }).then((response) => {
                         this.setDataList = response.data['data'];
-                        this.allSetList[this.form.projectName] = response.data['all_set'];
+                        this.allSetList[this.form.projectId] = response.data['all_set'];
                         this.setPage.total = response.data['total'];
                         if (this.setDataList[0]) {
                             this.setTempData.setId = this.setDataList[0]['id'];
@@ -353,7 +347,7 @@
                 this.$axios.post(this.$api.runCaseApi, {
                     'reportStatus': reportStatus,
                     'sceneIds': _sceneIds,
-                    'projectName': this.form.projectName
+                    'projectId': this.form.projectId
                 }).then((response) => {
                         this.loading = false;
                         if (response.data['status'] === 0) {
@@ -398,27 +392,35 @@
             cancelSelection() {
                 this.$refs.sceneMultipleTable.clearSelection();
             },
-            addCase(){
-                this.tabEditShow=true;
-                this.tabValue='second';
+            addCase() {
+                if (this.setDataList.length === 0) {
+                    this.$message({
+                        showClose: true,
+                        message: '请先创建用例集',
+                        type: 'warning',
+                    });
+                    return
+                }
+                this.tabEditShow = true;
+                this.tabValue = 'second';
                 setTimeout(() => {
                     this.$refs.caseEditFunc.initCaseData();
                 }, 0);
 
             },
-            editCase(id){
-                this.tabEditShow=true;
-                this.tabValue='second';
+            editCase(id) {
+                this.tabEditShow = true;
+                this.tabValue = 'second';
                 setTimeout(() => {
                     this.$refs.caseEditFunc.editCase(id);
                 }, 0);
 
             },
-            copyCase(id){
-                this.tabEditShow=true;
-                this.tabValue='second';
+            copyCase(id) {
+                this.tabEditShow = true;
+                this.tabValue = 'second';
                 setTimeout(() => {
-                    this.$refs.caseEditFunc.editCase(id,true);
+                    this.$refs.caseEditFunc.editCase(id, true);
                 }, 0);
 
             },

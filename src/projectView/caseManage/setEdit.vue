@@ -19,7 +19,7 @@
 <script>
     export default {
         name: 'setEdit',
-        props: ['projectName', 'setTempData'],
+        props: ['projectId', 'setTempData'],
         data() {
             return {
                 setData: {
@@ -33,7 +33,7 @@
         methods: {
             addSet() {
                 this.$axios.post(this.$api.addCaseSetApi, {
-                    'projectName': this.projectName,
+                    'projectId': this.projectId,
                     'name': this.setData.name,
                     'id': this.setData.id,
                     'num': this.setData.num,
@@ -58,7 +58,7 @@
             stickSet(id) {
                 this.$axios.post(this.$api.stickCaseSetApi, {
                     'id': id,
-                    'projectName': this.projectName,
+                    'projectId': this.projectId,
                 }).then((response) => {
                         this.messageShow(this, response);
                     this.$parent.findSet();

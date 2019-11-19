@@ -45,10 +45,12 @@
                             min-width="250">
                         <template slot-scope="scope">
                             <el-button type="primary" icon="el-icon-edit" size="mini"
-                                       @click.native="$refs.configEditFunc.editSceneConfig(tableData[scope.$index]['id'])">编辑
+                                       @click.native="$refs.configEditFunc.editSceneConfig(tableData[scope.$index]['id'])">
+                                编辑
                             </el-button>
                             <el-button type="danger" icon="el-icon-delete" size="mini"
-                                       @click.native="sureView(delConfig,tableData[scope.$index]['id'],tableData[scope.$index]['name'])">删除
+                                       @click.native="sureView(delConfig,tableData[scope.$index]['id'],tableData[scope.$index]['name'])">
+                                删除
                             </el-button>
                         </template>
                     </el-table-column>
@@ -79,6 +81,7 @@
 
 <script>
     import configEdit from './configEdit.vue'
+
     export default {
         components: {
             configEdit: configEdit,
@@ -88,7 +91,7 @@
         data() {
             return {
                 funcAddress: null,
-                proAndIdData:'',
+                proAndIdData: '',
                 tableData: Array(),
                 total: 1,
                 currentPage: 1,
@@ -104,12 +107,12 @@
         methods: {
             httpSend() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
-                    if (response.data['user_pro']){
-                        this.form.projectId = response.data['user_pro']['pro_id'];
-                        this.findConfig();
-                    }
-                    this.proAndIdData = response.data['pro_and_id'];
+                        this.proAndIdData = response.data['pro_and_id'];
 
+                        if (response.data['user_pros']) {
+                            this.form.projectId = this.proAndIdData[0].id;
+                            this.findConfig();
+                        }
 
 
                     }

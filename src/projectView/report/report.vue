@@ -3,20 +3,21 @@
 
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目" labelWidth="110px">
-                <el-select v-model="form.projectName" placeholder="请选择项目">
+                <el-select v-model="form.projectId" placeholder="请选择项目">
                     <el-option
-                            v-for="item in proData"
+                             v-for="(item) in proAndIdData"
                             :key="item.id"
-                            :value="item.name">
+                            :label="item.name"
+                            :value="item.id">
                     </el-option>
                 </el-select>
                 <el-form-item labelWidth="110px">
-                    <el-input placeholder="请输入用例名称" v-model="form.caseName">
+                    <el-input placeholder="请输入用例名称" v-model="form.caseName" style="left: 10px">
                     </el-input>
                 </el-form-item>
                 <!--<el-select v-module="form.gathers" multiple placeholder="请选择模块" style="width: 400px;">-->
                 <!--<el-option-->
-                <!--v-for="item in proData[this.form.projectName]"-->
+                <!--v-for="item in proAndIdData[this.form.projectName]"-->
                 <!--:key="item.id"-->
                 <!--:value="item.value">-->
                 <!--</el-option>-->
@@ -123,13 +124,13 @@
         name: 'reportManage',
         data() {
             return {
-                proData: '',
+                proAndIdData: '',
                 tableData: [],
                 total: 1,
                 currentPage: 1,
                 sizePage: 20,
                 form: {
-                    projectName: '',
+                    projectId: '',
                     caseName:'',
                     gathers: [],
                     scenes: [],
@@ -155,11 +156,14 @@
             },
             initData() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
-                        if (response.data['user_pro']) {
-                            this.form.projectName = response.data['user_pro']['pro_name'];
+
+                        this.proAndIdData = response.data['pro_and_id'];
+
+
+                          if (response.data['user_pros']) {
+                            this.form.projectId = this.proAndIdData[0].id;
                             this.findReport()
                         }
-                        this.proData = response.data['pro_and_id'];
                     }
                 );
             },

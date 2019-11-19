@@ -3,18 +3,19 @@
 
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目" labelWidth="80px">
-                <el-select v-model="form.projectName"
+                <el-select v-model="form.projectId"
                            placeholder="请选择项目"
                            @change="initProjectChoice"
                            style="width: 150px;padding-right:5px">
                     <el-option
                             v-for="(item) in proAndIdData"
-                            :key="item.name"
-                            :value="item.name">
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
                     </el-option>
                 </el-select>
                 <el-select
-                        v-model="form.config"
+                        v-model="form.configId"
                         placeholder="请选择配置"
                         clearable
                         value-key="configId"
@@ -22,10 +23,10 @@
                 >
                     <el-option
 
-                            v-for="item in configData[this.form.projectName]"
+                            v-for="item in configData[form.projectId]"
                             :key="item.configId"
                             :label="item.name"
-                            :value="item">
+                            :value="item.configId">
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -47,10 +48,10 @@
 
                 <el-button type="primary" icon="el-icon-view" @click.native="$refs.resultFunc.lastResult()">{{null}}
                 </el-button>
-                <el-button type="primary" @click.native="$refs.importApiFunc.initData()">导入信息</el-button>
+                <!--                <el-button type="primary" @click.native="$refs.importApiFunc.initData()">导入信息</el-button>-->
                 <el-button type="primary"
-                           v-if="form.config !== null && form.config !== '' "
-                           @click.native="$refs.configEditFunc.editSceneConfig(form.config.configId)">配置修改
+                           v-if="form.configId !== null && form.configId !== '' "
+                           @click.native="$refs.configEditFunc.editSceneConfig(form.configId)">配置修改
                 </el-button>
             </el-form-item>
         </el-form>
@@ -180,9 +181,9 @@
             <el-tab-pane label="接口配置" name="second" v-if="apiEditViewStatus"
                          style="background-color: rgb(250, 250, 250);min-height: 760px">
                 <apiEdit
-                        :projectName="form.projectName"
-                        :module="form.module"
+                        :projectId="form.projectId"
                         :configData="form.config"
+                        :proAndIdData="proAndIdData"
                         :proModelData="proModelData"
                         :proUrlData="proUrlData"
                         @findApiMsg="findApiMsg"
@@ -207,7 +208,7 @@
         </el-dialog>
 
         <importApi
-                :projectName="form.projectName"
+                :projectId="form.projectId"
                 :moduleData="form.module"
                 ref="importApiFunc">
 
@@ -221,8 +222,8 @@
 
 
         <configEdit
-                :proModelData="proModelData"
-                :projectName="form.projectName"
+                :proAndIdData="proAndIdData"
+                :projectId="form.projectId"
                 :funcAddress="funcAddress"
                 ref="configEditFunc">
         </configEdit>
@@ -249,14 +250,14 @@
         data() {
             return {
                 apiEditViewStatus: false,//  接口配置组件显示控制
-                numTab: 'first',
+                numTab: 'first',  //  tab页的显示
                 loading: false,  //  页面加载状态开关
-                proModelData: '',
-                proAndIdData: '',
-                configData: '',
-                proUrlData: null,
-                ApiMsgTableData: Array(),//  接口表单数据
-                apiMsgList: Array(),//  临时存储接口数据
+                proAndIdData: Array(),  //  项目名称和id的数据
+                proModelData: Object(),  //  项目对应的模块数据
+                configData: Object(),  //  项目对应的配置数据
+                proUrlData: Array(),  //  项目对应的环境url数据
+                ApiMsgTableData: Array(),   //  接口表单数据
+                apiMsgList: Array(),    //  临时存储接口数据
                 funcAddress: null,
                 moduleDataList: [],
                 defaultProps: {
@@ -280,18 +281,13 @@
                     name: '',
                 },
                 form: {
-                    config: {
-                        name: '',
-                        configId: '',
-                    },
+                    configId: null,
                     module: {
                         name: '',
                         moduleId: '',
                         num: '',
                     },
-                    projectName: null,
                     projectId: null,
-                    suiteName: null,
                     apiName: null,
 
                 },
@@ -302,15 +298,16 @@
             initBaseData() {
                 //  初始化页面所需要的数据
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
-                        this.proModelData = response.data['data'];
                         this.proAndIdData = response.data['pro_and_id'];
                         this.configData = response.data['config_name_list'];
                         this.proUrlData = response.data['urlData'];
-                        if (response.data['user_pro']) {
-                            this.form.projectName = response.data['user_pro']['pro_name'];
-                            if (this.configData[this.form.projectName][0]) {
-                                this.form.config = this.configData[this.form.projectName][0];
-                            }
+                        this.proModelData = response.data['data'];
+                        if (response.data['user_pros']) {
+                            this.form.projectId = this.proAndIdData[0].id;
+
+                            // if (this.configData[this.form.projectId].length !== 0) {
+                            //     this.form.configId = this.configData[this.form.projectId]['configId'];
+                            // }
                             this.findModule()
                         }
                         this.$axios.post(this.$api.getFuncAddressApi).then((response) => {
@@ -355,7 +352,7 @@
                 }
                 this.$axios.post(this.$api.findApiApi, {
                     'apiName': this.form.apiName,
-                    'projectName': this.form.projectName,
+                    'projectId': this.form.projectId,
                     'moduleId': this.form.module.moduleId,
                     'page': this.apiMsgPage.currentPage,
                     'sizePage': this.apiMsgPage.sizePage,
@@ -410,8 +407,8 @@
                 this.loading = true;
                 this.$axios.post(this.$api.runApiApi, {
                     'apiMsgData': apiMsgData,
-                    'projectName': this.form.projectName,
-                    'configId': this.form.config.configId,
+                    'projectId': this.form.projectId,
+                    'configId': this.form.configId,
                 }).then((response) => {
                         if (response.data['status'] === 0) {
                             this.$message({
@@ -446,7 +443,7 @@
 
             initProjectChoice() {
                 //  当项目选择项改变时，初始化模块和配置的数据
-                this.form.config = {name: null, configId: null,};
+                this.form.configId = null;
                 this.form.module = {name: null, moduleId: null,};
                 this.modulePage.currentPage = 1;
                 this.apiMsgPage.currentPage = 1;
@@ -456,14 +453,15 @@
             findModule() {
                 //  查询接口模块
                 this.$axios.post(this.$api.findModuleApi, {
-                    'projectName': this.form.projectName,
+                    'projectId': this.form.projectId,
                     'page': this.modulePage.currentPage,
                     'sizePage': this.modulePage.sizePage,
                 }).then((response) => {
                         if (this.messageShow(this, response)) {
                             this.moduleDataList = response.data['data'];
-                            this.proModelData[this.form.projectName] = response.data['all_module'];
                             this.modulePage.total = response.data['total'];
+                            this.proModelData[this.form.projectId] = response.data['all_module'];
+
                             this.form.module = this.moduleDataList[0];
                             if (this.form.module) {
                                 this.$nextTick(function () {
@@ -520,7 +518,7 @@
             addModule() {
                 //  添加模块
                 this.$axios.post(this.$api.addModuleApi, {
-                    'projectName': this.form.projectName,
+                    'projectId': this.form.projectId,
                     'name': this.moduleData.name,
                     'id': this.moduleData.id,
                     'num': this.moduleData.num,
@@ -548,7 +546,7 @@
                 //  置顶模块
                 this.$axios.post(this.$api.stickModuleApi, {
                     'id': this.form.module.moduleId,
-                    'projectName': this.form.projectName,
+                    'projectId': this.form.projectId,
                 }).then((response) => {
                         this.messageShow(this, response);
                         this.findModule();

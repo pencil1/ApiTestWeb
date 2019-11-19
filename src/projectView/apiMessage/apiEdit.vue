@@ -3,35 +3,35 @@
 
         <el-form :inline="true" style="padding: 10px 20px -10px 10px;">
             <el-form-item label="基础信息" labelWidth="80px" style="margin-bottom: 5px">
-                <el-select v-model="form.projectName"
+                <el-select v-model="form.projectId"
                            placeholder="请选择项目"
                            size="small"
                            @change="changeProChoice"
                            style="width: 200px;padding-right:10px">
-                    <el-option
-                            v-for="(item, key) in proModelData"
-                            :key="key"
-                            :value="key">
+                                    <el-option
+                            v-for="(item) in proAndIdData"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
                     </el-option>
                 </el-select>
 
-                <el-select v-model="form.module"
+                <el-select v-model="form.moduleId"
                            placeholder="请选择模块"
-                           value-key="moduleId"
                            size="small"
                            style="width: 200px;padding-right:10px">
                     <el-option
-                            v-for="item in proModelData[this.form.projectName]"
-                            :key="item.moduleId"
+                            v-for="(item) in proModelData[form.projectId]"
+                             :key="item.moduleId"
                             :label="item.name"
-                            :value="item">
+                            :value="item.moduleId">
                     </el-option>
                 </el-select>
                 <el-select v-model="form.choiceUrl"
                            clearable placeholder="请选择url"
                            size="small">
                     <el-option
-                            v-for="item in proUrlData[this.form.projectName]"
+                            v-for="item in proUrlData[form.projectId]"
                             :key="item"
                             :label="item"
                             :value="item"
@@ -398,7 +398,7 @@
             errorView: errorView,
         },
         name: 'apiEdit',
-        props: ['proModelData', 'projectName', 'module', 'proUrlData', 'configData'],
+        props: ['proAndIdData', 'projectId', 'proUrlData', 'configData', 'proModelData'],
         data() {
             return {
                 bodyShow: 'second',
@@ -410,14 +410,9 @@
                 temp_num: '',
                 methods: ['POST', 'GET', 'PUT', 'DELETE'],
                 form: {
-                    projectName: null,
+                    projectId: null,
                     configName: null,
-                    suiteName: null,
-                    apiName: null,
-                    module: {
-                        name: null,
-                        moduleId: null,
-                    },
+                    moduleId: null,
                     choiceUrl: '基础url1',
                     choiceType: 'data',
                 },
@@ -462,7 +457,7 @@
             },
             changeProChoice() {
                 //  改变项目选项时，清空模块和基础url的选择
-                this.form.module = '';
+                this.form.moduleId = '';
                 this.form.choiceUrl = ''
             },
             querySearch(queryString, cb) {
@@ -527,7 +522,7 @@
             },
             initApiMsgData() {
                 this.form.choiceType = 'data';
-                this.form.choiceUrl = String();
+
                 this.apiMsgData.header = Array();
                 this.apiMsgData.variable = Array();
                 this.apiMsgData.param = Array();
@@ -542,8 +537,9 @@
                 this.apiMsgData.desc = null;
                 this.apiMsgData.id = null;
                 this.apiMsgData.url = String();
-                this.form.projectName = this.projectName;
-                this.form.module = this.module;
+                this.form.projectId = this.projectId;
+                this.form.moduleId = this.proModelData[this.projectId][0].moduleId;
+                this.form.choiceUrl = this.proUrlData[this.projectId][0];
             },
             addApiMsg(messageClose = false) {
                 if (this.apiMsgData.jsonVariable) {
@@ -558,7 +554,7 @@
                         return
                     }
                 }
-                if (!this.form.projectName) {
+                if (!this.form.projectId) {
                     this.$message({
                         showClose: true,
                         message: '请选择项目',
@@ -567,12 +563,12 @@
                     return
                 }
                 return this.$axios.post(this.$api.addApiApi, {
-                    'moduleId': this.form.module.moduleId,
-                    'projectName': this.form.projectName,
+                    'moduleId': this.form.moduleId,
+                    'projectId': this.form.projectId,
                     'apiMsgName': this.apiMsgData.name,
                     'num': this.apiMsgData.num,
                     // 'choiceUrl': this.form.choiceUrl,
-                    'choiceUrl': this.proUrlData[this.form.projectName].indexOf(this.form.choiceUrl),
+                    'choiceUrl': this.proUrlData[this.form.projectId].indexOf(this.form.choiceUrl),
                     'variableType': this.form.choiceType,
                     'desc': this.apiMsgData.desc,
                     'funcAddress': this.apiMsgData.funcAddress,
@@ -641,9 +637,9 @@
                         this.apiMsgData.extract = response.data['data']['extract'];
                         this.apiMsgData.validate = response.data['data']['validate'];
                         this.apiMsgData.method = response.data['data']['method'];
-                        this.form.choiceUrl = this.proUrlData[this.projectName][response.data['data']['status_url']];
-                        this.form.projectName = this.projectName;
-                        this.form.module = this.module;
+                        this.form.choiceUrl = this.proUrlData[this.projectId][response.data['data']['status_url']];
+                        this.form.projectId = this.projectId;
+                        this.form.moduleId = this.proModelData[this.projectId][0].moduleId;
                     }
                 );
             },

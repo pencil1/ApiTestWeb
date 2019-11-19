@@ -3,11 +3,12 @@
 
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目" labelWidth="80px">
-                <el-select v-model="form.projectName" placeholder="选择项目">
+                <el-select v-model="form.projectId" placeholder="选择项目">
                     <el-option
-                            v-for="(item) in proModelData"
-                            :key="item.name"
-                            :value="item.name">
+                            v-for="(item) in proAndIdData"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -116,13 +117,14 @@
                         <!--</el-select>-->
                         <!--</el-form-item>-->
                         <el-form-item label="执行选择" :label-width="taskData.formLabelWidth">
-                            <el-select v-model="form.projectName" placeholder="选择项目"
+                            <el-select v-model="form.projectId" placeholder="选择项目"
                                        style="width: 150px;padding-right:5px"
                                        @change="changeProjectChoice">
                                 <el-option
-                                        v-for="(item) in proModelData"
-                                        :key="item.name"
-                                        :value="item.name">
+                                        v-for="(item) in proAndIdData"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id">
                                 </el-option>
                             </el-select>
 
@@ -194,7 +196,7 @@
         name: 'modeManage',
         data() {
             return {
-                proModelData: '',
+                proAndIdData: '',
                 runStatus: false,
                 caseStatus: false,
                 allSetList: '',
@@ -213,8 +215,7 @@
                         id: null,
                     },
                     set_id: '',
-                    projectName: '',
-                    modelName: '',
+                    projectId: '',
                     taskName: '',
 
 
@@ -239,20 +240,21 @@
         methods: {
             httpSend() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
-                        if (response.data['user_pro']) {
-                            this.form.projectName = response.data['user_pro']['pro_name'];
-                            this.findTask();
-                        }
-                        this.proModelData = response.data['pro_and_id'];
+                        this.proAndIdData = response.data['pro_and_id'];
                         this.allSetList = response.data['set_list'];
                         this.allSceneList = response.data['scene_list'];
+                        if (response.data['user_pros']) {
+                            this.form.projectId = this.proAndIdData[0].id;
+                            this.findTask();
+                        }
+
                     }
                 );
 
             },
             changeProjectChoice() {
                 this.form.set = [];
-                this.form.case = [   ];
+                this.form.case = [];
 
             },
             changeSceneChoice() {
@@ -276,7 +278,7 @@
             },
             findTask() {
                 this.$axios.post(this.$api.findTaskApi, {
-                    'projectName': this.form.projectName,
+                    'projectId': this.form.projectId,
                     'taskName': this.form.taskName,
                     'page': this.currentPage,
                     'sizePage': this.sizePage,
@@ -311,7 +313,7 @@
             },
             addTask() {
                 this.$axios.post(this.$api.addTaskApi, {
-                    'projectName': this.form.projectName,
+                    'projectId': this.form.projectId,
                     'setIds': this.form.set,
                     'caseIds': this.form.case,
                     'id': this.taskData.id,
