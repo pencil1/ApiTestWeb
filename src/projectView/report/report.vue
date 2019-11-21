@@ -170,7 +170,7 @@
             findReport() {
                 this.$axios.post(this.$api.findReportApi, {
                     'page': this.currentPage,
-                    'projectName': this.form.projectName,
+                    'projectId': this.form.projectId,
                     'caseName': this.form.caseName,
                     'sizePage': this.sizePage,
                 }).then((response) => {
