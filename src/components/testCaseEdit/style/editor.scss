@@ -1,0 +1,137 @@
+@import "../../../../node_modules/codemirror/lib/codemirror.css";
+@import "../../../../node_modules/kityminder-core/dist/kityminder.core.css";
+@import "navigator";
+@import "hotbox";
+
+// * {
+//   box-sizing: border-box;
+// }
+
+.mind-editor {
+  position: absolute;
+  top: 91px;
+  left: 400px;
+  right: 0;
+  bottom: 0;
+}
+
+.km-editor {
+  overflow: hidden;
+  z-index: 2;
+}
+
+.km-editor>.mask {
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: transparent;
+}
+
+.km-editor>.receiver {
+  position: absolute;
+  background: white;
+  outline: none;
+  box-shadow: 0 0 20px fadeout(black, 50%);
+  left: 0;
+  top: 0;
+  padding: 3px 5px;
+  margin-left: -3px;
+  margin-top: -5px;
+  max-width: 300px;
+  width: auto;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.4em;
+  min-height: 1.4em;
+  box-sizing: border-box;
+  overflow: hidden;
+  word-break: break-all;
+  word-wrap: break-word;
+  border: none;
+  -webkit-user-select: text;
+  pointer-events: none;
+  opacity: 0;
+  z-index: -1000;
+
+  &.debug {
+    opacity: 1;
+    outline: 1px solid green;
+    background: none;
+    z-index: 0;
+  }
+
+  &.input {
+    pointer-events: all;
+    opacity: 1;
+    z-index: 999;
+    background: white;
+    outline: none;
+  }
+}
+
+div.minder-editor-container {
+  position: absolute;
+  top: 40px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-family: Arial, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+}
+
+.minder-editor {
+  position: absolute;
+  top: 92px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.minder-viewer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.control-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 250px;
+  bottom: 0;
+  border-left: 1px solid #CCC;
+}
+
+.minder-divider {
+  position: absolute;
+  top: 0;
+  right: 250px;
+  bottom: 0;
+  width: 2px;
+  background-color: rgb(251, 251, 251);
+  cursor: ew-resize;
+}
+
+.hotbox .state .button.enabled.selected .key,
+.hotbox .state .ring .key {
+  margin-top: 5px;
+  font-size: 13px;
+}
+
+.hotbox .state .bottom .button .label,
+.hotbox .state .top .button .label {
+  font-weight: 600;
+}
+
+.hotbox .exp .ring .button .label{
+  margin-top: 28px;
+  margin-left: -2px;
+}
+
+.hotbox .exp .ring .button .key{
+  display: none;
+}

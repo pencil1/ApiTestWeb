@@ -1,22 +1,23 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import store from './store/store'
+import store from './store'
 import * as types from './store/types'
-import Header from './projectView/header.vue'
-import caseManage from './projectView/apiMessage/apiMsg.vue'
-import manage from './projectView/manage.vue'
-import projectManage from './projectView/project/project.vue'
-import reportManage from './projectView/report/report.vue'
-import reportShow from './projectView/report/reportShow.vue'
-import reportHeader from './projectView/report/reportHeader.vue'
-import buildInFunc from './projectView/buildInFunc/buildInFunc.vue'
-import sceneManage from './projectView/caseManage/case.vue'
-import testTool from './projectView/testTool/testTool.vue'
-import taskManage from './projectView/taskManage/task.vue'
-import user from './projectView/userManage/user.vue'
-import sceneConfig from './projectView/config/config.vue'
-import login from './login/login.vue'
+import Header from './components/projectView/header.vue'
+import caseManage from './components/projectView/apiMessage/apiMsg.vue'
+import manage from './components/projectView/manage.vue'
+import projectManage from './components/projectView/project/project.vue'
+import reportManage from './components/projectView/report/report.vue'
+import reportShow from './components/projectView/report/reportShow.vue'
+import reportHeader from './components/projectView/report/reportHeader.vue'
+import buildInFunc from './components/projectView/buildInFunc/buildInFunc.vue'
+import sceneManage from './components/projectView/caseManage/case.vue'
+import testTool from './components/projectView/testTool/testTool.vue'
+import taskManage from './components/projectView/taskManage/task.vue'
+import user from './components/projectView/userManage/user.vue'
+import sceneConfig from './components/projectView/config/config.vue'
+import testCaseEditor from './components/testCaseEdit/editor.vue'
+import login from './components/login/login.vue'
 
 Vue.use(VueRouter);
 
@@ -46,7 +47,7 @@ const routes = [
                 meta: {
                     title: '项目管理',
                     requireAuth: true,
-                     keepAlive: true
+                    keepAlive: true
                 },
                 components: {
                     Header: Header,
@@ -104,6 +105,7 @@ const routes = [
                     Manage: reportShow,
                 }
             },
+
             {
                 path: 'buildInFunc',
                 meta: {
@@ -167,10 +169,14 @@ const routes = [
         // component:caseManage,
         component: login,
     },
+    // {
+    //     path: '*',
+    //     // component:caseManage,
+    //     component: login,
+    // },
     {
-        path: '',
-        // component:caseManage,
-        component: login,
+        path: '/testCaseEdit',
+        component: testCaseEditor,
     },
 
 ];
@@ -178,15 +184,12 @@ const routes = [
 // 页面刷新时，重新赋值token
 if (window.localStorage.getItem('token')) {
     store.commit(types.LOGIN, window.localStorage.getItem('token'))
-    // store.commit(types.LOGIN, '1111')
 }
 if (window.localStorage.getItem('roles')) {
     store.commit(types.ROLES, window.localStorage.getItem('roles'));
-    // store.commit(types.LOGIN, '1111')
 }
 if (window.localStorage.getItem('userName')) {
     store.commit(types.USERNAME, window.localStorage.getItem('userName'));
-    // store.commit(types.LOGIN, '1111')
 }
 
 
@@ -195,21 +198,21 @@ const router = new VueRouter({
     routes
 });
 
-router.beforeEach((to, from, next) => {
-    if (to.matched.some(r => r.meta.requireAuth)) {
-        if (store.state.token) {
-            next();
-        }
-        else {
-            next({
-                path: '/login',
-                query: {redirect: to.fullPath}
-            })
-        }
-    }
-    else {
-        next();
-    }
-});
+// router.beforeEach((to, from, next) => {
+//     if (to.matched.some(r => r.meta.requireAuth)) {
+//         if (store.state.token) {
+//             next();
+//         }
+//         else {
+//             next({
+//                 path: '/login',
+//                 query: {redirect: to.fullPath}
+//             })
+//         }
+//     }
+//     else {
+//         next();
+//     }
+// });
 
 export default router;

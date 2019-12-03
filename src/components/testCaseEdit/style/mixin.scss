@@ -1,0 +1,27 @@
+$btn-hover-color: #eee;
+body {
+  user-select: none;
+  min-width: 1280px;
+  height: 360px;
+}
+
+*[disabled] {
+  opacity: 0.5;
+}
+
+@mixin block {
+  width: 100%;
+  height: 100%;
+}
+
+@mixin button {
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+@mixin flexcenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

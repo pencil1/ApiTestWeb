@@ -68,7 +68,19 @@ const editUserApi = '/api/user/edit';
 const delUserApi = '/api/user/del';
 const changeStatusUserApi = '/api/user/changeStatus';
 
+const addTestCaseFileApi = '/api/testCaseFile/add';
+const findTestCaseFileApi = '/api/testCaseFile/find';
+const delTestCaseFileApi = '/api/testCaseFile/del';
+const getTestCaseFileApi = '/api/testCaseFile/get';
+const saveTestCaseFileApi = '/api/testCaseFile/save';
+
 export default {
+    addTestCaseFileApi,
+    findTestCaseFileApi,
+    delTestCaseFileApi,
+    getTestCaseFileApi,
+    saveTestCaseFileApi,
+
     baseDataApi,
     getFuncAddressApi,
     checkFileApi,
