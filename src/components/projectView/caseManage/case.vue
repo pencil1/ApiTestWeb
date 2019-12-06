@@ -299,6 +299,8 @@
                                 this.$refs.testTree.setCurrentKey(this.setTempData.setId);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
                                 this.findCase();
                             });
+                        }else {
+                            this.caseAll = []
                         }
                     }
                 );

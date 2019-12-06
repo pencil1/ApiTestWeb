@@ -66,7 +66,12 @@
                             </template>
                             <el-menu-item-group>
                                 <el-menu-item index="/manage/testTool">小工具</el-menu-item>
-                                <el-menu-item index="/testCaseEdit">用例编写</el-menu-item>
+<!--                                <el-menu-item @click.prevent="goToEditTestCaseFile">用例编写</el-menu-item>-->
+                                <el-menu-item>
+                                    <div @click.prevent="goToEditTestCaseFile">用例编写</div>
+
+                                </el-menu-item>
+
                             </el-menu-item-group>
                         </el-submenu>
 
@@ -141,6 +146,10 @@
         methods: {
             collapse: function () {
                 this.collapsed = !this.collapsed;
+            },
+            goToEditTestCaseFile: function () {
+                let {href} = this.$router.resolve({path: '/testCaseEdit'});
+                window.open(href, '_blank');
             },
             closeNavigation() {
                 this.role = this.$store.state.roles;

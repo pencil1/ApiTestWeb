@@ -462,16 +462,17 @@
                             this.moduleDataList = response.data['data'];
                             this.modulePage.total = response.data['total'];
                             this.proModelData[this.form.projectId] = response.data['all_module'];
-
-                            this.form.module = this.moduleDataList[0];
-                            if (this.form.module) {
+                            if(this.moduleDataList.length !== 0){
+                                this.form.module = this.moduleDataList[0];
                                 this.$nextTick(function () {
                                     this.$refs.testTree.setCurrentKey(this.form.module.moduleId);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
                                 });
                                 this.findApiMsg();
-                            } else {
+                            }else {
                                 this.ApiMsgTableData = []
                             }
+
+
 
                         }
                     }
