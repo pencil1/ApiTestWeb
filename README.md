@@ -1,5 +1,5 @@
 # ApiTestWeb
-感觉项目不错的点个star，你的支持是作者源源不断的动力~谢谢！！如有疑问可联系qq：362508572   或q群：700387899 或issue
+感觉项目不错的点个star！如有疑问可联系qq：362508572   或q群：700387899 或issue
 
 后端传送门：https://github.com/pencil1/ApiTestManage
 
@@ -31,6 +31,8 @@ yarn install
 http://127.0.0.1:8010/#/login
 
 ## 微信打赏及广告
+
+您的支持是作者源源不断的动力~谢谢！！
 
 [阿里云双12活动，服务器最低仅限89](https://www.aliyun.com/minisite/goods?userCode=xd46ktom&share_source=aliyun_app)
 
