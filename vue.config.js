@@ -2,6 +2,13 @@
 module.exports = {
     lintOnSave: true,
     productionSourceMap: false,
+    configureWebpack: {
+        externals: {
+            'vue': 'Vue',
+        'element-ui': 'ELEMENT',
+        //将需要忽略打包的都写在这个里面，但前提是index.html文件里面必须script引入
+    },
+    },
 
     pages: {
         index: {
@@ -9,8 +16,8 @@ module.exports = {
             entry: 'src/main.js',
             // 模板来源
             template: 'public/index.html',
-            favicon:'public/favicon.ico',
-            assetsDir:"src/assets",
+            favicon: 'public/favicon.ico',
+            assetsDir: "src/assets",
             // 在 dist/index.html 的输出
             // filename: 'src/index.html',
             // 当使用 title 选项时，
