@@ -3,9 +3,10 @@ import VueRouter from 'vue-router'
 
 import store from './store'
 import * as types from './store/types'
+import manage from './components/projectView/manage.vue'
 import Header from './components/projectView/header.vue'
 import caseManage from './components/projectView/apiMessage/apiMsg.vue'
-import manage from './components/projectView/manage.vue'
+
 import projectManage from './components/projectView/project/project.vue'
 import reportManage from './components/projectView/report/report.vue'
 import reportShow from './components/projectView/report/reportShow.vue'
@@ -16,7 +17,7 @@ import testTool from './components/projectView/testTool/testTool.vue'
 import taskManage from './components/projectView/taskManage/task.vue'
 import user from './components/projectView/userManage/user.vue'
 import sceneConfig from './components/projectView/config/config.vue'
-import testCaseEditor from './components/testCaseEdit/editor.vue'
+// import testCaseEditor from './components/testCaseEdit/editor.vue'
 import login from './components/login/login.vue'
 
 Vue.use(VueRouter);
@@ -166,17 +167,12 @@ const routes = [
     },
     {
         path: '/login',
-        // component:caseManage,
-        component: login,
+        component: login
     },
-    // {
-    //     path: '*',
-    //     // component:caseManage,
-    //     component: login,
-    // },
     {
+        name:'testCaseEdit',
         path: '/testCaseEdit',
-        component: testCaseEditor,
+        component:  resolve=>(require(["@/components/testCaseEdit/editor.vue"],resolve))
     },
 
 ];

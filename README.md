@@ -5,7 +5,6 @@
 
 线上demo地址：http://122.51.184.120/#/login （账号：ceshi 密码：123456）
 
-[阿里云双12活动，服务器最低仅限89](https://www.aliyun.com/minisite/goods?userCode=xd46ktom&share_source=aliyun_app)
 
 
 ## Environment
@@ -34,7 +33,9 @@ yarn install
 http://127.0.0.1:8010/#/login
 
 ## 微信打赏及广告
+[阿里云双12活动，服务器最低仅限89](https://www.aliyun.com/minisite/goods?userCode=xd46ktom&share_source=aliyun_app)
 
+![image](https://github.com/pencil1/ApiTestWeb/blob/master/public/20191211162211.jpg)
 
 
 

@@ -1,29 +1,29 @@
 <template>
     <div class="main-container">
-        <caseTree></caseTree>
+<!--        <caseTree></caseTree>-->
         <div>
-            <header-menu v-if="update"></header-menu>
-            <mainEditor v-if="update"></mainEditor>
-            <navigator v-if="update"></navigator>
+<!--            <header-menu v-if="update"></header-menu>-->
+<!--            <mainEditor v-if="update"></mainEditor>-->
+<!--            <navigator v-if="update"></navigator>-->
         </div>
     </div>
 
 </template>
 
 <script>
-    import caseTree from '@/components/testCaseEdit/case_tree'
-    import headerMenu from '@/components/testCaseEdit/header'
-    import mainEditor from '@/components/testCaseEdit/main_editor/main_editor'
-    import navigator from '@/components/testCaseEdit/main_editor/navigator'
+    // import caseTree from '@/components/testCaseEdit/case_tree'
+    // import headerMenu from '@/components/testCaseEdit/header'
+    // import mainEditor from '@/components/testCaseEdit/main_editor/main_editor'
+    // import navigator from '@/components/testCaseEdit/main_editor/navigator'
 
     export default {
 
         name: 'editor',
         components: {
-            caseTree,
-            headerMenu,
-            mainEditor,
-            navigator
+            // caseTree,
+            // headerMenu,
+            // mainEditor,
+            // navigator
         },
         data() {
             return {

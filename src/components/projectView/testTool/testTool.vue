@@ -4,26 +4,35 @@
             <el-button type="primary" @click.native="initCase(1)" size="small">测试用例转化</el-button>
             <el-button type="primary" @click.native="initCase(2)" size="small">测试用例转化2</el-button>
             <el-button type="primary" @click.native="buildIdentity()" size="small">生成身份证12</el-button>
+            <el-button type="primary" @click.native="erweima()" size="small">二维码</el-button>
             <!--<el-button type="primary" size="small" @click.native="dealSql()">执行语句</el-button>-->
             <!--<el-button type="primary" size="small" @click.native="optimizeError()">错误信息优化显示</el-button>-->
             <!--<el-button type="primary" size="small" @click.native="sqlData1()">123</el-button>-->
 
         </div>
         <div style="margin: 20px 0;"></div>
-<!--        <el-tree-->
-<!--                :data="data"-->
-<!--                node-key="id"-->
-<!--                :expand-on-click-node="false"-->
-<!--                default-expand-all-->
-<!--                @node-drag-start="handleDragStart"-->
-<!--                @node-drag-enter="handleDragEnter"-->
-<!--                @node-drag-leave="handleDragLeave"-->
-<!--                @node-drag-end="handleDragEnd"-->
-<!--                @node-drop="handleDrop"-->
-<!--                draggable-->
-<!--                :allow-drop="allowDrop"-->
-<!--                :allow-drag="allowDrag">-->
-<!--        </el-tree>-->
+        <el-dialog
+                :visible.sync="a"
+                width="252px"
+              :showClose="false"
+        >
+            <div v-if="a" id="qrcode"></div>
+        </el-dialog>
+
+        <!--        <el-tree-->
+        <!--                :data="data"-->
+        <!--                node-key="id"-->
+        <!--                :expand-on-click-node="false"-->
+        <!--                default-expand-all-->
+        <!--                @node-drag-start="handleDragStart"-->
+        <!--                @node-drag-enter="handleDragEnter"-->
+        <!--                @node-drag-leave="handleDragLeave"-->
+        <!--                @node-drag-end="handleDragEnd"-->
+        <!--                @node-drop="handleDrop"-->
+        <!--                draggable-->
+        <!--                :allow-drop="allowDrop"-->
+        <!--                :allow-drag="allowDrag">-->
+        <!--        </el-tree>-->
 
         <el-dialog title="用例转化" :visible.sync="testCase.viewStatus" width="30%">
             <el-form :inline="true" class="demo-form-inline">
@@ -50,42 +59,15 @@
 </template>
 
 <script>
+    import QRCode from 'qrcodejs2'
 
     export default {
         name: 'test',
         data() {
             return {
-                data: [{
-                    id: 1,
-                    label: '一级 1',
-                    children: [{
-                        id: 4,
-                        label: '二级 1-1',
-                        children: [{
-                            id: 9,
-                            label: '三级 1-1-1'
-                        }, {
-                            id: 10,
-                            label: '三级 1-1-2'
-                        }]
-                    }]
-                }, {
-                    id: 2,
-                    label: '一级 2',
-                    children: [{
-                        id: 5,
-                        label: '二级 2-1'
-                    }, {
-                        id: 6,
-                        label: '二级 2-2'
-                    }]
-                },],
-                defaultProps: {
-                    children: 'children',
-                    label: 'label'
-                },
+                qrcode1: Object,
                 status: 1,
-
+                a: false,
                 value6: '',
                 token: '',
                 showData: '',
@@ -98,10 +80,21 @@
         mounted() {
         },
         methods: {
+            erweima() {
+                this.a = true;
+                this.$nextTick(function () {
+                    this.qrcode1 = new QRCode('qrcode',
+                        {
+                            width: 230,
+                            height: 230,
+                            text: 'http://192.168.1.199:8080/api/downloadFile/newFile',
+                            colorDark: '#000',
+                            colorLight: '#fff'
+                        }
+                    );
+                });
 
-            // handleDragStart(node, ev) {
-            //     console.log('drag start', node);
-            // },
+            },
             // handleDragEnter(draggingNode, dropNode, ev) {
             //     console.log('tree drag enter: ', dropNode.label);
             // },
@@ -128,96 +121,96 @@
             allowDrag(draggingNode) {
                 return draggingNode.data.label.indexOf('三级 3-2-2') === -1;
             },
-        initCase(status) {
-            this.status = status;
-            this.testCase.viewStatus = true;
-            this.testCase.address = ''
-        },
-        getFileAddress(response, file) {
-            if (response['status'] === 0) {
-                // this.$message({
-                //     showClose: true,
-                //     message: response['msg'],
-                //     type: 'warning',
-                // });
-                this.$confirm('服务器已存在相同名字文件，是否覆盖?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    let form = new FormData();
-                    form.append("file", file.raw);
-                    form.append("skip", '1');
-                    this.$axios.post('/api/upload', form).then((response) => {
+            initCase(status) {
+                this.status = status;
+                this.testCase.viewStatus = true;
+                this.testCase.address = ''
+            },
+            getFileAddress(response, file) {
+                if (response['status'] === 0) {
+                    // this.$message({
+                    //     showClose: true,
+                    //     message: response['msg'],
+                    //     type: 'warning',
+                    // });
+                    this.$confirm('服务器已存在相同名字文件，是否覆盖?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        let form = new FormData();
+                        form.append("file", file.raw);
+                        form.append("skip", '1');
+                        this.$axios.post('/api/upload', form).then((response) => {
+                                this.$message({
+                                    showClose: true,
+                                    message: response.data['msg'],
+                                    type: 'success',
+                                });
+                                this.testCase.address = response['data']['data'];
+                            }
+                        );
+                    }).catch(() => {
+                    });
+                } else {
+                    if (response['msg']) {
+                        this.$message({
+                            showClose: true,
+                            message: response['msg'],
+                            type: 'success',
+                        });
+                    }
+                    this.testCase.address = response['data'];
+                }
+
+            },
+            buildIdentity() {
+                // 调用 callback 返回建议列表的数据
+                this.$axios.get('/api/testCaseFile/find', {}).then((response) => {
+                        if (response.data['status'] === 0) {
                             this.$message({
                                 showClose: true,
                                 message: response.data['msg'],
-                                type: 'success',
+                                type: 'warning',
                             });
-                            this.testCase.address = response['data']['data'];
+                        } else {
+                            this.showData = response.data['data'];
+
                         }
-                    );
-                }).catch(() => {
-                });
-            } else {
-                if (response['msg']) {
-                    this.$message({
-                        showClose: true,
-                        message: response['msg'],
-                        type: 'success',
-                    });
-                }
-                this.testCase.address = response['data'];
-            }
-
-        },
-        buildIdentity() {
-            // 调用 callback 返回建议列表的数据
-            this.$axios.get('/api/testCaseFile/find', {}).then((response) => {
-                    if (response.data['status'] === 0) {
-                        this.$message({
-                            showClose: true,
-                            message: response.data['msg'],
-                            type: 'warning',
-                        });
-                    } else {
-                        this.showData = response.data['data'];
-
                     }
-                }
-            )
-        },
-        initCaseChange() {
-            // 调用 callback 返回建议列表的数据
-            this.$axios.post('/api/caseChange', {
-                'address': this.testCase.address,
-                'choice': this.status
-            }).then((response) => {
-                    if (response.data['status'] === 0) {
-                        this.$message({
-                            showClose: true,
-                            message: response.data['msg'],
-                            type: 'warning',
-                        });
-                    } else {
-                        // let blob = new Blob([response.data['data']],{type:"application/application/vnd.ms-excel"})
-                        // let objectUrl = URL.createObjectURL(blob)
-                        // window.location.href=objectUrl
-                        let link = document.createElement('a');
-                        link.style.display = 'none';
-                        link.href = response.data['data'];
-                        // link.setAttribute('download', 'excel.xlsx')
-                        document.body.appendChild(link);
-                        link.click();
-                        this.testCase.viewStatus = false;
+                )
+            },
+            initCaseChange() {
+                // 调用 callback 返回建议列表的数据
+                this.$axios.post('/api/caseChange', {
+                    'address': this.testCase.address,
+                    'choice': this.status
+                }).then((response) => {
+                        if (response.data['status'] === 0) {
+                            this.$message({
+                                showClose: true,
+                                message: response.data['msg'],
+                                type: 'warning',
+                            });
+                        } else {
+                            // let blob = new Blob([response.data['data']],{type:"application/application/vnd.ms-excel"})
+                            // let objectUrl = URL.createObjectURL(blob)
+                            // window.location.href=objectUrl
+                            let link = document.createElement('a');
+                            link.style.display = 'none';
+                            link.href = response.data['data'];
+                            // link.setAttribute('download', 'excel.xlsx')
+                            document.body.appendChild(link);
+                            link.click();
+                            this.testCase.viewStatus = false;
+                        }
                     }
-                }
-            )
-        },
+                )
+            },
 
 
-    }
-    ,
+        }
+        ,
 
     }
 </script>

@@ -367,7 +367,7 @@
             },
             initData() {
                 //  初始化数据并进入接口编辑tab
-                if (!this.form.module) {
+                if (!this.form.module.moduleId) {
                     this.$message({
                         showClose: true,
                         message: '请先创建接口模块',

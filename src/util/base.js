@@ -21,7 +21,7 @@ exports.install = function (Vue) {
             _this.$message({
                 showClose: true,
                 message: response.data['msg'],
-                type: 'warning',
+                type: 'warning'
             });
             // if(response.data['error']){
             //     return 'error'
@@ -32,7 +32,7 @@ exports.install = function (Vue) {
                 _this.$message({
                     showClose: true,
                     message: response.data['msg'],
-                    type: 'success',
+                    type: 'success'
                 });
             }
             return true

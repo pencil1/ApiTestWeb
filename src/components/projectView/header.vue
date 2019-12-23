@@ -3,7 +3,7 @@
         <el-container>
             <el-container>
                 <el-header style="height: 30px;">
-                    <div style="margin-top: -15px"><a style="color: #fff8f8" target="_blank" href="https://www.aliyun.com/minisite/goods?userCode=xd46ktom&share_source=aliyun_app">阿里云双12，服务器优化大促，想学习的可以买一台</a></div>
+<!--                    <div style="margin-top: -15px"><a style="color: #fff8f8" target="_blank" href="https://www.aliyun.com/minisite/goods?userCode=xd46ktom&share_source=aliyun_app">阿里云双12，服务器优化大促，想学习的可以买一台</a></div>-->
 <!--                    <div style="float: left;">-->
 <!--                        <el-breadcrumb separator-class="el-icon-arrow-right">-->
 <!--                            <el-breadcrumb-item-->
