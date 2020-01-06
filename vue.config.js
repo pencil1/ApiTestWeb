@@ -2,6 +2,7 @@
 module.exports = {
     lintOnSave: true,
     productionSourceMap: false,
+
     configureWebpack: {
         externals: {
             'vue': 'Vue',

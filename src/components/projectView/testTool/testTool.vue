@@ -5,6 +5,7 @@
             <el-button type="primary" @click.native="initCase(2)" size="small">测试用例转化2</el-button>
             <el-button type="primary" @click.native="buildIdentity()" size="small">生成身份证12</el-button>
             <el-button type="primary" @click.native="erweima()" size="small">二维码</el-button>
+            <el-button type="primary" @click.native="erweima1()" size="small">loading</el-button>
             <!--<el-button type="primary" size="small" @click.native="dealSql()">执行语句</el-button>-->
             <!--<el-button type="primary" size="small" @click.native="optimizeError()">错误信息优化显示</el-button>-->
             <!--<el-button type="primary" size="small" @click.native="sqlData1()">123</el-button>-->
@@ -88,6 +89,21 @@
                             width: 230,
                             height: 230,
                             text: 'http://192.168.1.199:8080/api/downloadFile/newFile',
+                            colorDark: '#000',
+                            colorLight: '#fff'
+                        }
+                    );
+                });
+
+            },
+            erweima1() {
+                this.a = true;
+                this.$nextTick(function () {
+                    this.qrcode1 = new QRCode('qrcode',
+                        {
+                            width: 230,
+                            height: 230,
+                            text: 'http://192.168.1.199:8010/#/loading',
                             colorDark: '#000',
                             colorLight: '#fff'
                         }

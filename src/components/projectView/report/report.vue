@@ -5,7 +5,7 @@
             <el-form-item label="项目" labelWidth="110px">
                 <el-select v-model="form.projectId" placeholder="请选择项目">
                     <el-option
-                             v-for="(item) in proAndIdData"
+                            v-for="(item) in proAndIdData"
                             :key="item.id"
                             :label="item.name"
                             :value="item.id">
@@ -32,6 +32,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click.native="handleCurrentChange(1)" size="small">搜索</el-button>
+
                 <!--<el-button type="primary" @click.native="reset()" size="small">重置</el-button>-->
                 <!--<el-button type="primary" size="small" @click.native="runProject()">跑项目</el-button>-->
                 <!--<el-button type="primary" size="small"@click.native="runModel()" >跑模块</el-button>-->
@@ -131,7 +132,7 @@
                 sizePage: 20,
                 form: {
                     projectId: '',
-                    caseName:'',
+                    caseName: '',
                     gathers: [],
                     scenes: [],
                 },
@@ -150,6 +151,15 @@
                 this.currentPage = val;
                 this.findReport()
             },
+            // handleCurrentChange1(proId) {
+            //     // let index = this.tableData.map(1)
+            //     for (let i = 0; i < this.proAndIdData.length; i++) {
+            //         if (this.proAndIdData[i].id === proId) {
+            //             return this.proAndIdData[i].name
+            //         }
+            //     }
+            // },
+
             handleSizeChange(val) {
                 this.sizePage = val;
                 this.findReport()
@@ -160,7 +170,7 @@
                         this.proAndIdData = response.data['pro_and_id'];
 
 
-                          if (response.data['user_pros']) {
+                        if (response.data['user_pros']) {
                             this.form.projectId = this.proAndIdData[0].id;
                             this.findReport()
                         }

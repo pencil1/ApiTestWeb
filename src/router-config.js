@@ -19,6 +19,7 @@ import user from './components/projectView/userManage/user.vue'
 import sceneConfig from './components/projectView/config/config.vue'
 // import testCaseEditor from './components/testCaseEdit/editor.vue'
 import login from './components/login/login.vue'
+import loading from './components/projectView/testTool/loading.vue'
 
 Vue.use(VueRouter);
 
@@ -170,10 +171,13 @@ const routes = [
         component: login
     },
     {
-        name:'testCaseEdit',
-        path: '/testCaseEdit',
-        component:  resolve=>(require(["@/components/testCaseEdit/editor.vue"],resolve))
+        path: '/loading',
+        component: loading
     },
+    // {
+    //     path: '/testCaseEdit',
+    //     component:  resolve=>(require(["@/components/testCaseEdit/editor.vue"],resolve))
+    // },
 
 ];
 

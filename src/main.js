@@ -14,7 +14,7 @@ import ring from 'v-charts/lib/ring.common';
 import base from './util/base';
 import api from './util/api';
 
-import "babel-polyfill";
+// import "babel-polyfill";
 // require('../node_modules/codemirror/lib/codemirror.js')
 // require('../node_modules/codemirror/mode/xml/xml.js')
 // require('../node_modules/codemirror/mode/javascript/javascript.js')
