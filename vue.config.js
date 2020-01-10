@@ -27,14 +27,14 @@ module.exports = {
 
     },
     devServer: {
-        host: '0.0.0.0',
-        // host: '127.0.0.1',
+        // host: '0.0.0.0',
+        host: '127.0.0.1',
         // host: '122.51.184.120',
         port: 8010,
         proxy: {
             '/api/': {
-                target: 'http://0.0.0.0:8080',
-                // target: 'http://127.0.0.1:8080',
+                // target: 'http://0.0.0.0:8080',
+                target: 'http://127.0.0.1:8080',
                 // target: 'http://172.17.0.16:8080',
                 // target: 'http://122.51.184.120',
                 changeOrigin: true,

@@ -250,6 +250,7 @@
                                         </el-button>
                                         <el-button type="primary" size="mini" @click.native="addApiData()">添加
                                         </el-button>
+
                                     </el-form-item>
                                 </el-form>
                                 <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
@@ -257,8 +258,10 @@
                                         style="margin-top:10px;color: rgb(171, 139, 149);font-weight: 500;font-size: 14px;
                                             padding-left: 5px;padding-top: 3px;">
                                     <el-col :span="1">
-                                        &nbsp;
+                                        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll"
+                                                     @change="handleCheckAllChange"></el-checkbox>
                                     </el-col>
+
                                     <el-col :span="2">
                                         编号
                                     </el-col>
@@ -281,10 +284,13 @@
                                              class="list-complete-item">
                                             <el-row :gutter="24">
                                                 <el-col :span="1">
-                                                    <el-radio v-model="radio" @change="addEvent(index)"
-                                                              :label="index">
-                                                        {{null}}
-                                                    </el-radio>
+                                                    <!--                                                    <el-radio v-model="radio" @change="addEvent(index)"-->
+                                                    <!--                                                              :label="index">-->
+                                                    <!--                                                        {{null}}-->
+                                                    <!--                                                    </el-radio>-->
+                                                    <el-checkbox v-model="_data.check" @change="addEvent(index)"
+                                                    > {{null}}
+                                                    </el-checkbox>
                                                     <!--<el-checkbox @change="addEvent" true-label="1" false-label="0">-->
                                                     <!---->
                                                     <!--</el-checkbox>-->
@@ -352,12 +358,12 @@
                     <el-select v-model="form.configProjectId" placeholder="请选择项目"
                                @change="changeConfigChoice"
                                style="width: 150px;padding-right:5px">
-                         <el-option
-                            v-for="(item) in proAndIdData"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                    </el-option>
+                        <el-option
+                                v-for="(item) in proAndIdData"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                        </el-option>
                     </el-select>
 
                     <el-select v-model="form.configId" value-key="configId" placeholder="请选择配置"
@@ -393,10 +399,12 @@
         props: ['proModelData', 'projectId', 'allSetList', 'configData', 'funcAddress', 'proAndIdData', 'currentSetId'],
         data() {
             return {
+                checkAll: false,
+                isIndeterminate: false,
                 apiMsgVessel: [], //接口用例容器，勾选的内容都存在此变量
                 ApiMsgData: [], // 接口信息里面的表格数据
                 mainWidth: '50%',
-                radio: '',
+                radio: false,
                 tabName: 'first',
                 showApiDataStatus: true,
                 stepSpan: 24,
@@ -414,7 +422,7 @@
                     projectId: '',
                     apiMesProjectId: '',
                     configProjectId: '',
-                    configId:'',
+                    configId: '',
                     apiName: '',
                 },
                 caseData: {
@@ -437,6 +445,29 @@
             }
         },
         methods: {
+            handleCheckAllChange(val) {
+                if (val) {
+
+                    for (let i = 0; i < this.ApiMsgData.length; i++) {
+                        if (this.ApiMsgData[i].check) {
+                            //
+                        } else {
+                            this.ApiMsgData[i].check = true;
+                            this.apiMsgVessel.push(this.ApiMsgData[i]);
+                        }
+                    }
+
+                } else {
+                    for (let i = 0; i < this.ApiMsgData.length; i++) {
+
+                        this.ApiMsgData[i].check = false;
+
+                    }
+                    this.apiMsgVessel = []
+                }
+                // this.checkedCities = val ? cityOptions : [];
+                this.isIndeterminate = false;
+            },
             apiMessageEditFuncInit(index) {
                 this.showApiDataStatus = false;
                 this.tabName = 'second';
@@ -445,7 +476,24 @@
                 this.stepSpan = 12;
             },
             addEvent(dex) {
-                this.apiMsgVessel = this.ApiMsgData[dex];
+                // console.log()
+                if (this.ApiMsgData[dex].check) {
+                    this.apiMsgVessel.push(this.ApiMsgData[dex]);
+                    this.apiMsgVessel = JSON.parse(JSON.stringify(this.apiMsgVessel));
+                } else {
+                    this.ApiMsgData[dex].check = false;
+                    let index = this.apiMsgVessel.map(item => item.apiMsgId).indexOf(this.ApiMsgData[dex]['apiMsgId']);
+                    // console.log(index)
+                    this.apiMsgVessel.splice(index, 1);
+                    // this.apiMsgVessel.push(this.ApiMsgData[dex]);
+                }
+
+                if (this.apiMsgVessel.length > 0) {
+                    this.isIndeterminate = true
+                } else {
+                    this.isIndeterminate = false
+                }
+                // this.apiMsgVessel = this.ApiMsgData[dex];
             },
             showApiData: function () {
                 this.showApiDataStatus = !this.showApiDataStatus;
@@ -548,7 +596,7 @@
                 // if (tempData) {
                 //     this.form.config = tempData;
                 // } else {
-                    this.form.configId = null
+                this.form.configId = null
                 // }
             },
             upNum(i) {
@@ -621,6 +669,15 @@
                             this.radio = false;
                             this.ApiMsgData = response.data['data'];
                             this.apiMsgPage.total = response.data['total'];
+
+                            this.isIndeterminate = false;
+                            this.apiMsgVessel = [];
+                            this.checkAll = false;
+                            for (let i = 0; i < this.ApiMsgData.length; i++) {
+                                // this.ApiMsgData[i].check
+                                this.$set(this.ApiMsgData[i], 'check', false)
+                                // this.ApiMsgData[i].check = false
+                            }
                         }
                     }
                 )
@@ -638,6 +695,11 @@
                 this.caseData.apiCases = JSON.parse(JSON.stringify(this.caseData.apiCases));
                 // this.$refs.multipleTable.clearSelection();
                 // this.againSort()
+            },
+            addApiData1() {
+                console.log(this.ApiMsgData);
+                this.ApiMsgData[0].check = false;
+                this.apiMsgVessel = [];
             },
             addConfigData() {
                 //  复制配置信息到用例配置里面
