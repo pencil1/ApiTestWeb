@@ -693,6 +693,7 @@
                 }
                 this.caseData.apiCases = this.caseData.apiCases.concat(this.apiMsgVessel);
                 this.caseData.apiCases = JSON.parse(JSON.stringify(this.caseData.apiCases));
+                this.handleCheckAllChange(false)
                 // this.$refs.multipleTable.clearSelection();
                 // this.againSort()
             },

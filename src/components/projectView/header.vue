@@ -1,36 +1,36 @@
 <template>
     <div class="caseHeader">
-        <el-container>
-            <el-container>
-                <el-header style="height: 30px;">
-<!--                    <div style="margin-top: -15px"><a style="color: #fff8f8" target="_blank" href="https://www.aliyun.com/minisite/goods?userCode=xd46ktom&share_source=aliyun_app">阿里云双12，服务器优化大促，想学习的可以买一台</a></div>-->
-<!--                    <div style="float: left;">-->
-<!--                        <el-breadcrumb separator-class="el-icon-arrow-right">-->
-<!--                            <el-breadcrumb-item-->
-<!--                                    v-for="(item, index) in title"-->
-<!--                                    :key="index"-->
-<!--                            >-->
-<!--                                {{title[index]}}-->
-<!--                            </el-breadcrumb-item>-->
+        <!--                    <div style="margin-top: -15px"><a style="color: #fff8f8" target="_blank" href="https://www.aliyun.com/minisite/goods?userCode=xd46ktom&share_source=aliyun_app">阿里云双12，服务器优化大促，想学习的可以买一台</a></div>-->
+        <!--                    <div style="float: left;">-->
+        <!--                        <el-breadcrumb separator-class="el-icon-arrow-right">-->
+        <!--                            <el-breadcrumb-item-->
+        <!--                                    v-for="(item, index) in title"-->
+        <!--                                    :key="index"-->
+        <!--                            >-->
+        <!--                                {{title[index]}}-->
+        <!--                            </el-breadcrumb-item>-->
 
-<!--                        </el-breadcrumb>-->
-<!--                    </div>-->
-                    <el-dropdown style="float:right;line-height:20px;top:6px;color: rgb(255, 255, 255);"
-                                 @command="logOut">
+        <!--                        </el-breadcrumb>-->
+        <!--                    </div>-->
+
+        <div  @click.prevent="collapse1">
+            <i class="el-icon-s-fold" v-show="!collapseS" style="cursor:pointer;float:left;line-height:40px;color: rgb(255, 255, 255);font-size: 25px"></i>
+            <i class="el-icon-s-unfold" v-show="collapseS" style="cursor:pointer;float:left;line-height:40px;color: rgb(255, 255, 255);font-size: 25px"></i>
+        </div>
+
+        <el-dropdown style="float:right;line-height:25px;top:6px;color: rgb(255, 255, 255);"
+                     @command="logOut">
                         <span class="el-dropdown-link">{{userName}}<i
                                 class="el-icon-arrow-down el-icon--right"></i></span>
-                        <el-dropdown-menu slot="dropdown" style="line-height:10px">
-                            <el-dropdown-item command="b">修改密码</el-dropdown-item>
-                            <el-dropdown-item command="a">退出系统</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                </el-header>
+            <el-dropdown-menu slot="dropdown" style="line-height:10px">
+                <el-dropdown-item command="b">修改密码</el-dropdown-item>
+                <el-dropdown-item command="a">退出系统</el-dropdown-item>
+            </el-dropdown-menu>
+        </el-dropdown>
 
-                <!--<el-footer style="height: 30px;">-->
-                <!--<span class="demonstration">author</span>-->
-                <!--</el-footer>-->
-            </el-container>
-        </el-container>
+        <!--<el-footer style="height: 30px;">-->
+        <!--<span class="demonstration">author</span>-->
+        <!--</el-footer>-->
         <el-dialog
                 title="修改密码"
                 :visible.sync="passwordData.formVisible"
@@ -70,16 +70,22 @@
             return {
                 title: ['项目管理', '项目'],
                 userName: '',
+                collapseS:false,
                 passwordData: {
                     oldPassword: '',
                     newPassword: '',
                     surePassword: '',
                     formVisible: false,
                     formLabelWidth: '80px',
+
                 },
             }
         },
         methods: {
+            collapse1(){
+                this.$emit('collapse');
+                this.collapseS = !this.collapseS;
+            },
             getUserName() {
                 // this.$store.state.userName = this.userName;
                 this.userName = this.$store.state.userName;
@@ -110,14 +116,12 @@
                                     message: response.data['msg'],
                                     type: 'warning',
                                 });
-                            }
-                            else {
+                            } else {
                                 this.tableData = response.data['msg'];
                             }
                         }
                     );
-                }
-                else if (command === 'b') {
+                } else if (command === 'b') {
                     this.passwordData.oldPassword = '';
                     this.passwordData.newPassword = '';
                     this.passwordData.surePassword = '';
@@ -128,37 +132,25 @@
             showTitle(path) {
                 if (path === '/manage/projectManage') {
                     this.title = ['接口管理', '项目管理']
-                }
-                else if (path === '/manage/caseManage') {
+                } else if (path === '/manage/caseManage') {
                     this.title = ['接口管理', '接口信息']
-                }
-                else if (path === '/manage/sceneConfig') {
+                } else if (path === '/manage/sceneConfig') {
                     this.title = ['接口管理', '业务配置']
-                }
-                else if (path === '/manage/sceneManage') {
+                } else if (path === '/manage/sceneManage') {
                     this.title = ['接口管理', '接口用例']
-                }
-                else if (path === '/manage/buildInFunc') {
+                } else if (path === '/manage/buildInFunc') {
                     this.title = ['接口管理', '内置函数']
-                }
-                else if (path === '/manage/reportManage') {
+                } else if (path === '/manage/reportManage') {
                     this.title = ['报告管理', '接口报告']
-                }
-                else if (path === '/manage/taskManage') {
+                } else if (path === '/manage/taskManage') {
                     this.title = ['报告管理', '定时任务']
-                }
-                else if (path === '/manage/userManage') {
+                } else if (path === '/manage/userManage') {
                     this.title = ['系统管理', '用户管理']
-                }
-
-                else if (path === '/manage/testTool') {
+                } else if (path === '/manage/testTool') {
                     this.title = ['其他程序', '测试小工具']
-                }
-
-                else if (path === '/manage/batch') {
+                } else if (path === '/manage/batch') {
                     this.title = ['其他程序', '批量操作']
-                }
-                else if (path === '/manage/sqlCheck') {
+                } else if (path === '/manage/sqlCheck') {
                     this.title = ['其他程序', '数据库查询']
                 }
 
@@ -186,7 +178,8 @@
 
 <style>
     .el-header {
-        background-color: #434650;
+        background-color: #5c8eea;
+        background-image: -webkit-gradient(linear, left top, right top, from(#587aeb), to(#54a7ed));
         color: #434650;
 
         line-height: 60px;

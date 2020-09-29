@@ -88,7 +88,7 @@
                             </el-col>
                         </el-row>
                         <el-row>
-                            <el-scrollbar wrapStyle="height:720px;">
+                            <el-scrollbar wrapStyle="height:685px;">
                                 <el-tree
                                         ref="testTree"
                                         @node-click="treeClick"
@@ -119,7 +119,7 @@
                                 @selection-change="handleApiMsgSelection"
                                 :data="ApiMsgTableData"
                                 stripe
-                                max-height="725">
+                                max-height="690">
                             <el-table-column
 
                                     type="selection"

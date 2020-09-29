@@ -1,24 +1,21 @@
 <template>
 
     <div id="manage">
-        <el-container>
-            <el-aside width="auto" style="min-height: 936px">
-                <!--<div style="margin: 0 0 40px;line-height: 30px;">-->
-                <!--测试平台-->
-                <!--</div>-->
-                <div class="menu-toggle" @click.prevent="collapse">
-                    <i class="my-icon-xiangzuo-copy" v-show="!collapsed"></i>
-                    <i class="my-icon-xiangyou" v-show="collapsed"></i>
-                </div>
-                <el-scrollbar wrap-class="specialList">
+        <el-container :class="{'hideSidebar':collapsed}">
+            <!--            <el-container class="hideSidebar">-->
+            <el-aside width="auto" class="sidebar-container">
+                <logo/>
+                <!--                <div class="menu-toggle" @click.prevent="collapse">-->
+                <!--                    <i class="my-icon-xiangzuo-copy" v-show="!collapsed"></i>-->
+                <!--                    <i class="my-icon-xiangyou" v-show="collapsed"></i>-->
+                <!--                </div>-->
+                <el-scrollbar wrap-class="scrollbar-wrapper">
                     <el-menu
                             :default-active="navigationName"
-                            background-color="#545c64"
-                            text-color="#fff"
-                            active-text-color="#ffd04b"
                             :router="true"
                             :collapse="collapsed"
-                            class="el-menu-vertical-demo">
+
+                    >
 
                         <!--<el-submenu index="1">-->
                         <!--<template slot="title">-->
@@ -44,6 +41,7 @@
                                 <el-menu-item index="/manage/sceneConfig">业务配置</el-menu-item>
                                 <el-menu-item index="/manage/sceneManage">接口用例</el-menu-item>
                                 <el-menu-item index="/manage/buildInFunc">内置函数</el-menu-item>
+
                             </el-menu-item-group>
                         </el-submenu>
                         <el-submenu index="3">
@@ -66,11 +64,11 @@
                             </template>
                             <el-menu-item-group>
                                 <el-menu-item index="/manage/testTool">小工具</el-menu-item>
-<!--                                <el-menu-item @click.prevent="goToEditTestCaseFile">用例编写</el-menu-item>-->
-<!--                                <el-menu-item>-->
-<!--                                    <div @click.prevent="goToEditTestCaseFile">用例编写</div>-->
+                                <!--                                <el-menu-item @click.prevent="goToEditTestCaseFile">用例编写</el-menu-item>-->
+                                <!--                                <el-menu-item>-->
+                                <!--                                    <div @click.prevent="goToEditTestCaseFile">用例编写</div>-->
 
-<!--                                </el-menu-item>-->
+                                <!--                                </el-menu-item>-->
 
                             </el-menu-item-group>
                         </el-submenu>
@@ -86,16 +84,17 @@
 
                                 <!--<el-menu-item index="/manage/batch">批量添加</el-menu-item>-->
                             </el-menu-item-group>
+
                         </el-submenu>
                     </el-menu>
                 </el-scrollbar>
             </el-aside>
 
-            <el-container>
+            <el-container class="main-container">
 
 
-                <el-header style="height: 30px;">
-                    <router-view class="view one" name="Header"></router-view>
+                <el-header style="height: 40px;">
+                    <router-view class="view one" name="Header" @collapse="collapse"></router-view>
                 </el-header>
                 <!--<el-header style="height: 40px;">-->
                 <!--<el-breadcrumb separator-class="el-icon-arrow-right">-->
@@ -105,15 +104,18 @@
                 <!--<el-breadcrumb-item>活动详情</el-breadcrumb-item>-->
                 <!--</el-breadcrumb>-->
                 <!--</el-header>-->
-                    <v-tags v-show="tagsShow"></v-tags>
-                <el-main>
+                <div style="margin:10px">
+                    <el-main style="background-color: #ffffff;box-shadow:0px 0px 3px #abbed4">
 
-                    <keep-alive :include="tagsList">
-                        <router-view class="view two" name="Manage" style="font-family: Arial"
-                                     v-if="isRouterAlive"></router-view>
-                    </keep-alive>
-                </el-main>
 
+                        <v-tags v-show="tagsShow"></v-tags>
+                        <keep-alive :include="tagsList">
+                            <router-view class="view two" name="Manage" style="font-family: Arial"
+                                         v-if="isRouterAlive"></router-view>
+                        </keep-alive>
+
+                    </el-main>
+                </div>
                 <!--<el-footer style="height: 30px;">-->
                 <!--<span class="demonstration">author</span>-->
                 <!--</el-footer>-->
@@ -125,25 +127,35 @@
 <script>
     import vTags from './Tags.vue';
     import bus from './bus';
+    import Logo from './sidebar/Logo'
 
     export default {
         name: 'manage',
         components: {
-            vTags
+            vTags,
+            Logo
         },
         data() {
             return {
                 isRouterAlive: true,
                 tagsList: [],
-                tagsShow:true,
+                tagsShow: true,
                 navigationName: '/manage/projectManage',
                 collapsed: false,
                 role: '',
                 userName: '',
+                logo: 'https://cdn.jin10.com/assets/img/commons/app-logo.png'
 
             }
         },
         methods: {
+            classObj() {
+                if (this.collapsed) {
+                    return 'hideSidebar'
+                } else {
+                    return
+                }
+            },
             collapse: function () {
                 this.collapsed = !this.collapsed;
             },
@@ -235,7 +247,6 @@
     }
 
     .el-aside {
-        background-color: #545c64;
         color: #333;
         text-align: left;
         line-height: 200px;
