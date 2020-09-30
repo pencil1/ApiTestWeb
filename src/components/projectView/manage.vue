@@ -14,6 +14,9 @@
                             :default-active="navigationName"
                             :router="true"
                             :collapse="collapsed"
+                            background-color="#545c64"
+                            text-color="#fff"
+                            active-text-color="#ffd04b"
 
                     >
 

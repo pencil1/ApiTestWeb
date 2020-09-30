@@ -34,7 +34,7 @@ module.exports = {
         proxy: {
             '/api/': {
                 // target: 'http://0.0.0.0:8080',
-                target: 'http://127.0.0.1:8082',
+                target: 'http://127.0.0.1:8081',
                 // target: 'http://172.17.0.16:8080',
                 // target: 'http://122.51.184.120',
                 changeOrigin: true,
@@ -45,7 +45,7 @@ module.exports = {
         loaderOptions: {
             // 设置 scss 公用变量文件
             sass: {
-                data: `@import '~@/assets/css/color.scss';`,
+                data: `@import '~@/assets/css/color.scss';`
             }
         }
     },

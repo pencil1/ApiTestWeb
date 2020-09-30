@@ -179,7 +179,7 @@
 <style>
     .el-header {
         background-color: #5c8eea;
-        background-image: -webkit-gradient(linear, left top, right top, from(#587aeb), to(#54a7ed));
+        background-image: -webkit-gradient(linear, left top, right top, from(#393b3e), to(#5d6c79));
         color: #434650;
 
         line-height: 60px;
