@@ -17,7 +17,7 @@ export const state = {
     callbackQueue: [],
     commonConfig:{
          // 右侧面板最小宽度
-        tableHeight: parseInt(document.documentElement.clientHeight-240),
+        tableHeight: parseInt(document.documentElement.clientHeight-230),
     },
     config: {
         // 右侧面板最小宽度

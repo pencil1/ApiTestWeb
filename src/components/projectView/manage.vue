@@ -282,7 +282,7 @@
         color: #333;
         text-align: left;
         line-height: 20px;
-        padding: 0 0 20px 0;
+        padding: 0 0 10px 0;
 
     }
 

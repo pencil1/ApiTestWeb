@@ -60,7 +60,7 @@
                             lang="python"
                             theme="monokai"
                             width="100%"
-                            height="790px"
+                            height="750px"
                             :options="{
                                  enableSnippets:true,
                                  enableBasicAutocompletion: true,
@@ -74,7 +74,7 @@
                 <!--height="810px">-->
                 <!--</codemirror>-->
             </el-col>
-            <el-col :span="8" style="padding-left:10px;background-color: rgb(234, 234, 234);height:790px ">
+            <el-col :span="8" style="padding-left:10px;background-color: rgb(234, 234, 234);height:750px ">
                 <div style="font-weight: 700;color: gray;font-size:14px;margin-top: 2px;">
                     测试结果：
                 </div>
