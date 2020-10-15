@@ -24,6 +24,9 @@ export const mutations = {
     [types.TITLE]: (state, data) => {
         state.title = data;
     },
+    [types.COMMONCONFIG]: (state, data) => {
+        state.commonConfig = data;
+    },
 
 
     changeDrag(state, bool) {

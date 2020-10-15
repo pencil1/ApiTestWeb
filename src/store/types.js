@@ -13,6 +13,8 @@ export const USERNAME = 'userName';
 
 export const ROLES = 'roles';
 
+export const COMMONCONFIG = 'commonConfig';
+
 
 
 

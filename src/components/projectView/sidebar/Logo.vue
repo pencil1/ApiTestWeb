@@ -26,7 +26,7 @@ export default {
   data() {
     return {
       title: 'Tester测试平台',
-      logo: 'http://www.heiman.website/notes/123.jpg'
+      logo: 'http://cdn.jin10.com/components/img/logo_mini_blue.920e4a8f.png'
     }
   }
 }
@@ -47,11 +47,12 @@ export default {
   width: 100%;
   height: 40px;
   line-height: 40px;
-  background-color: #fff;
+  background-color: #545c64;
   text-align: center;
   overflow: hidden;
+  background-image: -webkit-gradient(linear, left top, right top, from(#2c2d2d), to(#393b3e));
 
-  border-bottom: 1px solid #f2f2f2;
+  border-bottom: 1px solid #545c64;
 
   & .sidebar-logo-link {
     height: 100%;
@@ -61,13 +62,14 @@ export default {
       width: 32px;
       height: 32px;
       vertical-align: middle;
+      transform: scale(0.85);
 
     }
 
     & .sidebar-title {
       display: inline-block;
       margin: 0;
-      color: #515a6e;
+      color: #c5acac;
       font-weight: 600;
       line-height: 40px;
       font-size: 16px;

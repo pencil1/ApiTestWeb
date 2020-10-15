@@ -28,7 +28,7 @@
         <el-tabs value="first" class="table_padding">
             <el-tab-pane label="模块列表" name="first" style="margin: 0 0 -10px;">
                 <el-table :data="tableData"
-                          max-height="725"
+                          :max-height="this.$store.state.commonConfig.tableHeight"
                           stripe>
                     <el-table-column
                             prop="num"

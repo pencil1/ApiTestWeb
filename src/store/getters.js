@@ -13,6 +13,7 @@ export const working = state => {
 export const config = state => {
   return {
     ctrlPanelMin: state.config.ctrlPanelMin,
+    tableHeight: state.config.tableHeight,
     ctrlPanelWidth: state.config.ctrlPanelWidth,
     dividerWidth: state.config.dividerWidth,
     defaultLang: state.config.defaultLang,

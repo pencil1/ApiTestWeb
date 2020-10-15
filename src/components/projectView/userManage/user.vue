@@ -15,7 +15,7 @@
 
         <el-tabs value="first" style="padding-left: 10px">
             <el-tab-pane label="用户列表" name="first" class="table_padding">
-                <el-table :data="tableData" stripe max-height="725">
+                <el-table :data="tableData" stripe :max-height="this.$store.state.commonConfig.tableHeight">
                     <el-table-column
                             prop="user_id"
                             label="id"

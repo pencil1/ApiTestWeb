@@ -20,7 +20,7 @@
 
         <el-dropdown style="float:right;line-height:25px;top:6px;color: rgb(255, 255, 255);"
                      @command="logOut">
-                        <span class="el-dropdown-link">{{userName}}<i
+                        <span class="el-dropdown-link">{{this.$store.state.userName}}<i
                                 class="el-icon-arrow-down el-icon--right"></i></span>
             <el-dropdown-menu slot="dropdown" style="line-height:10px">
                 <el-dropdown-item command="b">修改密码</el-dropdown-item>

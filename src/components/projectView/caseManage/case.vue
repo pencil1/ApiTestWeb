@@ -24,7 +24,7 @@
             </el-form-item>
 
         </el-form>
-        <el-tabs v-model="tabValue" style="padding-left: 10px;padding-right:5px;" @tab-click="tabChange">
+        <el-tabs v-model="tabValue" class="table_padding" @tab-click="tabChange">
             <el-tab-pane label="用例信息" name="first">
                 <el-row>
                     <el-col :span="3"
@@ -46,7 +46,7 @@
                             </el-col>
                         </el-row>
                         <el-row>
-                            <el-scrollbar wrapStyle="height:720px;">
+                            <el-scrollbar :wrapStyle="scrollbarHeight()">
                                 <el-tree
 
                                         ref="testTree"
@@ -140,7 +140,7 @@
                 <div style="margin-top: 5px"></div>
                 <caseEdit
                         :allSetList="allSetList"
-                        :currentSetId = "setTempData.setId"
+                        :currentSetId="setTempData.setId"
                         :proModelData="proModelData"
                         :projectId="form.projectId"
                         :setTempData="setTempData"
@@ -221,7 +221,11 @@
         },
 
         methods: {
-
+            scrollbarHeight() {
+                let t = this.$store.state.commonConfig.tableHeight;
+                t = t - 5;
+                return "height:" + t + "px;"
+            },
             handleNodeClick(data) {
                 this.setTempData.setId = data['id'];
                 this.setTempData.name = data['label'];
@@ -299,7 +303,7 @@
                                 this.$refs.testTree.setCurrentKey(this.setTempData.setId);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
                                 this.findCase();
                             });
-                        }else {
+                        } else {
                             this.caseAll = []
                         }
                     }

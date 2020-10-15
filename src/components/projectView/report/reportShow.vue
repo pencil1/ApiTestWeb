@@ -279,7 +279,7 @@
             };
             return {
                 reportAddress: '',
-                picHeight: '635px',
+                picHeight: parseInt(document.documentElement.clientHeight-320)+'px',
                 picStatus: true,
                 active: true,
                 showScene: [true, true],
@@ -393,10 +393,10 @@
             hideShowPic(s) {
                 if (s) {
                     this.picStatus = true;
-                    this.picHeight = '635px';
+                    this.picHeight = parseInt(document.documentElement.clientHeight-320)+'px';
                 } else {
                     this.picStatus = false;
-                    this.picHeight = '835px';
+                    this.picHeight = parseInt(document.documentElement.clientHeight-120)+'px';
                 }
             },
         },

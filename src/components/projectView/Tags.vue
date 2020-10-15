@@ -132,6 +132,7 @@
         height: 35px;
         overflow: hidden;
         background: #fff;
+        box-shadow:inset 0 -1px 1px #a9cdf3;
     }
 
     .tags ul {

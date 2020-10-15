@@ -15,9 +15,15 @@ export const state = {
         draging: false
     },
     callbackQueue: [],
+    commonConfig:{
+         // 右侧面板最小宽度
+        tableHeight: parseInt(document.documentElement.clientHeight-240),
+    },
     config: {
         // 右侧面板最小宽度
         ctrlPanelMin: 250,
+
+
 
         // 右侧面板宽度
         ctrlPanelWidth: parseInt(window.localStorage.__dev_minder_ctrlPanelWidth) || 250,

@@ -1,6 +1,7 @@
 <template>
     <div class="reportManage">
 
+
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目" labelWidth="110px">
                 <el-select v-model="form.projectId" placeholder="请选择项目">
@@ -11,25 +12,26 @@
                             :value="item.id">
                     </el-option>
                 </el-select>
-                <el-form-item labelWidth="110px">
-                    <el-input placeholder="请输入用例名称" v-model="form.caseName" style="left: 10px">
-                    </el-input>
-                </el-form-item>
-                <!--<el-select v-module="form.gathers" multiple placeholder="请选择模块" style="width: 400px;">-->
-                <!--<el-option-->
-                <!--v-for="item in proAndIdData[this.form.projectName]"-->
-                <!--:key="item.id"-->
-                <!--:value="item.value">-->
-                <!--</el-option>-->
-                <!--</el-select>-->
-                <!--<el-select v-module="form.scenes" multiple placeholder="请选择业务集" style="width: 400px;">-->
-                <!--<el-option-->
-                <!--v-for="item in proSceneData[this.form.projectName]"-->
-                <!--:key="item.id"-->
-                <!--:value="item.value">-->
-                <!--</el-option>-->
-                <!--</el-select>-->
             </el-form-item>
+            <el-form-item>
+                <el-input placeholder="请输入用例名称" v-model="form.caseName" style="left: 10px">
+                </el-input>
+            </el-form-item>
+            <!--<el-select v-module="form.gathers" multiple placeholder="请选择模块" style="width: 400px;">-->
+            <!--<el-option-->
+            <!--v-for="item in proAndIdData[this.form.projectName]"-->
+            <!--:key="item.id"-->
+            <!--:value="item.value">-->
+            <!--</el-option>-->
+            <!--</el-select>-->
+            <!--<el-select v-module="form.scenes" multiple placeholder="请选择业务集" style="width: 400px;">-->
+            <!--<el-option-->
+            <!--v-for="item in proSceneData[this.form.projectName]"-->
+            <!--:key="item.id"-->
+            <!--:value="item.value">-->
+            <!--</el-option>-->
+            <!--</el-select>-->
+
             <el-form-item>
                 <el-button type="primary" @click.native="handleCurrentChange(1)" size="small">搜索</el-button>
 
@@ -42,11 +44,11 @@
         </el-form>
 
         <el-tabs value="first" class="table_padding">
-            <el-tab-pane label="报告列表" name="first" style="margin: 0 0 -10px;">
+            <el-tab-pane label="报告列表" name="first">
 
                 <!--<el-scrollbar wrap-class="scrollbarList">-->
                 <el-table :data="tableData"
-                          max-height="725"
+                          :max-height="this.$store.state.commonConfig.tableHeight"
                           stripe>
 
                     <el-table-column

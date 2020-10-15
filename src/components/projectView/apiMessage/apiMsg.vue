@@ -41,6 +41,7 @@
             <!--</el-form-item>-->
 
             <el-form-item>
+                <!--                <el-button type="primary" icon="el-icon-search" @click.native="test1()">搜索</el-button>-->
                 <el-button type="primary" icon="el-icon-search" @click.native="handleCurrentChange(1)">搜索</el-button>
                 <el-button type="primary" @click.native="initData()">录入接口信息</el-button>
                 <el-button type="primary" @click.native="apiTest(apiMsgList)">测试
@@ -88,7 +89,8 @@
                             </el-col>
                         </el-row>
                         <el-row>
-                            <el-scrollbar wrapStyle="height:685px;">
+                            <el-scrollbar :wrapStyle="scrollbarHeight()">
+                                <!--                                <el-scrollbar wrapStyle="height:620px;">-->
                                 <el-tree
                                         ref="testTree"
                                         @node-click="treeClick"
@@ -119,7 +121,7 @@
                                 @selection-change="handleApiMsgSelection"
                                 :data="ApiMsgTableData"
                                 stripe
-                                max-height="690">
+                                :max-height="this.$store.state.commonConfig.tableHeight">
                             <el-table-column
 
                                     type="selection"
@@ -179,7 +181,7 @@
 
             </el-tab-pane>
             <el-tab-pane label="接口配置" name="second" v-show="apiEditViewStatus"
-                         style="background-color: rgb(250, 250, 250);min-height: 760px">
+                         style="background-color: rgb(250, 250, 250);">
                 <apiEdit
                         :projectId="form.projectId"
                         :moduleId="form.module.moduleId"
@@ -250,6 +252,7 @@
         name: 'caseManage',
         data() {
             return {
+                heightD: "height:600px;",
                 apiEditViewStatus: false,//  接口配置组件显示控制
                 numTab: 'first',  //  tab页的显示
                 loading: false,  //  页面加载状态开关
@@ -296,6 +299,11 @@
         },
 
         methods: {
+            scrollbarHeight() {
+                let t = this.$store.state.commonConfig.tableHeight;
+                t = t -5;
+                return "height:" + t + "px;"
+            },
             initBaseData() {
                 //  初始化页面所需要的数据
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
@@ -462,16 +470,15 @@
                             this.moduleDataList = response.data['data'];
                             this.modulePage.total = response.data['total'];
                             this.proModelData[this.form.projectId] = response.data['all_module'];
-                            if(this.moduleDataList.length !== 0){
+                            if (this.moduleDataList.length !== 0) {
                                 this.form.module = this.moduleDataList[0];
                                 this.$nextTick(function () {
                                     this.$refs.testTree.setCurrentKey(this.form.module.moduleId);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
                                 });
                                 this.findApiMsg();
-                            }else {
+                            } else {
                                 this.ApiMsgTableData = []
                             }
-
 
 
                         }
