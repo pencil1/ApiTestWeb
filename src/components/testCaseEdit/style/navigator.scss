@@ -19,13 +19,6 @@
     line-height: 24px;
     text-align: center;
 
-    .icon {
-      background: url("~@/assets/icons.png");
-      width: 20px;
-      height: 20px;
-      margin: 2px auto;
-      display: block;
-    }
 
     &.active {
       background-color: #5A6378;

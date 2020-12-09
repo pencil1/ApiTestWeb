@@ -75,15 +75,20 @@
                                     :value="item">
                             </el-option>
                         </el-select>
-
-                        <el-select v-model="caseData.funcAddress" multiple placeholder="请选择导入函数文件" size="small">
-                            <el-option
-                                    v-for="item in this.funcAddress"
-                                    :key="item['value']"
-                                    :label="item['value']"
-                                    :value="item['value']">
-                            </el-option>
-                        </el-select>
+                        <el-cascader
+                                v-model="caseData.funcAddress"
+                                :options="funcAddress"
+                                :props="{ expandTrigger: 'hover', label: 'name' , value: 'name' ,multiple: true }"
+                                multiple placeholder="请选择导入函数文件" size="small">
+                        </el-cascader>
+<!--                        <el-select v-model="caseData.funcAddress" multiple placeholder="请选择导入函数文件" size="small">-->
+<!--                            <el-option-->
+<!--                                    v-for="item in this.funcAddress"-->
+<!--                                    :key="item['value']"-->
+<!--                                    :label="item['value']"-->
+<!--                                    :value="item['value']">-->
+<!--                            </el-option>-->
+<!--                        </el-select>-->
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" size="small" @click="configShow=true">加载配置
@@ -121,6 +126,7 @@
                     <el-table-column property="value" label="操作" header-align="center" width="140">
                         <template slot-scope="scope">
                             <el-button-group>
+
                                 <el-button type="info" icon="my-icon-jiantou-xiangshang"
                                            @click.native="upNum(scope.$index)" size="mini">{{null}}
                                 </el-button>
@@ -696,11 +702,6 @@
                 this.handleCheckAllChange(false)
                 // this.$refs.multipleTable.clearSelection();
                 // this.againSort()
-            },
-            addApiData1() {
-                console.log(this.ApiMsgData);
-                this.ApiMsgData[0].check = false;
-                this.apiMsgVessel = [];
             },
             addConfigData() {
                 //  复制配置信息到用例配置里面

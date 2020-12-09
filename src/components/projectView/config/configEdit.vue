@@ -24,14 +24,21 @@
                     </el-form>
                     <el-form :inline="true" size="small" class="demo-form-inline">
                         <el-form-item label="函数文件">
-                            <el-select v-model="configData.funcAddress" multiple placeholder="请选择导入函数文件" size="small">
-                                <el-option
-                                        v-for="item in this.funcAddress"
-                                        :key="item.value"
-                                        :label="item.value"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
+                            <el-cascader
+                                    v-model="configData.funcAddress"
+                                    :options="funcAddress"
+                                    :props="{ expandTrigger: 'hover', label: 'name' , value: 'name' ,multiple: true }"
+                                   multiple placeholder="请选择导入函数文件" size="small" >
+                            </el-cascader>
+
+<!--                            <el-select v-model="configData.funcAddress" multiple placeholder="请选择导入函数文件" size="small">-->
+<!--                                <el-option-->
+<!--                                        v-for="item in this.funcAddress"-->
+<!--                                        :key="item.value"-->
+<!--                                        :label="item.value"-->
+<!--                                        :value="item.value">-->
+<!--                                </el-option>-->
+<!--                            </el-select>-->
                         </el-form-item>
                         <el-form-item label="配置序号"
                                       v-if="configData.id">

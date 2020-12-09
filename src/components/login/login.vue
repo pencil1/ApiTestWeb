@@ -33,7 +33,7 @@
                                     </el-input>
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-input type="password" v-model="password" placeholder="密码">
+                                    <el-input type="password" v-model="password" placeholder="密码" @change="login">
                                         <i slot="prepend" class="my-icon-jianpan"></i>
                                     </el-input>
                                 </el-form-item>

@@ -105,14 +105,13 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="函数文件" :label-width="projectData.formLabelWidth">
-                            <el-select v-model="projectData.funcFile" placeholder="请选择导入函数文件" size="mini" clearable>
-                                <el-option
-                                        v-for="item in funcAddress"
-                                        :key="item.value"
-                                        :label="item.value"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
+                             <el-cascader
+                                    v-model="projectData.funcFile"
+                                    :options="funcAddress"
+                                    :props="{ expandTrigger: 'hover', label: 'name' , value: 'name' ,multiple: true }"
+                                   multiple placeholder="请选择导入函数文件" size="small" >
+                            </el-cascader>
+
                         </el-form-item>
 
                     </el-form>
@@ -333,12 +332,13 @@
                             this.tableData = response.data['data'];
                             this.total = response.data['total'];
                             this.userData = response.data['userData'];
+
                         }
                     }
                 )
             },
             findFuncAddress() {
-                this.$axios.post(this.$api.getFuncAddressApi).then((response) => {
+                this.$axios.post(this.$api.findFuncFileApi,{'privates': false}).then((response) => {
                         this.funcAddress = response['data']['data'];
                     }
                 )

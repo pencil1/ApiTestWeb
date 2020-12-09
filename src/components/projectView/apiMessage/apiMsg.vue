@@ -319,7 +319,7 @@
                             // }
                             this.findModule()
                         }
-                        this.$axios.post(this.$api.getFuncAddressApi).then((response) => {
+                        this.$axios.post(this.$api.findFuncFileApi,{'privates': false}).then((response) => {
                                 this.funcAddress = response['data']['data'];
                             }
                         )

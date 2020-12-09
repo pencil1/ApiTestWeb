@@ -58,10 +58,12 @@ const fileUploadingApi = '/api/upload';
 const checkFileApi = '/api/checkFile';
 const importApiApi = '/api/apiMsg/fileChange';
 
-const findFuncApi = '/api/func/find';
-const createFuncApi = '/api/func/create';
-const checkFuncApi = '/api/func/check';
-const saveFuncApi = '/api/func/save';
+const findFuncFileApi = '/api/FuncFile/find';
+const addFuncFileApi = '/api/FuncFile/add';
+const checkFuncFileApi = '/api/func/check';
+const saveFuncFileApi = '/api/FuncFile/save';
+const delFuncFileApi = '/api/FuncFile/del';
+const getFuncFileApi = '/api/FuncFile/get';
 
 const findUserApi = '/api/user/find';
 const editUserApi = '/api/user/edit';
@@ -81,6 +83,13 @@ export default {
     getTestCaseFileApi,
     saveTestCaseFileApi,
 
+    findFuncFileApi,
+    addFuncFileApi,
+    checkFuncFileApi,
+    saveFuncFileApi,
+    delFuncFileApi,
+    getFuncFileApi,
+
     baseDataApi,
     getFuncAddressApi,
     checkFileApi,
@@ -92,11 +101,6 @@ export default {
 
     findReportApi,
     delReportApi,
-
-    findFuncApi,
-    createFuncApi,
-    checkFuncApi,
-    saveFuncApi,
 
     startTaskApi,
     pauseTaskApi,

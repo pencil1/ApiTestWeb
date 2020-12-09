@@ -171,6 +171,10 @@ const routes = [
         component: login
     },
     {
+        path: '',
+        component: login
+    },
+    {
         path: '/loading',
         component: loading
     },
