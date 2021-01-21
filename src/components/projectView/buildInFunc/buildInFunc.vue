@@ -337,7 +337,7 @@ export default {
         this.saveTestCaseFile();
       }
       if (this.tempTestCaseFileData.id !== data.id){
-        //
+        // id不相等时，重新请求文件内容
         this.tempTreeData.data = data;
         this.tempTreeData.node = node;
 
