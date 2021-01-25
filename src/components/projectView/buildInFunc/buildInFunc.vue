@@ -268,6 +268,7 @@ export default {
     },
     addTestCaseFile() {
       //  添加文件
+
       if (this.addTestCaseFileData.idChoice === 1) {
         this.addTestCaseFileData.higherId = this.tempTestCaseFileData.higherId
       } else if (this.addTestCaseFileData.idChoice === 2) {
@@ -298,7 +299,7 @@ export default {
                     name: this.addTestCaseFileData.name,
                     children: [],
                     status: this.addTestCaseFileData.status,
-                    'higherId': response.data.higher_id,
+                    'higher_id': response.data.higher_id,
                     'id': response.data.id,
                   };
                   if (response.data.higher_id === 0) {
@@ -314,7 +315,7 @@ export default {
                     name: this.addTestCaseFileData.name,
                     children: [],
                     status: this.addTestCaseFileData.status,
-                    'higherId': response.data.higher_id,
+                    'higher_id': response.data.higher_id,
                     'id': response.data.id,
                   };
                   if (!this.tempTreeData.data.children) {
@@ -327,11 +328,13 @@ export default {
 
               // this.initBaseData();
             }
+
           }
       )
     },
 
     handleNodeClick(data, node) {
+
       if (this.tempTestCaseFileData.status === 1) {
 
         this.saveTestCaseFile();
