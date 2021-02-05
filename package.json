@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@vue/cli": "^3.3.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel": "^6.23.0",
     "codemirror": "^5.24.2",
     "color-picker": "0.0.1",
