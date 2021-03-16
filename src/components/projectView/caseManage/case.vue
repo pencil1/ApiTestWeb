@@ -181,7 +181,7 @@
             result: result,
 
         },
-        name: 'modeManage',
+        name: 'sceneManage',
         data() {
             return {
                 defaultProps: {

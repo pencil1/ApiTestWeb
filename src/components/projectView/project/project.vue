@@ -126,7 +126,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column property="value" label="操作" header-align="center" width="50">
+                                <el-table-column property="value" label="操作" header-align="center" width="60">
                                     <template slot-scope="scope">
                                         <el-button type="danger" icon="el-icon-delete" size="mini"
                                                    @click.native="delTableRow('test',scope.$index)">
@@ -144,7 +144,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column property="value" label="操作" header-align="center" width="50">
+                                <el-table-column property="value" label="操作" header-align="center" width="60">
                                     <template slot-scope="scope">
                                         <el-button type="danger" icon="el-icon-delete" size="mini"
                                                    @click.native="delTableRow('develop',scope.$index)">
@@ -162,7 +162,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column property="value" label="操作" header-align="center" width="50">
+                                <el-table-column property="value" label="操作" header-align="center" width="60">
                                     <template slot-scope="scope">
                                         <el-button type="danger" icon="el-icon-delete" size="mini"
                                                    @click.native="delTableRow('production',scope.$index)">
@@ -180,7 +180,7 @@
                                         </el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column property="value" label="操作" header-align="center" width="50">
+                                <el-table-column property="value" label="操作" header-align="center" width="60">
                                     <template slot-scope="scope">
                                         <el-button type="danger" icon="el-icon-delete" size="mini"
                                                    @click.native="delTableRow('standby',scope.$index)">
@@ -216,7 +216,7 @@
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column label="操作" header-align="center" width="80">
+                        <el-table-column label="操作" header-align="center" width="90">
                             <template slot-scope="scope">
                                 <el-button type="danger" icon="el-icon-delete" size="mini"
                                            @click.native="delProjectVariable(scope.$index)">删除
@@ -380,6 +380,7 @@
             },
             addProjectBtn() {
                 let test_length = this.environment.environmentTest.length;
+
                 let currentEnvironment;
                 if (this.environmentChoice === 'second') {
                     currentEnvironment = this.environment.environmentDevelop.length;
@@ -390,7 +391,9 @@
                 } else {
                     currentEnvironment = test_length
                 }
-
+              // console.log(currentEnvironment)
+              // console.log(test_length)
+              // console.log(this.environment)
                 if (currentEnvironment !== test_length) {
                     this.$message({
                         showClose: true,

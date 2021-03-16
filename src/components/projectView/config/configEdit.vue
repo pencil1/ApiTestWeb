@@ -70,7 +70,7 @@
                                 </el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column label="操作" header-align="center" width="80">
+                        <el-table-column label="操作" header-align="center" width="90">
                             <template slot-scope="scope">
                                 <el-button type="danger" icon="el-icon-delete" size="mini"
                                            @click.native="delConfigVariable(scope.$index)">删除

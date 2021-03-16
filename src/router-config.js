@@ -20,7 +20,7 @@ import sceneConfig from './components/projectView/config/config.vue'
 // import testCaseEditor from './components/testCaseEdit/editor.vue'
 import login from './components/login/login.vue'
 import loading from './components/projectView/testTool/loading.vue'
-
+import index from './components/index.vue'
 Vue.use(VueRouter);
 
 const routes = [
@@ -38,10 +38,10 @@ const routes = [
                 // },
                 components: {
                     Header: Header,
-                    Manage: projectManage,
+                    Manage: index,
                 },
                 meta: {
-                    title: '首页入口',
+                    title: '首页',
                 }
             }, {
                 path: 'projectManage',
@@ -178,6 +178,7 @@ const routes = [
         path: '/loading',
         component: loading
     },
+
     // {
     //     path: '/testCaseEdit',
     //     component:  resolve=>(require(["@/components/testCaseEdit/editor.vue"],resolve))

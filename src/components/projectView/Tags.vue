@@ -55,13 +55,16 @@
                 if (item) {
                     delItem.path === this.$route.fullPath && this.$router.push(item.path);
                 } else {
-                    this.$router.push('/');
+
+                    this.$router.push('/manage');
+                  this.setTags(this.$route);
                 }
             },
             // 关闭全部标签
             closeAll() {
                 this.tagsList = [];
-                this.$router.push('/');
+              this.$router.push('/manage');
+              this.setTags(this.$route);
             },
             // 关闭其他标签
             closeOther() {
@@ -85,7 +88,8 @@
                         name: route.matched[1].components.Manage.name
                     })
                 }
-                bus.$emit('tags', this.tagsList);
+
+              bus.$emit('tags', this.tagsList);
             },
             handleTags(command) {
                 command === 'other' ? this.closeOther() : this.closeAll();
@@ -115,7 +119,8 @@
                         } else if (i > 0) {
                             this.$router.push(this.tagsList[i - 1].path);
                         } else {
-                            this.$router.push('/');
+                          this.$router.push('/manage');
+                          this.setTags(this.$route);
                         }
                         this.tagsList.splice(i, 1);
                     }
