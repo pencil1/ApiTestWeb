@@ -17,6 +17,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click.native="checkFunc()" size="small">调试</el-button>
+<!--        <el-button type="primary" @click.native="formatData()" size="small">测试</el-button>-->
       </el-form-item>
 
     </el-form>
@@ -386,7 +387,19 @@ export default {
       // 调用 callback 返回建议列表的数据
       cb(this.comparators);
     },
-
+    formatData() {
+      // 格式化json字符串
+      try {
+        this.funcData = JSON.parse(this.funcData);
+        this.funcData = JSON.stringify(this.funcData, null, 4);
+      } catch (err) {
+        this.$message({
+          showClose: true,
+          message: 'json格式错误',
+          type: 'warning',
+        });
+      }
+    },
     checkFunc() {
       this.$axios.post(this.$api.saveFuncFileApi, {
         'ids': this.tempTestCaseFileData.id,

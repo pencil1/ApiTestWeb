@@ -54,7 +54,7 @@
                     <el-table-column
                             prop="project_name"
                             label="所属项目"
-                            minWidth="50">
+                            minWidth="100">
                     </el-table-column>
 
                     <el-table-column
@@ -67,22 +67,37 @@
                     <el-table-column
                             prop="create_time"
                             label="时间"
-                            minWidth="100">
+                            minWidth="150">
                     </el-table-column>
                     <el-table-column
                             prop="performer"
                             label="执行者"
-                            minWidth="100">
+                            minWidth="80">
                     </el-table-column>
+                  <el-table-column
+                      prop="read_status"
+                      label="结果"
+                      width="80"
+                      align="center">
+                    <template slot-scope="scope">
+                      <!--<div :style="scope.row.read_status === '已读' ? 'color:#2bef2b': 'color:rgb(255, 74, 74)'">-->
+                      <!--{{scope.row.read_status}}-->
+                      <!--</div>-->
+                      <el-tag size="small" :type="scope.row.result === '通过' ? 'success' : 'danger'" >
+                        {{scope.row.result}}
+                      </el-tag>
+                    </template>
+                  </el-table-column>
                     <el-table-column
                             prop="read_status"
                             label="状态"
-                            width="80">
+                            width="80"
+                            align="center">
                         <template slot-scope="scope">
                             <!--<div :style="scope.row.read_status === '已读' ? 'color:#2bef2b': 'color:rgb(255, 74, 74)'">-->
                             <!--{{scope.row.read_status}}-->
                             <!--</div>-->
-                            <el-tag size="small" :type="scope.row.read_status === '已读' ? 'success' : 'danger'">
+                            <el-tag size="small" :type="scope.row.read_status === '已读' ? 'success' : 'danger'" >
                                 {{scope.row.read_status}}
                             </el-tag>
                         </template>
