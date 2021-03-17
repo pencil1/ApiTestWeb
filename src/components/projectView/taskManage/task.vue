@@ -362,6 +362,7 @@ export default {
             this.taskData.toEmail = response.data['data']['task_to_email_address'];
             this.taskData.SendEmail = response.data['data']['task_send_email_address'];
             this.taskData.password = response.data['data']['password'];
+            this.taskData.sendEmailStatus = response.data['data']['send_email_status'];
             this.taskData.num = response.data['data']['num'];
             this.taskData.projectName = this.form.projectName;
             this.taskData.id = id;
