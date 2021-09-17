@@ -44,6 +44,11 @@
 <!--            >上传文件-->
 <!--            </el-button>-->
         </div>
+      <ul style="height: 100px;color: #dcd0d0">
+        <li v-for="item in pingzhong" :key="item">
+          {{ item }}
+        </li>
+      </ul>
 
         <!--        <el-dialog title="用例转化" :visible.sync="testCase.viewStatus" width="30%">-->
         <!--            <el-form :inline="true" class="demo-form-inline">-->
@@ -79,6 +84,7 @@
                 path:'',
                 qrcode1: Object,
                 status: 1,
+                pingzhong:'',
                 a: false,
                 value6: '',
                 token: '',
@@ -109,20 +115,18 @@
 
             },
             erweima1() {
-                this.a = true;
-                this.$nextTick(function () {
-                    this.qrcode1 = new QRCode('qrcode',
-                        {
-                            width: 230,
-                            height: 230,
-                            text: 'http://192.168.3.214:8010/#/loading',
-                            colorDark: '#000',
-                            colorLight: '#fff'
-                        }
-                    );
-                });
+              this.$axios.get('/api/mon').then((response) => {
+                  this.pingzhong = response.data
+                  // this.pingzhong= ['1','2'];
+                  let myVar = setTimeout(this.setV, 2000);
+yar
+                }
+            );
 
             },
+          setV() {
+            this.pingzhong= [];
+          },
             handlePaste(event) {
                 const items = (event.clipboardData || window.clipboardData).items;
                 let file = null;

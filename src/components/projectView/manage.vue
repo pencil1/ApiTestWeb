@@ -61,7 +61,7 @@
                             </el-menu-item-group>
                         </el-submenu>
 
-                        <el-submenu index="5">
+                        <el-submenu index="5" v-show="role === '2'">
                             <template slot="title">
                                 <i class="el-icon-time"></i>
                                 <span>其他程序</span>
