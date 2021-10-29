@@ -264,16 +264,18 @@
             },
             initData() {
                 //  初始化页面数据
-                this.$axios.get(this.$api.baseDataApi).then((response) => {
-                        this.proModelData = response.data['data'];
-                        this.proAndIdData = response.data['pro_and_id'];
-                        this.configData = response.data['config_name_list'];
+                this.$axios.get(this.$api.baseDataApi,{
+                  params: {case : true}
+                }).then((response) => {
+                        // this.proModelData = response.data['data'];
+                        this.proAndIdData = response.data['data'];
+                        // this.configData = response.data['config_name_list'];
 
                         if (response.data['user_pros']) {
                             this.form.projectId = this.proAndIdData[0].id;
                             this.findSet()
                         }
-                        this.allSetList = response.data['set_list'];
+                        // this.allSetList = response.data['set_list'];
                     }
                 );
                 this.$axios.post(this.$api.findFuncFileApi,{'privates': false}).then((response) => {
@@ -294,7 +296,7 @@
                     'sizePage': this.setPage.sizePage,
                 }).then((response) => {
                         this.setDataList = response.data['data'];
-                        this.allSetList[this.form.projectId] = response.data['all_set'];
+                        this.allSetList = response.data['all_set'];
                         this.setPage.total = response.data['total'];
                         if (this.setDataList[0]) {
                             this.setTempData.setId = this.setDataList[0]['id'];

@@ -132,10 +132,10 @@
                          @change="changeSceneChoice"
                          style="width: 150px;padding-right:5px">
                 <el-option
-                    v-for="item in allSetList[this.form.projectId]"
+                    v-for="item in currentSetList"
                     :key="item.id"
-                    :label="item.label"
-                    :value="item">
+                    :label="item.name"
+                    :value="item.id">
                 </el-option>
               </el-select>
 
@@ -143,10 +143,10 @@
                          :disabled="caseStatus"
                          style="width: 150px">
                 <el-option
-                    v-for="item in allSceneList[this.form.set_id]"
-                    :key="item.id"
+                    v-for="item in allSceneList"
+                    :key="item.sceneId"
                     :label="item.label"
-                    :value="item">
+                    :value="item.sceneId">
                 </el-option>
               </el-select>
 
@@ -205,6 +205,7 @@ export default {
       runStatus: false,
       caseStatus: false,
       allSetList: '',
+      currentSetList: '',
       allSceneList: '',
       tableData: [],
       total: 1,
@@ -245,12 +246,20 @@ export default {
 
   methods: {
     httpSend() {
-      this.$axios.get(this.$api.baseDataApi).then((response) => {
-            this.proAndIdData = response.data['pro_and_id'];
-            this.allSetList = response.data['set_list'];
-            this.allSceneList = response.data['scene_list'];
+      this.$axios.get(this.$api.baseDataApi, {
+        params: {task: true}
+      }).then((response) => {
+            this.proAndIdData = response.data['data'];
+            // this.allSetList = response.data['set_list'];
+            // this.allSceneList = response.data['scene_list'];
+
             if (response.data['user_pros']) {
               this.form.projectId = this.proAndIdData[0].id;
+              for (let i = 0; i < this.proAndIdData.length; i++) {
+                if (this.proAndIdData[i]['id'] === this.form.projectId) {
+                  this.currentSetList = this.proAndIdData[i]['set_data']
+                }
+              }
               this.findTask();
             }
 
@@ -261,12 +270,32 @@ export default {
     changeProjectChoice() {
       this.form.set = [];
       this.form.case = [];
+      for (let i = 0; i < this.proAndIdData.length; i++) {
+        if (this.proAndIdData[i]['id'] === this.form.projectId) {
+          this.currentSetList = this.proAndIdData[i]['set_data']
+        }
+      }
 
+    },
+    findCase() {
+      this.$axios.post(this.$api.findCaseApi, {
+        'setId': this.form.set_id,
+        'projectId': this.form.projectId,
+        'caseName': this.form.caseName,
+        'page': 1,
+        'sizePage': 9999,
+      }).then((response) => {
+            if (this.messageShow(this, response)) {
+              this.allSceneList = response.data['data'];
+            }
+          }
+      )
     },
     changeSceneChoice() {
       if (this.form.set.length === 1) {
         this.caseStatus = false;
-        this.form.set_id = this.form.set[0].id;
+        this.form.set_id = this.form.set[0];
+        this.findCase()
       } else {
         this.caseStatus = true;
         this.form.case = [];

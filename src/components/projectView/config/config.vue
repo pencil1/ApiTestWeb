@@ -5,7 +5,7 @@
             <el-form-item label="项目名称" labelWidth="110px">
                 <el-select v-model="form.projectId" placeholder="请选择项目">
                     <el-option
-                            v-for="(item) in proAndIdData"
+                            v-for="(item) in projectData"
                             :key="item.id"
                             :label="item.name"
                             :value="item.id">
@@ -70,7 +70,7 @@
         </el-tabs>
 
         <configEdit
-                :proAndIdData="proAndIdData"
+                :proAndIdData="projectData"
                 :projectId="form.projectId"
                 :funcAddress="funcAddress"
                 ref="configEditFunc">
@@ -91,7 +91,7 @@
         data() {
             return {
                 funcAddress: null,
-                proAndIdData: '',
+                projectData:'',
                 tableData: Array(),
                 total: 1,
                 currentPage: 1,
@@ -107,10 +107,13 @@
         methods: {
             httpSend() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
-                        this.proAndIdData = response.data['pro_and_id'];
+
+
+                        this.projectData = response.data['data'];
+
 
                         if (response.data['user_pros']) {
-                            this.form.projectId = this.proAndIdData[0].id;
+                            this.form.projectId = this.projectData[0].id;
                             this.findConfig();
                         }
 

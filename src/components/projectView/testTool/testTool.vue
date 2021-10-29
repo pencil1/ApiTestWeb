@@ -44,6 +44,11 @@
 <!--            >上传文件-->
 <!--            </el-button>-->
         </div>
+      <div class="dropbox p-3">
+        <h2 class="text-center">把要上传的文件拖动到这里</h2>
+
+        </div>
+
       <ul style="height: 100px;color: #dcd0d0">
         <li v-for="item in pingzhong" :key="item">
           {{ item }}
@@ -81,6 +86,7 @@
         name: 'test',
         data() {
             return {
+              files: [],
                 path:'',
                 qrcode1: Object,
                 status: 1,
@@ -96,9 +102,48 @@
             };
         },
         mounted() {
+          this.mounteds()
         },
         methods: {
-
+          mounteds: function () {
+            var dropbox = document.querySelector('.dropbox');
+            dropbox.addEventListener('dragenter', this.onDrag, false);
+            dropbox.addEventListener('dragover', this.onDrag, false);
+            dropbox.addEventListener('drop', this.onDrop, false);
+          },
+          onDrag: function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+          },
+          onDrop: function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            var dt = e.dataTransfer;
+            for (var i = 0; i !== dt.files.length; i++) {
+              this.uploadFile(dt.files[i]);
+            }
+          },
+          uploadFile: function (file) {
+            var item = {
+              name: file.name,
+              uploadPercentage: 0
+            };
+            this.files.push(item);
+            // var fd = new FormData();
+            // fd.append('myFile', file);
+            let form = new FormData();
+            form.append("file", file);
+            this.$axios.post('/api/upload/pic', form).then((response) => {
+                  this.path = response.data['data']
+                }
+            );
+            // var xhr = new XMLHttpRequest();
+            // xhr.open('POST', 'upload.php', true);
+            // xhr.upload.addEventListener('progress', function (e) {
+            //   item.uploadPercentage = Math.round((e.loaded * 100) / e.total);
+            // }, false);
+            // xhr.send(fd);
+          },
             erweima() {
                 this.a = true;
                 this.$nextTick(function () {
@@ -119,7 +164,6 @@
                   this.pingzhong = response.data
                   // this.pingzhong= ['1','2'];
                   let myVar = setTimeout(this.setV, 2000);
-yar
                 }
             );
 
@@ -312,7 +356,10 @@ yar
 </script>
 
 <style>
-
+.dropbox {
+  border: .25rem dashed #007bff;
+  min-height: 5rem;
+}
     .list {
         max-height: 200px;
     }

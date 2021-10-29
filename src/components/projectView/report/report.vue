@@ -32,7 +32,7 @@
             <!--</el-option>-->
             <!--</el-select>-->
 
-            <el-form-item>
+            <el-form-item  style="padding-left: 15px">
                 <el-button type="primary" @click.native="handleCurrentChange(1)" size="small">搜索</el-button>
 
                 <!--<el-button type="primary" @click.native="reset()" size="small">重置</el-button>-->
@@ -184,7 +184,7 @@
             initData() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
 
-                        this.proAndIdData = response.data['pro_and_id'];
+                        this.proAndIdData =  response.data['data'];
 
 
                         if (response.data['user_pros']) {

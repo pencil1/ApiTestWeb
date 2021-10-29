@@ -41,9 +41,9 @@
                         <el-select v-model="caseData.setId" placeholder="请选择用例集" value-key="id"
                                    style="width: 150px">
                             <el-option
-                                    v-for="item in allSetList[caseData.projectId]"
+                                    v-for="item in currentSetList"
                                     :key="item.id"
-                                    :label="item.label"
+                                    :label="item.name"
                                     :value="item.id">
                             </el-option>
                         </el-select>
@@ -239,10 +239,10 @@
                                                    style="width: 150px;padding-right:5px"
                                                    placeholder="请选择模块">
                                             <el-option
-                                                    v-for="item in proModelData[form.projectId]"
-                                                    :key="item.moduleId"
+                                                    v-for="item in currentModuleList"
+                                                    :key="item.id"
                                                     :label="item.name"
-                                                    :value="item.moduleId">
+                                                    :value="item.id">
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
@@ -407,6 +407,8 @@
             return {
                 checkAll: false,
                 isIndeterminate: false,
+                currentSetList:[],
+                currentModuleList:[],
                 apiMsgVessel: [], //接口用例容器，勾选的内容都存在此变量
                 ApiMsgData: [], // 接口信息里面的表格数据
                 mainWidth: '50%',
@@ -531,7 +533,14 @@
                 //     this.synchronousData();
                 // }
                 this.form.projectId = this.projectId;
-                this.form.moduleId = this.proModelData[this.form.projectId][0].moduleId;
+
+                for (let i = 0; i < this.proAndIdData.length; i++) {
+                  if (this.proAndIdData[i]['id'] === this.projectId) {
+                    this.currentModuleList = this.proAndIdData[i]['module_data']
+                    this.currentSetList = this.proAndIdData[i]['set_data']
+                  }
+                }
+                this.form.moduleId = this.currentModuleList[0].id;
                 this.caseData.apiCases = [];
                 this.caseData.variable = [{key: '', value: '', remark: ''}];
                 this.caseData.name = '';
@@ -554,7 +563,14 @@
                 }).then((response) => {
 
                         this.form.projectId = this.projectId;
-                        this.form.moduleId = this.proModelData[this.form.projectId][0].moduleId;
+                        for (let i = 0; i < this.proAndIdData.length; i++) {
+                          if (this.proAndIdData[i]['id'] === this.form.projectId) {
+
+                            this.currentModuleList = this.proAndIdData[i]['module_data']
+                            this.currentSetList = this.proAndIdData[i]['set_data']
+                          }
+                        }
+                       this.form.moduleId = this.currentModuleList[0].id;
                         this.caseData.projectId = this.projectId;
                         this.caseData.setId = this.currentSetId;
 
@@ -577,25 +593,37 @@
                 )
             },
             changeSetChoice() {
-                let tempData = this.allSetList[this.caseData.projectId][0];
-                if (tempData) {
-                    this.caseData.setId = tempData.id;
-                } else {
-                    this.caseData.setId = null
+              // console.log(`1123`)
+                for (let i = 0; i < this.proAndIdData.length; i++) {
+                  if (this.proAndIdData[i]['id'] === this.caseData.projectId) {
+                    // this.currentModuleList = this.proAndIdData[i]['module_data']
+                    this.currentSetList = this.proAndIdData[i]['set_data']
+                    if(this.currentSetList.length === 0){
+                      this.caseData.setId = null
+                    }else {
+                      this.caseData.setId = this.currentSetList[0].id;
+                    }
+                  }
                 }
+
             },
             changeModuleChoice() {
-                let tempData = this.proModelData[this.form.projectId][0];
-                if (tempData) {
-                    this.form.moduleId = tempData.moduleId;
-                    this.apiMsgPage.currentPage = 1;
-                    this.apiMsgPage.sizePage = 15;
-                    this.findApiMsg();
-                } else {
+              for (let i = 0; i < this.proAndIdData.length; i++) {
+                if (this.proAndIdData[i]['id'] === this.form.projectId) {
+                  this.currentModuleList = this.proAndIdData[i]['module_data']
+                  // this.currentSetList = this.proAndIdData[i]['set_data']
+                  if(this.currentModuleList.length === 0){
                     this.form.moduleId = null;
                     this.ApiMsgData = [];
                     this.apiMsgPage.total = 0;
+                  }else {
+                    this.apiMsgPage.currentPage = 1;
+                    this.apiMsgPage.sizePage = 15;
+                    this.form.moduleId = this.currentModuleList[0].id;
+                    this.findApiMsg();
+                  }
                 }
+              }
             },
             changeConfigChoice() {
                 // let tempData = this.configData[this.form.sceneVariableProjectName][0];
