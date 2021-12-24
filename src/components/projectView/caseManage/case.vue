@@ -185,7 +185,7 @@
         data() {
             return {
                 defaultProps: {
-                    children: 'children',
+                    value: 'children',
                     label: 'label'
                 },
                 tabValue: 'first',

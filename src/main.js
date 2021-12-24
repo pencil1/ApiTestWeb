@@ -16,6 +16,7 @@ import ring from 'v-charts/lib/ring.common';
 import line from 'v-charts/lib/line.common';
 import base from './util/base';
 import api from './util/api';
+import VueCookies from 'vue-cookies'
 
 // import "babel-polyfill";
 // require('../node_modules/codemirror/lib/codemirror.js')
@@ -49,6 +50,7 @@ Vue.component(line.name, line);
 Vue.use(base);
 Vue.use(ElementUI);
 Vue.use(contentmenu);
+Vue.use(VueCookies);
 // Vue.use(VueResource);
 // Vue.use(VueClipboard);
 new Vue({

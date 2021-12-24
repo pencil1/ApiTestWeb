@@ -29,6 +29,7 @@
     "v-contextmenu": "^2.8.0",
     "vue": "^2.6.10",
     "vue-clipboard2": "^0.2.1",
+    "vue-cookies": "^1.7.4",
     "vue-router": "^3.0.3",
     "vue2-ace-editor": "0.0.13",
     "vuedraggable": "^2.17.0",
