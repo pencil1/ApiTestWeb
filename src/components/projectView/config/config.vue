@@ -11,6 +11,16 @@
                             :value="item.id">
                     </el-option>
                 </el-select>
+
+              <el-autocomplete
+                  v-model="state"
+                  :fetch-suggestions="querySearchAsync"
+                  placeholder="请输入项目"
+                  @select="handleSelect"
+                  value-key="name"
+                  :value ='form.projectId'
+              ></el-autocomplete>
+
             </el-form-item>
             <el-form-item label="配置名称">
                 <el-input placeholder="请输入配置" v-model="form.configName">
@@ -90,6 +100,10 @@
         name: 'config',
         data() {
             return {
+              restaurants: [],
+              state: '',
+              timeout:  null,
+
                 funcAddress: null,
                 projectData:'',
                 tableData: Array(),
@@ -105,10 +119,28 @@
 
 
         methods: {
+          querySearchAsync(queryString, cb) {
+            var restaurants = this.restaurants;
+            var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants;
+            cb(results);
+            // clearTimeout(this.timeout);
+            // this.timeout = setTimeout(() => {
+            //   cb(results);
+            // }, 3000 * Math.random());
+          },
+          createStateFilter(queryString) {
+            return (state) => {
+              return (state.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+            };
+          },
+          handleSelect(item) {
+            this.form.projectId = item.id
+            // console.log(this.state);
+          },
             httpSend() {
                 this.$axios.get(this.$api.baseDataApi).then((response) => {
-
-
+                  this.restaurants=response.data['data']
+                  this.state = response.data['data'][0]['name']
                         this.projectData = response.data['data'];
 
 

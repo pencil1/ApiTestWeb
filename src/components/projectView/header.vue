@@ -107,6 +107,7 @@
             },
             logOut(command) {
                 if (command === "a") {
+
                     this.$store.commit(types.LOGOUT);
                     this.$router.push({path: '/login'});
                     this.$axios.get(this.$api.logoutApi).then((response) => {
