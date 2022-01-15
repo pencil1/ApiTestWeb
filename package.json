@@ -20,7 +20,7 @@
     "json-diff": "^0.5.4",
     "kity": "^2.0.4",
     "kityminder-core": "^1.4.50",
-    "marked": "^0.3.6",
+    "marked": "^4.0.10",
     "node-sass": "^4.9.0",
     "plugins": "^0.4.2",
     "qrcodejs2": "^0.0.2",
