@@ -2,18 +2,18 @@
 module.exports = {
     lintOnSave: true,
     productionSourceMap: false,
-
-    configureWebpack: {
-        externals: {
-            'vue': 'Vue',
-            'element-ui': 'ELEMENT',
-            //将需要忽略打包的都写在这个里面，但前提是index.html文件里面必须script引入
-        }
-    },
+    //
+    // configureWebpack: {
+    //     externals: {
+    //         'vue': 'Vue',
+    //         'element-ui': 'ELEMENT',
+    //         //将需要忽略打包的都写在这个里面，但前提是index.html文件里面必须script引入
+    //     }
+    // },
 
     pages: {
         index: {
-            // page 的入口
+            // components 的入口
             entry: 'src/main.js',
             // 模板来源
             template: 'public/index.html',
@@ -30,7 +30,7 @@ module.exports = {
         host: '0.0.0.0',
         // host: '127.0.0.1',
         // host: '122.51.184.120',
-        port: 8010,
+        port: 8020,
         proxy: {
             '/api/': {
                 target: 'http://0.0.0.0:8081',
@@ -45,7 +45,7 @@ module.exports = {
         loaderOptions: {
             // 设置 scss 公用变量文件
             sass: {
-                data: `@import '~@/assets/css/color.scss';`
+                prependData: `@import '~@/assets/css/color.scss';`
             }
         }
     },

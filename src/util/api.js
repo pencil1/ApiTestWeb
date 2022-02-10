@@ -9,11 +9,11 @@ const delProApi = '/api/project/del';
 const findReportApi = '/api/report/find';
 const delReportApi = '/api/report/del';
 
-const findModuleApi = '/api/module/find';
-const addModuleApi = '/api/module/add';
-const editModuleApi = '/api/module/edit';
-const delModuleApi = '/api/module/del';
-const stickModuleApi = '/api/module/stick';
+const findApiSetApi = '/api/apiSet/find';
+const addApiSetApi = '/api/apiSet/add';
+const editApiSetApi = '/api/apiSet/edit';
+const delApiSetApi = '/api/apiSet/del';
+const stickApiSetApi = '/api/apiSet/stick';
 
 const findConfigApi = '/api/config/find';
 const addConfigApi = '/api/config/add';
@@ -130,11 +130,11 @@ export default {
     editProApi,
     delProApi,
 
-    findModuleApi,
-    addModuleApi,
-    editModuleApi,
-    delModuleApi,
-    stickModuleApi,
+    findApiSetApi,
+    addApiSetApi,
+    editApiSetApi,
+    delApiSetApi,
+    stickApiSetApi,
 
     findConfigApi,
     addConfigApi,

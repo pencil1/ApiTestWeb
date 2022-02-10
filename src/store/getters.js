@@ -1,30 +1,8 @@
-export const count = state => {
-  return state.count;
+const getters = {
+    userInfo: state => state.user.userInfo,
+    asideStatus: state => state.user.asideStatus,
+    cachedViews:state => state.tags.cachedViews,
+    cacheStatus:state => state.tags.cacheStatus,
 }
+export default getters
 
-export const working = state => {
-  return {
-    saving: state.working.saving,
-    draging: state.working.draging,
-    editing: state.working.editing
-  }
-}
-
-export const config = state => {
-  return {
-    ctrlPanelMin: state.config.ctrlPanelMin,
-    tableHeight: state.config.tableHeight,
-    ctrlPanelWidth: state.config.ctrlPanelWidth,
-    dividerWidth: state.config.dividerWidth,
-    defaultLang: state.config.defaultLang,
-    zoom: state.config.zoom
-  }
-}
-
-export const getMinder = state => {
-  return state.minder
-}
-
-export const getEditor = state => {
-  return state.editor
-}
