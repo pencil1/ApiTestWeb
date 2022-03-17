@@ -14,13 +14,13 @@
             </el-input>
           </el-form-item>
           <el-form-item label="负责人" label-width="60px">
-            <el-select v-model="form.user" value-key="user_id" id="user" size="mini"
+            <el-select v-model="form.user" multiple value-key="id" size="mini"
                        style="width: 100px">
               <el-option
                   v-for="item in userData"
                   :key="item.user_id"
                   :label="item.user_name"
-                  :value="item">
+                  :value="item.user_id">
               </el-option>
             </el-select>
           </el-form-item>

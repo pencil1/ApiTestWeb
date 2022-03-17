@@ -118,6 +118,7 @@ const routes = [
           title: '用户管理',
         }
       },
+
     ],
 
   },
@@ -128,6 +129,14 @@ const routes = [
       title: '報告展示',
     },
     component: () => import('@/views/reportShow'),
+  },
+  {
+    path: '/h5Page',
+    name: 'h5Page',
+    component: () => import('@/views/h5Page'),
+    meta: {
+      title: 'h5页面',
+    }
   },
 ]
 
@@ -140,6 +149,9 @@ if (window.localStorage.getItem('roles')) {
 }
 if (window.localStorage.getItem('name')) {
   store.getters.userInfo.name = window.localStorage.getItem('name')
+}
+if (window.localStorage.getItem('userId')) {
+  store.state.userId = window.localStorage.getItem('userId')
 }
 
 const router = new Router({

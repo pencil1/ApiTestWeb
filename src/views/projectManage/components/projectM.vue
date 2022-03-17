@@ -90,6 +90,7 @@
 
 <script>
 import editView from '../components/editView'
+
 export default {
   components: {
     editView,
@@ -98,13 +99,13 @@ export default {
     return {
 
       environment: {
-        environmentTest: [{value: ''}],
-        environmentDevelop: [{value: ''}],
-        environmentProduction: [{value: ''}],
-        environmentStandby: [{value: ''}],
+        environmentTest: [{value: null}],
+        environmentDevelop: [{value: null}],
+        environmentProduction: [{value: null}],
+        environmentStandby: [{value: null}],
         environmentChoice: 'first',
       },
-      tableData: Array(),
+      tableData: [{value: null}],
       total: 1,
       userData: [],
       currentPage: 1,
@@ -112,10 +113,7 @@ export default {
       form: {
         showView: false,
         projectName: null,
-        user: {
-          user_name: null,
-          user_id: null,
-        },
+        user: [],
       },
       projectData: {
         host: null,
@@ -165,7 +163,7 @@ export default {
       this.environment.environmentDevelop = Array();
       this.environment.environmentProduction = Array();
       this.environment.environmentStandby = Array();
-      this.form.user = {};
+      this.form.user = [];
       this.projectData.principal = null;
       this.projectData.funcFile = null;
       this.projectData.header = Array();
@@ -195,7 +193,8 @@ export default {
     addProject() {
       this.$axios.post(this.$api.addProApi, {
         'projectName': this.projectData.projectName,
-        'principal': this.projectData.principal,
+        // 'principal': JSON.stringify(this.form.user.map(item => item.user_id)),
+        'principal': this.form.user,
         'funcFile': this.projectData.funcFile,
         'environmentChoice': this.environment.environmentChoice,
         'host': this.dealHostList(this.environment.environmentTest),
@@ -204,7 +203,7 @@ export default {
         'hostFour': this.dealHostList(this.environment.environmentStandby),
         'id': this.projectData.id,
         'header': JSON.stringify(this.projectData.header),
-        'userId': this.form.user.user_id,
+        'userId': this.$store.state.userId,
         'variable': JSON.stringify(this.projectData.variable),
       }).then((response) => {
             if (this.messageShow(this, response)) {
@@ -216,10 +215,11 @@ export default {
     },
     editProject(id) {
       this.$axios.post(this.$api.editProApi, {'id': id}).then((response) => {
-            let index = this.userData.map(item => item.user_id).indexOf(response.data['data']['user_id']);
-            this.form.user = this.userData[index];
+            // let index = this.userData.map(item => item.user_id).indexOf(response.data['data']['user_id']);
+            // this.form.user = this.userData[index];
+            // this.projectData.principal = response.data['data']['principal'];
             this.projectData.projectName = response.data['data']['pro_name'];
-            this.projectData.principal = response.data['data']['principal'];
+            this.form.user = response.data['data']['principal'];
             this.environment.environmentChoice = response.data['data']['environment_choice'];
             this.environment.environmentTest = this.dealHostDict(response.data['data']['host']);
             this.environment.environmentDevelop = this.dealHostDict(response.data['data']['host_two']);

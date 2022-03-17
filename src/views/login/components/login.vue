@@ -98,6 +98,7 @@ export default {
                 storage.token = response.data['token']
                 storage.roles = response.data['roles']
                 storage.name = response.data['name']
+                storage.userId = response.data['userId']
                 this.$router.push({path: '/home'})
               }
             }

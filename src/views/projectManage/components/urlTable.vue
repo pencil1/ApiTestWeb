@@ -60,8 +60,8 @@
           deep: true
         },
       },
-      created() {
-        if(!this.tableData){
+      mounted() {
+        if(!this.tableData[0]){
           this.tableData.push({value: null});
         }
       }

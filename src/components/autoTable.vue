@@ -235,10 +235,10 @@
             monitorData: {
                 handler: function () {
                     if (this.tableData.length === 0) {
-                        this.addTableRow('variable')
+                        this.addTableRow()
                     }
                     if (this.tableData[this.tableData.length - 1]['key'] || this.tableData[this.tableData.length - 1]['value']) {
-                        this.addTableRow('variable')
+                        this.addTableRow()
                     }
                 },
                 deep: true

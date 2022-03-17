@@ -7,5 +7,6 @@ export const state = {
     token: null,
     title: '',
     roles: null,
+    userId: null,
 }
 export default state
