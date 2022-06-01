@@ -22,17 +22,28 @@
         </el-button>
       </el-button-group>
       <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top:30px"/>
-      <el-scrollbar wrapStyle="height:719px;">
+      <el-scrollbar :wrapStyle="{
+              height: this.$store.state.tableHeight+10+'px'
+            }">
         <el-tree :data="this.$store.state.funcAddress"
                  :props="defaultProps"
                  @node-click="handleNodeClick"
-                 highlight-current
+                 @check-change="handleNodeChange"
+                 :highlight-current="true"
                  v-loading="this.loading">
-                <span class="custom-tree-node span-ellipsis" slot-scope="{ node, data }">
+          <!--          <span class="custom-tree-node span-ellipsis" slot-scope="{ node, data }">-->
+          <!--                  <span :title="node.label">-->
+          <!--                    <svg class="icon" aria-hidden="true">-->
+          <!--                        <use :xlink:href="data.status? '#my-icon-wenjian1':'#my-icon-wenjianjia'"></use>-->
+          <!--                    </svg>-->
+          <!--                      {{ node.label }}-->
+          <!--                  </span>-->
+          <!--                </span>-->
+          <span class="custom-tree-node span-ellipsis" slot-scope="{ node, data}">
                   <span :title="node.label">
-                    <svg class="icon" aria-hidden="true">
-                        <use :xlink:href="data.status? '#my-icon-wenjian1':'#my-icon-wenjianjia'"></use>
-                    </svg>
+                      <svg class="icon" aria-hidden="true">
+                      <use :xlink:href="data.status? '#my-icon-wenjian1':'#my-icon-wenjianjia'"></use>
+                              </svg>
                       {{ node.label }}
                   </span>
                 </span>
@@ -50,8 +61,8 @@
 
       <el-radio-group v-model="addTestCaseFileData.idChoice"
                       :disabled="this.addTestCaseFileData.id !== null">
-        <el-radio :label=1>新增同级</el-radio>
-        <el-radio :label=2>新增下级</el-radio>
+        <el-radio :label=2>新增同级</el-radio>
+        <el-radio :label=3>新增下级</el-radio>
       </el-radio-group>
       <el-divider></el-divider>
       <el-form>
@@ -92,7 +103,7 @@ export default {
         id: null,
         higherId: 0,
         status: 0,
-        idChoice: 1,
+        idChoice: 2,
         num: null,
       },
       defaultProps: {
@@ -104,14 +115,19 @@ export default {
   methods: {
     initTestCaseFile() {
       this.addTestCaseFileData.status = 0;
-      this.addTestCaseFileData.idChoice = 1;
+      this.addTestCaseFileData.idChoice = 2;
       this.addTestCaseFileData.id = null;
       this.addTestCaseFileData.name = null;
       this.tempTestCaseFileData.viewStatus = true
 
     },
     initEditTestCaseFile() {
-      this.addTestCaseFileData = this.tempTestCaseFileData;
+       this.addTestCaseFileData.status = this.tempTestCaseFileData.status;
+      this.addTestCaseFileData.idChoice = 2;
+      this.addTestCaseFileData.id = this.tempTestCaseFileData.id;
+      this.addTestCaseFileData.name = this.tempTestCaseFileData.name;
+      this.addTestCaseFileData.higherId = this.tempTestCaseFileData.higherId;
+
       this.tempTestCaseFileData.viewStatus = true
     },
     delTestCaseFileBtn() {
@@ -149,7 +165,16 @@ export default {
       this.privates = status;
       this.findTestCaseFile()
     },
+    handleNodeChange(data, status, node) {
+      console.log(data)
+          console.log(status)
+
+            console.log(node)
+
+
+    },
     handleNodeClick(data, node) {
+      // console.log(node)
       if (this.tempTestCaseFileData.status === 1) {
         this.$emit('saveTestCaseFile', this.tempTestCaseFileData.id);
       }
@@ -180,9 +205,9 @@ export default {
     },
     addTestCaseFile() {
       //  添加文件
-      if (this.addTestCaseFileData.idChoice === 1) {
+      if (this.addTestCaseFileData.idChoice === 2) {
         this.addTestCaseFileData.higherId = this.tempTestCaseFileData.higherId
-      } else if (this.addTestCaseFileData.idChoice === 2) {
+      } else if (this.addTestCaseFileData.idChoice === 3) {
         if (!this.tempTestCaseFileData.id) {
           this.$message({
             showClose: true,
@@ -206,22 +231,8 @@ export default {
               if (this.addTestCaseFileData.id) {
                 this.tempTreeData.data.name = this.addTestCaseFileData.name
               } else {
-                if (this.addTestCaseFileData.idChoice === 1) {
-                  const newChild = {
-                    name: this.addTestCaseFileData.name,
-                    children: [],
-                    status: this.addTestCaseFileData.status,
-                    'higher_id': response.data.higher_id,
-                    'id': response.data.id,
-                  };
-                  if (response.data.higher_id === 0) {
-                    // this.treeData.push(newChild);
-                    this.$store.state.funcAddress.push(newChild)
-                  } else {
+                if (this.addTestCaseFileData.idChoice === 2) {
 
-                    this.tempTreeData.node.parent.data.children.push(newChild);
-                  }
-                } else if (this.addTestCaseFileData.idChoice === 2) {
                   const newChild = {
                     name: this.addTestCaseFileData.name,
                     // children: [],
@@ -229,6 +240,23 @@ export default {
                     'higher_id': response.data.higher_id,
                     'id': response.data.id,
                   };
+
+                  if (response.data.higher_id === 0) {
+                    // this.treeData.push(newChild);
+                    this.$store.state.funcAddress.push(newChild)
+                  } else {
+
+                    this.tempTreeData.node.parent.data.children.push(newChild);
+                  }
+                } else if (this.addTestCaseFileData.idChoice === 3) {
+                  const newChild = {
+                    name: this.addTestCaseFileData.name,
+                    children: [],
+                    status: this.addTestCaseFileData.status,
+                    'higher_id': response.data.higher_id,
+                    'id': response.data.id,
+                  };
+
                   if (!this.tempTreeData.data.children) {
                     this.$set(this.tempTreeData.data, 'children', []);
                   }
@@ -246,3 +274,21 @@ export default {
 
 }
 </script>
+<style  lang="scss">
+.custom-tree-node {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 3px;
+}
+.child{
+  	display: none
+  }
+.el-tree-node__content:hover {
+  .child {
+    display: block
+  }
+}
+</style>

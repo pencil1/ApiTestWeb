@@ -17,7 +17,8 @@
         >
           <el-submenu v-for="item in asideList" :key="item.num" :index="item.num" >
             <template slot="title">
-              <i class="el-icon-document"></i>
+
+              <i :class="item.icon"></i>
               <span>{{ item.name }}</span>
             </template>
             <el-menu-item-group>
@@ -50,28 +51,36 @@ export default {
     return {
       navigationName: '/home',
       asideList: [{
-        name: '接口管理', num: '1', children: [
+        name: '基础管理', num: '1', icon:'el-icon-menu',
+        children: [
           {name: '项目管理', index: '/projectManage'},
+        ]
+      },{
+        name: '接口管理', num: '2', icon:'el-icon-s-promotion',
+        children: [
+          // {name: '项目管理', index: '/projectManage'},
           {name: '接口信息', index: '/apiManage'},
-          {name: '业务配置', index: '/sceneConfig'},
           {name: '接口用例', index: '/caseManage'},
+          {name: '业务配置', index: '/sceneConfig'},
           {name: '内置函数', index: '/buildInFunc'},
         ]
       },
         {
-          name: '报告管理', num: '2', children: [
+          name: '报告管理', num: '3', icon:'el-icon-document',
+          children: [
             {name: '测试报告', index: '/reportManage'},
             {name: '定时任务', index: '/taskManage'},
           ]
         },
         {
-          name: '其他程序', num: '3', children: [
+          name: '其他程序', num: '4', icon:'el-icon-attract',
+          children: [
             {name: '小工具', index: '/testTool'},
-
           ]
         },
         {
-          name: '系统管理', num: '4', children: [
+          name: '系统管理', num: '5',  icon:'el-icon-setting',
+          children: [
             {name: '用户管理', index: '/userManage'},
           ]
         },

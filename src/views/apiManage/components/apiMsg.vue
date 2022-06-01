@@ -55,7 +55,7 @@
     <el-tabs v-model="numTab" class="table_padding" @tab-click="tabChange">
       <el-tab-pane label="接口信息" name="first">
         <el-row>
-          <el-col :span="3"
+          <el-col :span="5"
                   style="border:1px solid;border-color: #ffffff rgb(234, 234, 234) #ffffff #ffffff;">
             <apiSet
                 ref="apiSetR"
@@ -64,7 +64,7 @@
                 :proAndIdData="proAndIdData"
             ></apiSet>
           </el-col>
-          <el-col :span="21" style="padding-left: 5px;">
+          <el-col :span="19" style="padding-left: 5px;">
             <el-table
 
                 ref="apiMultipleTable"
@@ -143,11 +143,6 @@
 
       </el-tab-pane>
     </el-tabs>
-<!--    <importApi-->
-<!--        :projectId="form.projectId"-->
-<!--        :moduleData="form.module"-->
-<!--        ref="importApiFunc">-->
-<!--    </importApi>-->
     <result ref="resultFunc">
     </result>
     <errorView ref="errorViewFunc">
@@ -161,7 +156,7 @@
 </template>
 <script>
 
-import apiSet from './apiSet.vue'
+import apiSet from './apiSetList.vue'
 import apiEdit from './apiEdit.vue'
 // import errorView from '../common/errorView.vue'
 const configEdit = () => import('@/views/sceneConfig/components/configEdit.vue')
@@ -197,7 +192,7 @@ export default {
       },
 
 
-      moduleData: {
+      apiSetData: {
         viewStatus: false,
         id: '',
         num: '',
@@ -209,6 +204,7 @@ export default {
         apiName: null,
         apiSet: {
           name: '',
+          higherId:'',
           id: '',
           num: '',
         },
@@ -260,7 +256,7 @@ export default {
       this.$axios.post(this.$api.findApiApi, {
         'apiName': this.form.apiName,
         'projectId': this.form.projectId,
-        'moduleId': apiSetId,
+        'apiSetId': apiSetId,
         'page': page,
         'sizePage': this.apiMsgPage.sizePage,
       }).then((response) => {
@@ -371,7 +367,9 @@ export default {
       this.form.apiSet = {name: null, id: null,};
       this.apiMsgPage.currentPage = 1;
       this.ApiMsgTableData = []
-      this.$refs.apiSetR.findApiSet();
+      // 查询其他项目时，关闭编辑
+      this.apiEditViewStatus = false;
+      // this.$refs.apiSetR.findApiSet();
       this.getConfigData()
 
     },
@@ -379,6 +377,9 @@ export default {
       //  当tab切换到接口信息时，刷新列表
       if (tab.label === '接口信息') {
         this.findApiMsg()
+      }else if(tab.label === '接口编辑'){
+          // 切换回来的时候更新接口集合数据
+        this.$refs.apiFunc.getNewApiSetList();
       }
     },
   },

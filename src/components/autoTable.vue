@@ -145,6 +145,10 @@
                 }else if (this.kind === 'url') {
                     this.temp = {value: null}
                 }
+                if (this.tableData.length === 0){
+                  this.addTableRow()
+                }
+                // console.log()
             },
             addTableRow() {
                 if (this.kind === 'extract') {

@@ -17,6 +17,7 @@
     "v-charts": "^1.19.0",
     "v-contextmenu": "^2.9.0",
     "vue": "^2.6.11",
+    "vue-codemirror": "4",
     "vue-router": "^3.5.3",
     "vue-runtime-helpers": "^1.1.2",
     "vue2-ace-editor": "^0.0.15",

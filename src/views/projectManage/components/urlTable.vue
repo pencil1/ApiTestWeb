@@ -61,9 +61,8 @@
         },
       },
       mounted() {
-        if(!this.tableData[0]){
+
           this.tableData.push({value: null});
-        }
       }
 
     }
