@@ -29,24 +29,28 @@
       <el-col :span="14"
               style="border:3px solid rgb(189, 189, 189)">
         <el-container>
-          <editor
+          <aceEditor
               style="font-size: 15px"
               v-model="funcData"
               @init="editorInit"
               lang="python"
               theme="monokai"
               width="100%"
-              height="756px"
+              :height= this.$store.state.tableHeight+65
               :options="{
                          enableSnippets:true,
                          enableBasicAutocompletion: true,
                          enableLiveAutocompletion: true
                          }"
           >
-          </editor>
+          </aceEditor>
         </el-container>
       </el-col>
-      <el-col :span="5" style="padding-left:10px;background-color: rgb(234, 234, 234);height:761px ">
+<!--      <el-col :span="5" style="padding-left:10px;background-color: rgb(234, 234, 234);height:761px">-->
+        <el-col :span="5" :style="{
+          height:this.$store.state.tableHeight+69+'px',
+          backgroundColor:'#eaeaea'
+        }">
         <div style="font-weight: 700;color: gray;font-size:14px;margin-top: 2px;">
           测试结果：
         </div>
@@ -61,12 +65,12 @@ import funcList from './funcList.vue'
 
 export default {
   components: {
-    editor: require('vue2-ace-editor'),
     funcList,
   },
   name: 'buildInFunc',
   data() {
     return {
+      style1:{},
       funcName: '',
       funcData: '',
       result: '',

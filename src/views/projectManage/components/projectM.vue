@@ -19,8 +19,8 @@
 
         <el-table :data="tableData" stripe :max-height="this.$store.state.tableHeight">
           <el-table-column
-              prop="id"
-              label="id"
+              prop="num"
+              label="编号"
               width="80"
           >
           </el-table-column>
@@ -48,7 +48,21 @@
           <el-table-column
               prop="principal"
               label="负责人"
-              width="150">
+              >
+            <template slot-scope="scope">
+              <!--<div :style="scope.row.read_status === '已读' ? 'color:#2bef2b': 'color:rgb(255, 74, 74)'">-->
+              <!--{{scope.row.read_status}}-->
+              <!--</div>-->
+              <el-tag
+                  v-for="tag in scope.row.principal"
+                  :key="tag"
+                  size="mini"
+                  style="margin-right: 5px"
+                 >
+                {{userData.find(item => item.user_id === tag)? userData.find(item => item.user_id === tag).user_name : ''}}
+              </el-tag>
+
+            </template>
           </el-table-column>
           <el-table-column
               label="操作"
@@ -116,6 +130,7 @@ export default {
         user: [],
       },
       projectData: {
+        num:null,
         host: null,
         hostTwo: null,
         hostThree: null,
@@ -157,7 +172,9 @@ export default {
       )
     },
     initProjectData() {
+      // console.log(this.$store.state.headerWidth)
       this.form.showView = true
+      this.projectData.num = null;
       this.projectData.projectName = null;
       this.environment.environmentTest = Array();
       this.environment.environmentDevelop = Array();
@@ -191,8 +208,10 @@ export default {
       return host
     },
     addProject() {
+
       this.$axios.post(this.$api.addProApi, {
         'projectName': this.projectData.projectName,
+        'num': parseInt(this.projectData.num),
         // 'principal': JSON.stringify(this.form.user.map(item => item.user_id)),
         'principal': this.form.user,
         'funcFile': this.projectData.funcFile,
@@ -227,6 +246,7 @@ export default {
             this.environment.environmentStandby = this.dealHostDict(response.data['data']['host_four']);
             this.projectData.header = response.data['data']['headers'];
             this.projectData.variable = response.data['data']['variables'];
+            this.projectData.num = response.data['data']['num'];
             this.projectData.id = id;
             this.projectData.funcFile = response.data['data']['func_file'];
             this.form.showView = true

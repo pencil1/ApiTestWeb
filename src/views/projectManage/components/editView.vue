@@ -9,8 +9,13 @@
       <el-tab-pane label="基础信息" style="margin-top: 10px">
         <el-form :inline="true">
           <el-form-item label="项目名称">
-            <el-input v-model="projectData.projectName" size="mini" id="project_name"
+            <el-input v-model="projectData.projectName" size="mini"
                       style="width: 150px">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="编号" v-if="projectData.id">
+            <el-input v-model="projectData.num" size="mini"
+                      style="width: 50px">
             </el-input>
           </el-form-item>
           <el-form-item label="负责人" label-width="60px">

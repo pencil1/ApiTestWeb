@@ -1,111 +1,118 @@
 <template>
   <div class="apiEdit">
-
-    <el-form :inline="true" style="padding: 10px 20px -10px 10px;">
-      <el-form-item label="基础信息" labelWidth="80px" style="margin-bottom: 5px">
-        <el-select v-model="form.projectId"
-                   placeholder="请选择项目"
-                   size="small"
-                   @change="changeProChoice"
-                   style="width: 200px;padding-right:10px">
-          <el-option
-              v-for="(item) in proAndIdData"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-          </el-option>
-        </el-select>
-
-        <el-select v-model="form.apiSetId"
-                   placeholder="请选择模块"
-                   size="small"
-                   style="width: 200px;padding-right:10px">
-          <el-option
-              v-for="(item) in currentApiSetList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-          </el-option>
-        </el-select>
-        <el-select v-model="form.choiceUrl"
-                   clearable placeholder="请选择url"
-                   size="small">
-          <el-option
-              v-for="item in proUrlData"
-              :key="item"
-              :label="item"
-              :value="item"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
-
-      <el-form-item label="接口编号"
-                    label-width="80px"
-                    prop="num"
-                    v-if="apiMsgData.id"
-                    style="margin-bottom: 5px">
-
-        <el-input v-model.number="apiMsgData.num"
-                  placeholder="接口编号"
-                  size="small"
-                  style="width: 70px;text-align:center;">
-        </el-input>
-      </el-form-item>
-      <el-form-item prop="name" style="margin-bottom: 5px">
-        <el-input v-model="apiMsgData.name" placeholder="接口名称" size="small">
-        </el-input>
-      </el-form-item>
-
-    </el-form>
-    <el-form :inline="true">
-      <el-form-item label="高级功能" prop="name" labelWidth="80px" style="margin-bottom: 5px">
-
-        <el-input v-model="apiMsgData.up_func" placeholder="set_up_hooks" size="small">
-        </el-input>
-
-      </el-form-item>
-      <el-form-item prop="name" style="margin-bottom: 5px">
-        <el-input v-model="apiMsgData.down_func" placeholder="set_down_hooks" size="small">
-        </el-input>
-      </el-form-item>
-      <el-form-item prop="name" style="margin-bottom: 5px">
-        <el-input v-model="apiMsgData.skip" placeholder="跳过判断，True跳过该请求" size="small">
-        </el-input>
-      </el-form-item>
-
-    </el-form>
-    <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
-    <el-form style="margin: 0 0 0 10px">
-      <el-form-item>
-        <el-input placeholder="Enter request URL"
-                  v-model="apiMsgData.url"
-                  class="input-with-select"
-                  style="width: 80%;margin-right: 5px">
-          <el-select v-model="apiMsgData.method"
-                     size="medium"
-                     style="width: 100px"
-                     slot="prepend"
-                     placeholder="选择请求方式">
-            <el-option v-for="item in methods"
-                       :key="item"
-                       :value="item"
-                       :label="item">
+    <div ref="baseMsg">
+      <el-form :inline="true" style="padding: 10px 20px -10px 10px;">
+        <el-form-item label="基础信息" labelWidth="80px" style="margin-bottom: 5px">
+          <el-select v-model="form.projectId"
+                     placeholder="请选择项目"
+                     size="small"
+                     @change="changeProChoice"
+                     style="width: 200px;padding-right:10px">
+            <el-option
+                v-for="(item) in proAndIdData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
             </el-option>
           </el-select>
-          <el-button
-              slot="append"
-              type="primary"
-              @click="ParamViewStatus = !ParamViewStatus">Params</el-button>
-        </el-input>
-        <el-button type="primary"
-                   @click.native="saveAndRun()"
-                   size="medium"
-                   :loading="this.saveRunStatus">Send</el-button>
-        <el-button type="primary" @click.native="addApiMsg()" size="medium">Save</el-button>
-      </el-form-item>
-    </el-form>
-<!--    <div :style={height:picHeight}>-->
+
+          <el-select v-model="form.apiSetId"
+                     placeholder="请选择模块"
+                     size="small"
+                     style="width: 200px;padding-right:10px">
+            <el-option
+                v-for="(item) in currentApiSetList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+            </el-option>
+          </el-select>
+          <el-select v-model="form.choiceUrl"
+                     clearable placeholder="请选择url"
+                     size="small">
+            <el-option
+                v-for="item in proUrlData"
+                :key="item"
+                :label="item"
+                :value="item"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="接口编号"
+                      label-width="80px"
+                      prop="num"
+                      v-if="apiMsgData.id"
+                      style="margin-bottom: 5px">
+
+          <el-input v-model.number="apiMsgData.num"
+                    placeholder="接口编号"
+                    size="small"
+                    style="width: 70px;text-align:center;">
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="name" style="margin-bottom: 5px">
+          <el-input v-model="apiMsgData.name" placeholder="接口名称" size="small">
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="name" style="margin-bottom: 5px">
+          <el-switch
+              v-model="highStatus"
+              inactive-text="高级功能">
+          </el-switch>
+        </el-form-item>
+      </el-form>
+      <el-form :inline="true" v-if="highStatus">
+        <el-form-item label="高级功能" prop="name" labelWidth="80px" style="margin-bottom: 5px">
+
+          <el-input v-model="apiMsgData.up_func" placeholder="set_up_hooks" size="small">
+          </el-input>
+
+        </el-form-item>
+        <el-form-item prop="name" style="margin-bottom: 5px">
+          <el-input v-model="apiMsgData.down_func" placeholder="set_down_hooks" size="small">
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="name" style="margin-bottom: 5px">
+          <el-input v-model="apiMsgData.skip" placeholder="跳过判断，True跳过该请求" size="small">
+          </el-input>
+        </el-form-item>
+
+      </el-form>
+      <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
+      <el-form style="margin: 0 0 0 10px">
+        <el-form-item>
+          <el-input placeholder="Enter request URL"
+                    v-model="apiMsgData.url"
+                    class="input-with-select"
+                    style="width: 80%;margin-right: 5px">
+            <el-select v-model="apiMsgData.method"
+                       size="medium"
+                       style="width: 100px"
+                       slot="prepend"
+                       placeholder="选择请求方式">
+              <el-option v-for="item in methods"
+                         :key="item"
+                         :value="item"
+                         :label="item">
+              </el-option>
+            </el-select>
+            <el-button
+                slot="append"
+                type="primary"
+                @click="ParamViewStatus = !ParamViewStatus">Params
+            </el-button>
+          </el-input>
+          <el-button type="primary"
+                     @click.native="saveAndRun()"
+                     size="medium"
+                     :loading="this.saveRunStatus">Send
+          </el-button>
+          <el-button type="primary" @click.native="addApiMsg()" size="medium">Save</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
     <el-table :data="apiMsgData.param"
               :row-style="{'background-color': 'rgb(250, 250, 250)'}"
               style="width:98.2%;margin-top:-20px;left: 10px;"
@@ -150,7 +157,8 @@
         </template>
       </el-table-column>
     </el-table>
-<!--      <el-scrollbar :wrapStyle="scrollbarHeight()">-->
+
+
     <el-tabs style="margin: 0 0 0 10px" v-model="bodyShow">
       <el-tab-pane label="Headers" name="first">
         <auto-table
@@ -167,7 +175,7 @@
             <el-radio label="text">text</el-radio>
           </el-radio-group>
           <el-button type="primary" size="mini"
-                     v-show="form.variable_type === 'json'"
+                     v-if="form.variable_type === 'json' "
                      style="margin-left:20px"
                      @click="formatData()">格式化
 
@@ -178,7 +186,7 @@
         <div v-if="form.variable_type === 'json'">
           <div style="border:1px solid rgb(234, 234, 234) ">
             <el-container>
-              <editor
+              <aceEditor
                   v-contextmenu:contextmenu
                   style="font-size: 15px"
                   v-model="apiMsgData.jsonVariable"
@@ -186,19 +194,18 @@
                   lang="json"
                   theme="chrome"
                   width="100%"
-                  height="515px"
+                  :height=this.$store.state.tableHeight-175
                   :options="{}"
               >
-              </editor>
+              </aceEditor>
             </el-container>
-
           </div>
         </div>
 
         <auto-table v-if="form.variable_type === 'data' || form.variable_type === 'text'"
-            :tableData="apiMsgData.variable"
-            kind="variable"
-            :lineFeed="true"
+                    :tableData="apiMsgData.variable"
+                    kind="variable"
+                    :lineFeed="true"
         ></auto-table>
       </el-tab-pane>
       <el-tab-pane label="Extract" name="third">
@@ -233,10 +240,11 @@
 // import errorView from '../common/errorView.vue'
 
 import AutoTable from "../../../components/autoTable";
+
 export default {
   components: {
     AutoTable,
-    editor: require('vue2-ace-editor'),
+    // editor: require('vue2-ace-editor'),
     // result: result,
     // errorView: errorView,
   },
@@ -244,10 +252,11 @@ export default {
   props: ['proAndIdData', 'projectId', 'apiSetId'],
   data() {
     return {
-      picHeight: parseInt(document.documentElement.clientHeight-400)+'px',
+      picHeight: parseInt(document.documentElement.clientHeight - 400) + 'px',
       bodyShow: 'second',
       paramTypes: ['string', 'file'],
       cell: Object(),
+      highStatus:false,//高级功能按钮状态
       proUrlData: null,
       saveRunStatus: false,
       currentApiSetList: [],
@@ -275,7 +284,7 @@ export default {
         {'value': 'count_greater_than_or_equals'},
         {'value': 'length_less_than'},
         {'value': 'length_less_than_or_equals'}
-        ],
+      ],
       apiMsgData: {
         id: null,
         project: null,
@@ -390,7 +399,7 @@ export default {
       this.apiMsgData.down_func = null;
       this.apiMsgData.desc = null;
       this.apiMsgData.id = null;
-      this.apiMsgData.skip= null;
+      this.apiMsgData.skip = null;
       this.apiMsgData.url = String();
       this.form.projectId = this.projectId;
       let index = this.proAndIdData.map(item => item.id).indexOf(this.form.projectId);
@@ -401,6 +410,8 @@ export default {
 
     },
     addApiMsg(messageClose = false) {
+      // console.log(Object.prototype.toString.call(this.apiMsgData.num))
+
       if (this.apiMsgData.jsonVariable) {
         try {
           JSON.parse(this.apiMsgData.jsonVariable)
@@ -535,7 +546,7 @@ export default {
         }
       }
     },
-    addTableRow(){
+    addTableRow() {
       this.apiMsgData.param.push({key: null, value: null});
     },
   },

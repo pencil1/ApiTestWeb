@@ -108,7 +108,6 @@
           <el-table-column property="value" label="操作" header-align="center" width="140">
             <template slot-scope="scope">
               <el-button-group>
-
                 <el-button type="info" icon="my-icon-jiantou-xiangshang"
                            @click.native="upNum(scope.$index)" size="mini">{{ null }}
                 </el-button>

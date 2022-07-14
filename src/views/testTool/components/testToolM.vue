@@ -81,12 +81,12 @@
 
 <script>
     // import QRCode from 'qrcodejs2'
-
     export default {
         name: 'test',
         data() {
             return {
               files: [],
+              jsonData: [{'asd':123}],
                 path:'',
                 qrcode1: Object,
                 status: 1,
@@ -101,6 +101,8 @@
                 },
             };
         },
+      components: {
+    },
         mounted() {
           this.mounteds()
         },
@@ -159,15 +161,19 @@
                 // });
 
             },
-            // erweima1() {
-            //   this.$axios.get('/api/mon').then((response) => {
-            //       this.pingzhong = response.data
-            //       // this.pingzhong= ['1','2'];
-            //       let myVar = setTimeout(this.setV, 2000);
-            //     }
-            // );
-            //
-            // },
+            erweima1() {
+            let l = ["300059.SZ",
+              "588050.SH",
+              "600183.SH",
+              "605090.SH"]
+              this.$axios.post('/api/listG',{
+                'list': l,
+              }).then((response) => {
+                  console.log(response.data)
+                }
+            );
+
+            },
           setV() {
             this.pingzhong= [];
           },

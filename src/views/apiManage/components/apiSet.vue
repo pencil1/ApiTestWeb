@@ -1,44 +1,45 @@
 <template>
   <div>
-  <el-row>
-    <el-col style="border:1px solid;border-color: #ffffff #ffffff rgb(234, 234, 234) #ffffff;padding:2px">
-      <el-dropdown @command="moduleCommand" style="float:right;">
+    <el-row>
+      <el-col style="border:1px solid;border-color: #ffffff #ffffff rgb(234, 234, 234) #ffffff;padding:2px">
+        <el-dropdown @command="moduleCommand" style="float:right;">
                                       <span class="el-dropdown-link" style="color: #4ae2d5">
                                         操作<i class="el-icon-arrow-down el-icon--right"></i>
                                       </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="add">添加</el-dropdown-item>
-          <el-dropdown-item command="edit">编辑</el-dropdown-item>
-          <el-dropdown-item command="stick">置顶</el-dropdown-item>
-          <el-dropdown-item command="del">删除</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </el-col>
-  </el-row>
-  <el-row>
-    <el-scrollbar :wrapStyle="scrollbarHeight()">
-      <!--                                <el-scrollbar wrapStyle="height:620px;">-->
-      <el-tree
-          ref="testTree"
-          @node-click="treeClick"
-          class="filter-tree"
-          highlight-current
-          node-key="id"
-          :data="apiSEtDataList"
-          :props="defaultProps"
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="add">添加</el-dropdown-item>
+            <el-dropdown-item command="edit">编辑</el-dropdown-item>
+            <el-dropdown-item command="stick">置顶</el-dropdown-item>
+            <el-dropdown-item command="del">删除</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-scrollbar :wrapStyle="{
+              height: this.$store.state.tableHeight-21+'px'
+            }">
+        <el-tree
+            ref="testTree"
+            @node-click="treeClick"
+            class="filter-tree"
+            highlight-current
+            node-key="id"
+            :data="apiSEtDataList"
+            :props="defaultProps"
 
-      >
-      </el-tree>
-    </el-scrollbar>
-    <el-pagination
-        small
-        @current-change="handleModuleCurrentChange"
-        :current-page="apiSetPage.currentPage"
-        :page-size="30"
-        layout="prev, pager, next"
-        :total="apiSetPage.total">
-    </el-pagination>
-  </el-row>
+        >
+        </el-tree>
+      </el-scrollbar>
+      <el-pagination
+          small
+          @current-change="handleModuleCurrentChange"
+          :current-page="apiSetPage.currentPage"
+          :page-size="30"
+          layout="prev, pager, next"
+          :total="apiSetPage.total">
+      </el-pagination>
+    </el-row>
     <el-dialog title="接口模块配置" :visible.sync="apiSetData.viewStatus" width="30%">
       <el-form>
         <el-form-item label="模块名称" label-width="100px">
@@ -57,7 +58,7 @@
 <script>
 export default {
   name: "apiSet",
-  props: ['form','proAndIdData'],
+  props: ['form', 'proAndIdData'],
   data() {
     return {
       apiSEtDataList: [],
@@ -81,17 +82,12 @@ export default {
   },
 
   methods: {
-    scrollbarHeight() {
-      let t = this.$store.state.tableHeight;
-      t = t - 5;
-      return "height:" + t + "px;"
-    },
     treeClick(data) {
       //  点击节点时，初始化数据并获取对应的接口信息
       let index = this.apiSEtDataList.map(item => item.id).indexOf(data['id']);  //  获取当前节点的下标
       this.form.apiSet = this.apiSEtDataList[index];
       // this.apiMsgPage.currentPage = 1;
-      this.$emit('findApiMsg',1);
+      this.$emit('findApiMsg', 1);
     },
     handleModuleCurrentChange(val) {
       this.apiSetPage.currentPage = val;
@@ -153,7 +149,7 @@ export default {
       } else if (command === 'stick') {
         this.stickApiSet()
       } else if (command === 'del') {
-        this.sureView(this.delApiSet, null, this.form.module.name)
+        this.sureView(this.delApiSet, null, this.form.apiSet.name)
       }
     },
     initApiSetData() {
@@ -166,7 +162,7 @@ export default {
     stickApiSet() {
       //  置顶模块
       this.$axios.post(this.$api.stickApiSetApi, {
-        'id': this.form.module.id,
+        'id': this.form.apiSet.id,
         'projectId': this.form.projectId,
       }).then((response) => {
             this.messageShow(this, response);
@@ -176,7 +172,8 @@ export default {
     },
     editApiSet() {
       //  编辑模块
-      if (!this.form.module) {
+
+      if (!this.form.apiSet) {
         this.$message({
           showClose: true,
           message: '请先创建接口模块',
@@ -184,14 +181,14 @@ export default {
         });
         return
       }
-      this.apiSetData.name = this.form.module.name;
-      this.apiSetData.id = this.form.module.id;
-      this.apiSetData.num = this.form.module.num;
+      this.apiSetData.name = this.form.apiSet.name;
+      this.apiSetData.id = this.form.apiSet.id;
+      this.apiSetData.num = this.form.apiSet.num;
       this.apiSetData.viewStatus = true;
     },
     delApiSet() {
       //  删除模块
-      this.$axios.post(this.$api.delApiSetApi, {'id': this.form.module.id}).then((response) => {
+      this.$axios.post(this.$api.delApiSetApi, {'id': this.form.apiSet.id}).then((response) => {
             this.messageShow(this, response);
             this.apiSetData.name = '';
             if ((this.apiSetPage.currentPage - 1) * this.apiSetPage.sizePage + 1 === this.apiSetPage.total) {

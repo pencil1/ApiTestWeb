@@ -22,7 +22,9 @@
         </el-button>
       </el-button-group>
       <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top:30px"/>
-      <el-scrollbar wrapStyle="height:719px;">
+      <el-scrollbar :wrapStyle="{
+              height: this.$store.state.tableHeight+10+'px'
+            }">
         <el-tree :data="this.$store.state.funcAddress"
                  :props="defaultProps"
                  @node-click="handleNodeClick"
@@ -50,8 +52,8 @@
 
       <el-radio-group v-model="addTestCaseFileData.idChoice"
                       :disabled="this.addTestCaseFileData.id !== null">
-        <el-radio :label=1>新增同级</el-radio>
-        <el-radio :label=2>新增下级</el-radio>
+        <el-radio :label=2>新增同级</el-radio>
+        <el-radio :label=3>新增下级</el-radio>
       </el-radio-group>
       <el-divider></el-divider>
       <el-form>
@@ -92,7 +94,7 @@ export default {
         id: null,
         higherId: 0,
         status: 0,
-        idChoice: 1,
+        idChoice: 2,
         num: null,
       },
       defaultProps: {
@@ -104,7 +106,7 @@ export default {
   methods: {
     initTestCaseFile() {
       this.addTestCaseFileData.status = 0;
-      this.addTestCaseFileData.idChoice = 1;
+      this.addTestCaseFileData.idChoice = 2;
       this.addTestCaseFileData.id = null;
       this.addTestCaseFileData.name = null;
       this.tempTestCaseFileData.viewStatus = true
@@ -180,9 +182,9 @@ export default {
     },
     addTestCaseFile() {
       //  添加文件
-      if (this.addTestCaseFileData.idChoice === 1) {
+      if (this.addTestCaseFileData.idChoice === 2) {
         this.addTestCaseFileData.higherId = this.tempTestCaseFileData.higherId
-      } else if (this.addTestCaseFileData.idChoice === 2) {
+      } else if (this.addTestCaseFileData.idChoice === 3) {
         if (!this.tempTestCaseFileData.id) {
           this.$message({
             showClose: true,
@@ -206,7 +208,7 @@ export default {
               if (this.addTestCaseFileData.id) {
                 this.tempTreeData.data.name = this.addTestCaseFileData.name
               } else {
-                if (this.addTestCaseFileData.idChoice === 1) {
+                if (this.addTestCaseFileData.idChoice === 2) {
                   const newChild = {
                     name: this.addTestCaseFileData.name,
                     children: [],
@@ -221,7 +223,7 @@ export default {
 
                     this.tempTreeData.node.parent.data.children.push(newChild);
                   }
-                } else if (this.addTestCaseFileData.idChoice === 2) {
+                } else if (this.addTestCaseFileData.idChoice === 3) {
                   const newChild = {
                     name: this.addTestCaseFileData.name,
                     // children: [],
