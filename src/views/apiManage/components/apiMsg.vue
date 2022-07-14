@@ -32,20 +32,26 @@
       </el-form-item>
 
       <el-form-item label="接口名称" v-if="numTab !== 'third'">
-        <el-input placeholder="请输入" v-model="form.apiName" clearable style="width: 150px">
+        <el-input placeholder="请输入名称" v-model="form.apiName" clearable style="width: 120px">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="接口地址" v-if="numTab !== 'third'">
+        <el-input placeholder="请输入地址" v-model="form.apiAddress" clearable style="width: 120px">
         </el-input>
       </el-form-item>
 
       <el-form-item>
         <!--                <el-button type="primary" icon="el-icon-search" @click.native="test1()">搜索</el-button>-->
-        <el-button type="primary" icon="el-icon-search" @click.native="handleCurrentChange(1)">搜索</el-button>
-        <el-button type="primary" @click.native="initData()">录入接口信息</el-button>
+        <el-button type="primary"  @click.native="handleCurrentChange(1)">搜索</el-button>
+        <el-button type="primary" @click.native="initData()">添加接口</el-button>
         <el-button type="primary" @click.native="apiTest(apiMsgList)">测试
         </el-button>
 
         <el-button type="primary" icon="el-icon-view" @click.native="$refs.resultFunc.lastResult()">{{ null }}
         </el-button>
-        <!--                <el-button type="primary" @click.native="$refs.importApiFunc.initData()">导入信息</el-button>-->
+
+        <el-button type="primary" @click.native="$refs.importApiFunc.initData()">导入接口</el-button>
+
         <el-button type="primary"
                    v-if="form.configId !== null && form.configId !== '' "
                    @click.native="$refs.configEditFunc.editSceneConfig(form.configId)">配置修改
@@ -147,6 +153,11 @@
     </result>
     <errorView ref="errorViewFunc">
     </errorView>
+            <importApi
+                :projectId="form.projectId"
+                :apiSetId="form.apiSet.id"
+                ref="importApiFunc">
+        </importApi>
     <configEdit
         :proAndIdData="proAndIdData"
         :projectId="form.projectId"
@@ -158,6 +169,7 @@
 
 import apiSet from './apiSetList.vue'
 import apiEdit from './apiEdit.vue'
+import importApi from './importApi.vue'
 // import errorView from '../common/errorView.vue'
 const configEdit = () => import('@/views/sceneConfig/components/configEdit.vue')
 
@@ -166,6 +178,7 @@ export default {
     apiSet: apiSet,
     // importApi: importApi,
     apiEdit: apiEdit,
+    importApi:importApi,
     // errorView: errorView,
     configEdit: configEdit,
 
@@ -202,6 +215,7 @@ export default {
         configId: null,
         projectId: null,
         apiName: null,
+        apiAddress: null,
         apiSet: {
           name: '',
           higherId:'',
@@ -238,7 +252,6 @@ export default {
       this.findApiMsg();
     },
     findApiMsg(page=null,apiSetId=null) {
-      console.log(document.documentElement.clientHeight)
       if(!page){
         page = this.apiMsgPage.currentPage
       }
@@ -256,6 +269,7 @@ export default {
       }
       this.$axios.post(this.$api.findApiApi, {
         'apiName': this.form.apiName,
+        'apiAddress': this.form.apiAddress,
         'projectId': this.form.projectId,
         'apiSetId': apiSetId,
         'page': page,
@@ -328,6 +342,7 @@ export default {
         'projectId': this.form.projectId,
         'configId': this.form.configId,
       }).then((response) => {
+        // console.log(response)
             if (response.data['status'] === 0) {
               this.$message({
                 showClose: true,
@@ -347,7 +362,14 @@ export default {
             }
             this.loading = false;
           }
-      )
+      ).catch(err => {
+        this.loading = false;
+        this.$message({
+                showClose: true,
+                message: '接口超时或消耗时间过长跳过等待',
+                type: 'warning',
+              });
+      })
     },
 
     handleApiMsgSelection(val) {

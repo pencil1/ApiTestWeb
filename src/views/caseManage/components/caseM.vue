@@ -20,59 +20,23 @@
         <el-button type="primary" icon="el-icon-search" @click.native="handleCaseCurrentChange(1)">搜索
         </el-button>
         <el-button type="primary" @click.native="addCase()">添加接口用例</el-button>
-        <el-button type="primary" @click.native="runScene(caseList,true,true)">批量运行</el-button>
+        <el-button type="primary" @click.native="runCase(caseList,true,true)">批量运行</el-button>
       </el-form-item>
 
     </el-form>
     <el-tabs v-model="tabValue" class="table_padding" @tab-click="tabChange">
       <el-tab-pane label="用例信息" name="first">
         <el-row>
-          <el-col :span="3"
+          <el-col :span="5"
                   style="border:1px solid;border-color: #ffffff rgb(234, 234, 234) #ffffff #ffffff;">
-            <el-row>
-              <el-col style="border:1px solid;border-color: #ffffff #ffffff rgb(234, 234, 234) #ffffff;padding:2px">
-
-                <el-dropdown @command="dropdownSetEvent" style="float:right;">
-                                      <span class="el-dropdown-link" style="color: #4ae2d5">
-                                        操作<i class="el-icon-arrow-down el-icon--right"></i>
-                                      </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="add">添加</el-dropdown-item>
-                    <el-dropdown-item command="edit">编辑</el-dropdown-item>
-                    <el-dropdown-item command="stick">置顶</el-dropdown-item>
-                    <el-dropdown-item command="del">删除</el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-scrollbar :wrapStyle="{
-              height: this.$store.state.tableHeight-21+'px'
-            }">
-                <el-tree
-
-                    ref="testTree"
-                    @node-click="handleNodeClick"
-                    class="filter-tree"
-                    highlight-current
-                    node-key="id"
-                    :data="setDataList"
-                    :props="defaultProps"
-                >
-                </el-tree>
-              </el-scrollbar>
-
-              <el-pagination
-                  small
-                  @current-change="handleSetCurrentChange"
-                  :current-page="setPage.currentPage"
-                  :page-size="30"
-                  layout="prev, pager, next"
-                  :total="setPage.total">
-              </el-pagination>
-            </el-row>
+            <caseSetList
+                ref="caseSetR"
+                @findCase="findCase"
+                :form="form"
+                :proAndIdData="proAndIdData"
+            ></caseSetList>
           </el-col>
-          <el-col :span="21">
+          <el-col :span="19">
 
             <el-table
                 ref="sceneMultipleTable"
@@ -111,7 +75,7 @@
                     复制
                   </el-button>
                   <el-button type="primary" icon="el-icon-setting" size="mini"
-                             @click.native="runScene(caseAll[scope.$index]['sceneId'])">运行
+                             @click.native="runCase(caseAll[scope.$index]['sceneId'])">运行
                   </el-button>
                   <el-button type="danger" icon="el-icon-delete" size="mini"
                              @click.native="sureView(delCase,caseAll[scope.$index]['sceneId'],caseAll[scope.$index]['name'])">
@@ -141,21 +105,16 @@
       <el-tab-pane label="用例编辑" name="second" v-if="tabEditShow">
         <div style="margin-top: 5px"></div>
         <caseEdit
-            :currentSetId="setTempData.setId"
+            :caseSetId="form.caseSet.id"
             :projectId="form.projectId"
             :setTempData="setTempData"
             :proAndIdData="proAndIdData"
+            @runStep="runStep"
             ref="caseEditFunc">
 
         </caseEdit>
       </el-tab-pane>
     </el-tabs>
-    <setEdit
-        :projectId="form.projectId"
-        :setTempData="setTempData"
-        ref="setEditFunc">
-
-    </setEdit>
 
     <errorView ref="errorViewFunc">
     </errorView>
@@ -166,13 +125,13 @@
 </template>
 
 <script>
-import setEdit from './setEdit.vue'
 import caseEdit from './caseEdit.vue'
+import caseSetList from './caseSetList.vue'
 
 export default {
   components: {
-    setEdit: setEdit,
     caseEdit: caseEdit,
+    caseSetList: caseSetList,
   },
   name: 'sceneManage',
   data() {
@@ -208,35 +167,20 @@ export default {
       form: {
         projectId: null,
         caseName: '',
+        caseSet: {
+          name: '',
+          higherId:'',
+          id: '',
+          num: '',
+        },
       },
     }
   },
 
   methods: {
-    handleNodeClick(data) {
-      this.setTempData.setId = data['id'];
-      this.setTempData.name = data['label'];
-      this.casePage.currentPage = 1;
-      this.findCase();
-    },
-    querySearch(queryString, cb) {
-      // 调用 callback 返回建议列表的数据
-      cb(this.comparators);
-    },
-    dropdownSetEvent(command) {
-      if (command === 'add') {
-        this.$refs.setEditFunc.initSet()
-      } else if (command === 'edit') {
-        this.$refs.setEditFunc.editSet()
-      } else if (command === 'stick') {
-        this.$refs.setEditFunc.stickSet(this.setTempData.setId)
-      } else if (command === 'del') {
-        this.sureView(this.delSet, null, this.setTempData.name)
-      }
-    },
     findCase() {
       this.$axios.post(this.$api.findCaseApi, {
-        'setId': this.setTempData.setId,
+        'setId': this.form.caseSet.id,
         'projectId': this.form.projectId,
         'caseName': this.form.caseName,
         'page': this.casePage.currentPage,
@@ -257,7 +201,8 @@ export default {
             this.proAndIdData = response.data['data'];
             if (response.data['user_pros']) {
               this.form.projectId = this.proAndIdData[0].id;
-              this.findSet()
+              let index = this.proAndIdData.map(item => item.id).indexOf(this.form.projectId);
+      this.configData = this.proAndIdData[index]['config_data']
             }
           }
       );
@@ -267,32 +212,12 @@ export default {
       );
     },
     initProjectChoice() {
-      //  当项目选择项改变时，初始化模块和配置的数据
+      //  当项目选择项改变时
       this.setPage.currentPage = 1;
       this.casePage.currentPage = 1;
-      this.findSet()
-    },
-    findSet() {
-      this.$axios.post(this.$api.findCaseSetApi, {
-        'projectId': this.form.projectId,
-        'page': this.setPage.currentPage,
-        'sizePage': this.setPage.sizePage,
-      }).then((response) => {
-            this.setDataList = response.data['data'];
-            this.allSetList = response.data['all_set'];
-            this.setPage.total = response.data['total'];
-            if (this.setDataList[0]) {
-              this.setTempData.setId = this.setDataList[0]['id'];
-              this.setTempData.name = this.setDataList[0]['label'];
-              this.$nextTick(function () {
-                this.$refs.testTree.setCurrentKey(this.setTempData.setId);  //"vuetree"是你自己在树形控件上设置的 ref="vuetree" 的名称
-                this.findCase();
-              });
-            } else {
-              this.caseAll = []
-            }
-          }
-      );
+       // 查询其他项目时，关闭编辑
+      this.tabEditShow = false;
+      // this.findSet()
     },
     handleCaseCurrentChange(val) {
       this.casePage.currentPage = val;
@@ -302,10 +227,6 @@ export default {
       this.casePage.sizePage = val;
       this.findCase()
     },
-    handleSetCurrentChange(val) {
-      this.setPage.currentPage = val;
-      this.findSet()
-    },
     delCase(caseId) {
       this.$axios.post(this.$api.delCaseApi, {'caseId': caseId}).then((response) => {
             this.messageShow(this, response);
@@ -314,7 +235,37 @@ export default {
           }
       )
     },
-    runScene(sceneIds, status = false, reportStatus = false) {
+    runStep(stepId){
+      this.$axios.post(this.$api.runStepApi, {
+        'stepId': stepId,
+        'projectId': this.form.projectId
+      }).then((response) => {
+            if (response.data['status'] === 0) {
+              this.$message({
+                showClose: true,
+                message: response.data['msg'],
+                type: 'warning',
+              });
+              if (response.data['error']) {
+                this.$refs.errorViewFunc.showData(response.data['error']);
+              }
+            } else {
+              this.$message({
+                showClose: true,
+                message: response.data['msg'],
+                type: 'success',
+              });
+                let tempData = {'details': [{'records': [], 'in_out': {'out': ''}}]};
+                for (let i = 0; i < response['data']['data']['data']['details'].length; i++) {
+                  tempData['details'][0]['records'] = tempData['details'][0]['records'].concat(response['data']['data']['data']['details'][i]['records'])
+                }
+                this.$refs.resultFunc.showData(tempData);
+
+            }
+          }
+      )
+    },
+    runCase(sceneIds, status = false, reportStatus = false) {
       //  status，为true时，批量运行用例，为false运行单用例
       //  reportStatus，为true时生成报告，为false时返回临时数据
       let _sceneIds = [];
@@ -372,7 +323,14 @@ export default {
               }
             }
           }
-      );
+      ).catch(err => {
+        this.loading = false;
+        this.$message({
+                showClose: true,
+                message: '接口超时或消耗时间过长跳过等待',
+                type: 'warning',
+              });
+      })
     },
 
 
@@ -384,7 +342,7 @@ export default {
       this.$refs.sceneMultipleTable.clearSelection();
     },
     addCase() {
-      if (this.setDataList.length === 0) {
+       if (!this.form.caseSet.id) {
         this.$message({
           showClose: true,
           message: '请先创建用例集',
@@ -430,6 +388,10 @@ export default {
       //  当tab切换到接口信息时，刷新列表
       if (tab.label === '用例信息') {
         this.findCase()
+      }else if(tab.label === '用例编辑'){
+        // 切换回来的时候更新用例集合和api集合数据
+        this.$refs.caseEditFunc.getNewCaseSetList();
+
       }
     },
   },

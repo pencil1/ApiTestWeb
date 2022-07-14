@@ -11,7 +11,7 @@
     <el-tabs type="card" style="margin-top: 10px">
       <el-tab-pane label="接口信息" style="margin-top: 10px">
         <el-form>
-          <el-form-item label="用例名称" prop="name" label-width="120px">
+          <el-form-item label="步骤名称" prop="name" label-width="120px">
             <el-input v-model="apiCaseData.name">
             </el-input>
           </el-form-item>
@@ -168,7 +168,7 @@
                 v-model="apiCaseData.parameters"
                 @init="editorInit"
                 lang="json"
-                theme="monokai"
+                theme="chrome"
                 width="100%"
                 height="500px"
                 :options="{

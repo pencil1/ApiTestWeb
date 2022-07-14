@@ -50,6 +50,7 @@ const findTaskApi = '/api/task/find';
 const findCaseApi = '/api/case/find';
 const delCaseApi = '/api/case/del';
 const runCaseApi = '/api/report/run';
+const runStepApi = '/api/step/run';
 const editCaseApi = '/api/case/edit';
 const addCaseApi = '/api/case/add';
 const configDataApi = '/api/config/data';
@@ -71,18 +72,18 @@ const editUserApi = '/api/user/edit';
 const delUserApi = '/api/user/del';
 const changeStatusUserApi = '/api/user/changeStatus';
 
-const addTestCaseFileApi = '/api/testCaseFile/add';
-const findTestCaseFileApi = '/api/testCaseFile/find';
-const delTestCaseFileApi = '/api/testCaseFile/del';
-const getTestCaseFileApi = '/api/testCaseFile/get';
-const saveTestCaseFileApi = '/api/testCaseFile/save';
+// const addTestCaseFileApi = '/api/testCaseFile/add';
+// const findTestCaseFileApi = '/api/testCaseFile/find';
+// const delTestCaseFileApi = '/api/testCaseFile/del';
+// const getTestCaseFileApi = '/api/testCaseFile/get';
+// const saveTestCaseFileApi = '/api/testCaseFile/save';
 
 export default {
-    addTestCaseFileApi,
-    findTestCaseFileApi,
-    delTestCaseFileApi,
-    getTestCaseFileApi,
-    saveTestCaseFileApi,
+    // addTestCaseFileApi,
+    // findTestCaseFileApi,
+    // delTestCaseFileApi,
+    // getTestCaseFileApi,
+    // saveTestCaseFileApi,
 
     findFuncFileApi,
     addFuncFileApi,
@@ -119,6 +120,7 @@ export default {
     editCaseApi,
     addCaseApi,
     configDataApi,
+    runStepApi,
 
     findCaseSetApi,
     delCaseSetApi,

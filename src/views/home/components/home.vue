@@ -87,8 +87,8 @@
         </el-col>
       </div>
     </el-row>
-    <div style="height: 50px"></div>
-    <ve-line :data="chartData"></ve-line>
+<!--    <div style="height: 50px"></div>-->
+<!--    <ve-line :data="chartData"></ve-line>-->
   </div>
 </template>
 
@@ -97,12 +97,12 @@ export default {
   data() {
     return {
       otherData: {
-        project_num: 1,
-        case_num: 1,
-        api_num: 1,
-        task_num: 1,
-        report_num: 1,
-        config_num: 1,
+        project_num: 0,
+        case_num: 0,
+        api_num: 0,
+        task_num: 0,
+        report_num: 0,
+        config_num: 0,
       },
       chartData: {
         columns: ['日期', '访问人数', '阅读次数'],

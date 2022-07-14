@@ -3,7 +3,7 @@
 
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目名称" labelWidth="110px">
-                <el-select v-model="form.projectId" placeholder="请选择项目">
+                <el-select v-model="form.projectId" placeholder="请选择项目" @change="findConfig">
                     <el-option
                             v-for="(item) in projectData"
                             :key="item.id"

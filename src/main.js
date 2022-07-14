@@ -18,6 +18,7 @@ import './assets/css/index.scss';
 import 'element-ui/lib/theme-chalk/index.css'
 import aceEditor from './util/ace-editor'
 // let aceEditor = require('./util/ace-editorr')
+
 // Vue.use(aceEditor);
 Vue.config.productionTip = false
 Vue.prototype.$api = api;

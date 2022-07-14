@@ -112,7 +112,11 @@
                     {'value': 'length_greater_than'},
                     {'value': 'count_greater_than_or_equals'},
                     {'value': 'length_less_than'},
-                    {'value': 'length_less_than_or_equals'}],
+                    {'value': 'list_equals'},
+                    {'value': 'in_list_equals'},
+                    {'value': 'length_less_than_or_equals'}
+                ],
+
             }
         },
         methods: {
@@ -249,7 +253,10 @@
             },
         },
         mounted() {
-            this.getKind()
+          this.getKind()
+          if (this.tableData[this.tableData.length - 1]['key'] || this.tableData[this.tableData.length - 1]['value']) {
+                        this.addTableRow()
+                    }
         }
 
     }

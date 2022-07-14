@@ -33,7 +33,7 @@
                   </el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-input type="password" v-model="password" placeholder="密码" @change="login">
+                  <el-input type="password" v-model="password" placeholder="密码" >
                     <i slot="prepend" class="my-icon-jianpan"></i>
                   </el-input>
                 </el-form-item>
@@ -52,14 +52,14 @@
         </div>
         <div class="page-login--content-footer">
 
-          <p class="page-login--content-footer-copyright">
-            <a href="https://github.com/pencil1/ApiTestWeb" target="view_window">ApiTestWeb 作品</a> |
-            <a href="https://github.com/pencil1/ApiTestManage" target="view_window">ApiTestManage 作品</a>
-          </p>
+<!--          <p class="page-login&#45;&#45;content-footer-copyright">-->
+<!--            <a href="https://github.com/pencil1/ApiTestWeb" target="view_window">ApiTestWeb 作品</a> |-->
+<!--            <a href="https://github.com/pencil1/ApiTestManage" target="view_window">ApiTestManage 作品</a>-->
+<!--          </p>-->
 
         </div>
-        <div style="right: 0;position: fixed;bottom: 0;padding: 10px;font-size: 12px"><a
-            href="https://beian.miit.gov.cn/"  target="view_window">粤ICP备20042423号-1</a></div>
+<!--        <div style="right: 0;position: fixed;bottom: 0;padding: 10px;font-size: 12px"><a-->
+<!--            href="https://beian.miit.gov.cn/"  target="view_window">粤ICP备20042423号-1</a></div>-->
       </div>
     </div>
   </div>

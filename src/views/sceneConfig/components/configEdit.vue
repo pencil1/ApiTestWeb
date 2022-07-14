@@ -116,7 +116,7 @@
             addSceneConfig() {
                 this.$axios.post(this.$api.addConfigApi, {
                     'projectId': this.configData.projectId,
-                    'sceneConfigName': this.configData.name,
+                    'name': this.configData.name,
                     'funcAddress': this.configData.funcAddress,
                     'num': this.configData.num,
                     'id': this.configData.id,

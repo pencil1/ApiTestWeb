@@ -10,7 +10,7 @@
     name:"hello",
     data() {
       return {
-        d:'hello',
+        d:'helloi',
 
       }
     },
