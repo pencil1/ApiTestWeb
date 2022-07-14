@@ -238,6 +238,7 @@ export default {
       this.findApiMsg();
     },
     findApiMsg(page=null,apiSetId=null) {
+      console.log(document.documentElement.clientHeight)
       if(!page){
         page = this.apiMsgPage.currentPage
       }

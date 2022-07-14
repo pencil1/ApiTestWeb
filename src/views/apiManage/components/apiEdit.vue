@@ -15,27 +15,26 @@
                 :value="item.id">
             </el-option>
           </el-select>
-          <el-cascader
-              placeholder="请选择模块"
-              size="small"
-              v-model="form.apiSetId"
-              :options="currentApiSetList"
-              :props="{
-                label:'name',
-                value:'id',
-                checkStrictly: true,
-                expandTrigger: 'hover',
-                emitPath:false
-              }"
-          ></el-cascader>
+
+          <el-select v-model="form.apiSetId"
+                     placeholder="请选择模块"
+                     size="small"
+                     style="width: 200px;padding-right:10px">
+            <el-option
+                v-for="(item) in currentApiSetList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+            </el-option>
+          </el-select>
           <el-select v-model="form.choiceUrl"
                      clearable placeholder="请选择url"
                      size="small">
             <el-option
-                v-for="(item, index) in proUrlData"
-                :key="index"
-                :label="item.value"
-                :value="index"
+                v-for="item in proUrlData"
+                :key="item"
+                :label="item"
+                :value="item"
             >
             </el-option>
           </el-select>
@@ -257,7 +256,7 @@ export default {
       bodyShow: 'second',
       paramTypes: ['string', 'file'],
       cell: Object(),
-      highStatus: false,//高级功能按钮状态
+      highStatus:false,//高级功能按钮状态
       proUrlData: null,
       saveRunStatus: false,
       currentApiSetList: [],
@@ -326,7 +325,7 @@ export default {
     },
     changeProChoice() {
       let index = this.proAndIdData.map(item => item.id).indexOf(this.form.projectId);  //  获取当前节点的下标
-      this.currentApiSetList = this.proAndIdData[index]['api_set_data'];
+      this.currentApiSetList = this.proAndIdData[index]['module_data'];
       this.proUrlData = this.proAndIdData[index]['url']
       //  改变项目选项时，清空模块和基础url的选择
       this.form.apiSetId = '';
@@ -385,11 +384,6 @@ export default {
     tempNum(i) {
       this.temp_num = i;
     },
-    getNewApiSetList() {
-      //  返回编辑页面的时候，刷新一下用例集合数据
-      let index = this.proAndIdData.map(item => item.id).indexOf(this.form.projectId);
-      this.currentApiSetList = this.proAndIdData[index]['api_set_data'];
-    },
     initApiMsgData() {
       this.form.variable_type = 'data';
       this.apiMsgData.header = Array();
@@ -409,9 +403,8 @@ export default {
       this.apiMsgData.url = String();
       this.form.projectId = this.projectId;
       let index = this.proAndIdData.map(item => item.id).indexOf(this.form.projectId);
-      this.currentApiSetList = this.proAndIdData[index]['api_set_data'];
+      this.currentApiSetList = this.proAndIdData[index]['module_data'];
       this.proUrlData = this.proAndIdData[index]['url'];
-      // this.form.apiSetId = '1,16';
       this.form.apiSetId = this.apiSetId;
       this.form.choiceUrl = this.proUrlData[0];
 
@@ -439,14 +432,13 @@ export default {
         });
         return
       }
-      // console.log(this.form.choiceUrl)
       return this.$axios.post(this.$api.addApiApi, {
-        'apiSetId': this.form.apiSetId,
+        'moduleId': this.form.apiSetId,
         'projectId': this.form.projectId,
         'apiMsgName': this.apiMsgData.name,
         'num': this.apiMsgData.num,
         // 'choiceUrl': this.form.choiceUrl,
-        'choiceUrl': this.form.choiceUrl,
+        'choiceUrl': this.proUrlData.indexOf(this.form.choiceUrl),
         'variableType': this.form.variable_type,
         'desc': this.apiMsgData.desc,
         'funcAddress': this.apiMsgData.funcAddress,
@@ -510,10 +502,10 @@ export default {
             this.form.projectId = this.projectId;
 
             let index = this.proAndIdData.map(item => item.id).indexOf(this.form.projectId);  //  获取当前节点的下标
-            this.currentApiSetList = this.proAndIdData[index]['api_set_data'];
+            this.currentApiSetList = this.proAndIdData[index]['module_data'];
             this.proUrlData = this.proAndIdData[index]['url']
-            this.form.choiceUrl = parseInt(response.data['data']['status_url'])
-            // this.form.choiceUrl = this.proUrlData[response.data['data']['status_url']];
+
+            this.form.choiceUrl = this.proUrlData[response.data['data']['status_url']];
             this.form.apiSetId = this.apiSetId;
           }
       );

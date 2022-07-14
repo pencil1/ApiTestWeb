@@ -168,7 +168,7 @@
                 v-model="apiCaseData.parameters"
                 @init="editorInit"
                 lang="json"
-                theme="chrome"
+                theme="monokai"
                 width="100%"
                 height="500px"
                 :options="{

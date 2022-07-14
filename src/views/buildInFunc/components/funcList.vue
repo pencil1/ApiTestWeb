@@ -28,22 +28,13 @@
         <el-tree :data="this.$store.state.funcAddress"
                  :props="defaultProps"
                  @node-click="handleNodeClick"
-                 @check-change="handleNodeChange"
-                 :highlight-current="true"
+                 highlight-current
                  v-loading="this.loading">
-          <!--          <span class="custom-tree-node span-ellipsis" slot-scope="{ node, data }">-->
-          <!--                  <span :title="node.label">-->
-          <!--                    <svg class="icon" aria-hidden="true">-->
-          <!--                        <use :xlink:href="data.status? '#my-icon-wenjian1':'#my-icon-wenjianjia'"></use>-->
-          <!--                    </svg>-->
-          <!--                      {{ node.label }}-->
-          <!--                  </span>-->
-          <!--                </span>-->
-          <span class="custom-tree-node span-ellipsis" slot-scope="{ node, data}">
+                <span class="custom-tree-node span-ellipsis" slot-scope="{ node, data }">
                   <span :title="node.label">
-                      <svg class="icon" aria-hidden="true">
-                      <use :xlink:href="data.status? '#my-icon-wenjian1':'#my-icon-wenjianjia'"></use>
-                              </svg>
+                    <svg class="icon" aria-hidden="true">
+                        <use :xlink:href="data.status? '#my-icon-wenjian1':'#my-icon-wenjianjia'"></use>
+                    </svg>
                       {{ node.label }}
                   </span>
                 </span>
@@ -122,12 +113,7 @@ export default {
 
     },
     initEditTestCaseFile() {
-       this.addTestCaseFileData.status = this.tempTestCaseFileData.status;
-      this.addTestCaseFileData.idChoice = 2;
-      this.addTestCaseFileData.id = this.tempTestCaseFileData.id;
-      this.addTestCaseFileData.name = this.tempTestCaseFileData.name;
-      this.addTestCaseFileData.higherId = this.tempTestCaseFileData.higherId;
-
+      this.addTestCaseFileData = this.tempTestCaseFileData;
       this.tempTestCaseFileData.viewStatus = true
     },
     delTestCaseFileBtn() {
@@ -165,16 +151,7 @@ export default {
       this.privates = status;
       this.findTestCaseFile()
     },
-    handleNodeChange(data, status, node) {
-      console.log(data)
-          console.log(status)
-
-            console.log(node)
-
-
-    },
     handleNodeClick(data, node) {
-      // console.log(node)
       if (this.tempTestCaseFileData.status === 1) {
         this.$emit('saveTestCaseFile', this.tempTestCaseFileData.id);
       }
@@ -232,15 +209,13 @@ export default {
                 this.tempTreeData.data.name = this.addTestCaseFileData.name
               } else {
                 if (this.addTestCaseFileData.idChoice === 2) {
-
                   const newChild = {
                     name: this.addTestCaseFileData.name,
-                    // children: [],
+                    children: [],
                     status: this.addTestCaseFileData.status,
                     'higher_id': response.data.higher_id,
                     'id': response.data.id,
                   };
-
                   if (response.data.higher_id === 0) {
                     // this.treeData.push(newChild);
                     this.$store.state.funcAddress.push(newChild)
@@ -251,12 +226,11 @@ export default {
                 } else if (this.addTestCaseFileData.idChoice === 3) {
                   const newChild = {
                     name: this.addTestCaseFileData.name,
-                    children: [],
+                    // children: [],
                     status: this.addTestCaseFileData.status,
                     'higher_id': response.data.higher_id,
                     'id': response.data.id,
                   };
-
                   if (!this.tempTreeData.data.children) {
                     this.$set(this.tempTreeData.data, 'children', []);
                   }
@@ -274,21 +248,3 @@ export default {
 
 }
 </script>
-<style  lang="scss">
-.custom-tree-node {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 14px;
-  padding-right: 3px;
-}
-.child{
-  	display: none
-  }
-.el-tree-node__content:hover {
-  .child {
-    display: block
-  }
-}
-</style>
