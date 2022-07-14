@@ -36,35 +36,60 @@
                 :props="{ expandTrigger: 'hover', label: 'name' , value: 'name' ,multiple: true }"
                 multiple placeholder="请选择导入函数文件" size="small">
             </el-cascader>
-
+<!--            <el-popover-->
+<!--                placement="top-start"-->
+<!--                width="200"-->
+<!--                trigger="hover"-->
+<!--            >-->
+<!--              <el-input size="mini" placeholder="请输入环境名称" v-model="tempTitle"></el-input>-->
+<!--              <el-button-->
+<!--                  slot="reference"-->
+<!--                  size="small"-->
+<!--                  @click="addTab(tempTitle)"-->
+<!--              >-->
+<!--                add tab-->
+<!--              </el-button>-->
+<!--            </el-popover>-->
           </el-form-item>
 
         </el-form>
         <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -10px"/>
         <el-tabs v-model="environment.environmentChoice" type="card">
-          <el-tab-pane label="测试环境" name="first">
+          <el-tab-pane
+              :key="item.environmentChoice"
+              v-for="(item, index) in environment.environmentList"
+              :label="item.environmentName"
+              :name="item.environmentChoice"
+          >
             <urlTable
-                :tableData="environment.environmentTest"
-            ></urlTable>
-
-          </el-tab-pane>
-          <el-tab-pane label="开发环境" name="second">
-            <urlTable
-                :tableData="environment.environmentDevelop"
-            ></urlTable>
-          </el-tab-pane>
-          <el-tab-pane label="线上环境" name="third">
-            <urlTable
-                :tableData="environment.environmentProduction"
-            ></urlTable>
-          </el-tab-pane>
-          <el-tab-pane label="备用环境" name="fourth">
-
-            <urlTable
-                :tableData="environment.environmentStandby"
+                :tableData="item.urls"
             ></urlTable>
           </el-tab-pane>
         </el-tabs>
+<!--        <el-tabs v-model="environment.environmentChoice" type="card">-->
+<!--          <el-tab-pane label="测试环境" name="first">-->
+<!--            <urlTable-->
+<!--                :tableData="environment.environmentTest"-->
+<!--            ></urlTable>-->
+
+<!--          </el-tab-pane>-->
+<!--          <el-tab-pane label="开发环境" name="second">-->
+<!--            <urlTable-->
+<!--                :tableData="environment.environmentDevelop"-->
+<!--            ></urlTable>-->
+<!--          </el-tab-pane>-->
+<!--          <el-tab-pane label="线上环境" name="third">-->
+<!--            <urlTable-->
+<!--                :tableData="environment.environmentProduction"-->
+<!--            ></urlTable>-->
+<!--          </el-tab-pane>-->
+<!--          <el-tab-pane label="备用环境" name="fourth">-->
+
+<!--            <urlTable-->
+<!--                :tableData="environment.environmentStandby"-->
+<!--            ></urlTable>-->
+<!--          </el-tab-pane>-->
+<!--        </el-tabs>-->
       </el-tab-pane>
 
       <el-tab-pane label="公用变量" style="margin-top: 10px">
@@ -114,6 +139,7 @@
 
 <script>
 import urlTable from '../components/urlTable'
+
 export default {
   props: ['environment', 'projectData', 'form', 'userData'],
   components: {
@@ -121,24 +147,32 @@ export default {
   },
   data() {
     return {
+      // currentEnvironmentName: '测试环境',
+      // tempTitle: '',
+      //
+      // environmentList: [{
+      //   environmentName: '测试环境',
+      //   urls: [{value: null}]
+      // }, {
+      //   environmentName: '开发环境',
+      //   urls: [{value: null}]
+      // }, {
+      //   environmentName: '预发布环境',
+      //   urls: [{value: null}]
+      // }, {
+      //   environmentName: '线上环境',
+      //   urls: [{value: null}]
+      // },],
     }
   },
   methods: {
     addProjectBtn() {
-      let test_length = this.environment.environmentTest.length;
+      let test_length = this.environment.environmentList[0].urls.length;
       let currentEnvironment;
-      if (this.environment.environmentChoice === 'second') {
-        currentEnvironment = this.environment.environmentDevelop.length;
-      } else if (this.environment.environmentChoice === 'third') {
-        currentEnvironment = this.environment.environmentProduction.length;
-      } else if (this.environment.environmentChoice === 'fourth') {
-        currentEnvironment = this.environment.environmentStandby.length;
-      } else {
-        currentEnvironment = test_length
-      }
-      // console.log(currentEnvironment)
+      let eIndex = parseInt(this.environment.environmentChoice)-1
+      currentEnvironment = this.environment.environmentList[eIndex].urls.length;
       // console.log(test_length)
-      // console.log(this.environment)
+      // console.log(currentEnvironment)
       if (currentEnvironment !== test_length) {
         this.$message({
           showClose: true,
@@ -164,10 +198,8 @@ export default {
       this.projectData.header.splice(i, 1);
     },
   },
-  computed: {
-  },
-  watch: {
-  },
+  computed: {},
+  watch: {},
   mounted() {
     // this.findProject();
     // this.findFuncAddress();

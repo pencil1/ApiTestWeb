@@ -15,16 +15,22 @@
               </el-option>
             </el-select>
 
-            <el-select v-model="form.set" multiple placeholder="选择用例集" value-key="id"
-                       @change="changeSceneChoice"
-                       style="width: 150px;padding-right:5px">
-              <el-option
-                  v-for="item in currentSetList"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id">
-              </el-option>
-            </el-select>
+                      <el-cascader
+                          style="width: 150px;padding-right:5px"
+                        placeholder="请选择用例集"
+
+                        v-model="form.caseSet"
+                        :options="currentCaseSetList"
+                          @change="changeSceneChoice"
+                        :props="{
+                          label:'name',
+                          value:'id',
+                          checkStrictly: true,
+                          expandTrigger: 'hover',
+                          multiple:true,
+                          emitPath:false
+                        }"
+                    ></el-cascader>
 
             <el-select v-model="form.case" multiple placeholder="选择用例" value-key="id"
                        :disabled="caseStatus"
@@ -36,8 +42,7 @@
                   :value="item.sceneId">
               </el-option>
             </el-select>
-
-          </el-form-item>
+ </el-form-item>
           <el-form-item label="任务名称" :label-width="taskData.formLabelWidth">
             <el-input v-model="taskData.name" auto-complete="off">
             </el-input>
@@ -87,7 +92,7 @@ export default {
   name: "editView",
   data() {
     return {
-      currentSetList: [],
+      currentCaseSetList: [],
       allSceneList: [],
       caseStatus: false,
       taskData: {
@@ -105,7 +110,7 @@ export default {
         sendEmailStatus: '',
       },
       form: {
-        set: {
+        caseSet: {
           label: null,
           id: null,
         },
@@ -113,14 +118,14 @@ export default {
           label: null,
           id: null,
         },
-        set_id: '',
+        case_set_id: '',
         projectId: '',
         taskName: '',
       },
     }
   },
   methods: {
-    initTaskData() {
+      initTaskData() {
       this.taskData.name = '';
       this.taskData.id = '';
       this.taskData.taskType = '';
@@ -128,37 +133,41 @@ export default {
       this.taskData.SendEmail = '';
       this.taskData.timeConfig = '';
       this.taskData.password = '';
-      this.form.set = [];
+      this.form.caseSet = [];
       this.form.case = [];
       this.taskData.num = '';
       this.taskData.modelFormVisible = true;
       this.taskData.sendEmailStatus = '1';
       this.form.projectId = this.$parent.projectId
       let index = this.proAndIdData.map(item => item.id).indexOf(this.form.projectId);
-      this.currentSetList = this.proAndIdData[index]['set_data'];
+      this.currentCaseSetList = this.proAndIdData[index]['case_set_data'];
     },
+
     changeProjectChoice() {
-      this.form.set = [];
+      this.form.caseSet = [];
       this.form.case = [];
       let index = this.proAndIdData.map(item => item.id).indexOf(this.form.projectId);
-      this.currentSetList = this.proAndIdData[index]['set_data'];
+      this.currentCaseSetList = this.proAndIdData[index]['case_set_data'];
     },
     changeSceneChoice() {
-      if (this.form.set.length === 1) {
+      if (this.form.caseSet.length === 1) {
         this.caseStatus = false;
-        this.form.set_id = this.form.set[0];
+        this.form.case_set_id = this.form.caseSet[0];
         this.findCase()
       } else {
         this.caseStatus = true;
         this.form.case = [];
-        this.form.set_id = ''
+        this.form.case_set_id = ''
 
       }
     },
     addTask() {
+        console.log(this.form.caseSet)
+      let setIds
+
       this.$axios.post(this.$api.addTaskApi, {
         'projectId': this.form.projectId,
-        'setIds': this.form.set,
+        'setIds': this.form.caseSet,
         'caseIds': this.form.case,
         'id': this.taskData.id,
         'num': this.taskData.num,
@@ -203,25 +212,27 @@ export default {
             this.taskData.num = response.data['data']['num'];
             this.taskData.projectName = this.form.projectName;
             this.taskData.id = id;
-            this.form.set = response.data['data']['set_ids'];
+            this.form.caseSet = response.data['data']['set_ids'];
+            console.log(response.data['data']['set_ids'].length)
             if (response.data['data']['set_ids'].length === 1) {
               // 当用例集只有1个时，赋值set_id，让用例下拉框有数据显示
-              this.form.set_id = response.data['data']['set_ids'][0]['id']
+              this.form.case_set_id = response.data['data']['set_ids'][0]
             } else {
-              this.caseStatus = true;
+              this.caseStatus = false;
             }
             this.form.case = response.data['data']['case_ids'];
             this.taskData.modelFormVisible = true;
 
             this.form.projectId = this.$parent.projectId
             let index = this.proAndIdData.map(item => item.id).indexOf(this.form.projectId);  //  获取当前节点的下标
-            this.currentSetList = this.proAndIdData[index]['set_data'];
+            this.currentCaseSetList = this.proAndIdData[index]['case_set_data'];
+            this.findCase()
           }
       )
     },
     findCase() {
       this.$axios.post(this.$api.findCaseApi, {
-        'setId': this.form.set_id,
+        'setId': this.form.case_set_id,
         'projectId': this.form.projectId,
         'caseName': this.form.caseName,
         'page': 1,

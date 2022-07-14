@@ -38,15 +38,28 @@
           </el-form-item>
 
           <el-form-item label="集合选择" :label-width="caseData.formLabelWidth">
-            <el-select v-model="caseData.setId" placeholder="请选择用例集" value-key="id"
-                       style="width: 150px">
-              <el-option
-                  v-for="item in currentSetList"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id">
-              </el-option>
-            </el-select>
+            <el-cascader
+                placeholder="请选择用例集"
+                size="small"
+                v-model="caseData.setId"
+                :options="currentSetList"
+                :props="{
+                label:'name',
+                value:'id',
+                checkStrictly: true,
+                expandTrigger: 'hover',
+                emitPath:false
+              }"
+            ></el-cascader>
+            <!--            <el-select v-model="caseData.setId" placeholder="请选择用例集" value-key="id"-->
+            <!--                       style="width: 150px">-->
+            <!--              <el-option-->
+            <!--                  v-for="item in currentSetList"-->
+            <!--                  :key="item.id"-->
+            <!--                  :label="item.name"-->
+            <!--                  :value="item.id">-->
+            <!--              </el-option>-->
+            <!--            </el-select>-->
           </el-form-item>
           <el-form-item label="执行次数" label-width="70px">
             <el-input-number v-model="caseData.times" :min="1" :max="1000">
@@ -185,9 +198,11 @@
                   </el-col>
                   <el-col :span="8" style="padding-left: 50px;padding-top: 3px">
                     <el-button type="danger" size="mini"
-                               @click.native="delApiCase(index)">删除</el-button>
+                               @click.native="delApiCase(index)">删除
+                    </el-button>
                     <el-button type="primary" size="mini"
-                               @click.native="apiMessageEditFuncInit(index)">配置</el-button>
+                               @click.native="apiMessageEditFuncInit(index)">配置
+                    </el-button>
                   </el-col>
                 </el-row>
               </div>
@@ -201,7 +216,7 @@
                     <el-select v-model="form.projectId"
                                style="width: 150px;padding-right:5px"
                                placeholder="请选择项目"
-                               @change="changeModuleChoice()">
+                               @change="changeApiSetChoice()">
                       <el-option
                           v-for="(item) in proAndIdData"
                           :key="item.id"
@@ -209,17 +224,29 @@
                           :value="item.id">
                       </el-option>
                     </el-select>
-
-                    <el-select v-model="form.moduleId"
-                               style="width: 150px;padding-right:5px"
-                               placeholder="请选择模块">
-                      <el-option
-                          v-for="item in currentModuleList"
-                          :key="item.id"
-                          :label="item.name"
-                          :value="item.id">
-                      </el-option>
-                    </el-select>
+                    <el-cascader
+                        placeholder="请选择模块"
+                        size="small"
+                        v-model="form.apiSetId"
+                        :options="currentApiSetList"
+                        :props="{
+                                label:'name',
+                                value:'id',
+                                checkStrictly: true,
+                                expandTrigger: 'hover',
+                                emitPath:false
+                              }"
+                    ></el-cascader>
+                    <!--                    <el-select v-model="form.apiSetId"-->
+                    <!--                               style="width: 150px;padding-right:5px"-->
+                    <!--                               placeholder="请选择模块">-->
+                    <!--                      <el-option-->
+                    <!--                          v-for="item in currentApiSetList"-->
+                    <!--                          :key="item.id"-->
+                    <!--                          :label="item.name"-->
+                    <!--                          :value="item.id">-->
+                    <!--                      </el-option>-->
+                    <!--                    </el-select>-->
                   </el-form-item>
                   <el-form-item label="">
                     <el-input placeholder="请输入用例" v-model="form.apiName" style="width: 150px">
@@ -313,8 +340,8 @@
       </el-tab-pane>
     </el-tabs>
     <apiMsgDataEdit
-            :apiCases="caseData.apiCases"
-            ref="apiMessageEditFunc">
+        :apiCases="caseData.apiCases"
+        ref="apiMessageEditFunc">
 
     </apiMsgDataEdit>
     <loadConfigView
@@ -337,13 +364,13 @@ export default {
     loadConfigView,
   },
   name: 'caseEdit',
-  props: [ 'projectId', 'proAndIdData', 'currentSetId'],
+  props: ['projectId', 'proAndIdData', 'caseSetId'],
   data() {
     return {
       checkAll: false,
       isIndeterminate: false,
       currentSetList: [],
-      currentModuleList: [],
+      currentApiSetList: [],
       apiMsgVessel: [], //接口用例容器，勾选的内容都存在此变量
       ApiMsgData: [], // 接口信息里面的表格数据
       mainWidth: '50%',
@@ -361,7 +388,7 @@ export default {
         sizePage: 15,
       },
       form: {
-        moduleId: '',
+        apiSetId: '',
         projectId: '',
         apiMesProjectId: '',
         configProjectId: '',
@@ -460,21 +487,21 @@ export default {
         this.mainWidth = '80%'
       }
     },
-
+    getNewCaseSetList() {
+      //  返回编辑页面的时候，刷新一下用例集合数据
+      let index = this.proAndIdData.map(item => item.id).indexOf(this.form.projectId);
+      this.currentSetList = this.proAndIdData[index]['case_set_data'];
+    },
 
     initCaseData() {
-      // if (this.projectName) {
-      //     this.synchronousData();
-      // }
       this.form.projectId = this.projectId;
-
       for (let i = 0; i < this.proAndIdData.length; i++) {
         if (this.proAndIdData[i]['id'] === this.projectId) {
-          this.currentModuleList = this.proAndIdData[i]['module_data']
-          this.currentSetList = this.proAndIdData[i]['set_data']
+          this.currentApiSetList = this.proAndIdData[i]['api_set_data']
+          this.currentSetList = this.proAndIdData[i]['case_set_data']
         }
       }
-      this.form.moduleId = this.currentModuleList[0].id;
+      this.form.apiSetId = this.currentApiSetList[0].id;
       this.caseData.apiCases = [];
       this.caseData.variable = [{key: '', value: '', remark: ''}];
       this.caseData.name = '';
@@ -484,7 +511,7 @@ export default {
       this.caseData.environment = '';
       this.caseData.funcAddress = Array();
       this.caseData.num = '';
-      this.caseData.setId = this.currentSetId;
+      this.caseData.setId = this.caseSetId;
       this.caseData.modelFormVisible = true;
       this.caseData.projectId = this.projectId;
       this.apiMsgVessel = [];
@@ -495,18 +522,18 @@ export default {
         'caseId': caseId,
         'copyEditStatus': copyEditStatus
       }).then((response) => {
-
             this.form.projectId = this.projectId;
             for (let i = 0; i < this.proAndIdData.length; i++) {
               if (this.proAndIdData[i]['id'] === this.form.projectId) {
 
-                this.currentModuleList = this.proAndIdData[i]['module_data']
-                this.currentSetList = this.proAndIdData[i]['set_data']
+                this.currentApiSetList = this.proAndIdData[i]['api_set_data']
+                this.currentSetList = this.proAndIdData[i]['case_set_data']
+
               }
             }
-            this.form.moduleId = this.currentModuleList[0].id;
+            this.form.apiSetId = this.currentApiSetList[0].id;
             this.caseData.projectId = this.projectId;
-            this.caseData.setId = this.currentSetId;
+            this.caseData.setId = this.caseSetId;
 
             this.caseData.name = response.data['data']['name'];
             this.caseData.desc = response.data['data']['desc'];
@@ -525,13 +552,13 @@ export default {
             this.caseData.environment = this.environmentList[response.data['data']['environment']];
           }
       )
+
     },
     changeSetChoice() {
       // console.log(`1123`)
       for (let i = 0; i < this.proAndIdData.length; i++) {
         if (this.proAndIdData[i]['id'] === this.caseData.projectId) {
-          // this.currentModuleList = this.proAndIdData[i]['module_data']
-          this.currentSetList = this.proAndIdData[i]['set_data']
+          this.currentSetList = this.proAndIdData[i]['case_set_data']
           if (this.currentSetList.length === 0) {
             this.caseData.setId = null
           } else {
@@ -541,19 +568,18 @@ export default {
       }
 
     },
-    changeModuleChoice() {
+    changeApiSetChoice() {
       for (let i = 0; i < this.proAndIdData.length; i++) {
         if (this.proAndIdData[i]['id'] === this.form.projectId) {
-          this.currentModuleList = this.proAndIdData[i]['module_data']
-          // this.currentSetList = this.proAndIdData[i]['set_data']
-          if (this.currentModuleList.length === 0) {
-            this.form.moduleId = null;
+          this.currentApiSetList = this.proAndIdData[i]['api_set_data']
+          if (this.currentApiSetList.length === 0) {
+            this.form.apiSetId = null;
             this.ApiMsgData = [];
             this.apiMsgPage.total = 0;
           } else {
             this.apiMsgPage.currentPage = 1;
             this.apiMsgPage.sizePage = 15;
-            this.form.moduleId = this.currentModuleList[0].id;
+            this.form.apiSetId = this.currentApiSetList[0].id;
             this.findApiMsg();
           }
         }
@@ -620,7 +646,7 @@ export default {
       this.radio = false;
       this.$axios.post(this.$api.findApiApi, {
         'projectId': this.form.projectId,
-        'moduleId': this.form.moduleId,
+        'apiSetId': this.form.apiSetId,
         'apiName': this.form.apiName,
         'page': this.apiMsgPage.currentPage,
         'sizePage': this.apiMsgPage.sizePage,
