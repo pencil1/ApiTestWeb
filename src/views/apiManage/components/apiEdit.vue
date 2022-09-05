@@ -18,6 +18,7 @@
           <el-cascader
               placeholder="请选择模块"
               size="small"
+              style="padding-right:10px"
               v-model="form.apiSetId"
               :options="currentApiSetList"
               :props="{
@@ -30,7 +31,8 @@
           ></el-cascader>
           <el-select v-model="form.choiceUrl"
                      clearable placeholder="请选择url"
-                     size="small">
+                     size="small"
+          >
             <el-option
                 v-for="(item, index) in proUrlData"
                 :key="index"
@@ -146,7 +148,7 @@
           <el-button type="danger"
                      icon="el-icon-delete"
                      size="mini"
-                     @click.native="delTableRow('param',scope.$index)">
+                     @click.native="delTableRow(scope.$index)">
           </el-button>
         </template>
       </el-table-column>
@@ -177,9 +179,29 @@
           <el-button type="primary" size="mini"
                      v-if="form.variable_type === 'json' "
 
-                     @click="jsonRemarkStatus = !jsonRemarkStatus">{{ jsonRemarkStatus?'json':'备注' }}
+                     @click="jsonRemarkStatus = !jsonRemarkStatus">{{ jsonRemarkStatus ? 'json' : '备注' }}
           </el-button>
-<!-- <i class="el-icon-full-screen"></i>-->
+
+          <el-popover
+              v-if="form.variable_type === 'data' "
+              placement="right"
+              width="400"
+              @hide="loadFormData()"
+              @show="textarea2=null"
+              trigger="click">
+            <el-input
+                type="textarea"
+                :autosize="{ minRows: 10, maxRows: 20}"
+                placeholder="key:value"
+                v-model="textarea2">
+            </el-input>
+            <el-button type="primary" size="mini"
+                       slot="reference"
+                       style="margin-left:20px">Bulk Edit
+
+            </el-button>
+          </el-popover>
+          <!-- <i class="el-icon-full-screen"></i>-->
         </el-form>
         <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);"/>
 
@@ -195,7 +217,7 @@
                   lang="json"
                   theme="chrome"
                   width="100%"
-                  :height=this.$store.state.tableHeight-175
+                  :height=this.$store.state.tableHeight-180
                   :options="{}"
               >
               </aceEditor>
@@ -208,7 +230,7 @@
                   lang="json"
                   theme="chrome"
                   width="100%"
-                  :height=this.$store.state.tableHeight-175
+                  :height=this.$store.state.tableHeight-180
                   :options="{}"
               >
               </aceEditor>
@@ -223,13 +245,13 @@
                     :lineFeed="true"
         ></auto-table>
       </el-tab-pane>
-      <el-tab-pane label="Extract" name="third">
+      <el-tab-pane label="提取" name="third">
         <auto-table
             :tableData="apiMsgData.extract"
         ></auto-table>
 
       </el-tab-pane>
-      <el-tab-pane label="Assert" name="fourth">
+      <el-tab-pane label="断言" name="fourth">
         <auto-table
             :tableData="apiMsgData.validate"
             kind="assert"
@@ -265,19 +287,20 @@ export default {
     // errorView: errorView,
   },
   name: 'apiEdit',
-  props: ['proAndIdData', 'projectId', 'apiSetId'],
+  props: ['proAndIdData', 'projectId', 'apiSetId', 'config'],
   data() {
     return {
       picHeight: parseInt(document.documentElement.clientHeight - 400) + 'px',
       bodyShow: 'second',
       paramTypes: ['string', 'file'],
       cell: Object(),
+      textarea2: '',
       highStatus: false,//高级功能按钮状态
       proUrlData: null,
       saveRunStatus: false,
       currentApiSetList: [],
       ParamViewStatus: false,
-      jsonRemarkStatus:false,
+      jsonRemarkStatus: false,
       //上传文件时，记录数组下当前数据的下标，用于把返回文件路径地址赋值
       temp_num: '',
       methods: ['POST', 'GET', 'PUT', 'DELETE'],
@@ -285,7 +308,7 @@ export default {
         projectId: null,
         configName: null,
         apiSetId: null,
-        choiceUrl: '',
+        choiceUrl: 0,
         variable_type: 'data',
       },
       comparators: [
@@ -327,6 +350,9 @@ export default {
     }
   },
   methods: {
+    delTableRow(i) {
+      this.apiMsgData.param.splice(i, 1);
+    },
     scrollbarHeight() {
       let t = this.$store.state.tableHeight;
       t = t - 200;
@@ -353,17 +379,31 @@ export default {
       // 调用 callback 返回建议列表的数据
       cb(this.comparators);
     },
+    loadFormData() {
+      // const items = (|| window.clipboardData );
+      let arrayList = this.textarea2.split('\n')
+      for (let i = 0; i < arrayList.length; i++) {
+        let oneData = arrayList[i].split(':')
+        if (oneData[0]) {
+          this.apiMsgData.variable.push({key: oneData[0], param_type: 'string', value: oneData[1], remark: null})
+        }
+
+      }
+      // console.log(window.clipboardData)
+      // mac.clipboardData
+      // console.log(window.clipboardData.getData)
+    },
     formatData() {
       // 格式化json字符串
       try {
-         // this.apiMsgData.jsonVariable = JSON.parse(this.apiMsgData.jsonVariable);
+        // this.apiMsgData.jsonVariable = JSON.parse(this.apiMsgData.jsonVariable);
         // this.apiMsgData.jsonVariable = JSON.stringify(this.apiMsgData.jsonVariable, null, 4);
-        if(this.jsonRemarkStatus){
+        if (this.jsonRemarkStatus) {
           this.apiMsgData.swaggerJsonVariable = JSON.parse(this.apiMsgData.swaggerJsonVariable);
-        this.apiMsgData.swaggerJsonVariable = JSON.stringify(this.apiMsgData.swaggerJsonVariable, null, 4);
-        }else {
+          this.apiMsgData.swaggerJsonVariable = JSON.stringify(this.apiMsgData.swaggerJsonVariable, null, 4);
+        } else {
           this.apiMsgData.jsonVariable = JSON.parse(this.apiMsgData.jsonVariable);
-        this.apiMsgData.jsonVariable = JSON.stringify(this.apiMsgData.jsonVariable, null, 4);
+          this.apiMsgData.jsonVariable = JSON.stringify(this.apiMsgData.jsonVariable, null, 4);
         }
       } catch (err) {
         this.$message({
@@ -462,15 +502,15 @@ export default {
         });
         return
       }
-      if (this.form.choiceUrl === '') {
-        this.$message({
-          showClose: true,
-          message: '请基础URL',
-          type: 'warning',
-        });
-        return
-      }
-      console.log(this.form.choiceUrl)
+      // if (this.form.choiceUrl === '') {
+      //   this.$message({
+      //     showClose: true,
+      //     message: '请填写基础URL',
+      //     type: 'warning',
+      //   });
+      //   return
+      // }
+      // console.log(this.form.choiceUrl)
       return this.$axios.post(this.$api.addApiApi, {
         'apiSetId': this.form.apiSetId,
         'projectId': this.form.projectId,
@@ -481,8 +521,8 @@ export default {
         'variableType': this.form.variable_type,
         'desc': this.apiMsgData.desc,
         'funcAddress': this.apiMsgData.funcAddress,
-        'up_func': this.apiMsgData.up_func,
-        'down_func': this.apiMsgData.down_func,
+        'upFunc': this.apiMsgData.up_func,
+        'downFunc': this.apiMsgData.down_func,
         'url': this.apiMsgData.url,
         'skip': this.apiMsgData.skip,
         'apiMsgId': this.apiMsgData.id,
@@ -503,7 +543,7 @@ export default {
               if (this.messageShow(this, response)) {
                 this.apiMsgData.id = response.data['api_msg_id'];
                 this.apiMsgData.num = response.data['num'];
-                // this.$emit('findApiMsg');
+                this.$emit('updateTab', this.apiMsgData.name, this.apiMsgData.id.toString(), response.data.msg)
                 return true
               }
             }
@@ -545,7 +585,7 @@ export default {
             let index = this.proAndIdData.map(item => item.id).indexOf(this.form.projectId);  //  获取当前节点的下标
             this.currentApiSetList = this.proAndIdData[index]['api_set_data'];
             this.proUrlData = this.proAndIdData[index]['url']
-            this.form.choiceUrl = parseInt(response.data['data']['status_url'])
+            this.form.choiceUrl = response.data['data']['status_url']
             // console.log()
             // this.form.choiceUrl = this.proUrlData[response.data['data']['status_url']];
             this.form.apiSetId = this.apiSetId;
@@ -683,6 +723,13 @@ export default {
 
   },
   mounted() {
+    if (this.config.mounted === 'init') {
+      this.initApiMsgData()
+    } else {
+      this.editCopyApiMsg(this.config.apiMsgId, this.config.mounted)
+    }
+
+    // console.log(this.config)
   },
 }
 </script>

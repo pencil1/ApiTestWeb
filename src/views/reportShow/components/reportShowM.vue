@@ -78,12 +78,26 @@
                                     :key="index"
                                     v-show="item.success === true ? showScene[0]: showScene[1]"
                             >
+
                                 <template slot="title">
-                                    <div style="font-weight:600 ;font-size: 15px;margin-left: 10px"
-                                         :style="item.success === true ? 'color:#409eff': 'color:rgb(255, 74, 74)'"
+                                  <tooltip-over
+                                    :content="item.name"
+                                    class="wid190"
+                                    refName="tooltipOver"
+                                    :style="item.success === true ? 'color:#409eff': 'color:rgb(255, 74, 74)'"
+                                >
+                                    <div
+                                        class="title1"
+
+
                                     >
                                         {{item.name}}
                                     </div>
+<!--    </el-tooltip>-->
+                                  </tooltip-over>
+<!--                                   <el-tooltip class="item" effect="dark" :content="item.name" placement="top">-->
+
+
 
                                 </template>
                                 <div>
@@ -226,8 +240,11 @@
 </template>
 
 <script>
-
+import tooltipOver from '@/components/tooltipOver'
     export default {
+  components: {
+    tooltip_over: tooltipOver,
+  },
         name: 'reportShow',
         data() {
             this.caseChartSettings = {
@@ -410,6 +427,15 @@
 </script>
 
 <style scoped>
+      .title1{
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-weight:600 ;
+        font-size: 15px;
+        margin-left: 10px;
+      }
+
     .el-main {
         line-height: 36px;
     }

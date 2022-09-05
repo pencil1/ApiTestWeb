@@ -16,6 +16,7 @@
       </el-main>
     </el-container>
     </el-container>
+  <errorView/>
   </div>
 </template>
 

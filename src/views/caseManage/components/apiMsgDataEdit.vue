@@ -4,13 +4,18 @@
   <!--         element-loading-text="左侧列表数据发生变化，请点击配置按钮重新配置"-->
   <!--         element-loading-spinner="my-icon-2"-->
   <!--         >-->
-  <el-dialog title="配置"
+  <el-dialog :title="apiCaseData.name"
              :visible.sync="paramVisible"
              width="80%">
     <!--        <span v-show="!paramVisible" style="color: red;margin-top: 20px">请点击左侧配置按钮加载信息</span>-->
     <el-tabs type="card" style="margin-top: 10px">
-      <el-tab-pane label="接口信息" style="margin-top: 10px">
+      <el-tab-pane label="基础信息" style="margin-top: 10px">
         <el-form>
+          <el-form-item label="接口地址" prop="url" label-width="120px">
+            <el-input v-model="apiCaseData.url" disabled>
+            </el-input>
+
+          </el-form-item>
           <el-form-item label="步骤名称" prop="name" label-width="120px">
             <el-input v-model="apiCaseData.name">
             </el-input>
@@ -28,6 +33,7 @@
             <el-input v-model="apiCaseData.skip">
             </el-input>
           </el-form-item>
+
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="Headers" style="margin-top: 10px">
@@ -85,6 +91,12 @@
               v-model="apiCaseData.statusCase.variable[1]"
               inactive-text="启动新参数">
           </el-switch>
+          <el-button type="primary" size="mini"
+                     v-if="form.variable_type === 'json' "
+                     style="margin-left:20px"
+                     @click="formatData()">格式化
+
+          </el-button>
         </el-card>
         <div v-if="form.variable_type.toString() === 'json'">
           <div style="margin: 0 0 15px;">
@@ -113,7 +125,7 @@
                     :lineFeed="true"
         ></auto-table>
       </el-tab-pane>
-      <el-tab-pane label="Extract" style="margin-top: 10px">
+      <el-tab-pane label="提取" style="margin-top: 10px">
         <el-card shadow="hover"
                  :body-style=styleCard>
           <el-switch
@@ -132,7 +144,7 @@
         ></auto-table>
 
       </el-tab-pane>
-      <el-tab-pane label="Assert" style="margin-top: 10px">
+      <el-tab-pane label="断言" style="margin-top: 10px">
         <el-card shadow="hover"
                  :body-style=styleCard>
           <el-switch
@@ -199,8 +211,7 @@
 <script>
 
 export default {
-  components: {
-  },
+  components: {},
   name: 'apiMsgDataEdit',
   props: ['apiCases'],
   data() {
@@ -208,7 +219,7 @@ export default {
       styleCard: {
         'padding': '5px'
       },
-      test:'',
+      test: '',
       paramVisible: false,
       form: {
         choiceTypeStatus: false,
@@ -220,6 +231,7 @@ export default {
         up_func: '',
         down_func: '',
         skip: '',
+        url:'',
         // method:'GET',
         statusCase: {variable: [], extract: [], validate: [], param: [], header: [], parameters: 0},
         variable: [{key: '', value: '', param_type: '', remark: ''}],
@@ -228,7 +240,7 @@ export default {
         validate: [{key: '', value: '', comparator: ''}],
         param: [{key: '', value: '', remark: ''}],
         header: [{key: '', value: '', remark: ''}],
-        parameters:'',
+        parameters: '',
       },
     }
   },
@@ -238,6 +250,21 @@ export default {
       require('brace/mode/json');
       require('brace/theme/chrome');
       require('brace/snippets/json')
+    },
+    formatData() {
+      // 格式化json字符串
+      try {
+
+        this.apiCaseData.json_variable = JSON.parse(this.apiCaseData.json_variable);
+        this.apiCaseData.json_variable = JSON.stringify(this.apiCaseData.json_variable, null, 4);
+
+      } catch (err) {
+        this.$message({
+          showClose: true,
+          message: 'json格式错误',
+          type: 'warning',
+        });
+      }
     },
     initData(i) {
       //  初始化步骤数据

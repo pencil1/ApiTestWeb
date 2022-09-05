@@ -77,7 +77,7 @@
     </el-row>
     <el-dialog title="用例集合配置" :visible.sync="caseSetData.viewStatus" width="30%">
       <el-form label-width="80px" v-if="!caseSetData.id">
-        <el-form-item label="路径选择">
+        <el-form-item label="路径选择"  v-show="pathStatus">
           <el-radio-group v-model="caseSetData.idChoice">
             <el-radio :label=1>根目录</el-radio>
             <el-radio :label=2>新增同级</el-radio>
@@ -119,6 +119,7 @@ export default {
   data() {
     return {
       caseSetDataList: [],
+      pathStatus:true,
       defaultProps: {
         children: 'children',
         label: 'name'
@@ -216,6 +217,7 @@ export default {
     },
     initCaseSetData() {
       //  打开窗口时，初始化模块窗口数据
+      this.pathStatus = true;
       this.caseSetData.name = '';
       this.caseSetData.higherId = '';
        if(!this.caseSetDataList){
@@ -245,6 +247,7 @@ export default {
     },
     editCaseSet() {
       //  编辑模块
+      this.pathStatus = false
         this.caseSetData.idChoice = 2
         if (!this.form.caseSet) {
           this.$message({

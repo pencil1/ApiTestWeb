@@ -91,7 +91,8 @@ export default {
     initData(){
       this.navigationName = this.$route.fullPath;
       if(this.userInfo.name !== '管理员' ){
-        this.asideList.splice(2, 1);
+        this.asideList = this.asideList.filter(items => items.name !== '系统管理')
+        // this.asideList.splice(4, 1);
       }
     }
   },

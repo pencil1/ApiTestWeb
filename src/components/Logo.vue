@@ -15,8 +15,8 @@ export default {
   name: 'SidebarLogo',
   data() {
     return {
-      title: 'Tester测试平台',
-      logo: 'http://cdn.jin10.com/components/img/logo_mini_blue.920e4a8f.png'
+      title: '测试平台',
+      logo: 'https://apptest.aulton.com/asset/files/logo_20220720114355666.png'
     }
   }
 }
@@ -49,7 +49,7 @@ export default {
     width: 100%;
 
     & .sidebar-logo {
-      width: 32px;
+      //width: 32px;
       height: 32px;
       vertical-align: middle;
       transform: scale(0.85);

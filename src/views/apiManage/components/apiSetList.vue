@@ -9,7 +9,7 @@
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="add">添加</el-dropdown-item>
             <el-dropdown-item command="edit">编辑</el-dropdown-item>
-<!--            <el-dropdown-item command="stick">置顶</el-dropdown-item>-->
+            <!--            <el-dropdown-item command="stick">置顶</el-dropdown-item>-->
             <el-dropdown-item command="del">删除</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -76,8 +76,8 @@
       <!--      </el-pagination>-->
     </el-row>
     <el-dialog title="接口集合配置" :visible.sync="apiSetData.viewStatus" width="30%">
-      <el-form label-width="80px" >
-        <el-form-item label="路径选择">
+      <el-form label-width="80px">
+        <el-form-item label="路径选择" v-show="pathStatus">
           <el-radio-group v-model="apiSetData.idChoice">
             <el-radio :label=1>根目录</el-radio>
             <el-radio :label=2>新增同级</el-radio>
@@ -119,6 +119,7 @@ export default {
   data() {
     return {
       apiSetDataList: [],
+      pathStatus:true,
       defaultProps: {
         children: 'children',
         label: 'name'
@@ -185,6 +186,7 @@ export default {
     },
     addApiSet() {
       //  添加模块
+
       let higherId
       if (this.apiSetData.idChoice === 1) {
         higherId = 0
@@ -212,23 +214,27 @@ export default {
       if (command === 'add') {
         this.initApiSetData()
       } else if (command === 'edit') {
-        setTimeout(() => { this.editApiSet() }, 100);
+        setTimeout(() => {
+          this.editApiSet()
+        }, 100);
 
       } else if (command === 'stick') {
         this.stickApiSet()
       } else if (command === 'del') {
-        setTimeout(() => {  this.sureView(this.delApiSet, null, this.form.apiSet.name) }, 100);
+        setTimeout(() => {
+          this.sureView(this.delApiSet, null, this.form.apiSet.name)
+        }, 100);
 
       }
     },
     initApiSetData() {
       //  打开窗口时，初始化模块窗口数据
+      this.pathStatus = true;
       this.apiSetData.name = '';
       this.apiSetData.higherId = '';
-      if(!this.apiSetDataList){
+      if (!this.apiSetDataList) {
         this.apiSetData.idChoice = 1
-      }
-      else if (this.form.apiSet.id) {
+      } else if (this.form.apiSet.id) {
         this.apiSetData.idChoice = 2;
         // this.apiSetData.higherId = this.form.apiSet.higherId;
       } else {
@@ -252,29 +258,29 @@ export default {
     },
     editApiSet() {
       //  编辑模块
-        this.apiSetData.idChoice = 2
-        if (!this.form.apiSet) {
-          this.$message({
-            showClose: true,
-            message: '请先创建接口模块',
-            type: 'warning',
-          });
-          return
-        }
-        this.apiSetData.name = this.form.apiSet.name;
-        this.apiSetData.id = this.form.apiSet.id;
-        this.apiSetData.num = this.form.apiSet.num;
-        this.apiSetData.viewStatus = true;
-
+      this.pathStatus = false
+      this.apiSetData.idChoice = 2
+      if (!this.form.apiSet) {
+        this.$message({
+          showClose: true,
+          message: '请先创建接口模块',
+          type: 'warning',
+        });
+        return
+      }
+      this.apiSetData.name = this.form.apiSet.name;
+      this.apiSetData.id = this.form.apiSet.id;
+      this.apiSetData.num = this.form.apiSet.num;
+      this.apiSetData.viewStatus = true;
 
 
     },
     delApiSet() {
       //  删除模块
-         this.$axios.post(this.$api.delApiSetApi, {'id': this.form.apiSet.id}).then((response) => {
-            if(this.messageShow(this, response)){
+      this.$axios.post(this.$api.delApiSetApi, {'id': this.form.apiSet.id}).then((response) => {
+            if (this.messageShow(this, response)) {
               this.apiSetData.name = '';
-            this.findApiSet();
+              this.findApiSet();
             }
 
           }

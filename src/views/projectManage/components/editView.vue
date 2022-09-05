@@ -126,6 +126,40 @@
         </el-table>
         <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);"/>
       </el-tab-pane>
+      <el-tab-pane label="头部信息" style="margin-top: 10px">
+        <span style="margin-left: 10px">变量信息：</span>
+        <el-button type="primary" size="mini" @click="addProjectHeader()">
+          添加
+        </el-button>
+        <el-table :data="projectData.header" stripe :show-header="false" size="mini">
+          <el-table-column label="Key" header-align="center" minWidth="50">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.key" size="mini" placeholder="key">
+              </el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="Value" header-align="center" minWidth="80">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.value" size="mini" placeholder="value">
+              </el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="备注" header-align="center" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.remark" size="mini" placeholder="备注">
+              </el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" header-align="center" width="90">
+            <template slot-scope="scope">
+              <el-button type="danger" icon="el-icon-delete" size="mini"
+                         @click.native="delProjectHeader(scope.$index)">删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);"/>
+      </el-tab-pane>
     </el-tabs>
     <div slot="footer" class="dialog-footer">
       <el-button @click="form.showView = false" size="small">取 消</el-button>

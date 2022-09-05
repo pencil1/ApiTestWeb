@@ -12,6 +12,7 @@
     "core-js": "^3.6.5",
     "echarts": "4.8.0",
     "element-ui": "^2.15.6",
+    "json5": "^2.2.1",
     "node-sass": "4.14.1",
     "sass-loader": "8.0.2",
     "v-charts": "^1.19.0",

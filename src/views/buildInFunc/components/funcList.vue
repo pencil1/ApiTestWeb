@@ -175,9 +175,9 @@ export default {
     },
     handleNodeClick(data, node) {
       // console.log(node)
-      if (this.tempTestCaseFileData.status === 1) {
-        this.$emit('saveTestCaseFile', this.tempTestCaseFileData.id);
-      }
+      // if (this.tempTestCaseFileData.status === 1) {
+      //   this.$emit('saveTestCaseFile', this.tempTestCaseFileData.id);
+      // }
       if (this.tempTestCaseFileData.id !== data.id) {
         // id不相等时，重新请求文件内容
         this.tempTreeData.data = data;

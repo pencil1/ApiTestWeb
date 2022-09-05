@@ -2,7 +2,7 @@
   <el-dialog title="任务配置" :visible.sync="taskData.modelFormVisible" width="42%">
     <el-tabs>
       <el-tab-pane label="messages" style="margin-top: 10px">
-        <el-form>
+        <el-form  size="small">
           <el-form-item label="执行选择" :label-width="taskData.formLabelWidth">
             <el-select v-model="form.projectId" placeholder="选择项目"
                        style="width: 150px;padding-right:5px"
@@ -36,37 +36,50 @@
                        :disabled="caseStatus"
                        style="width: 150px">
               <el-option
-                  v-for="item in allSceneList"
-                  :key="item.sceneId"
+                  v-for="item in allCaseList"
+                  :key="item.caseId"
                   :label="item.label"
-                  :value="item.sceneId">
+                  :value="item.caseId">
               </el-option>
             </el-select>
  </el-form-item>
           <el-form-item label="任务名称" :label-width="taskData.formLabelWidth">
-            <el-input v-model="taskData.name" auto-complete="off">
+            <el-input v-model="taskData.name" auto-complete="off" size="small">
             </el-input>
           </el-form-item>
           <el-form-item label="收件人邮箱" :label-width="taskData.formLabelWidth">
-            <el-input v-model="taskData.toEmail">
+            <el-input v-model="taskData.toEmail" >
             </el-input>
           </el-form-item>
-          <el-form-item label="发件人邮箱" :label-width="taskData.formLabelWidth">
-            <el-input v-model="taskData.SendEmail">
+<!--          <el-form-item label="发件人邮箱" :label-width="taskData.formLabelWidth">-->
+<!--            <el-input v-model="taskData.SendEmail">-->
+<!--            </el-input>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="邮箱密码" :label-width="taskData.formLabelWidth"-->
+<!--                        prop="desc">-->
+<!--            <el-input v-model="taskData.password" type="password">-->
+<!--            </el-input>-->
+<!--          </el-form-item>-->
+          <el-form-item label="webhook" :label-width="taskData.formLabelWidth">
+            <el-input v-model="taskData.webhook"  >
             </el-input>
           </el-form-item>
-          <el-form-item label="邮箱密码" :label-width="taskData.formLabelWidth"
+          <el-form-item label="secret" :label-width="taskData.formLabelWidth"
                         prop="desc">
-            <el-input v-model="taskData.password" type="password">
+            <el-input v-model="taskData.secret" >
             </el-input>
           </el-form-item>
-
+          <el-form-item label="钉钉标题" :label-width="taskData.formLabelWidth"
+                        prop="desc">
+            <el-input v-model="taskData.title" >
+            </el-input>
+          </el-form-item>
           <el-form-item label="时间配置" :label-width="taskData.formLabelWidth">
             <el-input v-model="taskData.timeConfig"
                       placeholder="second minute hour day month day_of_week(0 0 12 * * ? 每天中午12点触发)">
             </el-input>
           </el-form-item>
-          <el-form-item label="邮件策略" :label-width="taskData.formLabelWidth">
+          <el-form-item label="发送策略" :label-width="taskData.formLabelWidth">
             <el-radio v-model="taskData.sendEmailStatus" label="1">始终发送</el-radio>
             <el-radio v-model="taskData.sendEmailStatus" label="2">失败发送</el-radio>
             <el-radio v-model="taskData.sendEmailStatus" label="3">从不发送</el-radio>
@@ -93,7 +106,7 @@ export default {
   data() {
     return {
       currentCaseSetList: [],
-      allSceneList: [],
+      allCaseList: [],
       caseStatus: false,
       taskData: {
         id: '',
@@ -104,6 +117,9 @@ export default {
         taskType: '',
         toEmail: '',
         SendEmail: '',
+        webhook: '',
+        secret: '',
+        title:'',
         timeConfig: '',
         password: '',
         formLabelWidth: '90px',
@@ -133,6 +149,7 @@ export default {
       this.taskData.SendEmail = '';
       this.taskData.timeConfig = '';
       this.taskData.password = '';
+      this.taskData.title = '自动化测试报告';
       this.form.caseSet = [];
       this.form.case = [];
       this.taskData.num = '';
@@ -175,6 +192,9 @@ export default {
         'taskType': this.taskData.taskType,
         'toEmail': this.taskData.toEmail,
         'sendEmail': this.taskData.SendEmail,
+        'webhook': this.taskData.webhook,
+        'secret': this.taskData.secret,
+        'title': this.taskData.title,
         'timeConfig': this.taskData.timeConfig,
         'password': this.taskData.password,
         'sendEmailStatus': this.taskData.sendEmailStatus,
@@ -208,12 +228,15 @@ export default {
             this.taskData.toEmail = response.data['data']['task_to_email_address'];
             this.taskData.SendEmail = response.data['data']['task_send_email_address'];
             this.taskData.password = response.data['data']['password'];
+            this.taskData.webhook = response.data['data']['webhook'];
+            this.taskData.secret = response.data['data']['secret'];
+            this.taskData.title = response.data['data']['title'];
             this.taskData.sendEmailStatus = response.data['data']['send_email_status'];
             this.taskData.num = response.data['data']['num'];
             this.taskData.projectName = this.form.projectName;
             this.taskData.id = id;
             this.form.caseSet = response.data['data']['set_ids'];
-            console.log(response.data['data']['set_ids'].length)
+            // console.log(response.data['data']['set_ids'].length)
             if (response.data['data']['set_ids'].length === 1) {
               // 当用例集只有1个时，赋值set_id，让用例下拉框有数据显示
               this.form.case_set_id = response.data['data']['set_ids'][0]
@@ -232,14 +255,14 @@ export default {
     },
     findCase() {
       this.$axios.post(this.$api.findCaseApi, {
-        'setId': this.form.case_set_id,
+        'caseSetId': this.form.case_set_id,
         'projectId': this.form.projectId,
         'caseName': this.form.caseName,
         'page': 1,
         'sizePage': 9999,
       }).then((response) => {
             if (this.messageShow(this, response)) {
-              this.allSceneList = response.data['data'];
+              this.allCaseList = response.data['data'];
             }
           }
       )

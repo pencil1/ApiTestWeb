@@ -160,7 +160,7 @@
                 } else if (this.kind === 'header') {
                     this.tableData.push({key: null, value: null, remark: null})
                 } else if (this.kind === 'assert') {
-                    this.tableData.push({key: null, comparator: '', value: null, remark: null})
+                    this.tableData.push({key: null, comparator: 'equals', value: null, remark: null})
                 }else if (this.kind === 'variable') {
                     this.tableData.push({key: null, param_type: 'string', value: null, remark: null})
                 }
@@ -175,7 +175,7 @@
             showLine(prefix, n) {
                 //  获取单元格的滚动条高度，并使单元格为该高度
                 this.cell = document.getElementById(prefix + n);
-                console.log(this.cell.scrollHeight)
+                // console.log(this.cell.scrollHeight)
                 this.cell.style.height = this.cell.scrollHeight + 'px';
             },
             changeLine() {

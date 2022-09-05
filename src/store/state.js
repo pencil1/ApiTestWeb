@@ -9,5 +9,7 @@ export const state = {
     title: '',
     roles: null,
     userId: null,
+    errorData: null,
+    showStatus:false,
 }
 export default state

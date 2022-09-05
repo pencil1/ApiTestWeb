@@ -104,9 +104,9 @@ export default {
           }
       )
     },
-    saveTestCaseFile() {
+    async saveTestCaseFile() {
       // console.log(this.$refs.apiListRef.tempTestCaseFileData.id)
-      this.$axios.post(this.$api.saveFuncFileApi, {
+      await this.$axios.post(this.$api.saveFuncFileApi, {
         'ids': this.$refs.apiListRef.tempTestCaseFileData.id,
         'data': this.funcData
       }).then((response) => {
