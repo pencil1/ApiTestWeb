@@ -102,6 +102,14 @@ const routes = [
           title: '定时任务',
         }
       },
+        {
+        path: '/mockManage',
+        name: 'mockManage',
+        component: () => import('@/views/mockManage'),
+        meta: {
+          title: 'mock服务',
+        }
+      },
       {
         path: '/testTool',
         name: 'testTool',

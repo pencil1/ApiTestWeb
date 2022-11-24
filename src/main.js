@@ -33,6 +33,8 @@ Vue.component(ring.name, ring);
 Vue.use(contentmenu);
 Vue.use(ElementUI);
 Vue.use(base);
+
+
 new Vue({
   router,
   store,

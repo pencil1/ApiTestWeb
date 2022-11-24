@@ -81,6 +81,24 @@
           <el-input v-model="apiMsgData.skip" placeholder="跳过判断，True跳过该请求" size="small">
           </el-input>
         </el-form-item>
+        <el-form-item prop="name" style="margin-bottom: 5px">
+          <el-select
+              v-model="form.configId"
+              placeholder="请选择配置"
+              size="small"
+              clearable
+              value-key="configId"
+              style="width: 150px"
+          >
+            <el-option
+
+                v-for="item in configData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
 
       </el-form>
       <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);margin-top: -5px"/>
@@ -185,22 +203,30 @@
           <el-popover
               v-if="form.variable_type === 'data' "
               placement="right"
-              width="400"
               @hide="loadFormData()"
               @show="textarea2=null"
               trigger="click">
             <el-input
                 type="textarea"
-                :autosize="{ minRows: 10, maxRows: 20}"
+                :autosize="{ minRows: 10, maxRows: 30}"
                 placeholder="key:value"
+                resize="both"
                 v-model="textarea2">
             </el-input>
             <el-button type="primary" size="mini"
                        slot="reference"
-                       style="margin-left:20px">Bulk Edit
+                       style="margin-left:20px"
+                       v-if="form.variable_type === 'data' "
+                       @click="loadFormData()">Bulk Edit
 
             </el-button>
           </el-popover>
+          <el-button type="primary" size="mini"
+                     v-if="form.variable_type === 'data' "
+                     @click="clearVariable()"
+                     style="margin-left:20px">clear
+
+          </el-button>
           <!-- <i class="el-icon-full-screen"></i>-->
         </el-form>
         <hr style="height:1px;border:none;border-top:1px solid rgb(241, 215, 215);"/>
@@ -295,6 +321,7 @@ export default {
       paramTypes: ['string', 'file'],
       cell: Object(),
       textarea2: '',
+      configData: Object(),  //  项目对应的配置数据
       highStatus: false,//高级功能按钮状态
       proUrlData: null,
       saveRunStatus: false,
@@ -305,6 +332,7 @@ export default {
       temp_num: '',
       methods: ['POST', 'GET', 'PUT', 'DELETE'],
       form: {
+        configId:null,
         projectId: null,
         configName: null,
         apiSetId: null,
@@ -374,6 +402,7 @@ export default {
       //  改变项目选项时，清空模块和基础url的选择
       this.form.apiSetId = '';
       this.form.choiceUrl = '';
+      this.getConfigData()
     },
     querySearch(queryString, cb) {
       // 调用 callback 返回建议列表的数据
@@ -383,15 +412,21 @@ export default {
       // const items = (|| window.clipboardData );
       let arrayList = this.textarea2.split('\n')
       for (let i = 0; i < arrayList.length; i++) {
-        let oneData = arrayList[i].split(':')
+        let oneData = arrayList[i].split(':',)
+        console.log(oneData)
         if (oneData[0]) {
-          this.apiMsgData.variable.push({key: oneData[0], param_type: 'string', value: oneData[1], remark: null})
+          this.apiMsgData.variable.push({
+            key: oneData.shift().trim(),
+            param_type: 'string',
+            value: oneData.join(':').trim(),
+            remark: null
+          })
         }
-
       }
-      // console.log(window.clipboardData)
-      // mac.clipboardData
-      // console.log(window.clipboardData.getData)
+      this.textarea2 = ''
+    },
+    clearVariable() {
+      this.apiMsgData.variable = [{key: '', param_type: 'string', value: '', remark: null}]
     },
     formatData() {
       // 格式化json字符串
@@ -479,6 +514,7 @@ export default {
       this.proUrlData = this.proAndIdData[index]['url'];
       this.form.apiSetId = this.apiSetId;
       this.form.choiceUrl = 0;
+      this.getConfigData()
 
     },
     addApiMsg(messageClose = false) {
@@ -550,8 +586,8 @@ export default {
           }
       )
     },
-    editCopyApiMsg(apiMsgId, status) {
-      this.$axios.post(this.$api.editAndCopyApiApi, {'apiMsgId': apiMsgId}).then((response) => {
+    async editCopyApiMsg(apiMsgId, status) {
+      await this.$axios.post(this.$api.editAndCopyApiApi, {'apiMsgId': apiMsgId}).then((response) => {
             this.apiMsgData.name = response.data['data']['name'];
             if (status === 'edit') {
               this.apiMsgData.num = response.data['data']['num'];
@@ -579,17 +615,21 @@ export default {
             this.apiMsgData.extract = response.data['data']['extract'];
             this.apiMsgData.validate = response.data['data']['validate'];
             this.apiMsgData.method = response.data['data']['method'];
-            this.form.apiSetId = response.data['data']['api_set_id'];
-            this.form.projectId = this.projectId;
 
+            this.form.projectId = response.data['data']['project_id'];
+            // this.form.projectId = this.projectId;
+            if (response.data['data']['project_id'] !== this.projectId) {
+              //复制的时候，有可能改变项目，所以需要获取项目对应的集合
+              this.changeProChoice()
+            }
+            this.form.apiSetId = response.data['data']['api_set_id'];
+            //
             let index = this.proAndIdData.map(item => item.id).indexOf(this.form.projectId);  //  获取当前节点的下标
             this.currentApiSetList = this.proAndIdData[index]['api_set_data'];
             this.proUrlData = this.proAndIdData[index]['url']
             this.form.choiceUrl = response.data['data']['status_url']
-            // console.log()
-            // this.form.choiceUrl = this.proUrlData[response.data['data']['status_url']];
-            this.form.apiSetId = this.apiSetId;
             this.jsonRemarkStatus = false;
+            this.getConfigData()
           }
       );
     },
@@ -604,7 +644,7 @@ export default {
             type: 'warning',
           });
         } else {
-          this.$emit('apiTest', [{'apiMsgId': res.data['api_msg_id'], 'num': '1'}], false);
+          this.$emit('apiTest', [{'apiMsgId': res.data['api_msg_id'], 'num':'1'}],this.form.configId, false);
         }
       });
     },
@@ -616,6 +656,10 @@ export default {
       //  获取单元格的滚动条高度，并使单元格为该高度
       this.cell = document.getElementById(prefix + n);
       this.cell.style.height = this.cell.scrollHeight + 'px';
+    },
+    getConfigData() {
+      let index = this.proAndIdData.map(item => item.id).indexOf(this.form.projectId);
+      this.configData = this.proAndIdData[index]['config_data']
     },
     changeLine() {
       //  当单元格高度和滚动条高度不一致时，改变单元格高度

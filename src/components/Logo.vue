@@ -16,7 +16,7 @@ export default {
   data() {
     return {
       title: '测试平台',
-      logo: 'https://apptest.aulton.com/asset/files/logo_20220720114355666.png'
+      logo: ''
     }
   }
 }

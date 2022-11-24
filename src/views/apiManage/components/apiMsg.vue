@@ -14,21 +14,21 @@
               :value="item.id">
           </el-option>
         </el-select>
-        <el-select
-            v-model="form.configId"
-            placeholder="请选择配置"
-            clearable
-            value-key="configId"
-            style="width: 150px"
-        >
-          <el-option
+<!--        <el-select-->
+<!--            v-model="form.configId"-->
+<!--            placeholder="请选择配置"-->
+<!--            clearable-->
+<!--            value-key="configId"-->
+<!--            style="width: 150px"-->
+<!--        >-->
+<!--          <el-option-->
 
-              v-for="item in configData"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-          </el-option>
-        </el-select>
+<!--              v-for="item in configData"-->
+<!--              :key="item.id"-->
+<!--              :label="item.name"-->
+<!--              :value="item.id">-->
+<!--          </el-option>-->
+<!--        </el-select>-->
       </el-form-item>
 
       <el-form-item label="接口名称">
@@ -47,7 +47,7 @@
         <el-button type="primary" @click.native="apiTest(apiMsgList)">测试
         </el-button>
         <el-tooltip class="item" effect="dark" content="查看最近一次返回内容" placement="top">
-          <el-button type="primary" icon="el-icon-view" @click.native="$refs.resultFunc.lastResult()">{{ null }}
+          <el-button type="primary" icon="el-icon-view" @click.native="$store.state.showResultStatus=true">{{ null }}
           </el-button>
         </el-tooltip>
 
@@ -169,8 +169,7 @@
       <!--        </apiEdit>-->
       <!--      </el-tab-pane>-->
     </el-tabs>
-    <result ref="resultFunc">
-    </result>
+
     <!--    <errorView ref="errorViewFunc">-->
     <!--    </errorView>-->
     <importApi
@@ -210,7 +209,7 @@ export default {
       numTab: '-1',  //  tab页的显示
       loading: false,  //  页面加载状态开关
       proAndIdData: Array(),  //  项目名称和id的数据
-      configData: Object(),  //  项目对应的配置数据
+
       proUrlData: Array(),  //  项目对应的环境url数据
       ApiMsgTableData: Array(),   //  接口表单数据
       apiMsgList: Array(),    //  临时存储接口数据
@@ -279,7 +278,7 @@ export default {
             this.proAndIdData = response.data['data'];
             if (response.data['user_pros']) {
               this.form.projectId = this.proAndIdData[0].id;
-              this.getConfigData()
+              // this.getConfigData()
             }
           }
       )
@@ -402,13 +401,13 @@ export default {
       }
 
     },
-    apiTest(apiMsgData = null) {
+    apiTest(apiMsgData = null,configId = null) {
       //  接口调试
       this.loading = true;
       this.$axios.post(this.$api.runApiApi, {
         'apiMsgData': apiMsgData,
         'projectId': this.form.projectId,
-        'configId': this.form.configId,
+        'configId': configId,
       }).then((response) => {
             // console.log(response)
             if (response.data['status'] === 0) {
@@ -426,7 +425,8 @@ export default {
                 message: response.data['msg'],
                 type: 'success',
               });
-              this.$refs.resultFunc.showData(response['data']['data']);
+                this.$store.commit('SET_RESULT_DATA',response['data']['data'])
+              // this.$refs.resultFunc.showData(response['data']['data']);
             }
             this.loading = false;
           }
@@ -448,10 +448,10 @@ export default {
       //  清除接口选择
       this.$refs.apiMultipleTable.clearSelection();
     },
-    getConfigData() {
-      let index = this.proAndIdData.map(item => item.id).indexOf(this.form.projectId);
-      this.configData = this.proAndIdData[index]['config_data']
-    },
+    // getConfigData() {
+    //   let index = this.proAndIdData.map(item => item.id).indexOf(this.form.projectId);
+    //   this.configData = this.proAndIdData[index]['config_data']
+    // },
     initProjectChoice() {
       //  当项目选择项改变时，初始化模块和配置的数据
       this.form.configId = null;
@@ -461,7 +461,7 @@ export default {
       // 查询其他项目时，关闭编辑
       // this.apiEditViewStatus = false;
       // this.$refs.apiSetR.findApiSet();
-      this.getConfigData()
+      // this.getConfigData()
 
     },
     tabChange(tab) {

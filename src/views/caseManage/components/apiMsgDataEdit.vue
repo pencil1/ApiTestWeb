@@ -8,6 +8,15 @@
              :visible.sync="paramVisible"
              width="80%">
     <!--        <span v-show="!paramVisible" style="color: red;margin-top: 20px">请点击左侧配置按钮加载信息</span>-->
+
+    <el-button-group style="margin-top:15px;float: right;position:relative;z-index:999">
+      <el-button type="warning" size="mini"
+                 @click.native="$emit('debugStep', stepNum)">调试
+      </el-button>
+      <el-button type="primary" size="mini"
+                 @click.native="$store.state.showResultStatus=true">查看最近结果
+      </el-button>
+    </el-button-group>
     <el-tabs type="card" style="margin-top: 10px">
       <el-tab-pane label="基础信息" style="margin-top: 10px">
         <el-form>
@@ -51,6 +60,7 @@
               v-model="apiCaseData.statusCase.header[1]"
               inactive-text="启动新参数">
           </el-switch>
+
         </el-card>
         <auto-table
             :tableData="apiCaseData.header"
@@ -95,6 +105,31 @@
                      v-if="form.variable_type === 'json' "
                      style="margin-left:20px"
                      @click="formatData()">格式化
+
+          </el-button>
+          <el-popover
+              v-if="form.variable_type === 'data' "
+              placement="right"
+              width="400"
+              @hide="loadFormData()"
+              @show="textarea2=null"
+              trigger="click">
+            <el-input
+                type="textarea"
+                :autosize="{ minRows: 10, maxRows: 20}"
+                placeholder="key:value"
+                v-model="textarea2">
+            </el-input>
+            <el-button type="primary" size="mini"
+                       slot="reference"
+                       style="margin-left:20px">Bulk Edit
+
+            </el-button>
+          </el-popover>
+          <el-button type="primary" size="mini"
+                     v-if="form.variable_type === 'data' "
+                     style="margin-left:20px"
+                     @click="clearVariable()">clear
 
           </el-button>
         </el-card>
@@ -194,6 +229,7 @@
         </div>
       </el-tab-pane>
     </el-tabs>
+
     <!--        <div slot="footer" class="dialog-footer" style="margin-top: 5px">-->
     <!--            <el-button @click="initData(tempNum)" size="mini">还 原</el-button>-->
     <!--            <el-button type="primary"-->
@@ -206,6 +242,7 @@
 
     <!--    </div>-->
   </el-dialog>
+
 </template>
 
 <script>
@@ -220,6 +257,8 @@ export default {
         'padding': '5px'
       },
       test: '',
+      textarea2: '',
+      stepNum:'',
       paramVisible: false,
       form: {
         choiceTypeStatus: false,
@@ -231,7 +270,7 @@ export default {
         up_func: '',
         down_func: '',
         skip: '',
-        url:'',
+        url: '',
         // method:'GET',
         statusCase: {variable: [], extract: [], validate: [], param: [], header: [], parameters: 0},
         variable: [{key: '', value: '', param_type: '', remark: ''}],
@@ -251,6 +290,25 @@ export default {
       require('brace/theme/chrome');
       require('brace/snippets/json')
     },
+    loadFormData() {
+      // const items = (|| window.clipboardData );
+      let arrayList = this.textarea2.split('\n')
+      for (let i = 0; i < arrayList.length; i++) {
+        let oneData = arrayList[i].split(':')
+        if (oneData[0]) {
+          this.apiCaseData.variable.push({
+            key: oneData.shift().trim(),
+            param_type: 'string',
+            value: oneData.join(':').trim(),
+            remark: null
+          })
+        }
+      }
+      this.textarea2 = ''
+    },
+    clearVariable() {
+      this.apiCaseData.variable = [{key: '', param_type: 'string', value: '', remark: null}]
+    },
     formatData() {
       // 格式化json字符串
       try {
@@ -266,16 +324,13 @@ export default {
         });
       }
     },
-    initData(i) {
+    initData(i,num) {
       //  初始化步骤数据
       this.apiCaseData = i;
+      this.stepNum = num
       this.form.variable_type = i['variableType'];
       this.paramVisible = true;
-      if (this.form.variable_type === 'json') {
-        this.form.choiceTypeStatus = true
-      } else {
-        this.form.choiceTypeStatus = false
-      }
+      this.form.choiceTypeStatus = this.form.variable_type === 'json';
     },
   },
   mounted() {

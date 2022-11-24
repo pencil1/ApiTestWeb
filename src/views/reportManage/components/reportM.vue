@@ -4,7 +4,7 @@
 
         <el-form :inline="true" class="demo-form-inline search-style" size="small">
             <el-form-item label="项目" labelWidth="110px">
-                <el-select v-model="form.projectId" placeholder="请选择项目">
+                <el-select v-model="form.projectId" placeholder="请选择项目" @change="projectChoice">
                     <el-option
                             v-for="(item) in this.proAndIdData"
                             :key="item.id"
@@ -14,7 +14,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item>
-                <el-input placeholder="请输入用例名称" v-model="form.caseName" style="left: 10px">
+                <el-input placeholder="请输入报告名称" v-model="form.caseName" style="left: 10px">
                 </el-input>
             </el-form-item>
 
@@ -146,6 +146,9 @@
             },
             handleSizeChange(val) {
                 this.sizePage = val;
+                this.findReport()
+            },
+          projectChoice() {
                 this.findReport()
             },
             initData() {

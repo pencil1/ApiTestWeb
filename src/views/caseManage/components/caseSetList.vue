@@ -147,7 +147,7 @@ export default {
       let index = this.caseSetDataList.map(item => item.id).indexOf(data['id']);  //  获取当前节点的下标
       this.form.caseSet = data;
       // this.apiMsgPage.currentPage = 1;
-      this.$emit('findCase');
+      this.$emit('findCase', true);
     },
     findCaseSet() {
       //  查询接口模块

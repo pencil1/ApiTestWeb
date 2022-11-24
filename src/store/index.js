@@ -17,33 +17,58 @@ const modules = modulesFiles.keys().reduce((modules, modulePath) => {
 }, {})
 Vue.use(Vuex)
 
+
 const store = new Vuex.Store({
 
-  modules,
-  getters,
-  state,
+    modules,
+    getters,
+    state,
 
-  mutations: {
-    setFuncAddress (state,payload) {
-      // 变更状态
-      state.funcAddress = payload
+    mutations: {
+        setFuncAddress(state, payload) {
+            // 变更状态
+            state.funcAddress = payload
+            // console.log(store.state.user.userInfo)
+        },
+        SET_ERROR_DATA(state, payload) {
+            state.errorData = payload
+            state.showErrorStatus = true
+        },
+        SET_RESULT_DATA(state, payload = null) {
+            if (payload) {
+                state.resultData = payload
+            }
+            state.showResultStatus = true
+        },
+
+
+        // setBaseData (state,payload) {
+        //   // 变更状态
+        //   state.baseData = payload.data
+        //   state.userPros = payload.user_pros
+        // },
     },
-    SET_ERROR_DATA(state, payload) {
-      state.errorData = payload
-      state.showStatus = true
-    },
-    // setBaseData (state,payload) {
-    //   // 变更状态
-    //   state.baseData = payload.data
-    //   state.userPros = payload.user_pros
-    // },
-  },
-  actions: {
-    async GET_FUNC_DATA({ commit }) {
-      const res = await axios.post(api.findFuncFileApi,{'privates': false})
-      commit('setFuncAddress', res.data.data)
-    },
-  }
+    actions: {
+        async INIT_USER({commit}, token) {
+            const res = await axios.post(api.loginSsoApi, {'token': token})
+            if (res.data.code === 401) {
+                window.open(store.state.platformsUrl, "_self");
+            } else {
+                store.state.user.userInfo = res.data
+                let storage = window.localStorage
+                storage.token = token
+                storage.name = res.data.nickname
+                storage.userId = res.data.id
+                await store.dispatch('GET_FUNC_DATA')
+            }
+        },
+        async GET_FUNC_DATA({commit}) {
+            const res = await axios.post(api.findFuncFileApi, {'privates': false})
+            commit('setFuncAddress', res.data.data)
+        },
+
+
+    }
 })
 
 export default store

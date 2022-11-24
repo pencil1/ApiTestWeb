@@ -5,7 +5,7 @@
              :body-style="{ padding: '10px' }" shadow="always">
       <el-button-group style="float: right;">
         <el-button type="primary" size="mini" @click.native="initTestCaseFile()">新增</el-button>
-        <el-button type="primary" size="mini" @click.native="initEditTestCaseFile()">编辑</el-button>
+<!--        <el-button type="primary" size="mini" @click.native="initEditTestCaseFile()">编辑</el-button>-->
         <el-button type="primary" size="mini" @click.native="saveF()"
                    :disabled="tempTestCaseFileData.id === null || tempTestCaseFileData.status === 0">
           保存
@@ -166,10 +166,10 @@ export default {
       this.findTestCaseFile()
     },
     handleNodeChange(data, status, node) {
-      console.log(data)
-          console.log(status)
-
-            console.log(node)
+      // console.log(data)
+      //     console.log(status)
+      //
+      //       console.log(node)
 
 
     },

@@ -1,6 +1,6 @@
 <template>
   <div class="errorView">
-    <el-dialog title="错误信息" :visible.sync="$store.state.showStatus" width="50%">
+    <el-dialog title="错误信息" :visible.sync="$store.state.showErrorStatus" width="50%">
       <el-scrollbar :wrapStyle="this.$store.state.tableHeight+100">
         <pre style="color: #d04a4a">{{ this.$store.state.errorData }}</pre>
       </el-scrollbar>

@@ -2,7 +2,7 @@
   <el-dialog title="任务配置" :visible.sync="taskData.modelFormVisible" width="42%">
     <el-tabs>
       <el-tab-pane label="messages" style="margin-top: 10px">
-        <el-form  size="small">
+        <el-form size="small">
           <el-form-item label="执行选择" :label-width="taskData.formLabelWidth">
             <el-select v-model="form.projectId" placeholder="选择项目"
                        style="width: 150px;padding-right:5px"
@@ -15,14 +15,14 @@
               </el-option>
             </el-select>
 
-                      <el-cascader
-                          style="width: 150px;padding-right:5px"
-                        placeholder="请选择用例集"
+            <el-cascader
+                style="width: 150px;padding-right:5px"
+                placeholder="请选择用例集"
 
-                        v-model="form.caseSet"
-                        :options="currentCaseSetList"
-                          @change="changeSceneChoice"
-                        :props="{
+                v-model="form.caseSet"
+                :options="currentCaseSetList"
+                @change="changeSceneChoice"
+                :props="{
                           label:'name',
                           value:'id',
                           checkStrictly: true,
@@ -30,7 +30,7 @@
                           multiple:true,
                           emitPath:false
                         }"
-                    ></el-cascader>
+            ></el-cascader>
 
             <el-select v-model="form.case" multiple placeholder="选择用例" value-key="id"
                        :disabled="caseStatus"
@@ -42,36 +42,36 @@
                   :value="item.caseId">
               </el-option>
             </el-select>
- </el-form-item>
+          </el-form-item>
           <el-form-item label="任务名称" :label-width="taskData.formLabelWidth">
             <el-input v-model="taskData.name" auto-complete="off" size="small">
             </el-input>
           </el-form-item>
           <el-form-item label="收件人邮箱" :label-width="taskData.formLabelWidth">
-            <el-input v-model="taskData.toEmail" >
+            <el-input v-model="taskData.toEmail">
             </el-input>
           </el-form-item>
-<!--          <el-form-item label="发件人邮箱" :label-width="taskData.formLabelWidth">-->
-<!--            <el-input v-model="taskData.SendEmail">-->
-<!--            </el-input>-->
-<!--          </el-form-item>-->
-<!--          <el-form-item label="邮箱密码" :label-width="taskData.formLabelWidth"-->
-<!--                        prop="desc">-->
-<!--            <el-input v-model="taskData.password" type="password">-->
-<!--            </el-input>-->
-<!--          </el-form-item>-->
+          <!--          <el-form-item label="发件人邮箱" :label-width="taskData.formLabelWidth">-->
+          <!--            <el-input v-model="taskData.SendEmail">-->
+          <!--            </el-input>-->
+          <!--          </el-form-item>-->
+          <!--          <el-form-item label="邮箱密码" :label-width="taskData.formLabelWidth"-->
+          <!--                        prop="desc">-->
+          <!--            <el-input v-model="taskData.password" type="password">-->
+          <!--            </el-input>-->
+          <!--          </el-form-item>-->
           <el-form-item label="webhook" :label-width="taskData.formLabelWidth">
-            <el-input v-model="taskData.webhook"  >
+            <el-input v-model="taskData.webhook">
             </el-input>
           </el-form-item>
           <el-form-item label="secret" :label-width="taskData.formLabelWidth"
                         prop="desc">
-            <el-input v-model="taskData.secret" >
+            <el-input v-model="taskData.secret">
             </el-input>
           </el-form-item>
           <el-form-item label="钉钉标题" :label-width="taskData.formLabelWidth"
                         prop="desc">
-            <el-input v-model="taskData.title" >
+            <el-input v-model="taskData.title">
             </el-input>
           </el-form-item>
           <el-form-item label="时间配置" :label-width="taskData.formLabelWidth">
@@ -119,7 +119,7 @@ export default {
         SendEmail: '',
         webhook: '',
         secret: '',
-        title:'',
+        title: '',
         timeConfig: '',
         password: '',
         formLabelWidth: '90px',
@@ -141,7 +141,7 @@ export default {
     }
   },
   methods: {
-      initTaskData() {
+    initTaskData() {
       this.taskData.name = '';
       this.taskData.id = '';
       this.taskData.taskType = '';
@@ -179,7 +179,7 @@ export default {
       }
     },
     addTask() {
-        console.log(this.form.caseSet)
+      console.log(this.form.caseSet)
       let setIds
 
       this.$axios.post(this.$api.addTaskApi, {

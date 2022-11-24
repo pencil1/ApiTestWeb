@@ -21,6 +21,7 @@ const editConfigApi = '/api/config/edit';
 const delConfigApi = '/api/config/del';
 
 const loginApi = '/api/login';
+const loginSsoApi = '/api/loginSso';
 const logoutApi = '/api/logout';
 const registerApi = '/api/register';
 const changePasswordApi = '/api/changePassword';
@@ -53,6 +54,8 @@ const runCaseApi = '/api/report/run';
 const runStepApi = '/api/step/run';
 const editCaseApi = '/api/case/edit';
 const addCaseApi = '/api/case/add';
+const delStepApi = '/api/step/del';
+const addStepApi = '/api/step/add';
 const configDataApi = '/api/config/data';
 
 
@@ -72,10 +75,10 @@ const editUserApi = '/api/user/edit';
 const delUserApi = '/api/user/del';
 const changeStatusUserApi = '/api/user/changeStatus';
 
-// const addTestCaseFileApi = '/api/testCaseFile/add';
-// const findTestCaseFileApi = '/api/testCaseFile/find';
-// const delTestCaseFileApi = '/api/testCaseFile/del';
-// const getTestCaseFileApi = '/api/testCaseFile/get';
+const findMockApiApi = '/mock/mockApi/find';
+const delMockApiApi = '/mock/mockApi/del';
+const addMockApiApi = '/mock/mockApi/add';
+const editMockApi = '/mock/mockApi/edit';
 // const saveTestCaseFileApi = '/api/testCaseFile/save';
 
 export default {
@@ -84,6 +87,8 @@ export default {
     // delTestCaseFileApi,
     // getTestCaseFileApi,
     // saveTestCaseFileApi,
+    addStepApi,
+    delStepApi,
 
     findFuncFileApi,
     addFuncFileApi,
@@ -144,6 +149,7 @@ export default {
     delConfigApi,
 
     loginApi,
+    loginSsoApi,
     logoutApi,
     registerApi,
     changePasswordApi,
@@ -157,4 +163,9 @@ export default {
 
     fileUploadingApi,
     importApiApi,
+
+    findMockApiApi,
+    delMockApiApi,
+    addMockApiApi,
+    editMockApi,
 }

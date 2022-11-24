@@ -60,7 +60,7 @@
                   style="margin-right: 5px"
               >
                 {{
-                  userData.find(item => item.user_id === tag) ? userData.find(item => item.user_id === tag).user_name : ''
+                  userData.find(item => item.id === tag) ? userData.find(item => item.id === tag).nickname : ''
                 }}
               </el-tag>
 

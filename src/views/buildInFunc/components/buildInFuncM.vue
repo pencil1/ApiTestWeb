@@ -8,12 +8,17 @@
             class="inline-input"
             v-model="funcName"
             :fetch-suggestions="querySearch1"
+            style="width: 300px"
             placeholder="输入格式：${func(abc,123)}"
         ></el-autocomplete>
 
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click.native="checkFunc()" size="small">调试</el-button>
+        <el-button @click="drawer = true" type="small" style="margin-left: 16px;">
+          全屏函数
+        </el-button>
+<!--        <el-button type="primary" @click.native="checkFunc()" size="small">保存</el-button>-->
       </el-form-item>
 
     </el-form>
@@ -36,7 +41,7 @@
               lang="python"
               theme="monokai"
               width="100%"
-              :height= this.$store.state.tableHeight+65
+              :height=this.$store.state.tableHeight+65
               :options="{
                          enableSnippets:true,
                          enableBasicAutocompletion: true,
@@ -46,8 +51,8 @@
           </aceEditor>
         </el-container>
       </el-col>
-<!--      <el-col :span="5" style="padding-left:10px;background-color: rgb(234, 234, 234);height:761px">-->
-        <el-col :span="5" :style="{
+      <!--      <el-col :span="5" style="padding-left:10px;background-color: rgb(234, 234, 234);height:761px">-->
+      <el-col :span="5" :style="{
           height:this.$store.state.tableHeight+69+'px',
           backgroundColor:'#eaeaea'
         }">
@@ -57,6 +62,28 @@
         <pre style="white-space: pre-wrap;word-wrap: break-word;padding-left:10px;">{{ this.result }}</pre>
       </el-col>
     </el-row>
+    <el-drawer
+        title=""
+        :visible.sync="drawer"
+        size="95%"
+        direction="btt"
+        :with-header="false">
+      <aceEditor
+          style="font-size: 15px"
+          v-model="funcData"
+          @init="editorInit"
+          lang="python"
+          theme="monokai"
+          width="100%"
+          :height=this.$store.state.tableHeight+195
+          :options="{
+                         enableSnippets:true,
+                         enableBasicAutocompletion: true,
+                         enableLiveAutocompletion: true
+                         }"
+      >
+      </aceEditor>
+    </el-drawer>
   </div>
 </template>
 
@@ -70,7 +97,8 @@ export default {
   name: 'buildInFunc',
   data() {
     return {
-      style1:{},
+      style1: {},
+      drawer: false,
       funcName: '',
       funcData: '',
       result: '',

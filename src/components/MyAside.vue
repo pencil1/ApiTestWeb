@@ -63,6 +63,7 @@ export default {
           {name: '接口用例', index: '/caseManage'},
           {name: '业务配置', index: '/sceneConfig'},
           {name: '内置函数', index: '/buildInFunc'},
+          {name: 'mock服务', index: '/mockManage'},
         ]
       },
         {
@@ -90,7 +91,7 @@ export default {
   methods: {
     initData(){
       this.navigationName = this.$route.fullPath;
-      if(this.userInfo.name !== '管理员' ){
+      if(this.userInfo.nickname !== '超级管理员' ){
         this.asideList = this.asideList.filter(items => items.name !== '系统管理')
         // this.asideList.splice(4, 1);
       }

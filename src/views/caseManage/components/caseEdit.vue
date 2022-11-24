@@ -167,15 +167,6 @@
               <el-col :span="6" style="text-align: center">
                 操作
               </el-col>
-              <!--              <el-col :span="1">-->
-              <!--                <div @click.prevent="showApiData" style="color: #55a9ff">-->
-              <!--                  <el-tooltip content="接口" placement="top">-->
-              <!--                        <i class="my-icon-xiangzuo-copy" v-show="!showApiDataStatus"></i>-->
-              <!--                          </el-tooltip>-->
-
-              <!--                  <i class="my-icon-xiangyou" v-show="showApiDataStatus"></i>-->
-              <!--                </div>-->
-              <!--              </el-col>-->
             </el-row>
             <draggable v-model="caseData.apiCases" :options="{group:'apiData',animation:300}"
                        style="width: 99%;min-height: 10px;">
@@ -220,7 +211,7 @@
                       </el-button>
 
                       <el-button type="danger" size="mini"
-                                 @click.native="delApiCase(index)">删除
+                                 @click.native="delStep(index)">删除
                       </el-button>
                     </el-button-group>
                   </el-col>
@@ -418,6 +409,7 @@
 
     </el-drawer>
     <apiMsgDataEdit
+        @debugStep="debugStep"
         :apiCases="caseData.apiCases"
         ref="apiMessageEditFunc">
 
@@ -448,6 +440,7 @@ export default {
       allCaseList: Array(),
       drawer: false,
       apiMsgList: [],
+      tempStepNum: '',
       checkAll: false,
       isIndeterminate: false,
       currentSetList: [],
@@ -516,32 +509,16 @@ export default {
       )
     },
 
-    handleCheckAllChange(val) {
-      if (val) {
-
-        for (let i = 0; i < this.ApiMsgData.length; i++) {
-          if (this.ApiMsgData[i].check) {
-            //
-          } else {
-            this.ApiMsgData[i].check = true;
-            this.apiMsgVessel.push(this.ApiMsgData[i]);
-          }
-        }
-
-      } else {
-        for (let i = 0; i < this.ApiMsgData.length; i++) {
-
-          this.ApiMsgData[i].check = false;
-
-        }
-        this.apiMsgVessel = []
-      }
-      // this.checkedCities = val ? cityOptions : [];
-      this.isIndeterminate = false;
-    },
     async debugStep(index) {
-      await this.addCase()
-      this.$emit('runStep', this.caseData.apiCases[index].id)
+      let temp
+      if (!this.caseData.id) {
+
+        await this.addCase()
+      } else {
+        await this.addStep(index)
+      }
+      console.log(temp)
+      await this.runStep(this.caseData.apiCases[index].id)
 
 
     },
@@ -554,7 +531,7 @@ export default {
     apiMessageEditFuncInit(index) {
       // this.showApiDataStatus = false;
       // this.tabName = 'second';
-      this.$refs.apiMessageEditFunc.initData(this.caseData.apiCases[index]);
+      this.$refs.apiMessageEditFunc.initData(this.caseData.apiCases[index], index);
       // this.mainWidth = '80%';
       // this.stepSpan = 12;
     },
@@ -564,38 +541,7 @@ export default {
       this.caseData.apiCases.push(temp)
       // this.apiMsgVessel.push(temp);
     },
-    addEvent(dex) {
-      if (this.ApiMsgData[dex].check) {
-        this.apiMsgVessel.push(this.ApiMsgData[dex]);
-        this.apiMsgVessel = JSON.parse(JSON.stringify(this.apiMsgVessel));
-      } else {
-        this.ApiMsgData[dex].check = false;
-        let index = this.apiMsgVessel.map(item => item.apiMsgId).indexOf(this.ApiMsgData[dex]['apiMsgId']);
-        this.apiMsgVessel.splice(index, 1);
-        // this.apiMsgVessel.push(this.ApiMsgData[dex]);
-      }
 
-      if (this.apiMsgVessel.length > 0) {
-        this.isIndeterminate = true
-      } else {
-        this.isIndeterminate = false
-      }
-      // this.apiMsgVessel = this.ApiMsgData[dex];
-    },
-    showApiData: function () {
-      this.showApiDataStatus = !this.showApiDataStatus;
-      if (this.showApiDataStatus) {
-        this.mainWidth = '50%';
-        this.stepSpan = 24;
-
-
-      } else {
-        this.mainWidth = '80%';
-        this.stepSpan = 12;
-        this.tabName = "first";
-        this.findApiMsg();
-      }
-    },
     changeShow(tab) {
       if (tab.label === '用例信息') {
         this.mainWidth = '50%'
@@ -637,8 +583,8 @@ export default {
       this.findApiMsg();
       this.findAllCase();
     },
-    editCopyCase(caseId, copyEditStatus = 'edit', saveBtn = false) {
-      this.$axios.post(this.$api.editCaseApi, {
+    async editCopyCase(caseId, copyEditStatus = 'edit', saveBtn = false) {
+      await this.$axios.post(this.$api.editCaseApi, {
         'caseId': caseId,
         'copyEditStatus': copyEditStatus
       }).then((response) => {
@@ -651,14 +597,13 @@ export default {
 
               }
             }
-            if (!saveBtn) {
-              this.form.apiSetId = this.currentApiSetList[0].id;
-              this.findAllCase()
+
+            this.caseData.projectId = response.data['data']['project_id'];
+            if (response.data['data']['project_id'] !== this.projectId) {
+              //复制的时候，有可能改变项目，所以需要获取项目对应的集合
+              this.changeSetChoice()
             }
-
-            this.caseData.projectId = this.projectId;
-
-            this.caseData.setId = this.caseSetId;
+            this.caseData.setId = response.data['data']['setId'];
 
             this.caseData.name = response.data['data']['name'];
             this.caseData.desc = response.data['data']['desc'];
@@ -676,6 +621,10 @@ export default {
             }
             this.caseData.modelFormVisible = true;
             this.caseData.environment = this.environmentList[response.data['data']['environment']];
+            if (!saveBtn) {
+              this.form.apiSetId = this.currentApiSetList[0].id;
+              this.findAllCase()
+            }
           }
       )
 
@@ -739,7 +688,7 @@ export default {
       this.caseData.variable.splice(i, 1);
       this.caseData.variable.splice(i + 1, 0, d);
     },
-    delApiCase(i) {
+    delStep(i) {
       //判断caseList中是否存在id，存在则在数据库删除信息，否则在前端删除临时数据
       if ('id' in this.caseData.apiCases[i] && this.caseData.apiCases[i]['id']) {
         this.$confirm('是否删除用例中已保存的步骤：' + '<strong style="color: red;">' + this.caseData.apiCases[i]['name'] + '</strong>' + '?', '提示', {
@@ -748,7 +697,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$axios.post('/api/apiCase/del', {'id': this.caseData.apiCases[i]['id']}).then(() => {
+          this.$axios.post(this.$api.delStepApi, {'id': this.caseData.apiCases[i]['id']}).then(() => {
                 this.caseData.apiCases.splice(i, 1);
               }
           );
@@ -759,6 +708,44 @@ export default {
       }
     },
 
+    async addStep(i) {
+      this.caseData.apiCases[i].num = i
+      this.caseData.apiCases[i].caseId = this.caseData.id
+      await this.$axios.post(this.$api.addStepApi, this.caseData.apiCases[i]).then((response) => {
+            this.caseData.apiCases[i].id = response.data['step_id'];
+            // this.caseData.apiCases.splice(i, 1);
+          }
+      );
+    },
+    async runStep(stepId) {
+      await this.$axios.post(this.$api.runStepApi, {
+        'stepId': stepId,
+        'projectId': this.form.projectId
+      }).then((response) => {
+            if (response.data['status'] === 0) {
+              this.$message({
+                showClose: true,
+                message: response.data['msg'],
+                type: 'warning',
+              });
+            } else {
+              this.$message({
+                showClose: true,
+                message: response.data['msg'],
+                type: 'success',
+              });
+              let tempData = {'details': [{'records': [], 'in_out': {'out': ''}}]};
+              for (let i = 0; i < response['data']['data']['data']['details'].length; i++) {
+                tempData['details'][0]['records'] = tempData['details'][0]['records'].concat(response['data']['data']['data']['details'][i]['records'])
+              }
+              this.$store.commit('SET_RESULT_DATA', tempData)
+
+              // this.$refs.resultFunc.showData(tempData);
+
+            }
+          }
+      )
+    },
     handleCurrentCase(val) {
       this.apiMsgPage.currentPage = val;
       this.findApiMsg()
@@ -841,14 +828,14 @@ export default {
         apiCases[i].param = apiCases[i].param.filter(items => items.key !== null)
         apiCases[i].header = apiCases[i].header.filter(items => items.key !== null)
       }
-      if (this.caseData.apiCases.length === 0) {
-        this.$message({
-          showClose: true,
-          message: '请添加接口信息到执行步骤',
-          type: 'warning',
-        });
-        return
-      }
+      // if (this.caseData.apiCases.length === 0) {
+      //   this.$message({
+      //     showClose: true,
+      //     message: '请添加接口信息到执行步骤',
+      //     type: 'warning',
+      //   });
+      //   return
+      // }
       if (this.caseData.name === '' || this.caseData.name === null) {
         this.$message({
           showClose: true,
@@ -883,13 +870,14 @@ export default {
       }).then((response) => {
             if (this.messageShow(this, response)) {
               //  不直接赋值的原因是，如果步骤是新的，还要赋值id给步骤，有点麻烦，还不如直接重新查询
-              this.editCopyCase(response.data['case_id'], 'edit', true)
+              this.caseData.id = response.data['case_id']
               this.$emit('updateTab', this.caseData.name, response.data['case_id'].toString(), response.data.msg)
               // this.caseData.id = response.data['case_id'];
               // this.caseData.num = response.data['num'];
             }
           }
       )
+      await this.editCopyCase(this.caseData.id, 'edit', true)
     },
   },
   computed: {

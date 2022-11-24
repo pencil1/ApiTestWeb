@@ -1,9 +1,9 @@
 <template>
   <div class="result">
-    <el-dialog title="测试结果" :visible.sync="resultViewStatus" width="45%">
+    <el-dialog title="测试结果" :visible.sync="$store.state.showResultStatus" width="45%" :append-to-body='true'>
       <el-collapse accordion>
         <el-collapse-item
-            v-for="(item, index) in resultData.resultShowData"
+            v-for="(item, index) in $store.state.resultData['details'][0]['records']"
             :key="index">
           <template slot="title">
             <div :style="item.attachment ? 'color:rgb(255, 74, 74)': 'color:#45b90c'">{{ item.name }}</div>

@@ -29,7 +29,7 @@
           </el-card>
         </el-col>
         <el-col :span="7" style="margin: 5px">
-          <el-card class="box-card"  shadow="hover">
+          <el-card class="box-card" shadow="hover">
             <div style="font-size: 20px;">
               <svg class="icon" aria-hidden="true">
                 <use xlink:href="#my-icon-lianjie"></use>
@@ -87,8 +87,8 @@
         </el-col>
       </div>
     </el-row>
-<!--    <div style="height: 50px"></div>-->
-<!--    <ve-line :data="chartData"></ve-line>-->
+    <!--    <div style="height: 50px"></div>-->
+    <!--    <ve-line :data="chartData"></ve-line>-->
   </div>
 </template>
 
@@ -111,12 +111,23 @@ export default {
     }
   },
   methods: {
+    d() {
+      if (window.header.token) {
+        return
+      }
+    },
     findMsg() {
-      this.$axios.get(this.$api.msgApi, {}).then((response) => {
+
+      setTimeout(() => {   //设置延迟执行
+        this.$axios.get(this.$api.msgApi, {}).then((response) => {
             this.chartData.rows = response.data.data['time_data'];
             this.otherData = response.data.data['other_data'];
           }
       )
+      }, 1500);
+
+
+
     },
   },
   mounted() {

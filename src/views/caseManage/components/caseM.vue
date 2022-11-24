@@ -22,7 +22,7 @@
         <el-button type="primary" @click.native="addCase()">添加接口用例</el-button>
         <el-button type="primary" @click.native="runCase(caseList,true,true)">批量运行</el-button>
         <el-tooltip class="item" effect="dark" content="查看最近一次返回内容" placement="top">
-          <el-button type="primary" icon="el-icon-view" @click.native="$refs.resultFunc.lastResult()">{{ null }}
+          <el-button type="primary" icon="el-icon-view" @click.native="$store.state.showResultStatus=true">{{ null }}
           </el-button>
         </el-tooltip>
 
@@ -33,7 +33,6 @@
              @tab-click="tabChange" type="card" closable
              @tab-remove="removeTab"
              style="padding-top: 5px">
-      <!--    <el-tabs v-model="tabValue" class="table_padding" @tab-click="tabChange">-->
       <el-tab-pane label="用例信息" name="-1">
         <el-row>
           <el-col :span="5"
@@ -124,33 +123,12 @@
             :setTempData="setTempData"
             :proAndIdData="proAndIdData"
             :config="item.config"
-            @runStep="runStep"
             @runCase="runCase"
             @updateTab="updateTab"
             ref="caseEditFunc">
-
         </caseEdit>
       </el-tab-pane>
-      <!--      <el-tab-pane label="用例编辑" name="second" v-if="tabEditShow">-->
-      <!--        <div style="margin-top: 5px"></div>-->
-      <!--        <caseEdit-->
-      <!--            :caseSetId="form.caseSet.id"-->
-      <!--            :projectId="form.projectId"-->
-      <!--            :setTempData="setTempData"-->
-      <!--            :proAndIdData="proAndIdData"-->
-      <!--            @runStep="runStep"-->
-      <!--            @runCase="runCase"-->
-      <!--            ref="caseEditFunc">-->
-
-      <!--        </caseEdit>-->
-      <!--      </el-tab-pane>-->
     </el-tabs>
-
-    <!--    <errorView ref="errorViewFunc">-->
-    <!--    </errorView>-->
-
-    <result ref="resultFunc">
-    </result>
   </div>
 </template>
 
@@ -170,15 +148,10 @@ export default {
         children: 'children',
         label: 'label'
       },
-      tabValue: 'first',
-      tabEditShow: false,
-      allSetList: '',
       numTab: '-1',
       editableTabs: [],
-      setDataList: [],   //  用例集合的临时数据
       funcAddress: '',
       caseList: [],  //  临时存储被勾选的用例数据
-      proModelData: '',
       proAndIdData: '',
       loading: false,
       caseAll: [],  //  页面table的表格数据
@@ -210,7 +183,11 @@ export default {
   },
 
   methods: {
-    findCase() {
+    findCase(initPage=false) {
+      if (initPage){
+        // 切换不同集合的时候，重置页面为1
+        this.casePage.currentPage = 1
+      }
       this.$axios.post(this.$api.findCaseApi, {
         'caseSetId': this.form.caseSet.id,
         'projectId': this.form.projectId,
@@ -248,7 +225,6 @@ export default {
       this.setPage.currentPage = 1;
       this.casePage.currentPage = 1;
       // 查询其他项目时，关闭编辑
-      this.tabEditShow = false;
       // this.findSet()
     },
     handleCaseCurrentChange(val) {
@@ -267,36 +243,7 @@ export default {
           }
       )
     },
-    runStep(stepId) {
-      this.$axios.post(this.$api.runStepApi, {
-        'stepId': stepId,
-        'projectId': this.form.projectId
-      }).then((response) => {
-            if (response.data['status'] === 0) {
-              this.$message({
-                showClose: true,
-                message: response.data['msg'],
-                type: 'warning',
-              });
-              if (response.data['error']) {
-                this.$refs.errorViewFunc.showData(response.data['error']);
-              }
-            } else {
-              this.$message({
-                showClose: true,
-                message: response.data['msg'],
-                type: 'success',
-              });
-              let tempData = {'details': [{'records': [], 'in_out': {'out': ''}}]};
-              for (let i = 0; i < response['data']['data']['data']['details'].length; i++) {
-                tempData['details'][0]['records'] = tempData['details'][0]['records'].concat(response['data']['data']['data']['details'][i]['records'])
-              }
-              this.$refs.resultFunc.showData(tempData);
 
-            }
-          }
-      )
-    },
     runCase(caseIds, status = false, reportStatus = false) {
       //  status，为true时，批量运行用例，为false运行单用例
       //  reportStatus，为true时生成报告，为false时返回临时数据
@@ -330,9 +277,6 @@ export default {
                 message: response.data['msg'],
                 type: 'warning',
               });
-              if (response.data['error']) {
-                this.$refs.errorViewFunc.showData(response.data['error']);
-              }
             } else {
               this.$message({
                 showClose: true,
@@ -351,7 +295,8 @@ export default {
                 for (let i = 0; i < response['data']['data']['data']['details'].length; i++) {
                   tempData['details'][0]['records'] = tempData['details'][0]['records'].concat(response['data']['data']['data']['details'][i]['records'])
                 }
-                this.$refs.resultFunc.showData(tempData);
+                this.$store.commit('SET_RESULT_DATA',tempData)
+                // this.$refs.resultFunc.showData(tempData);
               }
             }
           }
@@ -389,12 +334,6 @@ export default {
         this.numTab = '9999';
       }
 
-      // this.tabEditShow = true;
-      // this.tabValue = 'second';
-      // setTimeout(() => {
-      //   this.$refs.caseEditFunc.initCaseData();
-      // }, 0);
-
     },
     editCopyCase(caseMsg, status) {
       let caseId = caseMsg.caseId.toString()
@@ -421,19 +360,6 @@ export default {
         });
         this.numTab = newNumTab;
       }
-      // this.tabEditShow = true;
-      // this.tabValue = 'second';
-      // setTimeout(() => {
-      //   this.$refs.caseEditFunc.editCase(id);
-      // }, 0);
-
-    },
-    copyCase(id) {
-      this.tabEditShow = true;
-      this.tabValue = 'second';
-      setTimeout(() => {
-        this.$refs.caseEditFunc.editCopyCase(id, true);
-      }, 0);
 
     },
     removeTab(targetName) {

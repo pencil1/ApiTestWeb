@@ -23,9 +23,9 @@
                        style="width: 100px">
               <el-option
                   v-for="item in userData"
-                  :key="item.user_id"
-                  :label="item.user_name"
-                  :value="item.user_id">
+                  :key="item.id"
+                  :label="item.nickname"
+                  :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>

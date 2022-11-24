@@ -10,6 +10,9 @@ export const state = {
     roles: null,
     userId: null,
     errorData: null,
-    showStatus:false,
+    showErrorStatus:false,
+    resultData: {'details':[{'records':[]}]},
+    showResultStatus:false,
+    platformsUrl:'http://43.138.146.161/#/login'
 }
 export default state

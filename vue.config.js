@@ -30,9 +30,8 @@ module.exports = {
 
     },
     devServer: {
-        // host: '0.0.0.0',
-        // host:'80.167.39.13',
-         host: '127.0.0.1',
+        host: '0.0.0.0',
+         // host: '43.138.146.161',
 
         // host: '122.51.184.120',
         // host:'10.100.2.45',
@@ -40,21 +39,28 @@ module.exports = {
         port: 8020,
         proxy: {
             '/api/': {
-                // target:process.env.NODE_ENV === 'production' ? 'http://172.20.0.2:8091' : 'http://0.0.0.0:8091',
+                target:process.env.NODE_ENV === 'production' ? 'http://10.0.8.16:8091' : 'http://0.0.0.0:8091',
                 // target: 'http://122.51.184.120',
-                target: 'http://127.0.0.1:8091',
-                // target: 'http://172.17.0.16:8091',
-
+                // target: 'http://0.0.0.0:8091',
+                // target: 'http://172.20.0.2:8091',
                 // target: 'http://172.16.11.228:8081',
-
                 changeOrigin: true,
-            }
+            },
+            '/mock/': {
+                target:process.env.NODE_ENV === 'production' ? 'http://10.0.8.16:8091' : 'http://0.0.0.0:8091',
+                // target: 'http://122.51.184.120',
+                // target: 'http://0.0.0.0:8091',
+                // target: 'http://172.20.0.2:8091',
+                // target: 'http://172.16.11.228:8081',
+                changeOrigin: true,
+            },
         },
     },
     css: {
         loaderOptions: {
             // 设置 scss 公用变量文件
             sass: {
+                // additionalData: `@import '~@/assets/css/color.scss';`,
                 prependData: `@import '~@/assets/css/color.scss';`
             }
         }

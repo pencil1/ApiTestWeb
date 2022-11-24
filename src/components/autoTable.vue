@@ -61,7 +61,7 @@
 
                         </div>
                         <div v-else>
-                            <el-input v-model="scope.row[key]" size="mini" :placeholder="key">
+                            <el-input v-model="scope.row[key]" size="mini" :placeholder="key" >
                             </el-input>
                         </div>
 
@@ -102,6 +102,7 @@
                 temp_num:0,
                 comparators: [
                     {'value': 'equals'},
+                    {'value': 'contains'},
                     {'value': 'less_than'},
                     {'value': 'less_than_or_equals'},
                     {'value': 'greater_than'},
@@ -131,7 +132,7 @@
                 } else if (key === 'param_type') {
                     s = '100px'
                 }else if (key === 'remark') {
-                    s = '100px'
+                    s = '150px'
                 }
                 return s
             },
