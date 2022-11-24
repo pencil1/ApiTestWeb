@@ -91,7 +91,7 @@ export default {
   methods: {
     initData(){
       this.navigationName = this.$route.fullPath;
-      if(this.userInfo.nickname !== '超级管理员' ){
+      if(this.userInfo.name !== '管理员' ){
         this.asideList = this.asideList.filter(items => items.name !== '系统管理')
         // this.asideList.splice(4, 1);
       }
